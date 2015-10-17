@@ -4,8 +4,11 @@ Flask-Babel
 flask-debugtoolbar
 Flask-Login
 flask-mongoengine
+Flask_WTF
+mongoengine
 payplug
 pillow
+python-geoip
 python-geoip-geolite2
 satchless
 scrypt
