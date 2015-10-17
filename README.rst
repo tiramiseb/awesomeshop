@@ -5,6 +5,8 @@ AwesomeShop
 AwesomeShop is an e-boutique webapp written in Python with the following
 dependencies:
 
+Python dependencies installed with pip:
+
 * *Flask*: web framework
 * *MongoDB*: data storage
 * *PayPlug*: online credit card payment
@@ -12,6 +14,12 @@ dependencies:
 * *Satchless*: cart and stuff
 * *Scrypt*: passwords hashing
 * *Whoosh*: indexing and search engine
+
+Front-end libraries/frameworks included:
+
+* `Bootstrap <http://getbootstrap.com/>`_
+* `Font Awesome <http://getbootstrap.com/>`_
+* `Start Bootstap Simple Sidebar <http://startbootstrap.com/template-overviews/simple-sidebar/>`_
 
 General information
 ===================
