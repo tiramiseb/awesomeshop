@@ -18,7 +18,7 @@ Python dependencies installed with pip:
 Front-end libraries/frameworks included:
 
 * `Bootstrap <http://getbootstrap.com/>`_
-* `Font Awesome <http://getbootstrap.com/>`_
+* `Font Awesome <http://fontawesome.io/>`_
 * `Start Bootstap Simple Sidebar <http://startbootstrap.com/template-overviews/simple-sidebar/>`_
 
 General information
