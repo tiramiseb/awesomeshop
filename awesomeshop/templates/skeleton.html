@@ -1,0 +1,180 @@
+{% extends "lowlevel_skeleton.html" %}
+
+{% macro product_in_grid(product) %}
+    <div class="col-xs-6 col-md-4 col-lg-3">
+        <div class="thumbnail product-in-category">
+            <a href="/{{ product.url }}">
+                {% if product.photos %}
+                <img src="{{ product.photos[0].preview_url }}">
+                {% endif %}
+                <div class="caption">
+                    <p class="text-center">{{ product }}</p>
+                    <p class="text-center">{{ product.get_price_per_item().quantize('0.01').net }} {{ config.CURRENCY }}</p>
+                    {% if product.stock - cart.quantity(product) -%}
+                    <form method="POST" action="{{ url_for('add_to_cart') }}">
+                        <input type="hidden" name="product" value="{{ product.id }}">
+                        <input type="hidden" name="quantity" value="1">
+                        <button class="btn btn-success btn-block">{{ _('Add to cart') }}</button>
+                    </form>
+                    {%- else -%}
+                    <button class="btn btn-danger btn-block disabled">{{ _('Out of stock') }}</button>
+                    {%- endif %}
+                </div>
+            </a>
+        </div>
+    </div>
+{% endmacro %}
+{% macro categories_rows(categories, level=0) %}
+                    {% for c in categories -%}
+                    <a href="/{{ c[0].url }}" class="list-group-item{% if c[0].id == active %} active{% endif %}">
+                        {% if c[0].nb_products %}<span class="badge">{{ c[0].nb_products }}</span>{% endif %}
+                        <span class="category_hierarchy_{{ level }}">{{ c[0].short_name }}</span>
+                    </a>
+                    {{ categories_rows(c[1], level=level+1) }}
+                    {%- endfor %}
+{% endmacro %}
+{% block head %}
+<link href="/static/local/local.css" rel="stylesheet">
+{% endblock %}
+{% block body %}
+<nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="{{ url_for('home') }}">{{ config.SHOP_DESCRIPTION[locale] }}</a>
+        </div>
+        <p class="navbar-text navbar-right">
+            {% if current_user.is_authenticated -%}
+            <a class="navbar-link" href="{{ url_for('profile') }}"><i class="fa fa-user"></i> {{ current_user }}</a>
+            {% if current_user.is_admin %}
+            |
+            <a class="navbar-link" href="{{ url_for('dashboard') }}"><i class="fa fa-tachometer"></i> {{ _('Dashboard') }}</a>
+            {% endif %}
+            |
+            <a class="navbar-link" href="{{ url_for('logout') }}"><i class="fa fa-sign-out"></i> {{ _('Logout') }}</a>
+            {%- else -%}
+            <a class="navbar-link" href="{{ url_for('login') }}"><i class="fa fa-sign-in"></i> {{ _('Login') }}</a>
+            |
+            <a class="navbar-link" href="{{ url_for('register') }}"><i class="fa fa-user-plus"></i> {{ _('Register') }}</a>
+            {% endif -%}
+            {% for lang in config.LANGS %}
+            {% if lang != locale %}
+            |
+            <a class="navbar-link" href="{{ url_for('change_locale', locale=lang, next=request.path) }}">{{ lang }}</a>
+            {% endif %}
+            {% endfor %}
+        </p>
+    </div>
+</nav>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-6">
+            {% include 'local/logo.html' %}
+        </div>
+        <div class="col-xs-6 text-right hidden-print">
+            <form method="GET" action="{{ url_for('search') }}" class="form-inline">
+                <div class="form-group bottom-space">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" placeholder="{{ _('Search for...') }}">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">
+                            <i class="fa fa-search"></i>
+                            {{ _('Search') }}
+                        </button>
+                    </span>
+                </div>
+                </div>
+            </form>
+            <a href="{{ url_for('cart') }}" class="btn btn-primary btn-lg{% if not cart %} disabled{% endif %} bottom-space">
+                <i class="fa fa-shopping-cart"></i>&nbsp;
+                <span id="cart-text">{% if cart %}{{ ngettext('%(num)s product, %(sum)s %(currency)s', '%(num)s products, %(sum)s %(currency)s', cart.quantity(), sum=cart.get_total().quantize('0.01').net, currency=config.CURRENCY) }}{% else %}{{ _('Cart is empty' ) }}{% endif %}</span>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3 col-sm-4 leftmenu hidden-print">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-list"></i>
+                    {{ _('Categories') }}
+                </div>
+                <div class="list-group">
+                    {{ categories_rows(categories, level=0) }}
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-book"></i>
+                    {{ _('Documentation') }}
+                </div>
+                <div class="list-group">
+                    {% for page in docpages %}
+                    <a href="{{ url_for('doc', slug=page.slug) }}" class="list-group-item{% if page.id == active %} active{% endif %}">
+                        {{ page }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-user"></i>
+                    {{ _('My account') }}
+                </div>
+                <div class="list-group">
+                    {%- if current_user.is_authenticated %}
+                    <a class="list-group-item" href="{{ url_for('profile') }}">{{ _('My profile') }}</a>
+                    <a class="list-group-item" href="{{ url_for('orders') }}">
+                        <span class="badge">{{ current_user.orders.count() }}</span>
+                        {{ _('My orders') }}
+                    </a>
+                    {%- else %}
+                    <a class="list-group-item" href="{{ url_for('login') }}">{{ _('Login') }}</a>
+                    <a class="list-group-item" href="{{ url_for('register') }}">{{ _('Register') }}</a>
+                    {%- endif %}
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-file"></i>
+                    {{ _('Information') }}
+                </div>
+                <div class="list-group">
+                    {% for page in infopages %}
+                    <a href="{{ url_for('info', slug=page.slug) }}" class="list-group-item{% if page.id == active %} active{% endif %}">
+                        {{ page }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9 col-sm-8 col-print-12">
+            {%- if current_user.confirm_code %}
+            <div class="alert alert-danger" role="alert">
+                <p>{{ _('Please confirm your email address by clicking on the link you should have received.') }}</p>
+                <p><i>
+                    {{ _('You have not received the validation email?')}}
+                    <a href="{{ url_for('resend_confirmation_email') }}">{{ _('Send it again') }}</a>
+                </i></p>
+            </div>
+            {%- endif %}
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+<div class="navbar navbar-inverse navbar-static-bottom">
+  <div class="container">
+        <p class="navbar-text navbar-right lead">
+            <b>{{ _('Follow us...') }}</b>
+            {% if config.FACEBOOK_ACCOUNT -%}
+            <a href="https://www.facebook.com/{{ config.FACEBOOK_ACCOUNT }}"><i class="fa fa-facebook-square"></i></a>
+            {%- endif %}
+            {% if config.TWITTER_ACCOUNT -%}
+            <a href="https://www.twitter.com/{{ config.TWITTER_ACCOUNT }}"><i class="fa fa-twitter-square"></i></a>
+            {%- endif %}
+            {% if config.BLOG_URL -%}
+            <a href="{{ config.BLOG_URL }}"><i class="fa fa-rss-square"></i></a>
+            {%- endif %}
+        </p>
+  </div>
+</div>
+{% endblock %}

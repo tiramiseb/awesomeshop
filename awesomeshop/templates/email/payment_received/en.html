@@ -1,0 +1,15 @@
+{% extends 'email/skeleton.html' %}
+{% block content %}
+<p>Hello,</p>
+
+<p>Your payment for order {{ order.full_number }} (invoice {{ order.full_invoice_number }}) has been received!</p>
+
+<p>This order will be prepared and shipped soon.</p>
+
+<p>Get more details on this order on the following link:<br>
+<a href="{{ url_for('order', order_number=order.number, _external=True) }}">{{ url_for('order', order_number=order.number, _external=True) }}</a>
+</p>
+
+<p>Regards,<br>
+The <i>{{ config.SHOP_NAME }}</i> team</p>
+{% endblock %}

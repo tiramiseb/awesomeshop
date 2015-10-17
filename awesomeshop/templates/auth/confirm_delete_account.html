@@ -1,0 +1,15 @@
+{% extends "skeleton.html" %}
+
+
+{% block title %}{{ _('Confirm account deletion') }}{% endblock %}
+{% block content %}
+<h1>{{ _('Confirm account deletion') }}</h1>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <p>{{ _('Are you sure you want to delete your account? You will not be able to access your orders or your invoices anymore.') }}</p>
+        <form method="POST">
+            <button type="submit" class="btn btn-danger">{{ _('Yes, delete my account on %(shopname)s once and for all!', shopname=config.SHOP_NAME) }}</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

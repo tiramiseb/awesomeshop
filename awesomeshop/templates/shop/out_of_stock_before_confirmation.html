@@ -1,0 +1,25 @@
+{% extends "skeleton.html" %}
+
+{% block title %}{{ _('Insufficient stock') }}{% endblock %}
+{% block content %}
+<h1>{{ _('Insufficient stock') }}</h1>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <p>{{ _('Sorry, we do not have enough stock for the following products:') }}</p>
+        <ul>
+            {%- for p in products %}
+            <li>
+                <a href="{{ p.url }}">{{ p }}</a>
+            </li>
+            {%- endfor %}
+        </ul>
+        <p>{{ _('Maybe another customer has confirmed his/her order before yours.') }}</p>
+        <p>{{ _('Quantities in your cart have been reduced.') }}</p>
+        <a href="{{ url_for('checkout') }}" class="btn btn-primary">
+            <i class="fa fa-chevron-left"></i>
+            {{ _('Go back to the checkout page') }}
+        </a>
+    </div>
+</div>
+{% endblock %}
+

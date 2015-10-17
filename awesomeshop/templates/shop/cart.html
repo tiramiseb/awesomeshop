@@ -1,0 +1,125 @@
+{% extends "skeleton.html" %}
+
+{% block title %}{{ _('My Cart') }}{% endblock %}
+{% block content %}
+<h1>{{ _('My Cart') }}</h1>
+{% if cart %}
+<form method="POST">
+    <div class="list-group">
+        {% for line in cart -%}
+        <div class="list-group-item cart-list">
+            <div class="row">
+                <div class="col-xs-6 col-sm-4 col-md-6 col-lg-8">
+                    <a href="{{ line.product.url }}">
+                        <span class="hidden-xs hidden-sm">
+                        {% if line.product.photos -%}
+                        <img class="cart-illustration" src="{{ line.product.photos[0].thumbnail_url }}">
+                        {%- else -%}
+                        <span class="cart-illustration-placeholder">
+                            <i class="fa fa-ban"></i>
+                        </span>
+                        {%- endif %}
+                        </span>
+                        {{ line.product }}
+                    </a>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                    <input type="text" id="quantity_{{ line.product.id }}" name="quantity_{{ line.product.id }}" class="form-control text-center cart-quantity" value="{{ line.quantity }}">
+                    <div class="btn-group btn-group-justified">
+                        <a href="#" class="btn btn-default" id="dec_{{ line.product.id }}">
+                            <i class="fa fa-minus"></i>
+                        </a>
+                        <a href="{{ url_for('remove_from_cart', product_id=line.product.id) }}" class="btn btn-default">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                        <a href="#" class="btn btn-default" id="inc_{{ line.product.id }}">
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-3 col-lg-2 text-right">
+                    {{ _('Unit:') }}
+                    {{ line.get_price_per_item().quantize('0.01').net }}
+                    {{ config.CURRENCY }}
+                    <br>
+                    <strong>
+                        {{ _('Total:') }}
+                        {{ line.get_total().quantize('0.01').net }}
+                        {{ config.CURRENCY }}
+                    </strong>
+                </div>
+             </div>
+        </div>
+        {%- endfor %}
+        <div class="list-group-item">
+            <div class="text-right">
+                <div id="recalculate" class="hidden">
+                    <button type="submit" class="btn btn-warning">
+                        {{ _('Recalculate') }}
+                    </button>
+                </div>
+                <div id="total">
+                    <strong>
+                        {{ _('Total:') }}
+                        {{ cart.get_total().quantize('0.01').net }}
+                        {{ config.CURRENCY }}
+                    </strong>
+                    <br>
+                    {{ _('+ shipping fee') }}
+                </div>
+            </div>
+            <small class="push-left">{% if locale == 'fr' %}{{ _('TVA non applicable, article 293 B du Code général des impôts') }}{% endif %}</small>
+        </div>
+        <div id="proceed">
+            <br>
+            <a href="{{ url_for('checkout') }}" class="btn btn-lg btn-success pull-right">
+                {{ _('Proceed to checkout') }}
+                <i class="fa fa-chevron-right"></i>
+            </a>
+        </div>
+    </div>
+</form>
+<div id="alert-overlay" class="hidden" onclick="this.className='hidden';">
+    <div class="overlay">
+    </div>
+    <div class="alert alert-danger overlay-content">
+        <i class="fa fa-exclamation-triangle"></i>
+        <span class="sr-only">Warning:</span>
+        {{ _('Sorry, insufficient stock.') }}
+    </div>
+</div>
+<script>
+    function disp_recalc() {
+        document.getElementById('recalculate').className = "";
+        document.getElementById('total').className = "hidden";
+        document.getElementById('proceed').className = "hidden";
+    }
+    {% for line in cart %}
+    document.getElementById('inc_{{ line.product.id }}').addEventListener('click', function(e) {
+        e.preventDefault();
+        var orig = parseInt(document.getElementById('quantity_{{ line.product.id }}').value);
+        if (orig < {{ line.product.get_stock() }}) {
+            document.getElementById('quantity_{{ line.product.id }}').value = orig + 1;
+            disp_recalc();
+        } else {
+            document.getElementById("alert-overlay").className = "";
+        }
+    });
+    document.getElementById('dec_{{ line.product.id }}').addEventListener('click', function(e) {
+        e.preventDefault();
+        var orig = parseInt(document.getElementById('quantity_{{ line.product.id }}').value);
+        if (orig > 0) {
+            document.getElementById('quantity_{{ line.product.id }}').value = orig - 1;
+            disp_recalc();
+        };
+    });
+    {% endfor %}
+    [].forEach.call(document.getElementsByClassName('cart-quantity'), function(elem) {
+        elem.addEventListener('keyup', disp_recalc);
+    });
+</script>
+{% else %}
+<div class="alert alert-danger text-center">{{ _('Your cart is empty!') }}</div>
+{% endif %}
+{% endblock %}
+

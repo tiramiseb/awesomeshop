@@ -1,0 +1,43 @@
+{% extends "dashboard/skeleton.html" %}
+
+{% block title %}{{ _('Dashboard') }} - {{ _('Category') }}{% endblock %}
+{% block content %}
+<h1>{% if form.slug.data %}{{ form.slug.data }}{% else %}{{ _('New category') }}{% endif %}</h1>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-6">
+                    {{ forminput(form.slug) }}
+                </div>
+                <div class="col-xs-6">
+                    {{ forminput(form.parent) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">{{ _('Translations') }}</div>
+        <div class="panel-body">
+            <div class="row">
+                {% for l in config.LANGS %}
+                <div class="col-sm-6">
+                    {{ forminput(form.name.entries[l]) }}
+                </div>
+                {% endfor %}
+            </div>
+    </div>
+</div>
+    <div class="btn-group pull-right" role="group">
+        <button type="submit" class="btn btn-success">
+            <i class="fa fa-check"></i>
+            {{ _('Save') }}
+        </button>
+        <a href="{{ url_for('dashboard_categories') }}" class="btn btn-danger">
+            <i class="fa fa-undo"></i>
+            {{ _('Cancel') }}
+        </a>
+    </div>
+</form>
+{% endblock %}

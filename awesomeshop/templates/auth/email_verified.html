@@ -1,0 +1,14 @@
+{% extends "skeleton.html" %}
+
+{% block title %}{{ _('Email address verified') }}{% endblock %}
+{% block content %}
+<h1>{{ _('Email address verified') }}</h1>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <p>{{ _('Congratulations! Your email address has been verified!') }}</p>
+        <a href="{{ url_for('home') }}" class="btn btn-success">
+            {{ _('Return to the home page') }}
+        </a>
+    </div>
+</div>
+{% endblock %}

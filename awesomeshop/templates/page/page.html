@@ -1,0 +1,11 @@
+{% extends "skeleton.html" %}
+
+{% block title %}{{ page }}{% endblock %}
+{% block content %}
+<h1>{{ page }}</h1>
+<div class="panel panel-default">
+<div class="panel-body">
+{{ page.output_text|safe }}
+</div>
+</div>
+{% endblock %}

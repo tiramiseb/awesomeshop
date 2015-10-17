@@ -1,0 +1,12 @@
+{% extends 'email/skeleton.html' %}
+{% block content %}
+<p>Hello,</p>
+
+<p>Please confirm your email address by loading the following page:<br>
+<a href="{{ url_for('confirm_email', code=code, _external=True) }}">{{ url_for('confirm_email', code=code, _external=True) }}</a></p>
+
+<p>Thanks!</p>
+
+<p>Regards,<br>
+The <i>{{ config.SHOP_NAME }}</i> team</p>
+{% endblock %}

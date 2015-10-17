@@ -1,0 +1,25 @@
+{% extends "dashboard/skeleton.html" %}
+
+{% block title %}{{ _('Dashboard') }} - {{ _('Countries group') }}{% endblock %}
+{% block content %}
+<h1>{% if form.name.data %}{{ form.name.data }}{% else %}{{ _('New countries group') }}{% endif %}</h1>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="panel panel-default">
+        <div class="panel-body">
+            {{ forminput(form.name) }}
+            {{ forminput(form.countries, class="large") }}
+        </div>
+    </div>
+    <div class="btn-group pull-right" role="group">
+        <button type="submit" class="btn btn-success">
+            <i class="fa fa-check"></i>
+            {{ _('Save') }}
+        </button>
+        <a href="{{ url_for('dashboard_countries_groups') }}" class="btn btn-danger">
+            <i class="fa fa-undo"></i>
+            {{ _('Cancel') }}
+        </a>
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends "dashboard/skeleton.html" %}
+
+{% block title %}{{ _('Dashboard') }} - {{ _('User') }}{% endblock %}
+{% block content %}
+<h1>{% if form.email.data %}{{ form.email.data }}{% else %}{{ _('New user') }}{% endif %}</h1>
+<form method="POST">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            {{ form.hidden_tag() }}
+            <div class="row">
+                <div class="col-sm-12 col-md-4">
+                    {{ forminput(form.email) }}
+                </div>
+                <div class="col-xs-6 col-md-4">
+                    {{ forminput(form.password) }}
+                </div>
+                <div class="col-xs-6 col-md-4">
+                    {{ forminput(form.password_again) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="checkbox">
+                        <label>
+                            {{ form.is_admin }}
+                            {{ _('Is an administrator') }}
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="btn-group pull-right">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fa fa-check"></i>
+                            {{ _('Save') }}
+                        </button>
+                        <a href="{{ url_for('dashboard_users') }}" class="btn btn-danger">
+                            <i class="fa fa-undo"></i>
+                            {{ _('Cancel') }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% if addresses or newaddress -%}
+<h2 id="addresses">{{ _('Addresses') }}</h2>
+<div class="panel panel-default">
+    <div class="list-group">
+        {% for address in addresses -%}
+        <div class="list-group-item">
+            <form method="POST">
+                {{ address.hidden_tag() }}
+                <div class="row">
+                    <div class="col-sm-6">
+                        {{ forminput(address.title) }}
+                        {{ forminput(address.firstname) }}
+                        {{ forminput(address.lastname) }}
+                        {{ forminput(address.phone) }}
+                    </div>
+                    <div class="col-sm-6">
+                        {{ forminput(address.address) }}
+                        {{ forminput(address.country) }}
+                        <div class="btn-group btn-group-justified" role="group">
+                            <div class="btn-group">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fa fa-check"></i>
+                                    {{ _('Change') }}
+                                </button>
+                            </div>
+                            <a href="{{ url_for('dashboard_remove_address', user_id=user_id, address_id=address._prefix[:-1]) }}" class="btn btn-danger">
+                                <i class="fa fa-trash"></i>
+                                {{ _('Remove') }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {%- endfor %}
+        <div class="list-group-item">
+            <h3>{{ _('New address') }}</h3>
+            <form method="POST">
+                {{ newaddress.hidden_tag() }}
+                <div class="row">
+                    <div class="col-sm-6">
+                        {{ forminput(newaddress.title) }}
+                        <div class="row">
+                            <div class="col-xs-6">
+                                {{ forminput(newaddress.firstname) }}
+                            </div>
+                            <div class="col-xs-6">
+                                {{ forminput(newaddress.lastname) }}
+                            </div>
+                        </div>
+                        {{ forminput(newaddress.phone) }}
+                    </div>
+                    <div class="col-sm-6">
+                        {{ forminput(newaddress.address) }}
+                        {{ forminput(newaddress.country) }}
+                        {{ formsubmit(_('Create'), 'plus') }}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{%- endif %}
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "skeleton.html" %}
+
+{% block title %}{{ _('SEPA bank transfer') }}{% endblock %}
+{% block content %}
+<h1>{{ _('SEPA bank transfer') }}</h1>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <p>{{ _('Please execute a SEPA bank transfer within %(num)d weeks with the following criteria:', num=config.PAYMENT_DELAY) }}</p>
+        <table class="table">
+            <tr><td>{{ _('Recipient account owner') }}</td><td>{{ config.SEPA_TRANSFER_RECIPIENT }}</td></tr>
+            <tr><td>{{ _('Recipient account BIC') }}</td><td><b>{{ config.SEPA_TRANSFER_BIC }}</b></td></tr>
+            <tr><td>{{ _('Recipient account IBAN') }}</td><td><b>{{ config.SEPA_TRANSFER_IBAN }}</b></td></tr>
+            <tr><td>{{ _('Transfer amount') }}</td><td><b>{{ order.net_total }}</b></td></tr>
+            <tr><td>{{ _('Transfer information') }}</td><td><b>{{ order.full_invoice_number }}</b></td></tr>
+            <tr><td>{{ _('Recipient address') }}</td><td>{{ config.SEPA_TRANSFER_RECIPIENT_ADDRESS.replace('\n', '<br>')|safe }}</td></tr>
+        </table>
+    </div>
+</div>
+{% endblock %}

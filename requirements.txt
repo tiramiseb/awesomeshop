@@ -1,0 +1,13 @@
+docutils
+Flask
+Flask-Babel
+flask-debugtoolbar
+Flask-Login
+flask-mongoengine
+payplug
+pillow
+python-geoip-geolite2
+satchless
+scrypt
+slugify
+Whoosh

@@ -1,0 +1,86 @@
+{% extends "lowlevel_skeleton.html" %}
+
+{% block head %}
+<link href="/static/css/simple-sidebar.css" rel="stylesheet">
+<link href="/static/css/dashboard.css" rel="stylesheet">
+{% endblock %}
+
+{% block title %}{{ _('Dashboard') }}{% endblock %}
+
+{% block body %}
+<div id="wrapper">
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <li class="sidebar-brand">
+                <a href="{{ url_for('dashboard') }}">{{ _('Dashboard') }}</a>
+            </li>
+            <li><a href="{{ url_for('home') }}" target="_blank">
+                    <i class="fa fa-eye"></i>
+                    {{ _('See the shop') }}</a>
+            </li>
+            <li>{{ _('Day-to-day') }}</li>
+            <li><a href="{{ url_for('dashboard_products') }}">
+                    <i class="fa fa-cubes"></i>
+                    {{ _('Products') }}
+            </a></li>
+            <li><a href="{{ url_for('dashboard_categories') }}">
+                    <i class="fa fa-th-list"></i>
+                    {{ _('Categories') }}</a>
+            </li>
+            <li><a href="{{ url_for('dashboard_orders') }}">
+                    <i class="fa fa-shopping-cart"></i>
+                    {{ _('Orders') }}</a>
+            </li>
+            <li><a href="{{ url_for('dashboard_pages', pagetype='doc') }}">
+                    <i class="fa fa-file-text"></i>
+                    {{ _('Documentation') }}
+            </a></li>
+            <li>{{ _('Configuration') }}</li>
+            <li><a href="{{ url_for('dashboard_carriers') }}">
+                    <i class="fa fa-truck"></i>
+                    {{ _('Carriers') }}
+            </a></li>
+            <li><a href="{{ url_for('dashboard_countries') }}">
+                    <i class="fa fa-flag"></i>
+                    {{ _('Countries') }}
+            </a></li>
+            <li><a href="{{ url_for('dashboard_countries_groups') }}">
+                    <i class="fa fa-globe"></i>
+                    {{ _('Countries groups') }}
+            </a></li>
+            <li><a href="{{ url_for('dashboard_taxes') }}">
+                    <i class="fa fa-calculator"></i>
+                    {{ _('Taxes') }}
+            </a></li>
+            <li><a href="{{ url_for('dashboard_pages', pagetype='info') }}">
+                    <i class="fa fa-file-text"></i>
+                    {{ _('Information') }}
+            </a></li>
+            <li><a href="{{ url_for('dashboard_users') }}">
+                    <i class="fa fa-users"></i>
+                    {{ _('Users') }}
+            </a></li>
+        </ul>
+    </div> <!-- sidebar-wrapper -->
+
+    <div id="page-content-wrapper">
+        <a href="#" class="btn btn-default" id="menu-toggle">
+            <i class="fa fa-bars"></i>
+        </a>
+        <div class="container-fluid">
+            {% block content %}{% endblock %}
+        </div>
+    </div> <!-- page-content-wrapper -->
+</div> <!-- wrapper -->
+<script>
+    document.getElementById('menu-toggle').addEventListener('click', function(e) {
+        var w = document.getElementById('wrapper');
+        e.preventDefault();
+        if (w.className == 'toggled') {
+            w.className = '';
+        } else {
+            w.className = 'toggled'
+        };
+    });
+</script>
+{% endblock %}

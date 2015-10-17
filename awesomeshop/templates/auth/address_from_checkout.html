@@ -1,0 +1,35 @@
+{% extends "skeleton.html" %}
+
+
+{% block title %}{% if address_id %}{{ _('Create an address') }}{% else %}{{ _('Modify an address') }}{% endif %}{% endblock %}
+{% block content %}
+<h1>{{ title }}</h1>
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    {{ forminput(form.title) }}
+                    <div class="row">
+                        <div class="col-xs-6">
+                            {{ forminput(form.firstname) }}
+                        </div>
+                        <div class="col-xs-6">
+                            {{ forminput(form.lastname) }}
+                        </div>
+                    </div>
+                    {{ forminput(form.address) }}
+                    {{ forminput(form.country) }}
+                    {{ forminput(form.phone) }}
+                    {% if address_id -%}
+                    {{ formsubmit(_('Modify'), 'check') }}
+                    {%- else -%}
+                    {{ formsubmit(_('Create'), 'plus') }}
+                    {%- endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

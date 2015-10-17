@@ -1,0 +1,1 @@
+{{ config.SHOP_NAME }}: Payment received for order {{ order.full_number }}

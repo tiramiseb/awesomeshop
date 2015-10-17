@@ -1,0 +1,6 @@
+{% extends "skeleton.html" %}
+
+{% block title %}{{ _('Home') }}{% endblock %}
+{% block content %}
+{% include ['local/home.html', 'placeholder/home.html'] ignore missing %}
+{% endblock %}

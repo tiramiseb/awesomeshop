@@ -1,0 +1,11 @@
+Bonjour,
+
+Votre commande {{ order.full_number }} a été expédié !
+
+{%- if order.tracking_number -%}
+Vous pouvez suivre votre livraison à l'adresse suivante:
+{{ order.tracking_url }}
+{%- endif -%}
+
+Cordialement,
+L'équipe {{ config.SHOP_NAME }}

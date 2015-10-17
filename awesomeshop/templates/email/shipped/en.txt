@@ -1,0 +1,11 @@
+Hello,
+
+Your order {{ order.full_number }} has been shipped!
+
+{%- if order.tracking_number -%}
+You can track your package using the following link:
+{{ order.tracking_url }}
+{%- endif -%}
+
+Regards,
+The {{ config.SHOP_NAME }} team

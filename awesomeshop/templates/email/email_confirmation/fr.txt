@@ -1,0 +1,10 @@
+Bonjour,
+
+Veuillez confirmer votre adresse e-mail en chargeant la page suivante :
+
+{{ url_for('confirm_email', code=code, _external=True) }}
+
+Merci !
+
+Cordialement,
+L'équipe {{ config.SHOP_NAME }}

@@ -1,0 +1,47 @@
+{% extends "dashboard/skeleton.html" %}
+
+{% macro orderline(order) %}
+                <a class="list-group-item" href="{{ url_for('dashboard_order', order_number=order.number) }}">
+                    {{ order.full_invoice_number }}
+                    ({{ order.full_number}}),
+                    {{ order.customer }},
+                    {{ order.formated_invoice_date }},
+                    {{ ngettext('%(num)d product', '%(num)d products', order.quantity) }},
+                </a>
+{% endmacro %}
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                {{ _('Orders in preparation') }}
+            </div>
+            <div class="list-group">
+                {%- for order in prep_orders %}
+                {{ orderline(order) }}
+                {%- endfor %}
+            </div>
+        </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                {{ _('Orders to prepare') }}
+            </div>
+            <div class="list-group">
+                {%- for order in paid_orders %}
+                {{ orderline(order) }}
+                {%- endfor %}
+            </div>
+        </div>
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                {{ _('Awaiting payment') }}
+            </div>
+            <div class="list-group">
+                {%- for order in awaiting_payment_orders %}
+                {{ orderline(order) }}
+                {%- endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

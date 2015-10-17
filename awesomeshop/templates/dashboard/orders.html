@@ -1,0 +1,66 @@
+{% extends "dashboard/skeleton.html" %}
+
+{% block title %}{{ _('Dashboard') }} - {{ _('Orders') }}{% endblock %}
+{% block content %}
+<h1>{{ _('Orders') }}</h1>
+<table class="table table-hover">
+    <tr>
+        <th>{{ _('Number') }}</th>
+        <th>{{ _('Status') }}</th>
+        <th>{{ _('Customer') }}</th>
+        <th>{{ _('Date') }}</th>
+        <th>{{ _('Gross') }}</th>
+        <th>{{ _('Net') }}</th>
+        <th></th>
+    </tr>
+    {% for order in orders %}
+    <tr>
+        <td class="pointer" onclick="document.location='{{ url_for('dashboard_order', order_number=order.number) }}'">
+            {%- if order.invoice_number %}
+            {{ order.full_invoice_number }} ({{ order.full_number }})
+            {%- else %}
+            {{ order.full_number }}
+            {%- endif %}
+        </td>
+        <td class="pointer" onclick="document.location='{{ url_for('dashboard_order', order_number=order.number) }}'">
+            {{ order.human_status|safe }}
+        </td>
+        <td class="pointer" onclick="document.location='{{ url_for('dashboard_order', order_number=order.number) }}'">
+            {%- if order.customer.email %}
+            {{ order.customer }}
+            {%- else -%}
+            {{ _('Deleted user') }}
+            {%- endif %}
+        </td>
+        <td class="pointer" onclick="document.location='{{ url_for('dashboard_order', order_number=order.number) }}'">
+            {{ order.formated_date }}
+        </td>
+        <td class="pointer" onclick="document.location='{{ url_for('dashboard_order', order_number=order.number) }}'">
+            {{ order.gross_total }}
+        </td>
+        <td class="pointer" onclick="document.location='{{ url_for('dashboard_order', order_number=order.number) }}'">
+            {{ order.net_total }}
+        </td>
+        {#<td class="pointer" onclick="document.location='{{ url_for('dashboard_product', product_id=product.id) }}'">
+            {{ product.reference }}
+        </td>
+        <td class="pointer" onclick="document.location='{{ url_for('dashboard_product', product_id=product.id) }}'">
+            {{ product }}
+        </td>
+        <td class="pointer" onclick="document.location='{{ url_for('dashboard_product', product_id=product.id) }}'">
+            {{ product.stock }}
+        </td>
+        <td>
+            <div class="btn-group pull-right">
+                <a class="btn btn-success" href="{{ url_for('dashboard_product', product_id=product.id) }}">
+                    <i class="fa fa-pencil"></i>
+                </a>
+                <a class="btn btn-danger" href="{{ url_for('dashboard_remove_product', product_id=product.id) }}">
+                    <i class="fa fa-trash"></i>
+                </a>
+            </div>
+        </td>#}
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

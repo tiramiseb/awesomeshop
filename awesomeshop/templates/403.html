@@ -1,0 +1,14 @@
+{% extends "skeleton.html" %}
+
+{% block title %}{{ _('Error 403') }}{% endblock %}
+{% block content %}
+<h1>{{ _('Error 403: Forbidden') }}</h1>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <p>{{ _('You are not authorized to be here, sorry!') }}</p>
+        <ul>
+            <li><a href="{{ url_for('home') }}">{{ _('Return to the home page') }}</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

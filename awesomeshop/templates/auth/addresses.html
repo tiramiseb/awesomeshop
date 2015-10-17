@@ -1,0 +1,72 @@
+{% extends "skeleton.html" %}
+
+
+{% block title %}{{ _('Addresses') }}{% endblock %}
+{% block content %}
+<h1>{{ _('Configure your addresses') }}</h1>
+<div class="row">
+    {% for aid, form in allforms %}
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    {{ forminput(form.title) }}
+                    <div class="row">
+                        <div class="col-xs-6">
+                            {{ forminput(form.firstname) }}
+                        </div>
+                        <div class="col-xs-6">
+                            {{ forminput(form.lastname) }}
+                        </div>
+                    </div>
+                    {{ forminput(form.address) }}
+                    {{ forminput(form.country) }}
+                    {{ forminput(form.phone) }}
+                    <div class="btn-group btn-group-justified" role="group">
+                        <div class="btn-group" role="group">
+                            <button type="submit" name="ok" class="btn btn-success">
+                                <i class="fa fa-check"></i>
+                                {{ _('Change') }}
+                            </button>
+                        </div>
+                        <a href="{{ url_for('remove_address', address_id=aid) }}" class="btn btn-danger">
+                            <i class="fa fa-trash"></i>
+                            {{ _('Remove') }}
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-home"></i>
+                {{ _('New address') }}
+            </div>
+            <div class="panel-body">
+                <form method="POST">
+                    {{ newform.hidden_tag() }}
+                    {{ forminput(newform.title) }}
+                    <div class="row">
+                        <div class="col-xs-6">
+                            {{ forminput(newform.firstname) }}
+                        </div>
+                        <div class="col-xs-6">
+                            {{ forminput(newform.lastname) }}
+                        </div>
+                    </div>
+                    {{ forminput(newform.address) }}
+                    {{ forminput(newform.country) }}
+                    {{ forminput(newform.phone) }}
+                    {{ formsubmit(_('Create'), 'plus') }}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

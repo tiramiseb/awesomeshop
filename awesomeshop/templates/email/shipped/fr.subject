@@ -1,0 +1,1 @@
+{{ config.SHOP_NAME }} : Colis envoyé pour la commande {{ order.full_number }}

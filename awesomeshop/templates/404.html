@@ -1,0 +1,14 @@
+{% extends "skeleton.html" %}
+
+{% block title %}{{ _('Error 404') }}{% endblock %}
+{% block content %}
+<h1>{{ _('Error 404: Page not found') }}</h1>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <p>{{ _('It seems what you were looking for is not here.') }}</p>
+        <ul>
+            <li><a href="{{ url_for('home') }}">{{ _('Return to the home page') }}</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

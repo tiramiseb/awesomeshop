@@ -1,0 +1,33 @@
+{% extends "dashboard/skeleton.html" %}
+
+{% macro categories_rows(categories, level=0) %}
+{% for category in categories %}
+    <tr>
+        <td class="pointer" onclick="document.location='{{ url_for('dashboard_category', category_id=category[0].id) }}'">
+            <span class="category_hierarchy_{{ level }}">{{ category[0].short_name }}</span>
+        </td>
+        <td>
+            <div class="btn-group pull-right">
+                <a class="btn btn-success" href="{{ url_for('dashboard_category', category_id=category[0].id) }}">
+                    <i class="fa fa-pencil"></i>
+                </a>
+                <a class="btn btn-danger" href="{{ url_for('dashboard_remove_category', category_id=category[0].id) }}">
+                    <i class="fa fa-trash"></i>
+                </a>
+            </div>
+        </td>
+    </tr>
+    {{ categories_rows(category[1], level=level+1) }}
+{% endfor %}
+{% endmacro %}
+{% block title %}{{ _('Dashboard') }} - {{ _('Categories') }}{% endblock %}
+{% block content %}
+<h1>{{ _('Categories') }}</h1>
+<p><a href="{{ url_for('dashboard_category') }}" class="btn btn-primary">
+    <i class="fa fa-plus"></i>
+    {{ _('Add a category') }}
+</a></p>
+<table class="table table-hover">
+    {{ categories_rows(categories) }}
+</table>
+{% endblock %}

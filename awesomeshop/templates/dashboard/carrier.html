@@ -1,0 +1,269 @@
+{% extends "dashboard/skeleton.html" %}
+
+{% block title %}{{ _('Dashboard') }} - {{ _('Carrier') }}{% endblock %}
+{% block content %}
+<h1>{% if form.name.data %}{{ form.name.data }}{% else %}{{ _('New carrier') }}{% endif %}</h1>
+<form method="POST">
+ {{ form.hidden_tag() }}
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6">
+                    {{ forminput(form.name) }}
+                </div>
+                <div class="col-md-6">
+                    {{ forminput(form.tracking_url) }}
+                </div>
+            </div>
+            <div class="row">
+                {% for l in config.LANGS -%}
+                <div class="col-sm-6">
+                    {{ forminput(form.description.entries[l]) }}
+                </div>
+                {%- endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">{{ _('Countries') }}</div>
+        <div class="panel-body">
+            <p>{{ _('This carrier has special rates for the following countries or groups.') }} {{ _('Please note there is always a "rest of the world" option.') }}</p>
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ forminput(form.countries) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ forminput(form.countries_groups) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">{{ _('Weights') }}</div>
+        <div class="panel-body" id="weights">
+            {% for w in form.weights -%}
+            <div class="row" id="row-{{ w.id }}">
+                <div class="col-xs-4 col-sm-3 col-md-2 text-right">
+                    <label for="{{ w.id }}">{{ _('up to...') }}</label>
+                </div>
+                <div class="col-xs-8 col-sm-6 col-md-5 col-lg-4">
+                    <div class="input-group">
+                        {{ w(class='form-control weight') }}
+                        <span class="input-group-addon">{{ _('grams') }}</span>
+                        <span class="input-group-btn">
+                            <a href="#" class="btn btn-danger" onclick="remove_weight('{{ w.id }}'); return false">{{ _('Remove') }}</a>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-1 col-sm-4">
+                </div>
+            </div>
+            {%- endfor %}
+            <div class="row" id="addweight">
+                <div class="col-xs-8 col-xs-offset-4 col-sm-6 col-sm-offset-3 col-md-5 col-md-offset-2 col-lg-4">
+                    <a href="#" class="btn btn-primary btn-block" onclick="add_weight_range(); return false;">
+                        {{ _('Add a weight range') }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group text-right">
+        <div class="btn-group">
+            <button type="submit" class="btn btn-success">
+                <i class="fa fa-check"></i>
+                {{ _('Save') }}
+            </button>
+            <a href="{{ url_for('dashboard_carriers') }}" class="btn btn-danger">
+                <i class="fa fa-undo"></i>
+                {{ _('Cancel') }}
+            </a>
+        </div>
+    </div>
+</form>
+{% if carrier.id -%}
+<form action="{{ url_for('dashboard_carrier_costs', carrier_id=carrier.id) }}" method="POST">
+    <div class="panel panel-default" id="price">
+        <div class="panel-heading">{{ _('Price we pay') }}</div>
+        <div class="panel-body">
+            <table>
+                <tr>
+                    <th></th>
+                    {% for w in carrier.weights -%}
+                    <th>
+                        {% if w < 1000 -%}
+                        {{ _('... %(weight)s g', weight=w) }}
+                        {%- else -%}
+                        {{ _('... %(weight)s kg', weight=w/1000) }}
+                        {%- endif %}
+                    </th>
+                    {%- endfor %}
+                </tr>
+                {% for g in carrier.countries_groups -%}
+                <tr>
+                    <td class="text-right carrier-countries">{{ g }}</td>
+                    {% for w in carrier.weights -%}
+                    <td>
+                        <div class="input-group">
+                            <input type="text" class="form-control text-right" name="{{ g.id }}+{{ w }}" value="{{ carrier.get_price(g.id, w, 'purchasing', exact=True) }}">
+                            <span class="input-group-addon">{{ config.CURRENCY }}</span>
+                        </div>
+                    </td>
+                    {%- endfor %}
+                </tr>
+                {%- endfor %}
+                {% for c in carrier.countries -%}
+                <tr>
+                    <td class="text-right carrier-countries">{{ c }}</td>
+                    {% for w in carrier.weights -%}
+                    <td>
+                        <div class="input-group">
+                            <input type="text" class="form-control text-right" name="{{ c.id }}+{{ w }}" value="{{ carrier.get_price(c.id, w, 'purchasing', exact=True) }}">
+                            <span class="input-group-addon">{{ config.CURRENCY }}</span>
+                        </div>
+                    </td>
+                    {%- endfor %}
+                </tr>
+                {%- endfor %}
+                <tr>
+                    <td class="text-right carrier-countries">
+                        {{ _('Rest of the world') }}
+                    </td>
+                    {% for w in carrier.weights -%}
+                    <td>
+                        <div class="input-group">
+                            <input type="text" class="form-control text-right" name="rest+{{ w }}" value="{{ carrier.get_price('rest', w, 'purchasing', exact=True) }}">
+                            <span class="input-group-addon">{{ config.CURRENCY }}</span>
+                        </div>
+                    </td>
+                    {%- endfor %}
+                </tr>
+            </table>
+            <div class="form-group text-right">
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fa fa-check"></i>
+                        {{ _('Save') }}
+                    </button>
+                    <a href="{{ url_for('dashboard_carrier', carrier_id=carrier.id) }}" class="btn btn-danger">
+                        <i class="fa fa-undo"></i>
+                        {{ _('Cancel') }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="panel panel-default">
+    <div class="panel-heading">{{ _('Net price for the customers') }}</div>
+        <table class="table table-hover">
+            <tr>
+                <th></th>
+                {% for w in carrier.weights -%}
+                <th class="text-right">
+                    {% if w < 1000 -%}
+                    {{ _('... %(weight)s g', weight=w) }}
+                    {%- else -%}
+                    {{ _('... %(weight)s kg', weight=w/1000) }}
+                    {%- endif %}
+                </th>
+                {%- endfor %}
+            </tr>
+            {% for g in carrier.countries_groups -%}
+            <tr>
+                <td class="text-right carrier-countries">{{ g }}</td>
+                {% for w in carrier.weights -%}
+                {%- set price = carrier.get_price(g.id, w, 'net', exact=True) %}
+                <td class="text-right">
+                    {% if price -%}
+                    {{ price }} {{ config.CURRENCY }}
+                    {%- endif %}
+                </td>
+                {%- endfor %}
+            </tr>
+            {%- endfor %}
+            {% for c in carrier.countries -%}
+            <tr>
+                <td class="text-right carrier-countries">{{ c }}</td>
+                {% for w in carrier.weights -%}
+                {%- set price = carrier.get_price(c.id, w, 'net', exact=True) %}
+                <td class="text-right">
+                    {% if price -%}
+                    {{ price }} {{ config.CURRENCY }}
+                    {%- endif %}
+                </td>
+                {%- endfor %}
+            </tr>
+            {%- endfor %}
+            <tr>
+                <td class="text-right carrier-countries">
+                    {{ _('Rest of the world') }}
+                </td>
+                {% for w in carrier.weights -%}
+                {%- set price = carrier.get_price('rest', w, 'net', exact=True) %}
+                <td class="text-right">
+                    {% if price -%}
+                    {{ price }} {{ config.CURRENCY }}
+                    {%- endif %}
+                </td>
+                {%- endfor %}
+            </tr>
+        </table>
+</div>
+{%- endif %}
+<script>
+function add_weight_range() {
+    var ids = [],
+        container = document.getElementById('weights'),
+        buttonrow = document.getElementById('addweight'),
+        newid;
+    [].forEach.call(document.getElementsByClassName('weight'), function(elem) {
+        ids.push(parseInt(elem.id.split('-')[1]));
+    });
+    ids.sort();
+    newid = ids.pop() + 1;
+    
+    var row = document.createElement('div');
+    row.className = 'row';
+    row.id = 'row-weights-'+newid;
+    var col1 = document.createElement('div');
+    col1.className = 'col-xs-4 col-sm-3 col-md-2 text-right';
+    var label = document.createElement('label');
+    label.setAttribute('for', 'weights-'+newid);
+    label.innerHTML = "{{ _('up to...') }}";
+    var col2 = document.createElement('div')
+    col2.className = 'col-xs-8 col-sm-6 col-md-5 col-lg-4';
+    var inputgroup = document.createElement('div');
+    inputgroup.className = 'input-group';
+    var input = document.createElement('input');
+    input.id = 'weights-'+newid;
+    input.className = 'form-control weight';
+    input.type = 'text';
+    input.name = 'weights-'+newid;
+    var grams = document.createElement('span');
+    grams.className = 'input-group-addon';
+    grams.innerHTML = '{{ _('grams') }}';
+    var removespan = document.createElement('span');
+    removespan.className = 'input-group-btn';
+    var removelink = document.createElement('a');
+    removelink.className = 'btn btn-danger';
+    removelink.href = '#';
+    removelink.innerHTML = '{{ _('Remove') }}';
+    removelink.setAttribute('onclick', "remove_weight('weights-"+newid+"'); return false;");
+    col1.appendChild(label);
+    row.appendChild(col1);
+    inputgroup.appendChild(input);
+    inputgroup.appendChild(grams);
+    removespan.appendChild(removelink);
+    inputgroup.appendChild(removespan);
+    col2.appendChild(inputgroup);
+    row.appendChild(col2);
+    container.insertBefore(row, buttonrow);
+}
+function remove_weight(id) {
+    var container = document.getElementById('weights'),
+        row = document.getElementById('row-'+id);
+    container.removeChild(row);
+}
+</script>
+{% endblock %}

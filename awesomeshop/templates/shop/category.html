@@ -1,0 +1,12 @@
+{% extends "skeleton.html" %}
+
+{% block title %}{{ category }}{% endblock %}
+{% block content %}
+<h1>{{ category.short_name }}</h1>
+<div class="row">
+    {% for product in category.onsale_products_recursive -%}
+    {{ product_in_grid(product) }}
+    {%- endfor %}
+</div>
+{% endblock %}
+

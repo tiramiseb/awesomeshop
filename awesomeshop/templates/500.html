@@ -1,0 +1,14 @@
+{% extends "skeleton.html" %}
+
+{% block title %}{{ _('Error 500') }}{% endblock %}
+{% block content %}
+<h1>{{ _('Error 500: Internal server error') }}</h1>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <p>{{ _('Something bad happened, sorry!') }}</p>
+        <ul>
+            <li><a href="{{ url_for('home') }}">{{ _('Return to the home page') }}</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

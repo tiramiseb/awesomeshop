@@ -1,0 +1,22 @@
+{% extends "skeleton.html" %}
+
+{% block title %}{{ _('Payment cancelled') }}{% endblock %}
+{% block content %}
+<h1>{{ _('Payment cancelled') }}</h1>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <p>{{ _("You have cancelled the payment!") }}</p>
+        <div class="btn-group">
+            <a href="{{ url_for('cancel_order', order_number=order.number) }}" class="btn btn-danger">
+                {{ _('Cancel the order') }}
+            </a>
+            <a href="{{ url_for('order', order_number=order.number) }}" class="btn btn-primary">
+                {{ _('Return to the order page') }}
+            </a>
+            <a href="{{ url_for('pay_order', order_number=order.number) }}" class="btn btn-success">
+                {{ _('Proceed to payment again') }}
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

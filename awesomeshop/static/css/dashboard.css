@@ -1,0 +1,22 @@
+/* Button to toggle the menu */
+#menu-toggle {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 100;
+}
+
+/* Smaller text for the menu */
+.sidebar-nav li {
+    font-size: 90%;
+    line-height: 3em !important;
+}
+/* Text area with monospace, better for writing ReST */
+textarea {
+    font-family: monospace;
+}
+
+.carrier-countries {
+    white-space: nowrap;
+    padding-right: 10px;
+}

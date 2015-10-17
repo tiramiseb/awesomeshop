@@ -1,0 +1,315 @@
+{% extends "skeleton.html" %}
+
+{% block title %}{{ _('Checkout') }}{% endblock %}
+{% block content %}
+{% if cart -%}
+<form method="POST" action="{{ url_for('confirm_order') }}" id="checkout-form">
+    <h1>{{ _('Checkout') }}</h1>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <i class="fa fa-cube"></i>
+                    {{ _('Product') }}
+                </div>
+                <div class="col-xs-4 col-sm-2 text-right">
+                    {{ _('Qty') }}
+                </div>
+                <div class="col-xs-4 col-sm-2 text-right">
+                    {{ _('Unit') }}
+                </div>
+                <div class="col-xs-4 col-sm-2 text-right">
+                    {{ _('Total') }}
+                </div>
+            </div>
+        </div>
+        <div class="list-group">
+            {% for line in cart -%}
+            <div class="list-group-item">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                        {{ line.product }}
+                    </div>
+                    <div class="col-xs-4 col-sm-2 text-right">
+                        {{ line.quantity }}
+                    </div>
+                    <div class="col-xs-4 col-sm-2 text-right">
+                        {{ line.get_price_per_item().quantize('0.01').net }}
+                        {{ config.CURRENCY }}
+                    </div>
+                    <div class="col-xs-4 col-sm-2 text-right">
+                        <strong>
+                            {{ line.get_total().quantize('0.01').net }}
+                            {{ config.CURRENCY }}
+                        </strong>
+                    </div>
+                 </div>
+            </div>
+            {%- endfor %}
+        </div>
+    </div>
+    {% if current_user.addresses -%}
+    <div class="row checkout-addresses">
+        <div class="col-xs-12 col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <i class="fa fa-map-marker"></i>
+                        {{ _('Delivery address') }}
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <select id="delivery-select" class="form-control" name="delivery" onchange="update_delivery_address()">
+                            {% for address in current_user.addresses -%}
+                            <option value="{{ address.id }}">{{ address.title }}</option>
+                            {%- endfor %}
+                        </select>
+                    </div>
+                    <p>{{ _('The package will be shipped to:') }}</p>
+                    <div class="delivery-display">
+                        <pre class="well" id="delivery-address"></pre>
+                        <div class="btn-group btn-group-justified">
+                            <a href="#" class="btn btn-info" id="delivery-modify-address">
+                                <i class="fa fa-pencil"></i>
+                                {{ _('Modify') }}
+                            </a>
+                            <a href="{{ url_for('address_from_checkout') }}" class="btn btn-warning">
+                                <i class="fa fa-plus"></i>
+                                {{ _('New address') }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <i class="fa fa-file-text-o"></i>
+                        {{ _('Billing address') }}
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div id="billing-checkbox" class="checkbox">
+                        <label>
+                            <input type="checkbox" checked="checked" name="delivery_as_billing" id="delivery-as-billing" onchange="change_delivery_as_billing()">
+                            {{ _('Use the delivery address') }}
+                        </label> 
+                    </div>
+                    <div id="billing-container" class="hidden">
+                        <div class="form-group">
+                            <select id="billing-select" class="form-control" name="billing" onchange="update_billing_address()">
+                                {% for address in current_user.addresses -%}
+                                <option value="{{ address.id }}">{{ address.title }}</option>
+                                {%- endfor %}
+                            </select>
+                        </div>
+                        <div class="delivery-display">
+                            <pre class="well" id="billing-address"></pre>
+                            <div class="btn-group btn-group-justified">
+                                <a href="#" class="btn btn-info" id="billing-modify-address">
+                                    <i class="fa fa-pencil"></i>
+                                    {{ _('Modify') }}
+                                </a>
+                                <a href="{{ url_for('address_from_checkout') }}" class="btn btn-warning">
+                                    <i class="fa fa-plus"></i>
+                                    {{ _('New address') }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">
+                <i class="fa fa-truck"></i>
+                {{ _('Shipping') }}
+            </h2>
+        </div>
+        <div class="list-group order-options" id="carriers-list">
+        </div>
+    </div>
+    {%- else -%}
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <p class="lead text-center">{{ _('You must define at least one address for delivery') }}</p>
+            <a href="{{ url_for('address_from_checkout') }}" class="btn btn-lg btn-block btn-success">
+                <i class="fa fa-home"></i>
+                {{ _('Create an address') }}
+            </a>
+        </div>
+    </div>
+    {%- endif %}
+    <div class="well">
+        <div class="row">
+            <div class="col-xs-8 col-md-9 text-right">
+                {{ _('Subtotal') }}
+            </div>
+            <div class="col-xs-4 col-md-3 text-right">
+                {{ cart.get_total().quantize('0.01').net }}
+                {{ config.CURRENCY }}
+            </div>
+        </div>
+        <div class="shippingtotal">
+            <div class="row">
+                <div class="col-xs-8 col-md-9 text-right">
+                    {{ _('Shipping fee') }}
+                </div>
+                <div class="col-xs-4 col-md-3 text-right" id="shipping-fee">
+                </div>
+            </div>
+            <div class="row total-cost text-info">
+                <div class="col-xs-8 col-md-9 text-right">
+                    {{ _('Total') }}
+                </div>
+                <div class="col-xs-4 col-md-3 text-right">
+                    <b id="total">
+                    </b>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">
+                <i class="fa fa-money"></i>
+                {{_('Payment') }}
+            </h2>
+        </div>
+        <div class="list-group order-options">
+            {%- for mode in modes_of_payment %}
+            <label class="list-group-item">
+                <input type="radio" name="payment" value="{{ mode.id }}" onchange="maybe_activate_payment_button()">
+                {{ mode.text|safe }}
+            </label>
+            {% endfor %}
+        </div>
+    </div>
+    <textarea placeholder="{{ _('If you have any message for us about this order, write it here!') }}" id="checkout-message" class="form-control"></textarea>
+    <div class="panel panel-default">
+        <div class="panel-body text-right">
+                <label class="reused-package">
+                    <i class="fa fa-recycle"></i>
+                    {{ _('I accept that my order is shipped in a reused package') }}
+                    <input type="checkbox" name="reused_package">
+                </label>
+                <label>
+                    <i class="fa fa-check"></i>
+                    <b>{{ _('I agree to the %(terms)s and adhere to them unconditionally', terms='<a href="'|safe+url_for('info', slug='terms_of_purchase')+'" target="_blank">'|safe+_('terms of purchase')+'</a>'|safe) }}</b>
+                    <input type="checkbox" name="accept_terms" onchange="maybe_activate_payment_button()">
+                </label>
+            </div>
+    </div>
+    <button type="submit" id="proceed" class="btn btn-lg btn-success pull-right" disabled="disabled">
+        {{ _('Verify and confirm the order') }}
+        <i class="fa fa-chevron-right"></i>
+    </button>
+    <small>{% if locale == 'fr' %}{{ _('TVA non applicable, article 293 B du Code général des impôts') }}{% endif %}</small>
+</form>
+<script>
+var addresses = {
+        {%- for address in current_user.addresses %}
+        "{{ address.id }}": {
+            address: "{{ address.firstname }} {{ address.lastname }}\n{{ address.address|replace('\n','\\n')|replace('\r', '') }}\n{{ address.country }}",
+            modifyurl: "{{ url_for('address_from_checkout', address_id=address.id) }}",
+            carriers: [
+                {%- for carrier in address.carriers(weight=cart.weight()) %}
+                {
+                    name: "{{ carrier[0] }}",
+                    id: "{{ carrier[0].id }}",
+                    gross: "{{ carrier[1].gross }} {{ config.CURRENCY }}",
+                    net: "{{ carrier[1].net }} {{ config.CURRENCY }}",
+                    total_net: "{{ carrier[1].net + cart.get_total().quantize('0.01').net }} {{ config.CURRENCY }}"
+                    },
+            {%- endfor %}
+                ]
+            },
+        {%- endfor %}
+        };
+function update_delivery_address() {
+    var id = document.getElementById('delivery-select').value,
+        address = addresses[id],
+        carriers_list = document.getElementById('carriers-list');
+    // Display the delivery address
+    document.getElementById('delivery-address').innerHTML = address.address;
+    document.getElementById('delivery-modify-address').href = address.modifyurl;
+    // Remove all carriers options
+    while (carriers_list.firstChild) {
+        carriers_list.removeChild(carriers_list.firstChild);
+    };
+    // Reinitialize the price display
+    document.getElementById('shipping-fee').innerHTML = "...";
+    document.getElementById('total').innerHTML = "...";
+    // Create new carriers options
+    address.carriers.forEach(function(c){
+        var label = document.createElement('label');
+        label.className = "list-group-item";
+        var row = document.createElement('div');
+        row.className = "row";
+        var col1 = document.createElement('div');
+        col1.className = "col-xs-8";
+        var radio = document.createElement('input');
+        radio.type = "radio";
+        radio.name = "shipping";
+        radio.value = c.id;
+        radio.setAttribute('onchange', "carrier_changed('"+c.net+"', '"+c.total_net+"')");
+        var name = document.createElement('span');
+        name.innerHTML = c.name;
+        var col2 = document.createElement('div');
+        col2.className = "col-xs-4 text-right";
+        var cost = document.createElement('b');
+        cost.innerHTML = c.net;
+        col2.appendChild(cost);
+        col1.appendChild(radio);
+        col1.appendChild(name);
+        row.appendChild(col1);
+        row.appendChild(col2);
+        label.appendChild(row);
+        carriers_list.appendChild(label);
+    });
+    maybe_activate_payment_button();
+}
+function update_billing_address() {
+    var id=document.getElementById('billing-select').value;
+    // Display the billing address
+    document.getElementById('billing-address').innerHTML = addresses[id].address;
+    document.getElementById('billing-modify-address').href = addresses[id].modifyurl;
+}
+function change_delivery_as_billing() {
+    var cont = document.getElementById('billing-container');
+    if (document.getElementById('delivery-as-billing').checked == true) {
+        cont.className="hidden";
+    } else {
+        cont.className="";
+    };
+}
+function carrier_changed(net, total_net) {
+    document.getElementById('shipping-fee').innerHTML = net;
+    document.getElementById('total').innerHTML = total_net;
+    maybe_activate_payment_button();
+}
+function maybe_activate_payment_button() {
+    var form = document.getElementById('checkout-form');
+    if (form['delivery'].value && form['shipping'].value &&
+        form['payment'].value && form['accept_terms'].checked) {
+        document.getElementById('proceed').disabled = "";
+    } else {;
+        document.getElementById('proceed').disabled = "disabled";
+    };
+}
+// Initialize everything after loading the page
+update_delivery_address();
+update_billing_address();
+change_delivery_as_billing();
+maybe_activate_payment_button();
+</script>
+{%- else -%}
+<div class="alert alert-danger text-center">{{ _('Your cart is empty!') }}</div>
+{%- endif %}
+{% endblock %}
+

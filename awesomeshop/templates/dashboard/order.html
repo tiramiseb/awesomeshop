@@ -1,0 +1,205 @@
+{% extends "dashboard/skeleton.html" %}
+
+{% block title %}{{ _('Order') }}{% endblock %}
+{% block content %}
+<h1>{% if order.invoice_number %}{{ _('Invoice #%(num)s', num=order.full_invoice_number) }}, {% endif %}{{ _('Order #%(num)s', num=order.full_number) }}</h1>
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table>
+                    <tr>
+                        <td colspan="2">
+                            <a href="{{ url_for('order', order_number=order.number) }}" target="_blank">
+                                {{ _("View the customer's (printable) version") }}
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ _('Customer') }}</td>
+                        <td>{% if order.customer.email %}{{ order.customer }}{% else %}{{ _('Deleted user') }}{% endif %}</td>
+                    </tr>
+                    {%- if order.invoice_number %}
+                    <tr>
+                        <td>{{ _('Invoice date:') }}</td>
+                        <td>{{ order.formated_invoice_date }}</td>
+                    </tr>
+                    {%- endif %}
+                    <tr>
+                        <td>{{ _('Order date:') }}</td>
+                        <td>{{ order.formated_date }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ _('Payment mode:') }}</td>
+                        <td>{{ order.payment_description|safe }}</td>
+                    </tr>
+                    {%- if order.payment_date %}
+                    <tr>
+                        <td>{{ _('Payment date:') }}</td>
+                        <td>{{ order.formated_payment_date }}</td>
+                    </tr>
+                    {%- endif %}
+                    <tr>
+                        <td>{{ _('Carrier:') }}</td>
+                        <td>{{ order.carrier }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ _('Reused packaging:') }}</td>
+                        <td>{% if order.accept_reused_package %}<span class="text-success">{{ _('yes') }}</span>{% else %}<span class="text-danger">{{ _('no') }}</span>{% endif %}</td>
+                    </tr>
+                    {%- if order.status == 'unconfirmed' %}
+                    <tr>
+                        <td colspan="2">{{ _('Cancelled if not paid within %(num)d days.', num=config.CONFIRM_DELAY) }}</td>
+                    </tr>
+                    {%- elif order.status == 'awaiting_payment' %}
+                    <tr>
+                        <td colspan="2">{{ _('Cancelled if payment not received within %(num)d days.', num=config.PAYMENT_DELAY) }}</td>
+                    </tr>
+                    {%- endif %}
+                    <tr>
+                        <td>{{ _('Status:') }}</td>
+                        <td>{{ order.human_status|safe }}</td>
+                    </tr>
+                    {%- if order.tracking_number %}
+                    <tr>
+                        <td>{{ _('Tracking number:') }}</td>
+                        <td><a href="{{ order.tracking_url }}" target="_blank">{{ order.tracking_number }}</a></td>
+                    </tr>
+                    {%- endif %}
+                </table>
+            </div>
+        </div>
+        {%- if order.status in ('preparation', 'shipped') and order.carrier.tracking_url %}
+        <form method="POST" action="{{ url_for('dashboard_change_order_status', order_number=order.number, status='shipped') }}">
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="tracking_number" placeholder="{{ _('Tracking number') }}">
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" type="submit">
+                            {%- if order.status == 'preparation' %}
+                                {{ _('Parcel shipped') }}
+                            {%- else %}
+                                <i class="fa fa-dot-circle-o"></i>
+                                {{ _('Change tracking number') }}
+                            {%- endif %}
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </form>
+        {%- endif %}
+        <div class="form-group btn-group">
+            {%- if 'awaiting_payment' in order.next_states %}
+            <a href="{{ url_for('dashboard_change_order_status', order_number=order.number, status='awaiting_payment') }}" class="btn btn-primary">{{ _('Confirm (wait for payment)') }}</a>
+            {%- endif %}
+            {%- if 'payment_received' in order.next_states %}
+            <a href="{{ url_for('dashboard_change_order_status', order_number=order.number, status='payment_received') }}" class="btn btn-success">{{ _('Payment received') }}</a>
+            {%- endif %}
+            {%- if 'payment_failed' in order.next_states %}
+            <a href="{{ url_for('dashboard_change_order_status', order_number=order.number, status='payment_failed') }}" class="btn btn-danger">{{ _('Payment failed') }}</a>
+            {%- endif %}
+            {%- if 'preparation' in order.next_states %}
+            <a href="{{ url_for('dashboard_change_order_status', order_number=order.number, status='preparation') }}" class="btn btn-info">{{ _('Begin preparation') }}</a>
+            {%- endif %}
+            {%- if 'shipped' in order.next_states and not order.carrier.tracking_url %}
+            <a href="{{ url_for('dashboard_change_order_status', order_number=order.number, status='shipped') }}" class="btn btn-primary">{{ _('Parcel shipped') }}</a>
+            {%- endif %}
+            {%- if 'awaiting_return' in order.next_states %}
+            <a href="{{ url_for('dashboard_change_order_status', order_number=order.number, status='awaiting_return') }}" class="btn btn-warning">{{ _('Accept a return') }}</a>
+            {%- endif %}
+            {%- if 'refund' in order.next_states %}
+            <a href="{{ url_for('dashboard_change_order_status', order_number=order.number, status='refund') }}" class="btn btn-danger">{{ _('Emit a refund') }}</a>
+            {%- endif %}
+            {%- if 'cancelled' in order.next_states %}
+            <a href="{{ url_for('dashboard_change_order_status', order_number=order.number, status='cancelled') }}" class="btn btn-danger">{{ _('Cancel') }}</a>
+            {%- endif %}
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-10">
+                        <i class="fa fa-cube"></i>
+                        {{ _('Product') }}
+                    </div>
+                    <div class="col-xs-2 text-right">
+                        {{ _('Qty') }}
+                    </div>
+                </div>
+            </div>
+            <div class="list-group">
+                {% for product in order.products %}
+                <div class="list-group-item">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            {{ product.reference }}
+                        </div>
+                        <div class="col-xs-7">
+                            {{ product.name }}
+                        </div>
+                        <div class="col-xs-2 text-right">
+                            {{ product.quantity }}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-map-marker"></i>
+                {{ _('Delivery address') }}
+            </div>
+            <div class="panel-body">
+                <b>
+                    {{ order.delivery|replace('\r\n', '<br>'|safe)|replace('\n', '<br>'|safe) }}
+                </b>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-file-text-o"></i>
+                {{ _('Billing address') }}
+            </div>
+            <div class="panel-body text-muted">
+                {{ order.billing|replace('\r\n', '<br>'|safe)|replace('\n', '<br>'|safe) }}
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="list-group">
+                <div class="list-group-item">
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <b>{{ _('Subtotal') }}</b>
+                        </div>
+                        <div class="col-xs-4 text-right">
+                            <b>{{ order.net_subtotal }}</b>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row">
+                        <div class="col-xs-8">
+                            {{ _('Shipping fee') }}
+                        </div>
+                        <div class="col-xs-4 text-right">
+                            {{ order.net_shipping }}
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row text-info total-cost">
+                        <div class="col-xs-8">
+                            <b>{{ _('Total') }}</b>
+                        </div>
+                        <div class="col-xs-4 text-right">
+                            <b>{{ order.net_total }}</b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

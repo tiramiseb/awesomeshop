@@ -1,0 +1,39 @@
+{% extends "skeleton.html" %}
+
+
+{% block title %}{{ _('Profile') }}{% endblock %}
+{% block content %}
+<h1>{{ _('Welcome on your profile, %(username)s!', username=current_user) }}</h1>
+<div class="list-group">
+    <a href="{{ url_for('email_password') }}" class="list-group-item">
+        <h4 class="list-group-item-heading">
+            <i class="fa fa-user"></i>
+            {{ _('Email and password')}}
+        </h4>
+        <p class="list-group-item-text">{{ _('Modify your email address and password') }}</p>
+    </a>
+    <a href="{{ url_for('addresses') }}" class="list-group-item">
+        <h4 class="list-group-item-heading">
+            <i class="fa fa-home"></i>
+            {{ _('Addresses')}}
+        </h4>
+        <p class="list-group-item-text">{{ _('Configure your addresses') }}</p>
+    </a>
+    <a href="{{ url_for('orders') }}" class="list-group-item">
+        <h4 class="list-group-item-heading">
+            <i class="fa fa-shopping-cart"></i>
+            {{ _('Orders')}}
+        </h4>
+        <p class="list-group-item-text">{{ _('View your orders') }}</p>
+    </a>
+    <a href="{{ url_for('delete_profile') }}" class="list-group-item">
+        <h4 class="list-group-item-heading">
+            <span class="text-danger">
+            <i class="fa fa-trash"></i>
+            {{ _('Delete the account')}}
+            </span>
+        </h4>
+        <p class="list-group-item-text text-danger">{{ _('Delete your account once and for all') }}</p>
+    </a>
+</div>
+{% endblock %}
