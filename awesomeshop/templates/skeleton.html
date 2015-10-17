@@ -68,7 +68,7 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-6">
-            {% include 'local/logo.html' %}
+            {% include 'local/logo.html' ignore missing %}
         </div>
         <div class="col-xs-6 text-right hidden-print">
             <form method="GET" action="{{ url_for('search') }}" class="form-inline">
