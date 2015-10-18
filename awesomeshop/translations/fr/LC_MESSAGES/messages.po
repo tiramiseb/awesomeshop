@@ -860,7 +860,7 @@ msgstr "Paiement reçu"
 
 #: awesomeshop/templates/dashboard/order.html:99
 msgid "Payment failed"
-msgstr "Paiement reçu"
+msgstr "Échec du paiement"
 
 #: awesomeshop/templates/dashboard/order.html:102
 msgid "Begin preparation"
