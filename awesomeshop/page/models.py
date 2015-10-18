@@ -5,6 +5,7 @@ from slugify import slugify
 
 from .. import db, get_locale
 from ..mongo import TranslationsField
+from ..photo import Photo
 
 
 class Page(db.Document):
@@ -16,6 +17,7 @@ class Page(db.Document):
                               verbose_name=lazy_gettext('Display in menu'))
     title = TranslationsField(max_length=100)
     text = TranslationsField()
+    photos = db.EmbeddedDocumentListField(Photo)
 
     meta = {
         'ordering': ['rank']
@@ -56,4 +58,10 @@ class Page(db.Document):
     def slugify_slug(cls, sender, document, **kwargs):
         document.slug = slugify(document.slug)
 
+    @classmethod
+    def remove_photos_from_disk(cls, sender, document, **kwargs):
+        for p in document.photos:
+            p.delete_files()
+
 signals.pre_save.connect(Page.slugify_slug, sender=Page)
+signals.pre_delete.connect(Page.remove_photos_from_disk, sender=Page)

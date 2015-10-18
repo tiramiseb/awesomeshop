@@ -132,6 +132,12 @@ button#add-to-cart, a#proceed_again {
     margin-right: 16px;
 }
 
+/****** ******/
+.page-content img {
+    max-width: 80%;
+    margin-left: 10%;
+}
+
 /* Small gutter for images thumbnails */
 .small-gutter > [class*='col-'] {
     padding-right:1px;

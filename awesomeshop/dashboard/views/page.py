@@ -2,6 +2,7 @@ from flask import redirect, request, url_for
 
 from ... import app
 from ...helpers import admin_required, render_template
+from ...photo import Photo
 from ...page.models import Page
 from ..forms import PageForm
 
@@ -30,7 +31,7 @@ def dashboard_page(pagetype, page_id=None):
         page.pagetype = pagetype
         page.save()
         return redirect(url_for('dashboard_pages', pagetype=pagetype))
-    return render_template('dashboard/page.html', form=form, pagetype=pagetype)
+    return render_template('dashboard/page.html', page=page, form=form, pagetype=pagetype)
 
 
 @app.route('/dashboard/page/<pagetype>/<page_id>/remove')
@@ -45,3 +46,31 @@ def dashboard_remove_page(pagetype, page_id):
 def dashboard_move_page(pagetype, page_id, direction):
     Page.objects.get_or_404(id=page_id).move(direction)
     return redirect(url_for('dashboard_pages', pagetype=pagetype))
+
+@app.route('/dashboard/page/<pagetype>/<page_id>/addphoto', methods=['POST'])
+@admin_required
+def dashboard_add_page_photo(pagetype, page_id):
+    page = Page.objects.get_or_404(id=page_id)
+    for f in request.files.getlist('photo[]'):
+        photo = Photo.from_request(f)
+        page.photos.append(photo)
+    page.save()
+    return redirect(
+                url_for('dashboard_page', pagetype=pagetype, \
+                        page_id=page_id) + \
+                '#pictures')
+
+
+@app.route('/dashboard/page/<pagetype>/<page_id>/removephoto/<filename>')
+@admin_required
+def dashboard_remove_page_photo(pagetype, page_id, filename):
+    page = Page.objects.get_or_404(id=page_id)
+    for p in page.photos:
+        if p.filename == filename:
+            p.delete_files()
+            page.photos.remove(p)
+            break
+    page.save()
+    return redirect(url_for('dashboard_page', pagetype=pagetype, \
+                            page_id=page_id) + \
+                    '#pictures')

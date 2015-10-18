@@ -41,4 +41,33 @@
         </a>
     </div>
 </form>
+{%- if page.id %}
+<div id="pictures" class="panel panel-default">
+    <div class="panel-heading">{{ _('Pictures') }}</div>
+    <div class="list-group">
+        {% for photo in page.photos -%}
+        <div class="list-group-item">
+        {#<div class="thumbnail">#}
+        <img src="{{ photo.thumbnail_url }}">
+        <tt>.. image:: {{ photo.url }}</tt>
+        <a class="btn btn-danger" href="{{ url_for('dashboard_remove_page_photo', pagetype=page.pagetype, page_id=page.id, filename=photo.filename) }}">
+            <i class="fa fa-trash"></i>
+            {{ _('Remove') }}
+        </a>
+        </div>
+        {%- endfor %}
+        <div class="list-group-item">
+            <form class="form-inline" method="POST" action="{{ url_for('dashboard_add_page_photo', pagetype=page.pagetype, page_id=page.id) }}" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label class="sr-only" for="photo[]">Pictures</label>
+                    <input type="file" name="photo[]" multiple="multiple">
+                </div>
+                <button type="submit" class="btn btn-success">
+                    {{ _('Upload') }}
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{%- endif %}
 {% endblock %}

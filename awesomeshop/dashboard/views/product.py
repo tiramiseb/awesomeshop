@@ -2,8 +2,9 @@ from flask import redirect, request, url_for
 
 from ... import app
 from ...helpers import admin_required, render_template
+from ...photo import Photo
 from ...page.models import Page
-from ...shop.models import Photo, Product
+from ...shop.models import Product
 from ..forms import ProductForm
 
 @app.route('/dashboard/products')
@@ -47,7 +48,7 @@ def dashboard_remove_product(product_id):
 def dashboard_add_product_photo(product_id):
     prod = Product.objects.get_or_404(id=product_id)
     for f in request.files.getlist('photo[]'):
-        photo = Photo.from_request(f, 'products')
+        photo = Photo.from_request(f)
         prod.photos.append(photo)
     prod.save()
     return redirect(
