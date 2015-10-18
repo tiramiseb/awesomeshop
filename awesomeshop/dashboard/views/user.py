@@ -40,7 +40,11 @@ def dashboard_user(user_id=None):
         newaddress = None
     form = UserForm(request.form, user, prefix="user")
     if form.validate_on_submit():
-        form.populate_obj(user)
+        if form.email.data:
+            user.email = form.email.data
+        user.is_admin = form.is_admin.data
+        if form.password.data:
+            user.set_password(form.password.data)
         user.save()
         if user_id:
             return redirect(url_for('dashboard_users'))
