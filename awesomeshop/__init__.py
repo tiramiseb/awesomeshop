@@ -20,8 +20,8 @@ db = MongoEngine(app)
 # Initialize flask-babel
 babel = Babel(app)
 @babel.localeselector
-def get_locale():
-    if current_user and current_user.is_authenticated and current_user.locale:
+def get_locale(from_user=True):
+    if from_user and current_user.is_authenticated and current_user.locale:
         return current_user.locale
     try:
         return session.get('locale') or \
