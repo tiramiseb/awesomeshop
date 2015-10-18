@@ -25,7 +25,7 @@ class User(db.Document, UserMixin):
                     default=False,
                     verbose_name=lazy_gettext('Is an administrator')
                     )
-    locale = db.StringField(default=get_locale)
+    locale = db.StringField()
     confirm_code = db.StringField(db_field='confirm')
 
     meta = {
@@ -40,6 +40,7 @@ class User(db.Document, UserMixin):
         user = cls(email=email)
         user.set_password(password)
         user.send_confirmation_email()
+        user.locale = get_locale()
         return user
 
     def set_password(self, password):
