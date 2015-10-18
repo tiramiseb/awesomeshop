@@ -25,7 +25,7 @@ class User(db.Document, UserMixin):
                     default=False,
                     verbose_name=lazy_gettext('Is an administrator')
                     )
-    locale = db.StringField()
+    locale = db.StringField(default=get_locale)
     confirm_code = db.StringField(db_field='confirm')
 
     meta = {

@@ -304,7 +304,7 @@ class OrderProduct(db.EmbeddedDocument):
 
 def next_invoice_number():
     last = Order.objects.only('invoice_number').order_by('-invoice_number').first()
-    if not last.invoice_number: return 1
+    if not last or not last.invoice_number: return 1
     else: return last.invoice_number + 1
 order_states = {
         # 'name': (
@@ -333,7 +333,7 @@ order_states = {
             ('preparation', 'cancelled')
             ),
         'payment_failed': (
-            lazy_gettext('payment failed'),
+            lazy_gettext('payment failed ({})'),
             'danger',
             ('awaiting_payment', 'payment_received', 'cancelled')
             ),
@@ -393,6 +393,7 @@ class Order(db.Document):
     payment_description = db.StringField(db_field='p_desc', required=True)
     payment_data = db.DynamicField(db_field='p_data')
     payment_date = db.DateTimeField(db_field='p_date')
+    payment_message = db.StringField(db_field='p_msg')
     accept_reused_package = db.BooleanField(db_field='reuse', required=True)
     shipping_date = db.DateTimeField(db_field='s_date')
     tracking_url = db.StringField(db_field='turl')
@@ -435,19 +436,29 @@ class Order(db.Document):
         text, color, next_ = order_states[self.status]
         if self.status == 'shipped':
             text = text.format(self.formated_shipping_date)
+        elif self.status == 'payment_failed':
+            text = text.format(self.payment_message)
         return u'<span class="text-{}">{}</span>'.format(color, text)
 
     def set_status(self, status):
         if status in order_states.keys():
             self.status = status
-            if status == 'awaiting_payment' and not self.invoice_number:
+            if status == 'unconfirmed':
+                self.payment_date = None
+                self.payment_data = None
+            elif status == 'awaiting_payment' and not self.invoice_number:
                 self.invoice_number = next_invoice_number()
                 self.invoice_number_prefix = app.config['INVOICE_PREFIX']
                 self.invoice_date = datetime.datetime.now()
-            elif status == 'payment_received' and not self.payment_date:
+            elif status == 'payment_received':
                 self.payment_date = datetime.datetime.now()
                 send_message(self.customer.email, 'payment_received',
-                             order=self)
+                             order=self, locale=self.customer.locale)
+            elif status == 'payment_failed':
+                self.payment_date = datetime.datetime.now()
+                send_message(self.customer.email, 'payment_failed',
+                             order=self, locale=self.customer.locale,
+                             error=self.payment_message)
             elif status == 'shipped':
                 self.shipping_date = datetime.datetime.now()
                 send_message(self.customer.email, 'shipped', order=self)
@@ -514,8 +525,6 @@ class Order(db.Document):
             self.tracking_number = number
 
     def execute_payment(self):
-        if self.payment_date:
-            return redirect(url_for('order', order_number=self))
         if self.status not in ('unconfirmed', 'awaiting_payment'): abort(403)
         pay = None
         for m in payment.modes:

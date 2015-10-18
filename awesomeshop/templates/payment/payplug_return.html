@@ -1,11 +1,11 @@
 {% extends "skeleton.html" %}
 
-{% block title %}{{ _('Payment done') }}{% endblock %}
+{% block title %}{{ _('Payment processed') }}{% endblock %}
 {% block content %}
-<h1>{{ _('Payment done') }}</h1>
+<h1>{{ _('Payment processed') }}</h1>
 <div class="panel panel-default">
     <div class="panel-body">
-        <p>{{ _("Your payment has been received! It should be accepted soon.") }}</p>
+        <p>{{ _("Your payment has been processed!") }}</p>
         <div class="btn-group">
             <a href="{{ url_for('home') }}" class="btn btn-success">
                 {{ _('Return to the home page') }}

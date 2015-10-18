@@ -51,6 +51,15 @@
                 </a>
             </div>
         </div>
+        {%- elif order.status == 'payment_failed' %}
+        <div class="row">
+            <div class="col-xs-12 text-right">
+                <a href="{{ url_for('pay_order', order_number=order.number) }}" class="btn btn-lg btn-success" id="proceed_again">
+                    {{ _('Retry payment') }}
+                    <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+        </div>
         {%- endif %}
     </div>
 </div>

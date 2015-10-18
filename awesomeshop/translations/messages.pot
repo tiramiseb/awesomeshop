@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-10-17 14:59+0200\n"
+"POT-Creation-Date: 2015-10-18 10:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -100,22 +100,56 @@ msgstr ""
 msgid "Display in menu"
 msgstr ""
 
-#: awesomeshop/payment/__init__.py:18
-msgid "Return to the payment page"
-msgstr ""
-
-#: awesomeshop/payment/__init__.py:26
-msgid "Credit card (secured by PayPlug)"
-msgstr ""
-
-#: awesomeshop/payment/__init__.py:60
+#: awesomeshop/payment/__init__.py:9 awesomeshop/payment.old/__init__.py:60
 msgid "See SEPA bank transfer information again"
 msgstr ""
 
-#: awesomeshop/payment/__init__.py:65
+#: awesomeshop/payment/__init__.py:16 awesomeshop/payment.old/__init__.py:65
 #: awesomeshop/templates/payment/sepa_bank_transfer.html:3
 #: awesomeshop/templates/payment/sepa_bank_transfer.html:5
 msgid "SEPA bank transfer"
+msgstr ""
+
+#: awesomeshop/payment/payplug_awesomeshop/__init__.py:11
+#: awesomeshop/payment.old/__init__.py:18
+msgid "Return to the payment page"
+msgstr ""
+
+#: awesomeshop/payment/payplug_awesomeshop/__init__.py:19
+#: awesomeshop/payment.old/__init__.py:26
+msgid "Credit card (secured by PayPlug)"
+msgstr ""
+
+#: awesomeshop/payment/payplug_awesomeshop/views.py:41
+msgid "Error while processing the card"
+msgstr ""
+
+#: awesomeshop/payment/payplug_awesomeshop/views.py:43
+msgid "Your bank declined the payment"
+msgstr ""
+
+#: awesomeshop/payment/payplug_awesomeshop/views.py:45
+msgid "Insufficient funds on your bank account"
+msgstr ""
+
+#: awesomeshop/payment/payplug_awesomeshop/views.py:47
+msgid "3-D secure protection has failed"
+msgstr ""
+
+#: awesomeshop/payment/payplug_awesomeshop/views.py:49
+msgid "The card number is incorrect"
+msgstr ""
+
+#: awesomeshop/payment/payplug_awesomeshop/views.py:51
+msgid "A potential fraud has been detected"
+msgstr ""
+
+#: awesomeshop/payment/payplug_awesomeshop/views.py:53
+msgid "Payment has been aborted"
+msgstr ""
+
+#: awesomeshop/payment/payplug_awesomeshop/views.py:55
+msgid "Unknown problem"
 msgstr ""
 
 #: awesomeshop/shipping/models.py:12
@@ -241,7 +275,7 @@ msgid "payment received"
 msgstr ""
 
 #: awesomeshop/shop/models.py:336
-msgid "payment failed"
+msgid "payment failed ({})"
 msgstr ""
 
 #: awesomeshop/shop/models.py:341
@@ -871,42 +905,42 @@ msgstr ""
 #: awesomeshop/templates/dashboard/product.html:4
 #: awesomeshop/templates/shop/checkout.html:13
 #: awesomeshop/templates/shop/confirm.html:34
-#: awesomeshop/templates/shop/order.html:82
+#: awesomeshop/templates/shop/order.html:91
 msgid "Product"
 msgstr ""
 
 #: awesomeshop/templates/dashboard/order.html:125
 #: awesomeshop/templates/shop/checkout.html:16
 #: awesomeshop/templates/shop/confirm.html:37
-#: awesomeshop/templates/shop/order.html:85
+#: awesomeshop/templates/shop/order.html:94
 msgid "Qty"
 msgstr ""
 
 #: awesomeshop/templates/dashboard/order.html:152
 #: awesomeshop/templates/shop/checkout.html:58
 #: awesomeshop/templates/shop/confirm.html:14
-#: awesomeshop/templates/shop/order.html:62
+#: awesomeshop/templates/shop/order.html:71
 msgid "Delivery address"
 msgstr ""
 
 #: awesomeshop/templates/dashboard/order.html:163
 #: awesomeshop/templates/shop/checkout.html:91
 #: awesomeshop/templates/shop/confirm.html:23
-#: awesomeshop/templates/shop/order.html:71
+#: awesomeshop/templates/shop/order.html:80
 msgid "Billing address"
 msgstr ""
 
 #: awesomeshop/templates/dashboard/order.html:174
 #: awesomeshop/templates/shop/checkout.html:151
 #: awesomeshop/templates/shop/confirm.html:69
-#: awesomeshop/templates/shop/order.html:120
+#: awesomeshop/templates/shop/order.html:129
 msgid "Subtotal"
 msgstr ""
 
 #: awesomeshop/templates/dashboard/order.html:184
 #: awesomeshop/templates/shop/checkout.html:161
 #: awesomeshop/templates/shop/confirm.html:79
-#: awesomeshop/templates/shop/order.html:130
+#: awesomeshop/templates/shop/order.html:139
 msgid "Shipping fee"
 msgstr ""
 
@@ -915,8 +949,8 @@ msgstr ""
 #: awesomeshop/templates/shop/checkout.html:168
 #: awesomeshop/templates/shop/confirm.html:43
 #: awesomeshop/templates/shop/confirm.html:92
-#: awesomeshop/templates/shop/order.html:91
-#: awesomeshop/templates/shop/order.html:143
+#: awesomeshop/templates/shop/order.html:100
+#: awesomeshop/templates/shop/order.html:152
 msgid "Total"
 msgstr ""
 
@@ -1056,11 +1090,11 @@ msgstr ""
 
 #: awesomeshop/templates/payment/payplug_return.html:3
 #: awesomeshop/templates/payment/payplug_return.html:5
-msgid "Payment done"
+msgid "Payment processed"
 msgstr ""
 
 #: awesomeshop/templates/payment/payplug_return.html:8
-msgid "Your payment has been received! It should be accepted soon."
+msgid "Your payment has been processed!"
 msgstr ""
 
 #: awesomeshop/templates/payment/sepa_bank_transfer.html:8
@@ -1146,7 +1180,7 @@ msgstr ""
 #: awesomeshop/templates/shop/cart.html:71
 #: awesomeshop/templates/shop/checkout.html:212
 #: awesomeshop/templates/shop/confirm.html:122
-#: awesomeshop/templates/shop/order.html:165
+#: awesomeshop/templates/shop/order.html:174
 msgid "TVA non applicable, article 293 B du Code général des impôts"
 msgstr ""
 
@@ -1174,7 +1208,7 @@ msgstr ""
 
 #: awesomeshop/templates/shop/checkout.html:19
 #: awesomeshop/templates/shop/confirm.html:40
-#: awesomeshop/templates/shop/order.html:88
+#: awesomeshop/templates/shop/order.html:97
 msgid "Unit"
 msgstr ""
 
@@ -1204,7 +1238,7 @@ msgstr ""
 
 #: awesomeshop/templates/shop/checkout.html:198
 #: awesomeshop/templates/shop/confirm.html:112
-#: awesomeshop/templates/shop/order.html:159
+#: awesomeshop/templates/shop/order.html:168
 msgid "I accept that my order is shipped in a reused package"
 msgstr ""
 
@@ -1239,13 +1273,13 @@ msgid "Options"
 msgstr ""
 
 #: awesomeshop/templates/shop/confirm.html:108
-#: awesomeshop/templates/shop/order.html:155
+#: awesomeshop/templates/shop/order.html:164
 msgid "Payment:"
 msgstr ""
 
 #: awesomeshop/templates/shop/confirm.html:124
 #: awesomeshop/templates/shop/order.html:40
-#: awesomeshop/templates/shop/order.html:168
+#: awesomeshop/templates/shop/order.html:177
 msgid "Proceed to payment"
 msgstr ""
 
@@ -1282,7 +1316,11 @@ msgstr ""
 msgid "Payment received on %(date)s"
 msgstr ""
 
-#: awesomeshop/templates/shop/order.html:174
+#: awesomeshop/templates/shop/order.html:58
+msgid "Retry payment"
+msgstr ""
+
+#: awesomeshop/templates/shop/order.html:183
 msgid "Print"
 msgstr ""
 

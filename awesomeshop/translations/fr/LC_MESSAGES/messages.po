@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: sebastien@domotego.com\n"
-"POT-Creation-Date: 2015-10-17 14:59+0200\n"
+"POT-Creation-Date: 2015-10-18 10:55+0200\n"
 "PO-Revision-Date: 2015-09-23 16:11+0200\n"
 "Last-Translator: Sebastien Maccagnoni <sebastien@domotego.com>\n"
 "Language: fr\n"
@@ -101,23 +101,57 @@ msgstr "Slug"
 msgid "Display in menu"
 msgstr "Afficher dans le menu"
 
-#: awesomeshop/payment/__init__.py:18
-msgid "Return to the payment page"
-msgstr "Retour à la page de paiement"
-
-#: awesomeshop/payment/__init__.py:26
-msgid "Credit card (secured by PayPlug)"
-msgstr "Carte bancaire (sécurisé par PayPlug)"
-
-#: awesomeshop/payment/__init__.py:60
+#: awesomeshop/payment/__init__.py:9 awesomeshop/payment.old/__init__.py:60
 msgid "See SEPA bank transfer information again"
 msgstr "Revoir les informations du virement SEPA"
 
-#: awesomeshop/payment/__init__.py:65
+#: awesomeshop/payment/__init__.py:16 awesomeshop/payment.old/__init__.py:65
 #: awesomeshop/templates/payment/sepa_bank_transfer.html:3
 #: awesomeshop/templates/payment/sepa_bank_transfer.html:5
 msgid "SEPA bank transfer"
 msgstr "Virement bancaire SEPA"
+
+#: awesomeshop/payment/payplug_awesomeshop/__init__.py:11
+#: awesomeshop/payment.old/__init__.py:18
+msgid "Return to the payment page"
+msgstr "Retour à la page de paiement"
+
+#: awesomeshop/payment/payplug_awesomeshop/__init__.py:19
+#: awesomeshop/payment.old/__init__.py:26
+msgid "Credit card (secured by PayPlug)"
+msgstr "Carte bancaire (sécurisé par PayPlug)"
+
+#: awesomeshop/payment/payplug_awesomeshop/views.py:41
+msgid "Error while processing the card"
+msgstr "Erreur de traitement de la carte"
+
+#: awesomeshop/payment/payplug_awesomeshop/views.py:43
+msgid "Your bank declined the payment"
+msgstr "Votre banque a refusé le paiement"
+
+#: awesomeshop/payment/payplug_awesomeshop/views.py:45
+msgid "Insufficient funds on your bank account"
+msgstr "Fonds insuffisant sur votre compte bancaire"
+
+#: awesomeshop/payment/payplug_awesomeshop/views.py:47
+msgid "3-D secure protection has failed"
+msgstr "Échec de la protection 3-D secure"
+
+#: awesomeshop/payment/payplug_awesomeshop/views.py:49
+msgid "The card number is incorrect"
+msgstr "Le numéro de carte est incorrect"
+
+#: awesomeshop/payment/payplug_awesomeshop/views.py:51
+msgid "A potential fraud has been detected"
+msgstr "Une fraude potentielle a été détectée"
+
+#: awesomeshop/payment/payplug_awesomeshop/views.py:53
+msgid "Payment has been aborted"
+msgstr "Le paiement a été annulé"
+
+#: awesomeshop/payment/payplug_awesomeshop/views.py:55
+msgid "Unknown problem"
+msgstr "Problème inconnu"
 
 #: awesomeshop/shipping/models.py:12
 msgid "Code"
@@ -242,8 +276,8 @@ msgid "payment received"
 msgstr "paiement reçu"
 
 #: awesomeshop/shop/models.py:336
-msgid "payment failed"
-msgstr "échec du paiement"
+msgid "payment failed ({})"
+msgstr "échec du paiement ({})"
 
 #: awesomeshop/shop/models.py:341
 msgid "in preparation"
@@ -878,42 +912,42 @@ msgstr "Émettre un remboursement"
 #: awesomeshop/templates/dashboard/product.html:4
 #: awesomeshop/templates/shop/checkout.html:13
 #: awesomeshop/templates/shop/confirm.html:34
-#: awesomeshop/templates/shop/order.html:82
+#: awesomeshop/templates/shop/order.html:91
 msgid "Product"
 msgstr "Produit"
 
 #: awesomeshop/templates/dashboard/order.html:125
 #: awesomeshop/templates/shop/checkout.html:16
 #: awesomeshop/templates/shop/confirm.html:37
-#: awesomeshop/templates/shop/order.html:85
+#: awesomeshop/templates/shop/order.html:94
 msgid "Qty"
 msgstr "Qt"
 
 #: awesomeshop/templates/dashboard/order.html:152
 #: awesomeshop/templates/shop/checkout.html:58
 #: awesomeshop/templates/shop/confirm.html:14
-#: awesomeshop/templates/shop/order.html:62
+#: awesomeshop/templates/shop/order.html:71
 msgid "Delivery address"
 msgstr "Adresse de livraison"
 
 #: awesomeshop/templates/dashboard/order.html:163
 #: awesomeshop/templates/shop/checkout.html:91
 #: awesomeshop/templates/shop/confirm.html:23
-#: awesomeshop/templates/shop/order.html:71
+#: awesomeshop/templates/shop/order.html:80
 msgid "Billing address"
 msgstr "Adresse de facturation"
 
 #: awesomeshop/templates/dashboard/order.html:174
 #: awesomeshop/templates/shop/checkout.html:151
 #: awesomeshop/templates/shop/confirm.html:69
-#: awesomeshop/templates/shop/order.html:120
+#: awesomeshop/templates/shop/order.html:129
 msgid "Subtotal"
 msgstr "Sous-total"
 
 #: awesomeshop/templates/dashboard/order.html:184
 #: awesomeshop/templates/shop/checkout.html:161
 #: awesomeshop/templates/shop/confirm.html:79
-#: awesomeshop/templates/shop/order.html:130
+#: awesomeshop/templates/shop/order.html:139
 msgid "Shipping fee"
 msgstr "Frais d'expédition"
 
@@ -922,8 +956,8 @@ msgstr "Frais d'expédition"
 #: awesomeshop/templates/shop/checkout.html:168
 #: awesomeshop/templates/shop/confirm.html:43
 #: awesomeshop/templates/shop/confirm.html:92
-#: awesomeshop/templates/shop/order.html:91
-#: awesomeshop/templates/shop/order.html:143
+#: awesomeshop/templates/shop/order.html:100
+#: awesomeshop/templates/shop/order.html:152
 msgid "Total"
 msgstr "Total"
 
@@ -1063,12 +1097,12 @@ msgstr "Relancer la procédure de paiement"
 
 #: awesomeshop/templates/payment/payplug_return.html:3
 #: awesomeshop/templates/payment/payplug_return.html:5
-msgid "Payment done"
-msgstr "Paiement effectué"
+msgid "Payment processed"
+msgstr "Paiement traité"
 
 #: awesomeshop/templates/payment/payplug_return.html:8
-msgid "Your payment has been received! It should be accepted soon."
-msgstr "Votre paiement a été reçu ! Il devrait être accepté rapidement."
+msgid "Your payment has been processed!"
+msgstr "Votre paiement a été traité !"
 
 #: awesomeshop/templates/payment/sepa_bank_transfer.html:8
 #, python-format
@@ -1157,7 +1191,7 @@ msgstr "+ frais de livraison"
 #: awesomeshop/templates/shop/cart.html:71
 #: awesomeshop/templates/shop/checkout.html:212
 #: awesomeshop/templates/shop/confirm.html:122
-#: awesomeshop/templates/shop/order.html:165
+#: awesomeshop/templates/shop/order.html:174
 msgid "TVA non applicable, article 293 B du Code général des impôts"
 msgstr "TVA non applicable, article 293 B du Code général des impôts"
 
@@ -1185,7 +1219,7 @@ msgstr "Commande"
 
 #: awesomeshop/templates/shop/checkout.html:19
 #: awesomeshop/templates/shop/confirm.html:40
-#: awesomeshop/templates/shop/order.html:88
+#: awesomeshop/templates/shop/order.html:97
 msgid "Unit"
 msgstr "PU"
 
@@ -1215,7 +1249,7 @@ msgstr "Si vous avez un message à propos de cette commande, écrivez-le ici !"
 
 #: awesomeshop/templates/shop/checkout.html:198
 #: awesomeshop/templates/shop/confirm.html:112
-#: awesomeshop/templates/shop/order.html:159
+#: awesomeshop/templates/shop/order.html:168
 msgid "I accept that my order is shipped in a reused package"
 msgstr "J'accepte que ma commande soit livrée dans un emballage réutilisé"
 
@@ -1250,13 +1284,13 @@ msgid "Options"
 msgstr "Options"
 
 #: awesomeshop/templates/shop/confirm.html:108
-#: awesomeshop/templates/shop/order.html:155
+#: awesomeshop/templates/shop/order.html:164
 msgid "Payment:"
 msgstr "Paiement :"
 
 #: awesomeshop/templates/shop/confirm.html:124
 #: awesomeshop/templates/shop/order.html:40
-#: awesomeshop/templates/shop/order.html:168
+#: awesomeshop/templates/shop/order.html:177
 msgid "Proceed to payment"
 msgstr "Payer"
 
@@ -1293,7 +1327,11 @@ msgstr "État de la commande :"
 msgid "Payment received on %(date)s"
 msgstr "Paiement reçu le %(date)s"
 
-#: awesomeshop/templates/shop/order.html:174
+#: awesomeshop/templates/shop/order.html:58
+msgid "Retry payment"
+msgstr "Réessayer le paiement"
+
+#: awesomeshop/templates/shop/order.html:183
 msgid "Print"
 msgstr "Imprimer"
 
@@ -1346,4 +1384,10 @@ msgstr "Requête trop courte"
 #: awesomeshop/templates/shop/search_terms_too_short.html:6
 msgid "Sorry, your search query is too short."
 msgstr "Désolé, votre recherche est trop courte."
+
+#~ msgid "Payment done"
+#~ msgstr "Paiement effectué"
+
+#~ msgid "Your payment has been received! It should be accepted soon."
+#~ msgstr "Votre paiement a été reçu ! Il devrait être accepté rapidement."
 
