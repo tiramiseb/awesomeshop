@@ -29,6 +29,20 @@ def get_locale():
     except RuntimeError:
         return app.config['LANGS'][0]
 
+# Initialize the debug toolbar when in debug mode
+if app.config['DEBUG']:
+    app.config['DEBUG_TB_PANELS'] = [
+        'flask_debugtoolbar.panels.timer.TimerDebugPanel',
+        'flask_debugtoolbar.panels.headers.HeaderDebugPanel',
+        'flask_debugtoolbar.panels.request_vars.RequestVarsDebugPanel',
+        'flask_debugtoolbar.panels.config_vars.ConfigVarsDebugPanel',
+        'flask_debugtoolbar.panels.template.TemplateDebugPanel',
+        'flask_debugtoolbar.panels.logger.LoggingPanel',
+        'flask.ext.mongoengine.panels.MongoDebugPanel'
+        ]
+    app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+    from flask_debugtoolbar import DebugToolbarExtension
+    toolbar = DebugToolbarExtension(app)
 
 # Initialize flask-login (code must not directly be here
 # or there is an import loop)

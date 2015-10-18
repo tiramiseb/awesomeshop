@@ -1,5 +1,7 @@
 # -*- coding: utf8 -*-
 
+DEBUG = False
+
 # A secret key for cookies encryption. Put any random string here
 SECRET_KEY = 'anything'
 
