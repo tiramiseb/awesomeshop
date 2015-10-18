@@ -1,0 +1,12 @@
+Hello,
+
+Your payment for order {{ order.full_number }} (invoice {{ order.full_invoice_number }}) has failed!
+
+The failure justification is:
+{{ error }}
+
+Get more details on this order on the following link:
+{{ url_for('order', order_number=order.number, _external=True) }}
+
+Regards,
+The {{ config.SHOP_NAME }} team

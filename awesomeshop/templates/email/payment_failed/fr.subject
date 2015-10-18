@@ -1,0 +1,1 @@
+{{ config.SHOP_NAME }} : Échec du paiement pour la commande {{ order.full_number }}
