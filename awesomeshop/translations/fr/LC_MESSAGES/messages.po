@@ -349,7 +349,7 @@ msgstr "Erreur 500"
 
 #: awesomeshop/templates/500.html:5
 msgid "Error 500: Internal server error"
-msgstr "Erreur 500 : Erreur inteerne du serveur"
+msgstr "Erreur 500 : Erreur interne du serveur"
 
 #: awesomeshop/templates/home.html:3
 msgid "Home"
