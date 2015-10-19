@@ -72,8 +72,8 @@ class Carrier(db.Document):
     }
 
     def __unicode__(self):
-        return '{} ({})'.format(self.description.get(get_locale(), u''),
-                                self.name)
+        return u'{} ({})'.format(self.description.get(get_locale(), u''),
+                                 self.name)
 
     def get_price(self, country_or_group, weight, which=None, exact=False):
         """Get the price for the association of a country and a weight
