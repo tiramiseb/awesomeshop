@@ -135,6 +135,11 @@ class Product(db.Document, StockedItem):
                                     verbose_name=lazy_gettext('Description'))
     keywords = db.StringField(db_field='kw', max_length=200,
                               verbose_name=lazy_gettext('Keywords'))
+    related_products = db.ListField(
+                            db.ReferenceField('self'),
+                            db_field='rel',
+                            verbose_name=lazy_gettext('Related products')
+                            )
     photos = db.EmbeddedDocumentListField(Photo)
 
     meta = {

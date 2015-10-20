@@ -49,26 +49,37 @@
             </div>
         </div>
     </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">{{ _('Stock and shipping') }}</div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-xs-3">
-                    {{ forminput(form.weight, after='g') }}
-                </div>
-                <div class="col-xs-3">
-                    {{ forminput(form.stock) }}
-                </div>
-                <div class="col-xs-3">
-                    {{ forminput(form.stock_alert) }}
-                </div>
-                <div class="col-xs-3">
-                    <div class="checkbox">
-                        <label>
-                            {{ form.on_sale }}
-                            {{ _('Is on sale') }}
-                        </label>
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">{{ _('Stock and shipping') }}</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            {{ forminput(form.stock) }}
+                        </div>
+                        <div class="col-xs-6">
+                            {{ forminput(form.stock_alert) }}
+                        </div>
+                        <div class="col-xs-6">
+                            {{ forminput(form.weight, after='g') }}
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="checkbox">
+                                <label>
+                                    {{ form.on_sale }}
+                                    {{ _('Is on sale') }}
+                                </label>
+                            </div>
+                        </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    {{ forminput(form.related_products) }}
                 </div>
             </div>
         </div>
