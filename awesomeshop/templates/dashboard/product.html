@@ -3,7 +3,7 @@
 
 {% block title %}{{ _('Dashboard') }} - {{ _('Product') }}{% endblock %}
 {% block content %}
-<h1>{% if form.slug.data %}{{ form.slug.data }}{% else %}{{ _('New product') }}{% endif %}</h1>
+<h1>{% if form.slug.data %}{{ form.slug.data }} <small><a href="/{{ product.url }}" target="_blank">({{ _('see in the shop') }})</a></small>{% else %}{{ _('New product') }}{% endif %}</h1>
 
 <form method="POST">
     {{ form.hidden_tag() }}
