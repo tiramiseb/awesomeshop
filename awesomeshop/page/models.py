@@ -54,6 +54,11 @@ class Page(db.Document):
                     writer_name='html')
         return parts['body']
 
+    @property
+    def products(self):
+        from ..shop.models import Product
+        return Product.objects(documentation=self)
+
     @classmethod
     def slugify_slug(cls, sender, document, **kwargs):
         document.slug = slugify(document.slug)
