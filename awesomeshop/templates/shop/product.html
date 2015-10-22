@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col-xs-7 col-md-8 col-lg-9">
         <div class="row">
-            <div class="{% if product.photos %}col-xs-12{% else %}hidden-xs{% endif %} col-md-5 col-lg-6">
+            <div class="{% if not product.photos %}hidden-xs{% endif %} col-md-5 col-lg-6">
                 {% if product.photos -%}
                 <a href="{{ product.photos[0].url }}" target="_blank" class="thumbnail" onclick="display('{{ product.photos[0].url }}'); return false;">
                     <img src="{{ product.photos[0].preview_url }}">
@@ -32,7 +32,7 @@
                 </div>
                 {%- endif %}
             </div>
-            <div class="col-xs-12 col-md-7 col-lg-6">
+            <div class="col-md-7 col-lg-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h2 class="panel-title">

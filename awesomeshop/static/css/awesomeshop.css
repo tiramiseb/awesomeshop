@@ -88,7 +88,7 @@ p.price {
     font-size: 1.5em;
     text-align: center;
 }
-button#add-to-cart, a#proceed_again {
+.btn-wrap {
     white-space: normal;
 }
 /***** PLACEHOLDER WHEN THERE IS NO PICTURE *****/

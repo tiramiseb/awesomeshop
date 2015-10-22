@@ -10,55 +10,42 @@
 {%- endif %}
 <div class="panel panel-default">
     <div class="panel-body">
-        <div class="row">
-            <div class="col-xs-12">
-                {{ _('Order status:' ) }} {{ order.human_status|safe }}
-                {%- if order.status == 'unconfirmed' %}
-                <br><b>{{ _('Cancelled if not paid within %(num)d days.', num=config.CONFIRM_DELAY) }}</b>
-                {%- elif order.status == 'awaiting_payment' %}
-                <br><b>{{ _('Cancelled if payment not received within %(num)d days.', num=config.PAYMENT_DELAY) }}</b>
-                {%- endif %}
-                {%- if order.payment_date %}
-                <br>{{ _('Payment received on %(date)s', date=order.formated_payment_date) }}
-                {%- endif %}
-            </div>
-        </div>
+        {{ _('Order status:' ) }} {{ order.human_status|safe }}
+        {%- if order.status == 'unconfirmed' %}
+        <br><b>{{ _('Cancelled if not paid within %(num)d days.', num=config.CONFIRM_DELAY) }}</b>
+        {%- elif order.status == 'awaiting_payment' %}
+        <br><b>{{ _('Cancelled if payment not received within %(num)d days.', num=config.PAYMENT_DELAY) }}</b>
+        {%- endif %}
+        {%- if order.payment_date %}
+        <br>{{ _('Payment received on %(date)s', date=order.formated_payment_date) }}
+        {%- endif %}
         {%- if order.tracking_number %}
-        <div class="row">
-            <div class="col-xs-12">
-                <b>
-                    {{ _('Tracking number:') }}
-                    <a href="{{ order.tracking_url }}" target="_blank">{{ order.tracking_number }}</a>
-                </b>
-            </div>
-        </div>
+        <br>
+        <b>
+            {{ _('Tracking number:') }}
+            <a href="{{ order.tracking_url }}" target="_blank">{{ order.tracking_number }}</a>
+        </b>
         {%- endif %}
         {%- if order.status == 'unconfirmed' %}
-        <div class="row">
-            <div class="col-xs-12 text-right">
-                <a href="{{ url_for('pay_order', order_number=order.number) }}" class="btn btn-lg btn-success">
-                    {{ _('Proceed to payment') }}
-                    <i class="fa fa-chevron-right"></i>
-                </a>
-            </div>
+        <div class="text-right">
+            <a href="{{ url_for('pay_order', order_number=order.number) }}" class="btn btn-lg btn-success">
+                {{ _('Proceed to payment') }}
+                <i class="fa fa-chevron-right"></i>
+            </a>
         </div>
         {%- elif order.status == 'awaiting_payment' %}
-        <div class="row">
-            <div class="col-xs-12 text-right">
-                <a href="{{ url_for('pay_order', order_number=order.number) }}" class="btn btn-lg btn-success" id="proceed_again">
-                    {{ order.replay_payment_button_text }}
-                    <i class="fa fa-chevron-right"></i>
-                </a>
-            </div>
+        <div class="text-right">
+            <a href="{{ url_for('pay_order', order_number=order.number) }}" class="btn btn-lg btn-success btn-wrap">
+                {{ order.replay_payment_button_text }}
+                <i class="fa fa-chevron-right"></i>
+            </a>
         </div>
         {%- elif order.status == 'payment_failed' %}
-        <div class="row">
-            <div class="col-xs-12 text-right">
-                <a href="{{ url_for('pay_order', order_number=order.number) }}" class="btn btn-lg btn-success" id="proceed_again">
-                    {{ _('Retry payment') }}
-                    <i class="fa fa-chevron-right"></i>
-                </a>
-            </div>
+        <div class="text-right">
+            <a href="{{ url_for('pay_order', order_number=order.number) }}" class="btn btn-lg btn-success">
+                {{ _('Retry payment') }}
+                <i class="fa fa-chevron-right"></i>
+            </a>
         </div>
         {%- endif %}
     </div>
@@ -86,7 +73,7 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <div class="row">
-            <div class="col-xs-12 col-md-6 col-print-6">
+            <div class="col-md-6 col-print-6">
                 <i class="fa fa-cube"></i>
                 {{ _('Product') }}
             </div>
@@ -105,10 +92,10 @@
         {% for product in order.products %}
         <div class="list-group-item">
             <div class="row">
-                <div class="col-xs-3 col-md-2 col-print-2">
+                <div class="col-xs-4 col-md-2 col-print-2">
                     {{ product.reference }}
                 </div>
-                <div class="col-xs-9 col-md-4 col-print-4">
+                <div class="col-xs-8 col-md-4 col-print-4">
                     {{ product.name }}
                 </div>
                 <div class="col-xs-4 col-sm-3 col-sm-offset-3 col-md-2 col-md-offset-0 col-print-2 col-print-offset-0 text-right">
