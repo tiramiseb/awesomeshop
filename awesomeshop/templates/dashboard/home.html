@@ -42,6 +42,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {% block content %}
 <div class="row">
     <div class="col-md-6">
+        {%- if prep_prders %}
         <div class="panel panel-primary">
             <div class="panel-heading">
                 {{ _('Orders in preparation') }}
@@ -50,6 +51,8 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 {{- orderlines(prep_orders) }}
             </div>
         </div>
+        {%- endif %}
+        {%- if paid_orders %}
         <div class="panel panel-primary">
             <div class="panel-heading">
                 {{ _('Orders to prepare') }}
@@ -58,7 +61,9 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 {{- orderlines(paid_orders) }}
             </div>
         </div>
-        <div class="panel panel-danger">
+        {%- endif %}
+        {%- if awaiting_payment_orders %}
+        <div class="panel panel-warning">
             <div class="panel-heading">
                 {{ _('Awaiting payment') }}
             </div>
@@ -66,8 +71,10 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 {{- orderlines(awaiting_payment_orders) }}
             </div>
         </div>
+        {%- endif %}
     </div>
     <div class="col-md-6">
+        {%- if out_of_stock_products %}
         <div class="panel panel-danger">
             <div class="panel-heading">
                 {{ _('Out of stock')}}
@@ -76,6 +83,8 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 {{- productlines(out_of_stock_products) }}
             </div>
         </div>
+        {%- endif %}
+        {%- if stock_alert_products %}
         <div class="panel panel-warning">
             <div class="panel-heading">
                 {{ _('Out of stock soon')}}
@@ -84,6 +93,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 {{- productlines(stock_alert_products, show_stock=True) }}
             </div>
         </div>
+        {%- endif %}
     </div>
 </div>
 {%- endblock %}
