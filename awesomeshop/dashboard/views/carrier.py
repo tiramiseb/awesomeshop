@@ -53,7 +53,7 @@ def dashboard_carrier_costs(carrier_id):
     for entry, cost in request.form.items():
         try:
             c_or_g, w = entry.split('+')
-            w = str(int(w))
+            w = unicode(int(w))
             if cost:
                 cost = float(cost.replace(',', '.'))
             else:
