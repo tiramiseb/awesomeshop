@@ -143,7 +143,7 @@ class Product(db.Document, StockedItem):
     photos = db.EmbeddedDocumentListField(Photo)
 
     meta = {
-        'ordering': ['slug']
+        'ordering': ['reference']
     }
 
     def __unicode__(self):
