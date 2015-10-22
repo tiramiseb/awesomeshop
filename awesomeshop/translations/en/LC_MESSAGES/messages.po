@@ -1,18 +1,30 @@
-# English translations for AwesomeShop.
-# Copyright (C) 2015 Sebastien Maccagnoni
-# This file is distributed under the same license as the AwesomeShop
-# project.
-# Sebastien Maccagnoni <sebastien@domotego.com>, 2015.
+# Copyright 2015 Sébastien Maccagnoni-Munch
 #
+# This file is part of AwesomeShop.
+#
+# AwesomeShop is free software: you can redistribute it and/or modify it under
+# the terms of the GNU Affero General Public License as published by the
+# Free Software Foundation, either version 3 of the License, or (at your
+# option) any later version.
+#
+# AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+# details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+
+# English translations for AwesomeShop.
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
+"Project-Id-Version: N/A\n"
 "Report-Msgid-Bugs-To: sebastien@domotego.com\n"
 "POT-Creation-Date: 2015-10-22 07:29+0200\n"
-"PO-Revision-Date: 2015-09-23 16:11+0200\n"
-"Last-Translator: Sebastien Maccagnoni <sebastien@domotego.com>\n"
+"PO-Revision-Date: 2015-10-22 09:00+0200\n"
+"Last-Translator: Sebastien Maccagnoni-Munch <sebastien@domotego.com>\n"
 "Language: en\n"
-"Language-Team: en <LL@li.org>\n"
+"Language-Team: Sébastien Maccagnoni-Munch <sebastien@domotego.com>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
