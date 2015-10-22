@@ -42,8 +42,8 @@ SHIPPING_MULTIPLIER = 1
 # (will be integrated into the shipping price, no detail given to the customer)
 PACKAGE_PREPARATION_PRICE = 0
 
-# Average weight of the package itself (will be added to the weight of a cart
-# before calculating the shipping cost)
+# Average (or minimum) weight of the package itself (will be added to the
+# weight of a cart before calculating the shipping cost)
 PACKAGE_WEIGHT = 0
 
 # Rounding of the resulting shipping price (always rounding up)
