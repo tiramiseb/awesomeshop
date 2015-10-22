@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-10-20 23:37+0200\n"
+"POT-Creation-Date: 2015-10-22 07:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -206,7 +206,7 @@ msgid "Parent"
 msgstr ""
 
 #: awesomeshop/shop/models.py:102
-#: awesomeshop/templates/dashboard/product.html:69
+#: awesomeshop/templates/dashboard/product.html:71
 msgid "Is on sale"
 msgstr ""
 
@@ -247,7 +247,7 @@ msgstr ""
 
 #: awesomeshop/shop/models.py:131 awesomeshop/templates/skeleton.html:118
 #: awesomeshop/templates/dashboard/skeleton.html:36
-#: awesomeshop/templates/shop/product.html:86
+#: awesomeshop/templates/shop/product.html:99
 #: awesomeshop/templates/shop/search.html:21
 msgid "Documentation"
 msgstr ""
@@ -256,43 +256,48 @@ msgstr ""
 msgid "Keywords"
 msgstr ""
 
-#: awesomeshop/shop/models.py:262
-msgid "unconfirmed"
+#: awesomeshop/shop/models.py:141 awesomeshop/templates/page/page.html:13
+#: awesomeshop/templates/shop/product.html:87
+msgid "Related products"
 msgstr ""
 
 #: awesomeshop/shop/models.py:267
-msgid "awaiting payment"
+msgid "unconfirmed"
 msgstr ""
 
 #: awesomeshop/shop/models.py:272
-msgid "awaiting a response from the payment provider"
+msgid "awaiting payment"
 msgstr ""
 
 #: awesomeshop/shop/models.py:277
-msgid "payment received"
+msgid "awaiting a response from the payment provider"
 msgstr ""
 
 #: awesomeshop/shop/models.py:282
-msgid "payment failed ({})"
+msgid "payment received"
 msgstr ""
 
 #: awesomeshop/shop/models.py:287
-msgid "in preparation"
+msgid "payment failed ({})"
 msgstr ""
 
 #: awesomeshop/shop/models.py:292
-msgid "shipped on {}"
+msgid "in preparation"
 msgstr ""
 
 #: awesomeshop/shop/models.py:297
-msgid "awaiting return"
+msgid "shipped on {}"
 msgstr ""
 
 #: awesomeshop/shop/models.py:302
-msgid "refund"
+msgid "awaiting return"
 msgstr ""
 
 #: awesomeshop/shop/models.py:307
+msgid "refund"
+msgstr ""
+
+#: awesomeshop/shop/models.py:312
 msgid "cancelled"
 msgstr ""
 
@@ -358,6 +363,7 @@ msgid "Add to cart"
 msgstr ""
 
 #: awesomeshop/templates/skeleton.html:21
+#: awesomeshop/templates/dashboard/home.html:55
 #: awesomeshop/templates/shop/product.html:76
 msgid "Out of stock"
 msgstr ""
@@ -503,7 +509,7 @@ msgstr ""
 #: awesomeshop/templates/dashboard/carrier.html:54
 #: awesomeshop/templates/dashboard/carrier.html:251
 #: awesomeshop/templates/dashboard/page.html:57
-#: awesomeshop/templates/dashboard/product.html:114
+#: awesomeshop/templates/dashboard/product.html:125
 #: awesomeshop/templates/dashboard/user.html:73
 msgid "Remove"
 msgstr ""
@@ -590,7 +596,7 @@ msgid "Your orders"
 msgstr ""
 
 #: awesomeshop/templates/auth/orders.html:17
-#: awesomeshop/templates/dashboard/home.html:9
+#: awesomeshop/templates/dashboard/home.html:10
 #, python-format
 msgid "%(num)d product"
 msgid_plural "%(num)d products"
@@ -678,7 +684,7 @@ msgstr ""
 #: awesomeshop/templates/dashboard/countries_group.html:17
 #: awesomeshop/templates/dashboard/country.html:35
 #: awesomeshop/templates/dashboard/page.html:37
-#: awesomeshop/templates/dashboard/product.html:91
+#: awesomeshop/templates/dashboard/product.html:102
 #: awesomeshop/templates/dashboard/user.html:34
 msgid "Save"
 msgstr ""
@@ -690,7 +696,7 @@ msgstr ""
 #: awesomeshop/templates/dashboard/country.html:39
 #: awesomeshop/templates/dashboard/order.html:114
 #: awesomeshop/templates/dashboard/page.html:41
-#: awesomeshop/templates/dashboard/product.html:95
+#: awesomeshop/templates/dashboard/product.html:106
 #: awesomeshop/templates/dashboard/user.html:38
 msgid "Cancel"
 msgstr ""
@@ -741,7 +747,7 @@ msgstr ""
 #: awesomeshop/templates/dashboard/category.html:21
 #: awesomeshop/templates/dashboard/country.html:21
 #: awesomeshop/templates/dashboard/page.html:21
-#: awesomeshop/templates/dashboard/product.html:77
+#: awesomeshop/templates/dashboard/product.html:88
 msgid "Translations"
 msgstr ""
 
@@ -769,16 +775,25 @@ msgstr ""
 msgid "New country"
 msgstr ""
 
-#: awesomeshop/templates/dashboard/home.html:17
+#: awesomeshop/templates/dashboard/home.html:19
+#, python-format
+msgid "%(qty)d left"
+msgstr ""
+
+#: awesomeshop/templates/dashboard/home.html:29
 msgid "Orders in preparation"
 msgstr ""
 
-#: awesomeshop/templates/dashboard/home.html:27
+#: awesomeshop/templates/dashboard/home.html:37
 msgid "Orders to prepare"
 msgstr ""
 
-#: awesomeshop/templates/dashboard/home.html:37
+#: awesomeshop/templates/dashboard/home.html:45
 msgid "Awaiting payment"
+msgstr ""
+
+#: awesomeshop/templates/dashboard/home.html:63
+msgid "Out of stock soon"
 msgstr ""
 
 #: awesomeshop/templates/dashboard/order.html:3
@@ -982,12 +997,12 @@ msgid "New page"
 msgstr ""
 
 #: awesomeshop/templates/dashboard/page.html:48
-#: awesomeshop/templates/dashboard/product.html:102
+#: awesomeshop/templates/dashboard/product.html:113
 msgid "Pictures"
 msgstr ""
 
 #: awesomeshop/templates/dashboard/page.html:68
-#: awesomeshop/templates/dashboard/product.html:128
+#: awesomeshop/templates/dashboard/product.html:139
 msgid "Upload"
 msgstr ""
 
@@ -998,6 +1013,10 @@ msgstr ""
 
 #: awesomeshop/templates/dashboard/pages.html:9
 msgid "Add a page"
+msgstr ""
+
+#: awesomeshop/templates/dashboard/product.html:6
+msgid "see in the shop"
 msgstr ""
 
 #: awesomeshop/templates/dashboard/product.html:6
@@ -1012,7 +1031,7 @@ msgstr ""
 msgid "Net:"
 msgstr ""
 
-#: awesomeshop/templates/dashboard/product.html:53
+#: awesomeshop/templates/dashboard/product.html:55
 msgid "Stock and shipping"
 msgstr ""
 
@@ -1065,10 +1084,6 @@ msgstr ""
 
 #: awesomeshop/templates/dashboard/users.html:15
 msgid "admin"
-msgstr ""
-
-#: awesomeshop/templates/page/page.html:13
-msgid "Related products"
 msgstr ""
 
 #: awesomeshop/templates/payment/payplug_cancel.html:3
@@ -1196,7 +1211,7 @@ msgstr ""
 #: awesomeshop/templates/shop/cart.html:88
 #: awesomeshop/templates/shop/insufficient_stock.html:8
 #: awesomeshop/templates/shop/product.html:69
-#: awesomeshop/templates/shop/product.html:99
+#: awesomeshop/templates/shop/product.html:112
 msgid "Sorry, insufficient stock."
 msgstr ""
 
@@ -1353,7 +1368,7 @@ msgstr ""
 msgid "Quantity"
 msgstr ""
 
-#: awesomeshop/templates/shop/product.html:98
+#: awesomeshop/templates/shop/product.html:111
 msgid "Warning:"
 msgstr ""
 

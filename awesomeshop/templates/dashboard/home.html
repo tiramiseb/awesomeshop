@@ -1,6 +1,7 @@
 {% extends "dashboard/skeleton.html" %}
 
-{% macro orderline(order) %}
+{% macro orderlines(orders) %}
+                {%- for order in orders %}
                 <a class="list-group-item" href="{{ url_for('dashboard_order', order_number=order.number) }}">
                     {{ order.full_invoice_number }}
                     ({{ order.full_number}}),
@@ -8,6 +9,17 @@
                     {{ order.formated_invoice_date }},
                     {{ ngettext('%(num)d product', '%(num)d products', order.quantity) }},
                 </a>
+                {%- endfor %}
+{% endmacro %}
+{% macro productlines(products, show_stock=False) %}
+                {%- for product in products %}
+                <a class="list-group-item" href="{{ url_for('dashboard_product', product_id=product.id) }}">
+                    {{ product.reference }},
+                    {{ product }}{% if show_stock %},
+                    <b>{{ _('%(qty)d left', qty=product.stock) }}</b>
+                    {%- endif %}
+                </a>
+                {%- endfor %}
 {% endmacro %}
 {% block content %}
 <div class="row">
@@ -17,9 +29,7 @@
                 {{ _('Orders in preparation') }}
             </div>
             <div class="list-group">
-                {%- for order in prep_orders %}
-                {{ orderline(order) }}
-                {%- endfor %}
+                {{ orderlines(prep_orders) }}
             </div>
         </div>
         <div class="panel panel-primary">
@@ -27,9 +37,7 @@
                 {{ _('Orders to prepare') }}
             </div>
             <div class="list-group">
-                {%- for order in paid_orders %}
-                {{ orderline(order) }}
-                {%- endfor %}
+                {{ orderlines(paid_orders) }}
             </div>
         </div>
         <div class="panel panel-danger">
@@ -37,9 +45,25 @@
                 {{ _('Awaiting payment') }}
             </div>
             <div class="list-group">
-                {%- for order in awaiting_payment_orders %}
-                {{ orderline(order) }}
-                {%- endfor %}
+                {{ orderlines(awaiting_payment_orders) }}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                {{ _('Out of stock')}}
+            </div>
+            <div class="list-group">
+                {{ productlines(out_of_stock_products) }}
+            </div>
+        </div>
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                {{ _('Out of stock soon')}}
+            </div>
+            <div class="list-group">
+                {{ productlines(stock_alert_products, show_stock=True) }}
             </div>
         </div>
     </div>
