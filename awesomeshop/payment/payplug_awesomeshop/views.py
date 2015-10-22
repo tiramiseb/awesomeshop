@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
-from flask import abort, request
+from flask import abort, request, redirect, url_for
 from flask.ext.babel import _, lazy_gettext
 from flask.ext.login import current_user
 import payplug
@@ -34,7 +34,7 @@ def payplug_return(order_number):
     if order.status == 'awaiting_payment' and order.payment_data:
         order.set_status('awaiting_provider')
         order.save()
-    return render_front('payment/payplug_return.html', order=order)
+    return redirect(url_for('order', order_number=order_number))
 
 @app.route('/orders/<order_number>/payplug_cancel')
 @login_required
