@@ -28,7 +28,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 </a></p>
 <p>({{ _('A country can be placed in multiple groups') }})</p>
 <table class="table table-hover">
-    {% for countries_group in countries_groups %}
+    {%- for countries_group in countries_groups %}
     <tr>
         <td class="pointer" onclick="document.location='{{ url_for('dashboard_countries_group', countries_group_id=countries_group.id) }}'">
             {{ countries_group }}
@@ -44,6 +44,6 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             </div>
         </td>
     </tr>
-    {% endfor %}
+    {%- endfor %}
 </table>
-{% endblock %}
+{%- endblock %}

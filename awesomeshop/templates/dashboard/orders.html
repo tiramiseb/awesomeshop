@@ -31,7 +31,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <th>{{ _('Net') }}</th>
         <th></th>
     </tr>
-    {% for order in orders %}
+    {%- for order in orders %}
     <tr>
         <td class="pointer" onclick="document.location='{{ url_for('dashboard_order', order_number=order.number) }}'">
             {%- if order.invoice_number %}
@@ -59,26 +59,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <td class="pointer" onclick="document.location='{{ url_for('dashboard_order', order_number=order.number) }}'">
             {{ order.net_total }}
         </td>
-        {#<td class="pointer" onclick="document.location='{{ url_for('dashboard_product', product_id=product.id) }}'">
-            {{ product.reference }}
-        </td>
-        <td class="pointer" onclick="document.location='{{ url_for('dashboard_product', product_id=product.id) }}'">
-            {{ product }}
-        </td>
-        <td class="pointer" onclick="document.location='{{ url_for('dashboard_product', product_id=product.id) }}'">
-            {{ product.stock }}
-        </td>
-        <td>
-            <div class="btn-group pull-right">
-                <a class="btn btn-success" href="{{ url_for('dashboard_product', product_id=product.id) }}">
-                    <i class="fa fa-pencil"></i>
-                </a>
-                <a class="btn btn-danger" href="{{ url_for('dashboard_remove_product', product_id=product.id) }}">
-                    <i class="fa fa-trash"></i>
-                </a>
-            </div>
-        </td>#}
     </tr>
-    {% endfor %}
+    {%- endfor %}
 </table>
 {% endblock %}

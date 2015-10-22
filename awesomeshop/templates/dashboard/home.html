@@ -28,7 +28,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     {{ ngettext('%(num)d product', '%(num)d products', order.quantity) }},
                 </a>
                 {%- endfor %}
-{% endmacro %}
+{%- endmacro %}
 {% macro productlines(products, show_stock=False) %}
                 {%- for product in products %}
                 <a class="list-group-item" href="{{ url_for('dashboard_product', product_id=product.id) }}">
@@ -38,7 +38,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     {%- endif %}
                 </a>
                 {%- endfor %}
-{% endmacro %}
+{%- endmacro %}
 {% block content %}
 <div class="row">
     <div class="col-md-6">
@@ -47,7 +47,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 {{ _('Orders in preparation') }}
             </div>
             <div class="list-group">
-                {{ orderlines(prep_orders) }}
+                {{- orderlines(prep_orders) }}
             </div>
         </div>
         <div class="panel panel-primary">
@@ -55,7 +55,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 {{ _('Orders to prepare') }}
             </div>
             <div class="list-group">
-                {{ orderlines(paid_orders) }}
+                {{- orderlines(paid_orders) }}
             </div>
         </div>
         <div class="panel panel-danger">
@@ -63,7 +63,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 {{ _('Awaiting payment') }}
             </div>
             <div class="list-group">
-                {{ orderlines(awaiting_payment_orders) }}
+                {{- orderlines(awaiting_payment_orders) }}
             </div>
         </div>
     </div>
@@ -73,7 +73,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 {{ _('Out of stock')}}
             </div>
             <div class="list-group">
-                {{ productlines(out_of_stock_products) }}
+                {{- productlines(out_of_stock_products) }}
             </div>
         </div>
         <div class="panel panel-warning">
@@ -81,9 +81,9 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 {{ _('Out of stock soon')}}
             </div>
             <div class="list-group">
-                {{ productlines(stock_alert_products, show_stock=True) }}
+                {{- productlines(stock_alert_products, show_stock=True) }}
             </div>
         </div>
     </div>
 </div>
-{% endblock %}
+{%- endblock %}

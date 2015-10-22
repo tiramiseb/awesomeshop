@@ -25,21 +25,21 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     <div class="col-xs-7 col-md-8 col-lg-9">
         <div class="row">
             <div class="{% if not product.photos %}hidden-xs{% endif %} col-md-5 col-lg-6">
-                {% if product.photos -%}
+                {%- if product.photos %}
                 <a href="{{ product.photos[0].url }}" target="_blank" class="thumbnail" onclick="display('{{ product.photos[0].url }}'); return false;">
                     <img src="{{ product.photos[0].preview_url }}">
                 </a>
-                {% if product.photos|length > 1 -%}
-                {% set thumb_width = (12 / (product.photos|length - 1))|int %}
-                {% set thumb_pre = ((12 % (product.photos|length - 1 )) / 2)|int %}
+                {%- if product.photos|length > 1 %}
+                {%- set thumb_width = (12 / (product.photos|length - 1))|int -%}
+                {%- set thumb_pre = ((12 % (product.photos|length - 1 )) / 2)|int -%}
                 <div class="row small-gutter">
-                    {% for photo in product.photos[1:] %}
+                    {%- for photo in product.photos[1:] %}
                     <div class="col-xs-{{ thumb_width }}">
                         <a href="{{ photo.url }}" target="_blank" class="thumbnail" onclick="display('{{ photo.url }}'); return false;">
                             <img src="{{ photo.thumbnail_url }}">
                         </a>
                     </div>
-                    {% endfor %}
+                    {%- endfor %}
                 </div>
                 {%- endif %}
                 {%- else -%}
@@ -69,7 +69,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <div class="well">
             <p class="price">{{ product.get_price_per_item().quantize('0.01').net }} {{ config.CURRENCY }}</p>
         <hr>
-        {% if product.stock -%}
+        {%- if product.stock %}
         <form method="POST" action="{{ url_for('add_to_cart') }}">
             <input type="hidden" name="product" value="{{ product.id }}">
             <div class="form-group">
@@ -133,7 +133,6 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <div id="image-overlay" class="hidden" onclick="this.className='hidden';">
     <div class="overlay">
     </div>
-    {#<div id="overlay-image-container" class="img-thumbnail overlay-content">#}
     <div id="overlay-image-container">
         <img src="" id="overlay-image">
     </div>
@@ -160,5 +159,5 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         };
     });
 </script>
-{% endblock %}
+{%- endblock %}
 

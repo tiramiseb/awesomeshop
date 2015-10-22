@@ -61,11 +61,11 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </div>
     </div>
 </form>
-{% if addresses or newaddress -%}
+{%- if addresses or newaddress %}
 <h2 id="addresses">{{ _('Addresses') }}</h2>
 <div class="panel panel-default">
     <div class="list-group">
-        {% for address in addresses -%}
+        {%- for address in addresses %}
         <div class="list-group-item">
             <form method="POST">
                 {{ address.hidden_tag() }}
@@ -124,4 +124,4 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     </div>
 </div>
 {%- endif %}
-{% endblock %}
+{%- endblock %}

@@ -26,12 +26,12 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {{ page.output_text|safe }}
 </div>
 </div>
-{% if page.products %}
+{%- if page.products %}
 <div class="panel panel-default">
     <div class="panel-heading">{{ _('Related products') }}</div>
     <div class="panel-body">
-        {{ products_grid(page.products) }}
+        {{- products_grid(page.products) }}
     </div>
 </div>
-{% endif %}
-{% endblock %}
+{%- endif %}
+{%- endblock %}

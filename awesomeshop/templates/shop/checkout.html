@@ -20,7 +20,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 {% block title %}{{ _('Checkout') }}{% endblock %}
 {% block content %}
-{% if cart -%}
+{%- if cart %}
 <form method="POST" action="{{ url_for('confirm_order') }}" id="checkout-form">
     <h1>{{ _('Checkout') }}</h1>
     <div class="panel panel-default">
@@ -42,7 +42,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             </div>
         </div>
         <div class="list-group">
-            {% for line in cart -%}
+            {%- for line in cart %}
             <div class="list-group-item">
                 <div class="row">
                     <div class="col-sm-6">
@@ -52,13 +52,11 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                         {{ line.quantity }}
                     </div>
                     <div class="col-xs-4 col-sm-2 text-right">
-                        {{ line.get_price_per_item().quantize('0.01').net }}
-                        {{ config.CURRENCY }}
+                        {{ line.get_price_per_item().quantize('0.01').net }} {{ config.CURRENCY }}
                     </div>
                     <div class="col-xs-4 col-sm-2 text-right">
                         <strong>
-                            {{ line.get_total().quantize('0.01').net }}
-                            {{ config.CURRENCY }}
+                            {{ line.get_total().quantize('0.01').net }} {{ config.CURRENCY }}
                         </strong>
                     </div>
                  </div>
@@ -66,7 +64,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             {%- endfor %}
         </div>
     </div>
-    {% if current_user.addresses -%}
+    {%- if current_user.addresses %}
     <div class="row checkout-addresses">
         <div class="col-md-6">
             <div class="panel panel-default">
@@ -79,7 +77,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <div class="panel-body">
                     <div class="form-group">
                         <select id="delivery-select" class="form-control" name="delivery" onchange="update_delivery_address()">
-                            {% for address in current_user.addresses -%}
+                            {%- for address in current_user.addresses %}
                             <option value="{{ address.id }}">{{ address.title }}</option>
                             {%- endfor %}
                         </select>
@@ -119,7 +117,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     <div id="billing-container" class="hidden">
                         <div class="form-group">
                             <select id="billing-select" class="form-control" name="billing" onchange="update_billing_address()">
-                                {% for address in current_user.addresses -%}
+                                {%- for address in current_user.addresses %}
                                 <option value="{{ address.id }}">{{ address.title }}</option>
                                 {%- endfor %}
                             </select>
@@ -169,8 +167,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 {{ _('Subtotal') }}
             </div>
             <div class="col-xs-4 col-md-3 text-right">
-                {{ cart.get_total().quantize('0.01').net }}
-                {{ config.CURRENCY }}
+                {{ cart.get_total().quantize('0.01').net }} {{ config.CURRENCY }}
             </div>
         </div>
         <div class="shippingtotal">
@@ -227,7 +224,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         {{ _('Verify and confirm the order') }}
         <i class="fa fa-chevron-right"></i>
     </button>
-    <small>{% if locale == 'fr' %}{{ _('TVA non applicable, article 293 B du Code général des impôts') }}{% endif %}</small>
+    <small>{{ _('TVA non applicable, article 293 B du Code général des impôts') }}</small>
 </form>
 <script>
 var addresses = {
@@ -329,5 +326,5 @@ maybe_activate_payment_button();
 {%- else -%}
 <div class="alert alert-danger text-center">{{ _('Your cart is empty!') }}</div>
 {%- endif %}
-{% endblock %}
+{%- endblock %}
 

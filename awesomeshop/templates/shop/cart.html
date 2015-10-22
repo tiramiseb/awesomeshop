@@ -21,16 +21,16 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {% block title %}{{ _('My Cart') }}{% endblock %}
 {% block content %}
 <h1>{{ _('My Cart') }}</h1>
-{% if cart %}
+{%- if cart %}
 <form method="POST">
     <div class="list-group">
-        {% for line in cart -%}
+        {%- for line in cart %}
         <div class="list-group-item cart-list">
             <div class="row">
                 <div class="col-xs-6 col-sm-4 col-md-6 col-lg-8">
                     <a href="{{ line.product.url }}">
                         <span class="hidden-xs hidden-sm">
-                        {% if line.product.photos -%}
+                        {%- if line.product.photos %}
                         <img class="cart-illustration" src="{{ line.product.photos[0].thumbnail_url }}">
                         {%- else -%}
                         <span class="cart-illustration-placeholder">
@@ -56,14 +56,10 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     </div>
                 </div>
                 <div class="col-sm-4 col-md-3 col-lg-2 text-right">
-                    {{ _('Unit:') }}
-                    {{ line.get_price_per_item().quantize('0.01').net }}
-                    {{ config.CURRENCY }}
+                    {{ _('Unit:') }} {{ line.get_price_per_item().quantize('0.01').net }} {{ config.CURRENCY }}
                     <br>
                     <strong>
-                        {{ _('Total:') }}
-                        {{ line.get_total().quantize('0.01').net }}
-                        {{ config.CURRENCY }}
+                        {{ _('Total:') }} {{ line.get_total().quantize('0.01').net }} {{ config.CURRENCY }}
                     </strong>
                 </div>
              </div>
@@ -78,9 +74,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 </div>
                 <div id="total">
                     <strong>
-                        {{ _('Total:') }}
-                        {{ cart.get_total().quantize('0.01').net }}
-                        {{ config.CURRENCY }}
+                        {{ _('Total:') }} {{ cart.get_total().quantize('0.01').net }} {{ config.CURRENCY }}
                     </strong>
                     <br>
                     {{ _('+ shipping fee') }}
@@ -136,8 +130,8 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         elem.addEventListener('keyup', disp_recalc);
     });
 </script>
-{% else %}
+{%- else %}
 <div class="alert alert-danger text-center">{{ _('Your cart is empty!') }}</div>
-{% endif %}
-{% endblock %}
+{%- endif %}
+{%- endblock %}
 

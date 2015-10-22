@@ -22,8 +22,6 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {% block title %}{{ _('Dashboard') }} - {{ _('Taxes') }}{% endblock %}
 {% block content %}
 <h1>{{ _('Taxes') }}</h1>
-
-
 <div class="row">
     <div class="col-xs-6">
         <label>{{ _('Name') }}</label>
@@ -32,8 +30,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <label>{{ _('Rate') }}</label>
     </div>
 </div>
-
-{% for form in allforms -%}
+{%- for form in allforms %}
 <div class="row">
     <form method="POST">
         {{ form.hidden_tag() }}
@@ -86,11 +83,4 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </div>
     </form>
 </div>
-
-
-
-
-
-
-
 {% endblock %}

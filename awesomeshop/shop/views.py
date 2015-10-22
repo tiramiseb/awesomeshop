@@ -42,9 +42,6 @@ def category_or_product(path):
 @app.route('/search')
 def search():
     terms = request.args.get('q')
-#    if len(terms) == 1:
-#        return render_front('shop/search_terms_too_short.html', terms=terms)
-
     return render_front('shop/search.html', terms=terms,
                         **search_mod.search(terms))
 

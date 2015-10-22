@@ -27,7 +27,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     {{ _('Add a country')}}
 </a></p>
 <table class="table table-hover">
-    {% for country in countries %}
+    {%- for country in countries %}
     <tr>
         <td class="pointer" onclick="document.location='{{ url_for('dashboard_country', country_id=country.id) }}'">
             <p>{{ country }}</p>
@@ -43,6 +43,6 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             </div>
         </td>
     </tr>
-    {% endfor %}
+    {%- endfor %}
 </table>
-{% endblock %}
+{%- endblock %}

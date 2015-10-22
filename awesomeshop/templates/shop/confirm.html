@@ -63,7 +63,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </div>
     </div>
     <div class="list-group">
-        {% for product in order.products %}
+        {%- for product in order.products %}
         <div class="list-group-item">
             <div class="row">
                 <div class="col-sm-6">
@@ -80,7 +80,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 </div>
              </div>
         </div>
-        {% endfor %}
+        {%- endfor %}
         <div class="list-group-item">
             <div class="row">
                 <div class="col-xs-8">
@@ -137,9 +137,9 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </ul>
     </div>
 </div>
-{%- if locale == 'fr' %}<small>{{ _('TVA non applicable, article 293 B du Code général des impôts') }}</small>{% endif %}
+<small>{{ _('TVA non applicable, article 293 B du Code général des impôts') }}</small>
 <a href="{{ url_for('pay_order', order_number=order.number) }}" class="btn btn-lg btn-success pull-right">
     {{ _('Proceed to payment') }}
     <i class="fa fa-chevron-right"></i>
 </a>
-{% endblock %}
+{%- endblock %}

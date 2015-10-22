@@ -39,7 +39,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <div class="panel-heading">{{ _('Translations') }}</div>
         <div class="panel-body">
             <div class="row">
-                {% for l in config.LANGS -%}
+                {%- for l in config.LANGS %}
                 <div class="col-sm-6">
                     {{ forminput(form.name.entries[l]) }}
                 </div>
@@ -58,4 +58,4 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </a>
     </div>
 </form>
-{% endblock %}
+{%- endblock %}

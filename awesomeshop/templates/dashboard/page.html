@@ -65,9 +65,8 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <div id="pictures" class="panel panel-default">
     <div class="panel-heading">{{ _('Pictures') }}</div>
     <div class="list-group">
-        {% for photo in page.photos -%}
+        {%- for photo in page.photos %}
         <div class="list-group-item">
-        {#<div class="thumbnail">#}
         <img src="{{ photo.thumbnail_url }}">
         <tt>.. image:: {{ photo.url }}</tt>
         <a class="btn btn-danger" href="{{ url_for('dashboard_remove_page_photo', pagetype=page.pagetype, page_id=page.id, filename=photo.filename) }}">
@@ -90,4 +89,4 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     </div>
 </div>
 {%- endif %}
-{% endblock %}
+{%- endblock %}

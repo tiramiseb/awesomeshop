@@ -27,10 +27,12 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     {{ _('Add an user') }}
 </a></p>
 <table class="table table-hover">
-    {% for user in users %}
+    {%- for user in users %}
     <tr>
         <td class="pointer" onclick="document.location='{{ url_for('dashboard_user', user_id=user.id) }}'">
-            {% if user.is_admin %}<span class="label label-warning">{{ _('admin') }}</span>{% endif %}
+            {%- if user.is_admin %}
+            <span class="label label-warning">{{ _('admin') }}</span>
+            {%- endif %}
             {{ user.email }}
         </td>
         <td>
@@ -44,6 +46,6 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             </div>
         </td>
     </tr>
-    {% endfor %}
+    {%- endfor %}
 </table>
-{% endblock %}
+{%- endblock %}

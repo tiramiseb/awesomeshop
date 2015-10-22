@@ -33,12 +33,12 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <th>{{ _('Stock') }}</th>
         <th></th>
     </tr>
-    {% for product in products %}
+    {%- for product in products %}
     <tr>
         <td class="pointer" onclick="document.location='{{ url_for('dashboard_product', product_id=product.id) }}'">
-            {% if product.photos %}
+            {%- if product.photos %}
             <img src="{{ product.photos[0].thumbnail_url }}">
-            {% endif %}
+            {%- endif %}
         </td>
         <td class="pointer" onclick="document.location='{{ url_for('dashboard_product', product_id=product.id) }}'">
             {{ product.reference }}
@@ -60,6 +60,6 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             </div>
         </td>
     </tr>
-    {% endfor %}
+    {%- endfor %}
 </table>
-{% endblock %}
+{%- endblock %}

@@ -99,7 +99,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </div>
     </div>
 </form>
-{% if carrier.id -%}
+{%- if carrier.id %}
 <form action="{{ url_for('dashboard_carrier_costs', carrier_id=carrier.id) }}" method="POST">
     <div class="panel panel-default" id="price">
         <div class="panel-heading">{{ _('Price we pay') }}</div>
@@ -107,7 +107,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             <table>
                 <tr>
                     <th></th>
-                    {% for w in carrier.weights -%}
+                    {%- for w in carrier.weights %}
                     <th>
                         {% if w < 1000 -%}
                         {{ _('... %(weight)s g', weight=w) }}
@@ -117,10 +117,10 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     </th>
                     {%- endfor %}
                 </tr>
-                {% for g in carrier.countries_groups -%}
+                {%- for g in carrier.countries_groups %}
                 <tr>
                     <td class="text-right carrier-countries">{{ g }}</td>
-                    {% for w in carrier.weights -%}
+                    {%- for w in carrier.weights %}
                     <td>
                         <div class="input-group">
                             <input type="text" class="form-control text-right" name="{{ g.id }}+{{ w }}" value="{{ carrier.get_price(g.id, w, 'purchasing', exact=True) }}">
@@ -130,10 +130,10 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     {%- endfor %}
                 </tr>
                 {%- endfor %}
-                {% for c in carrier.countries -%}
+                {%- for c in carrier.countries %}
                 <tr>
                     <td class="text-right carrier-countries">{{ c }}</td>
-                    {% for w in carrier.weights -%}
+                    {%- for w in carrier.weights %}
                     <td>
                         <div class="input-group">
                             <input type="text" class="form-control text-right" name="{{ c.id }}+{{ w }}" value="{{ carrier.get_price(c.id, w, 'purchasing', exact=True) }}">
@@ -147,7 +147,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     <td class="text-right carrier-countries">
                         {{ _('Rest of the world') }}
                     </td>
-                    {% for w in carrier.weights -%}
+                    {%- for w in carrier.weights %}
                     <td>
                         <div class="input-group">
                             <input type="text" class="form-control text-right" name="rest+{{ w }}" value="{{ carrier.get_price('rest', w, 'purchasing', exact=True) }}">
@@ -187,26 +187,26 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 </th>
                 {%- endfor %}
             </tr>
-            {% for g in carrier.countries_groups -%}
+            {%- for g in carrier.countries_groups %}
             <tr>
                 <td class="text-right carrier-countries">{{ g }}</td>
-                {% for w in carrier.weights -%}
+                {%- for w in carrier.weights -%}
                 {%- set price = carrier.get_price(g.id, w, 'net', exact=True) %}
                 <td class="text-right">
-                    {% if price -%}
+                    {%- if price %}
                     {{ price }} {{ config.CURRENCY }}
                     {%- endif %}
                 </td>
                 {%- endfor %}
             </tr>
             {%- endfor %}
-            {% for c in carrier.countries -%}
+            {%- for c in carrier.countries %}
             <tr>
                 <td class="text-right carrier-countries">{{ c }}</td>
-                {% for w in carrier.weights -%}
+                {%- for w in carrier.weights %}
                 {%- set price = carrier.get_price(c.id, w, 'net', exact=True) %}
                 <td class="text-right">
-                    {% if price -%}
+                    {%- if price %}
                     {{ price }} {{ config.CURRENCY }}
                     {%- endif %}
                 </td>
@@ -217,10 +217,10 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <td class="text-right carrier-countries">
                     {{ _('Rest of the world') }}
                 </td>
-                {% for w in carrier.weights -%}
+                {%- for w in carrier.weights %}
                 {%- set price = carrier.get_price('rest', w, 'net', exact=True) %}
                 <td class="text-right">
-                    {% if price -%}
+                    {%- if price %}
                     {{ price }} {{ config.CURRENCY }}
                     {%- endif %}
                 </td>
@@ -284,4 +284,4 @@ function remove_weight(id) {
     container.removeChild(row);
 }
 </script>
-{% endblock %}
+{%- endblock %}

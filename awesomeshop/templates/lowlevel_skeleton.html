@@ -18,40 +18,39 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
 {%- macro forminput(field, after=None, class=None) -%}
 <div class="form-group{% if field.errors %} has-error{% endif %}">
-    {{ field.label(class='control-label') }}
-    {% for e in field.errors %}
+    {{- field.label(class='control-label') }}
+    {%- for e in field.errors -%}
     <div class="alert alert-danger" role="alert">{{ e }}</div>
-    {% endfor %}
-    {% if after %}<div class="input-group">{% endif %}
-    {% if class %}
+    {%- endfor %}
+    {%- if after -%}
+    <div class="input-group">
+    {%- endif %}
+    {%- if class -%}
     {{ field(class='form-control '+class) }}
-    {% else %}
+    {%- else -%}
     {{ field(class='form-control') }}
-    {% endif %}
-    {% if after %}<span class="input-group-addon">{{ after }}</span></div>{% endif %}
+    {%- endif %}
+    {%- if after -%}
+    <span class="input-group-addon">{{ after }}</span></div>
+    {%- endif -%}
 </div>
-{%- endmacro -%}
+{%- endmacro %}
 {%- macro formsubmit(message, icon) -%}
-<div class="form-group">
-    <button type="submit" class="btn btn-success form-control">
-        <i class="fa fa-{{ icon }}"></i>
-        {{ message }}
-    </button>
-</div>
-{%- endmacro -%}
+<div class="form-group"><button type="submit" class="btn btn-success form-control"><i class="fa fa-{{ icon }}"></i>{{ message }}</button></div>
+{%- endmacro %}
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8">
-        <meta name="generator" content="AwesomeShop">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-        <link href="/static/css/bootstrap.min.css" rel="stylesheet">
-        <link href="/static/css/font-awesome.min.css" rel="stylesheet">        
-        <link href="/static/css/awesomeshop.css" rel="stylesheet">
-        {%- block head %}{% endblock %}
-        <title>{{ config.SHOP_NAME }} - {% block title %}AwesomeShop{% endblock %}</title>
-    </head>
-    <body>
-        {%- block body %}{% endblock %}
-    </body>
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8">
+<meta name="generator" content="AwesomeShop">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+<link href="/static/css/font-awesome.min.css" rel="stylesheet">        
+<link href="/static/css/awesomeshop.css" rel="stylesheet">
+{%- block head %}{% endblock %}
+<title>{{ config.SHOP_NAME }} - {% block title %}AwesomeShop{% endblock %}</title>
+</head>
+<body>
+{%- block body %}{% endblock %}
+</body>
 </html>

@@ -25,7 +25,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     <div class="panel-body">
         <p>{{ _('Sorry, insufficient stock.') }}</p>
         <p>
-            {% if next -%}
+            {%- if next %}
             <a href="{{ next }}">{{ _('Go back') }}</a>
             &mdash;
             {%- endif %}
@@ -33,5 +33,5 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </p>
     </div>
 </div>
-{% endblock %}
+{%- endblock %}
 

@@ -22,7 +22,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {% block content %}
 <h1>{{ category.short_name }}</h1>
 <div class="row">
-    {{ products_grid(category.onsale_products_recursive) }}
+{{- products_grid(category.onsale_products_recursive) }}
 </div>
-{% endblock %}
+{%- endblock %}
 

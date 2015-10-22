@@ -107,7 +107,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </div>
     </div>
     <div class="list-group">
-        {% for product in order.products %}
+        {%- for product in order.products %}
         <div class="list-group-item">
             <div class="row">
                 <div class="col-xs-4 col-md-2 col-print-2">
@@ -127,7 +127,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 </div>
              </div>
         </div>
-        {% endfor %}
+        {%- endfor %}
         <div class="list-group-item">
             <div class="row">
                 <div class="col-xs-8">
@@ -188,4 +188,4 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     {{ _('Print') }}
 </a>
 {%- endif %}
-{% endblock %}
+{%- endblock %}

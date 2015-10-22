@@ -27,7 +27,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     {{ _('Add a carrier') }}
 </a></p>
 <table class="table table-hover">
-    {% for carrier in carriers %}
+    {%- for carrier in carriers %}
     <tr>
         <td class="pointer" onclick="document.location='{{ url_for('dashboard_carrier', carrier_id=carrier.id) }}'">
             <p>{{ carrier }}</p>
@@ -43,6 +43,6 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             </div>
         </td>
     </tr>
-    {% endfor %}
+    {%- endfor %}
 </table>
-{% endblock %}
+{%- endblock %}

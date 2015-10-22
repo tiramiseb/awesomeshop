@@ -18,10 +18,9 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
 {% extends "skeleton.html" %}
 
-
 {% block title %}{% if address_id %}{{ _('Create an address') }}{% else %}{{ _('Modify an address') }}{% endif %}{% endblock %}
 {% block content %}
-<h1>{{ title }}</h1>
+<h1>{% if address_id %}{{ _('Create an address') }}{% else %}{{ _('Modify an address') }}{% endif %}</h1>
 <div class="row">
     <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
         <div class="panel panel-default">
@@ -50,4 +49,4 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </div>
     </div>
 </div>
-{% endblock %}
+{%- endblock %}
