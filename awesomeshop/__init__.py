@@ -38,8 +38,6 @@ db = MongoEngine(app)
 babel = Babel(app)
 @babel.localeselector
 def get_locale(from_user=True):
-    # Fallback locale
-    locale = app.config['LANGS'][0]
     if from_user and current_user and current_user.is_authenticated \
             and current_user.locale:
         # Use the user-defined locale if it exists
@@ -59,6 +57,9 @@ def get_locale(from_user=True):
             if i in app.config['LANGS']:
                 locale = i
                 break
+    if not locale:
+        # Fallback locale
+        locale = app.config['LANGS'][0]
     return locale
 
 # Initialize the debug toolbar when in debug mode
