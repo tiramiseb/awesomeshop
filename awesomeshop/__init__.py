@@ -42,18 +42,23 @@ def get_locale(from_user=True):
     locale = app.config['LANGS'][0]
     if from_user and current_user and current_user.is_authenticated \
             and current_user.locale:
+        # Use the user-defined locale if it exists
         locale = current_user.locale
-    try:
-        locale = session.get('locale') or \
-                 request.accept_languages.best_match(app.config['LANGS'])
+    else:
+        try:
+            # Use the locale defined in the session or get the "best match"
+            locale = session.get('locale') or \
+                     request.accept_languages.best_match(app.config['LANGS'])
+        except RuntimeError:
+            pass
+    if not locale:
+        # If there is no "best match", try pseudo-manually (but ignore weights)
         for i in request.accept_languages.itervalues():
             if '-' in i:
-                shorter = i.split('-')[0]
-                if shorter in app.config['LANGS']:
-                    locale = shorter
-                    break
-    except RuntimeError:
-        pass
+                i = i.split('-')[0]
+            if i in app.config['LANGS']:
+                locale = i
+                break
     return locale
 
 # Initialize the debug toolbar when in debug mode
