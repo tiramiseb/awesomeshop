@@ -31,6 +31,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <th>{{ _('Reference') }}</th>
         <th>{{ _('Name') }}</th>
         <th>{{ _('Stock') }}</th>
+        <th>{{ _('Net price') }}</th>
         <th></th>
     </tr>
     {%- for product in products %}
@@ -48,6 +49,9 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </td>
         <td class="pointer" onclick="document.location='{{ url_for('dashboard_product', product_id=product.id) }}'">
             {{ product.stock }}
+        </td>
+        <td class="pointer" onclick="document.location='{{ url_for('dashboard_product', product_id=product.id) }}'">
+            {{ product.get_price_per_item().quantize('0.01').net }} {{ config.CURRENCY }}
         </td>
         <td>
             <div class="btn-group pull-right">

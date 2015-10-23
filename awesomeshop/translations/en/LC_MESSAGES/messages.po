@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  N/A\n"
 "Report-Msgid-Bugs-To: sebastien@domotego.com\n"
-"POT-Creation-Date: 2015-10-22 21:13+0200\n"
+"POT-Creation-Date: 2015-10-23 09:42+0200\n"
 "PO-Revision-Date: 2015-10-22 09:00+0200\n"
 "Last-Translator: Sebastien Maccagnoni-Munch <sebastien@domotego.com>\n"
 "Language: en\n"
@@ -1066,6 +1066,10 @@ msgstr "Products"
 msgid "Add a product"
 msgstr "Add a product"
 
+#: awesomeshop/templates/dashboard/products.html:34
+msgid "Net price"
+msgstr "Net price"
+
 #: awesomeshop/templates/dashboard/skeleton.html:37
 msgid "See the shop"
 msgstr "See the shop"
@@ -1398,3 +1402,4 @@ msgstr "Search results for \"%(terms)s\""
 #: awesomeshop/templates/shop/search.html:47
 msgid "Sorry, there are no results for this search..."
 msgstr "Sorry, there are no results for this search..."
+
