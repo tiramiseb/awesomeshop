@@ -53,6 +53,7 @@ class User(db.Document, UserMixin):
                                                  default=True)
     latest_carrier = db.StringField(db_field='carrier')
     latest_payment = db.StringField(db_field='paymt')
+    latest_reused_package = db.BooleanField(db_field='reuse_pkg')
 
     meta = {
         'ordering': ['email']

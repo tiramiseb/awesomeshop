@@ -167,6 +167,7 @@ def confirm_order():
     current_user.latest_delivery_as_billing = delivery_as_billing
     current_user.latest_carrier = carrier_id
     current_user.latest_payment = payment_id
+    current_user.latest_reused_package = reused_package
     current_user.save()
     # ... and render the page :)
     return render_front('shop/confirm.html', order=order)
