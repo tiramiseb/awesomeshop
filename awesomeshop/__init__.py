@@ -47,16 +47,19 @@ def get_locale(from_user=True):
             # Use the locale defined in the session or get the "best match"
             locale = session.get('locale') or \
                      request.accept_languages.best_match(app.config['LANGS'])
-        except RuntimeError:
+        except:
             pass
     if not locale:
-        # If there is no "best match", try pseudo-manually (but ignore weights)
-        for i in request.accept_languages.itervalues():
-            if '-' in i:
-                i = i.split('-')[0]
-            if i in app.config['LANGS']:
-                locale = i
-                break
+        try:
+            # If there is no "best match", try pseudo-manually (but ignore weights)
+            for i in request.accept_languages.itervalues():
+                if '-' in i:
+                    i = i.split('-')[0]
+                if i in app.config['LANGS']:
+                    locale = i
+                    break
+        except:
+            pass
     if not locale:
         # Fallback locale
         locale = app.config['LANGS'][0]
