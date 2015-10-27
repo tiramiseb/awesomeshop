@@ -43,7 +43,6 @@ def dashboard_user(user_id=None):
                 a.save()
                 return redirect(url_for('dashboard_user',
                                         user_id=user_id)+'#addresses')
-            print thisform.errors
             addresses.append(thisform)
         newaddress = AddressForm(request.form, prefix='new')
         if newaddress.validate_on_submit():

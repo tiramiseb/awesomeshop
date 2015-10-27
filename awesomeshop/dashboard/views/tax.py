@@ -44,7 +44,6 @@ def dashboard_taxes():
         newform.populate_obj(newtax)
         newtax.save()
         return redirect(url_for('dashboard_taxes'))
-    print newform.errors
     # Rendering
     return render_template('dashboard/taxes.html',
                            allforms=allforms,
