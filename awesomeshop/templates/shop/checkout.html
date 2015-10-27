@@ -199,7 +199,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <div class="list-group order-options">
             {%- for mode in modes_of_payment %}
             <label class="list-group-item">
-                <input type="radio" name="payment" value="{{ mode.id }}"{% if mode.id|string == current_user.latest_payment %} checked="checked"{% endif %} onchange="maybe_activate_payment_button()">
+                <input type="radio" name="payment" value="{{ mode.id }}"{% if mode.id|string == current_user.latest_payment %} checked="checked"{% endif %} onchange="payment_changed('{{ mode.id }}')">
                 {{ mode.text|safe }}
             </label>
             {% endfor %}
@@ -253,6 +253,8 @@ function update_delivery_address() {
     // Display the delivery address
     document.getElementById('delivery-address').innerHTML = address.address;
     document.getElementById('delivery-modify-address').href = address.modifyurl;
+    // Save the address in the session
+    sessionStorage.setItem('delivery-address', id);
     // Remove all carriers options
     while (carriers_list.firstChild) {
         carriers_list.removeChild(carriers_list.firstChild);
@@ -272,7 +274,7 @@ function update_delivery_address() {
         radio.type = "radio";
         radio.name = "shipping";
         radio.value = c.id;
-        radio.setAttribute('onchange', "carrier_changed('"+c.net+"', '"+c.total_net+"')");
+        radio.setAttribute('onchange', "carrier_changed('"+c.net+"', '"+c.total_net+"', '"+c.id+"')");
         if (c.id == '{{ current_user.latest_carrier }}') {
             radio.setAttribute('checked', 'checked');
             document.getElementById('shipping-fee').innerHTML = c.net;
@@ -299,18 +301,27 @@ function update_billing_address() {
     // Display the billing address
     document.getElementById('billing-address').innerHTML = addresses[id].address;
     document.getElementById('billing-modify-address').href = addresses[id].modifyurl;
+    // Save the address in the session
+    sessionStorage.setItem('billing-address', id);
 }
 function change_delivery_as_billing() {
-    var cont = document.getElementById('billing-container');
-    if (document.getElementById('delivery-as-billing').checked == true) {
+    var cont = document.getElementById('billing-container'),
+        checked = document.getElementById('delivery-as-billing').checked;
+    if (checked == true) {
         cont.className="hidden";
     } else {
         cont.className="";
     };
+    sessionStorage.setItem('delivery-as-billing', checked);
 }
-function carrier_changed(net, total_net) {
+function carrier_changed(net, total_net, id) {
     document.getElementById('shipping-fee').innerHTML = net;
     document.getElementById('total').innerHTML = total_net;
+    sessionStorage.setItem('carrier', id);
+    maybe_activate_payment_button();
+}
+function payment_changed(id) {
+    sessionStorage.setItem('payment', id);
     maybe_activate_payment_button();
 }
 function maybe_activate_payment_button() {
@@ -322,11 +333,41 @@ function maybe_activate_payment_button() {
         document.getElementById('proceed').disabled = "disabled";
     };
 }
+function initialize() {
+    // Get data from the session (to keep recent changes)
+    delivery = sessionStorage.getItem('delivery-address');
+    if (delivery) {
+        document.getElementById('delivery-select').value = delivery;
+    };
+    delivery_as_billing = sessionStorage.getItem('delivery-as-billing');
+    if (delivery_as_billing) {
+        var checkbox = document.getElementById('delivery-as-billing');
+        if (delivery_as_billing == "true") {
+            checkbox.checked = "checked";
+        } else if (delivery_as_billing == "false") {
+            checkbox.checked = "";
+        }
+    }
+    billing = sessionStorage.getItem('billing-address');
+    if (billing) {
+        document.getElementById('billing-select').value = billing;
+    };
+    payment = sessionStorage.getItem('payment');
+    if (payment) {
+        document.getElementById('checkout-form').payment.value = payment;
+    };
+    update_delivery_address();
+    // Carrier must be changed after updating the delivery address, or the
+    // value from the database overrides the value from the session
+    //
+    // TODO: set the carrier from the session... harder than initially planned
+    // carrier = sessionStorage.getItem('carrier');
+    update_billing_address();
+    change_delivery_as_billing();
+    maybe_activate_payment_button();
+}
 // Initialize everything after loading the page
-update_delivery_address();
-update_billing_address();
-change_delivery_as_billing();
-maybe_activate_payment_button();
+initialize();
 </script>
 {%- else -%}
 <div class="alert alert-danger text-center">{{ _('Your cart is empty!') }}</div>
