@@ -162,10 +162,11 @@ def delete_profile():
         return redirect(url_for('home'))
     return render_front('auth/confirm_delete_account.html')
 
-@app.route('/checkout/address', methods=['GET','POST'])
+@app.route('/checkout/new_address-<address_destination>',
+           methods=['GET','POST'])
 @app.route('/checkout/address-<address_id>', methods=['GET','POST'])
 @login_required
-def address_from_checkout(address_id=None):
+def address_from_checkout(address_id=None, address_destination=None):
     if address_id:
         address = Address.objects.get_or_404(user=current_user.to_dbref(), id=address_id)
     else:
@@ -174,8 +175,13 @@ def address_from_checkout(address_id=None):
     if form.validate_on_submit():
         form.populate_obj(address)
         address.save()
+        if address_destination == 'delivery':
+            current_user.latest_delivery_address = str(address.id)
+            current_user.save()
+        elif address_destination == 'billing':
+            current_user.latest_billing_address = str(address.id)
+            current_user.save()
         return redirect(url_for('checkout'))
-    print form.errors
     return render_front('auth/address_from_checkout.html',
                         address_id=address_id, form=form)
 
