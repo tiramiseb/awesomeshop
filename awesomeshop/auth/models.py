@@ -46,6 +46,13 @@ class User(db.Document, UserMixin):
                     )
     locale = db.StringField()
     confirm_code = db.StringField(db_field='confirm')
+    # The following are user's "preferences" from his latest order
+    latest_delivery_address = db.StringField(db_field='del_addr')
+    latest_billing_address = db.StringField(db_field='bil_addr')
+    latest_delivery_as_billing = db.BooleanField(db_field='del_as_bil',
+                                                 default=True)
+    latest_carrier = db.StringField(db_field='carrier')
+    latest_payment = db.StringField(db_field='paymt')
 
     meta = {
         'ordering': ['email']

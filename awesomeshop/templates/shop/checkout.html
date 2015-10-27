@@ -78,7 +78,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     <div class="form-group">
                         <select id="delivery-select" class="form-control" name="delivery" onchange="update_delivery_address()">
                             {%- for address in current_user.addresses %}
-                            <option value="{{ address.id }}">{{ address.title }}</option>
+                            <option value="{{ address.id }}"{% if address.id|string == current_user.latest_delivery_address %} selected="selected"{% endif %}>{{ address.title }}</option>
                             {%- endfor %}
                         </select>
                     </div>
@@ -110,7 +110,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <div class="panel-body">
                     <div id="billing-checkbox" class="checkbox">
                         <label>
-                            <input type="checkbox" checked="checked" name="delivery_as_billing" id="delivery-as-billing" onchange="change_delivery_as_billing()">
+                            <input type="checkbox"{% if current_user.latest_delivery_as_billing %} checked="checked"{% endif %} name="delivery_as_billing" id="delivery-as-billing" onchange="change_delivery_as_billing()">
                             {{ _('Use the delivery address') }}
                         </label> 
                     </div>
@@ -118,7 +118,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                         <div class="form-group">
                             <select id="billing-select" class="form-control" name="billing" onchange="update_billing_address()">
                                 {%- for address in current_user.addresses %}
-                                <option value="{{ address.id }}">{{ address.title }}</option>
+                                <option value="{{ address.id }}"{% if address.id|string == current_user.latest_billing_address %} selected="selected"{% endif %}>{{ address.title }}</option>
                                 {%- endfor %}
                             </select>
                         </div>
@@ -199,7 +199,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <div class="list-group order-options">
             {%- for mode in modes_of_payment %}
             <label class="list-group-item">
-                <input type="radio" name="payment" value="{{ mode.id }}" onchange="maybe_activate_payment_button()">
+                <input type="radio" name="payment" value="{{ mode.id }}"{% if mode.id|string == current_user.latest_payment %} checked="checked"{% endif %} onchange="maybe_activate_payment_button()">
                 {{ mode.text|safe }}
             </label>
             {% endfor %}
@@ -273,6 +273,11 @@ function update_delivery_address() {
         radio.name = "shipping";
         radio.value = c.id;
         radio.setAttribute('onchange', "carrier_changed('"+c.net+"', '"+c.total_net+"')");
+        if (c.id == '{{ current_user.latest_carrier }}') {
+            radio.setAttribute('checked', 'checked');
+            document.getElementById('shipping-fee').innerHTML = c.net;
+            document.getElementById('total').innerHTML = c.total_net;
+        };
         var name = document.createElement('span');
         name.innerHTML = c.name;
         var col2 = document.createElement('div');

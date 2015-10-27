@@ -126,8 +126,8 @@ def confirm_order():
         shipping_price # Call it to raise an exception if it does not exist
     except:
         abort(400)
-    # And create result
     #  TODO Move that to models.py
+    # Create result
     order = Order()
     order.set_status('unconfirmed')
     order.customer = current_user.to_dbref()
@@ -161,6 +161,14 @@ def confirm_order():
     cart.clear()
     cart.to_session()
     order.save()
+    # Save "preferences"
+    current_user.latest_delivery_address = delivery_id
+    current_user.latest_billing_address = carrier_id
+    current_user.latest_delivery_as_billing = delivery_as_billing
+    current_user.latest_carrier = carrier_id
+    current_user.latest_payment = payment_id
+    current_user.save()
+    # ... and render the page :)
     return render_front('shop/confirm.html', order=order)
 
 @app.route('/orders/<order_number>')
