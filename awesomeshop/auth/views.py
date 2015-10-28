@@ -189,3 +189,8 @@ def address_from_checkout(address_id=None, address_destination=None):
 @login_required
 def orders():
     return render_front('auth/orders.html')
+
+@app.route('/carts')
+@login_required
+def carts():
+    return render_front('auth/carts.html')

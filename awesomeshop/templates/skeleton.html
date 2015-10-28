@@ -155,6 +155,10 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                         <span class="badge">{{ current_user.orders.count() }}</span>
                         {{ _('My orders') }}
                     </a>
+                    <a class="list-group-item" href="{{ url_for('carts') }}">
+                        <span class="badge">{{ current_user.carts.count() }}</span>
+                        {{ _('My saved carts') }}
+                    </a>
                     {%- else %}
                     <a class="list-group-item" href="{{ url_for('login') }}">
                         {{ _('Login') }}

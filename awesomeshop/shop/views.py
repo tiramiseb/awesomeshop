@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
-from flask import abort, redirect, request, url_for
+from flask import abort, current_app, redirect, request, url_for
 from flask.ext.login import current_user
 from satchless.item import InsufficientStock
 
@@ -25,7 +25,7 @@ from .. import app, payment, search as search_mod
 from ..helpers import render_front, login_required
 from ..auth.models import Address
 from ..shipping.models import Carrier
-from .models import Category, Product, Url, Order, OrderProduct
+from .models import Category, Product, Url, DbCart, Order, OrderProduct
 from .cart import Cart
 
 @app.route('/<path:path>')
@@ -67,24 +67,62 @@ def add_to_cart():
 @app.route('/cart', methods=['GET', 'POST'])
 def cart():
     cart = Cart.from_session()
+    saved_cart = False
     if cart and request.method == 'POST':
-        for item in cart:
-            inputname = 'quantity_{}'.format(item.product.id)
-            if inputname in request.form:
-                try: quantity = int(request.form[inputname])
-                except: continue
-                try:
-                    cart.add(item.product, quantity, replace=True)
-                except InsufficientStock:
-                    return render_front('shop/insufficient_stock.html',
-                                        next=request.args.get('next') or \
-                                             request.referrer)
-    return render_front('shop/cart.html', cart=cart)
+        # Taken from login_required
+        if 'save' in request.form:
+            if not current_user.is_authenticated:
+                return current_app.login_manager.unauthorized()
+            saved_cart = DbCart.from_sessioncart(
+                                cart,
+                                request.form.get('cartname', '')
+                                )
+            saved_cart.save()
+        else:
+            for item in cart:
+                inputname = 'quantity_{}'.format(item.product.id)
+                if inputname in request.form:
+                    try: quantity = int(request.form[inputname])
+                    except: continue
+                    try:
+                        cart.add(item.product, quantity, replace=True)
+                    except InsufficientStock:
+                        return render_front('shop/insufficient_stock.html',
+                                            next=request.args.get('next') or \
+                                                 request.referrer)
+    return render_front('shop/cart.html', cart=cart, saved_cart=saved_cart)
 
 @app.route('/cart/remove-<product_id>')
 def remove_from_cart(product_id):
     product = Product.objects.get_or_404(id=product_id)
     Cart.from_session().add(product, 0, replace=True)
+    return redirect(url_for('cart'))
+
+@app.route('/cart/empty')
+def empty_cart():
+    cart = Cart.from_session()
+    cart.clear()
+    cart.to_session()
+    return redirect(url_for('home'))
+
+@app.route('/cart/<cart_id>')
+@login_required
+def saved_cart(cart_id):
+    cart = DbCart.objects.get_or_404(id=cart_id, user=current_user.to_dbref())
+    return render_front('shop/saved_cart.html', saved_cart=cart)
+    
+@app.route('/cart/<cart_id>/delete')
+@login_required
+def delete_saved_cart(cart_id):
+    DbCart.objects(id=cart_id, user=current_user.to_dbref()).delete()
+    return redirect(url_for('carts'))
+    
+@app.route('/cart/<cart_id>/load')
+@login_required
+def load_saved_cart(cart_id):
+    cart = DbCart.objects.get_or_404(id=cart_id, user=current_user.to_dbref())
+    cart.to_session()
+    cart.delete()
     return redirect(url_for('cart'))
 
 @app.route('/checkout')

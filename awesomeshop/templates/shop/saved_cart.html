@@ -1,0 +1,82 @@
+{#
+Copyright 2015 Sébastien Maccagnoni-Munch
+
+This file is part of AwesomeShop.
+
+AwesomeShop is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+details.
+
+You should have received a copy of the GNU Affero General Public License
+along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+#}
+{% extends "skeleton.html" %}
+
+{% block title %}{{ _('Saved cart: %(cart_name)s', cart_name=saved_cart.name) }}{% endblock %}
+{% block content %}
+<h1>{{ _('Saved cart: %(cart_name)s', cart_name=saved_cart.name) }}</h1>
+<div class="list-group">
+    {%- for line in saved_cart.lines %}
+    <a href="{{ line.product.url }}" class="list-group-item cart-list">
+        <div class="row">
+            <div class="col-xs-8 col-md-9 col-lg-10">
+                    <span class="hidden-xs hidden-sm">
+                    {%- if line.product.photos %}
+                    <img class="cart-illustration" src="{{ line.product.photos[0].thumbnail_url }}">
+                    {%- else -%}
+                    <span class="cart-illustration-placeholder">
+                        <i class="fa fa-ban"></i>
+                    </span>
+                    {%- endif %}
+                    </span>
+                    {{ line.product }}
+            </div>
+            <div class="col-xs-4 col-md-3 col-lg-2 text-right">
+                {{ _('Unit:') }} {{ line.get_price_per_item().quantize('0.01').net }} {{ config.CURRENCY }}
+                <br>
+                {{ _('Quantity:') }} <strong>{{ line.available_quantity }}</strong>
+                <br>
+                <strong>
+                    {{ _('Total:') }} {{ line.get_total().quantize('0.01').net }} {{ config.CURRENCY }}
+                </strong>
+            </div>
+         </div>
+    </a>
+    {%- endfor %}
+    <div class="list-group-item">
+        <div class="text-right">
+            <div id="recalculate" class="hidden">
+                <button type="submit" class="btn btn-warning">
+                    {{ _('Recalculate') }}
+                </button>
+            </div>
+            <div id="total">
+                <strong>
+                    {{ _('Total:') }} {{ saved_cart.total_price.quantize('0.01').net }} {{ config.CURRENCY }}
+                </strong>
+                <br>
+                {{ _('+ shipping fee') }}
+            </div>
+        </div>
+        <small class="push-left">{{ _('TVA non applicable, article 293 B du Code général des impôts') }}</small>
+    </div>
+    <br>
+    <div class="btn-group pull-right">
+        <a href="{{ url_for('delete_saved_cart', cart_id=saved_cart.id) }}" class="btn btn-lg btn-danger">
+            <i class="fa fa-trash"></i>
+            {{ _('Delete this cart') }}
+        </a>
+        <a href="{{ url_for('load_saved_cart', cart_id=saved_cart.id) }}" class="btn btn-lg btn-success">
+            {{ _('Load this cart') }}
+            <i class="fa fa-chevron-right"></i>
+        </a>
+    </div>
+</div>
+{%- endblock %}
+

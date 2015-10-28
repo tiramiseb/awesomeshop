@@ -21,8 +21,9 @@ import datetime
 
 import docutils.core
 import prices
-from flask import abort
-from flask.ext.babel import lazy_gettext
+from flask import abort, session
+from flask.ext.babel import _, lazy_gettext
+from flask.ext.login import current_user
 from mongoengine import signals
 from satchless.item import StockedItem
 from slugify import slugify
@@ -236,6 +237,75 @@ def remove_url(sender, document, **kwargs):
     Url.objects(document=document).delete()
 signals.pre_delete.connect(remove_url, sender=Category)
 signals.pre_delete.connect(remove_url, sender=Product)
+
+
+
+class DbCartLine(db.EmbeddedDocument):
+    product = db.ReferenceField(Product, db_field='prod')
+    quantity = db.IntField(db_field='qty')
+
+    @property
+    def available_quantity(self):
+        return min(self.product.stock, self.quantity)
+
+    def get_price_per_item(self):
+        return self.product.get_price_per_item()
+
+    def get_total(self):
+        return self.get_price_per_item() * self.available_quantity
+
+    def for_session(self):
+        return {
+            'product_id': str(self.product.id),
+            'quantity': self.available_quantity
+            }
+
+class DbCart(db.Document):
+    user = db.ReferenceField(User, required=True)
+    date = db.DateTimeField(default=datetime.datetime.now)
+    name = db.StringField()
+    lines = db.EmbeddedDocumentListField(DbCartLine)
+
+    meta = {
+        'collection': 'cart',
+        'ordering': ['-date']
+    }
+
+    @classmethod
+    def from_sessioncart(cls, sessioncart, name=None):
+        if not name:
+            name = _('Unnamed cart')
+        dbcart = cls(name=name, user=current_user.to_dbref())
+        for line in sessioncart:
+            dbcart.lines.append(
+                            DbCartLine(
+                                    product=line.product,
+                                    quantity=line.quantity
+                                    )
+                            )
+        return dbcart
+
+    def to_session(self):
+        lines = [ line.for_session() for line in self.lines ]
+        session['cart'] = [ line for line in lines if line ]
+
+    @property
+    def formated_date(self):
+        return self.date.strftime('%d/%m/%Y')
+
+    @property
+    def total_quantity(self):
+        qty = 0
+        for line in self.lines:
+            qty += line.available_quantity
+        return qty
+
+    @property
+    def total_price(self):
+        price = prices.Price(0)
+        for line in self.lines:
+            price += line.product.get_price_per_item()*line.available_quantity
+        return price
 
 class OrderProduct(db.EmbeddedDocument):
     reference = db.StringField(db_field='ref', max_length=50)

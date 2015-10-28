@@ -84,10 +84,40 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </div>
         <div id="proceed">
             <br>
-            <a href="{{ url_for('checkout') }}" class="btn btn-lg btn-success pull-right">
-                {{ _('Proceed to checkout') }}
-                <i class="fa fa-chevron-right"></i>
-            </a>
+            <div class="row">
+                <div class="col-sm-6">
+                    {% if saved_cart %}
+                    <a href="{{ url_for('saved_cart', cart_id=saved_cart.id) }}" class="btn btn-primary">
+                            <i class="fa fa-check"></i>
+                            {{ _('Cart has been saved (%(name)s)', name=saved_cart.name) }}
+                        </a>
+                        <a href="{{ url_for('empty_cart') }}" class="btn btn-warning">
+                            <i class="fa fa-trash"></i>
+                            {{ _('Empty cart') }}
+                        </a>
+                    {% else %}
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="cartname" placeholder="{{ _('Cart name') }}">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" type="submit" name="save">
+                                <i class="fa fa-bookmark"></i>
+                                {{ _('Save cart') }}
+                            </button>
+                            <a href="{{ url_for('empty_cart') }}" class="btn btn-warning">
+                                <i class="fa fa-trash"></i>
+                                {{ _('Empty cart') }}
+                            </a>
+                        </span>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-sm-6">
+                    <a href="{{ url_for('checkout') }}" class="btn btn-lg btn-success pull-right">
+                        {{ _('Proceed to checkout') }}
+                        <i class="fa fa-chevron-right"></i>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </form>

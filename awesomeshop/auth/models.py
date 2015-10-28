@@ -101,6 +101,11 @@ class User(db.Document, UserMixin):
         return Address.objects(user=current_user.to_dbref())
 
     @property
+    def carts(self):
+        from ..shop.models import DbCart
+        return DbCart.objects(user=current_user.to_dbref())
+
+    @property
     def orders(self):
         from ..shop.models import Order
         return Order.objects(customer=current_user.to_dbref())
