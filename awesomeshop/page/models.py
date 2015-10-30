@@ -75,8 +75,8 @@ class Page(db.Document):
 
     @property
     def products(self):
-        from ..shop.models import Product
-        return Product.objects(documentation=self)
+        from ..shop.models import BaseProduct
+        return BaseProduct.objects(documentation=self)
 
     @classmethod
     def slugify_slug(cls, sender, document, **kwargs):

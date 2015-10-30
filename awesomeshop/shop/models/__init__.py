@@ -19,229 +19,36 @@
 
 import datetime
 
-import docutils.core
 import prices
 from flask import abort, session
 from flask.ext.babel import _, lazy_gettext
 from flask.ext.login import current_user
 from mongoengine import signals
-from satchless.item import StockedItem
 from slugify import slugify
 
-from .. import app, db, get_locale, payment
-from ..mail import send_message
-from ..mongo import TranslationsField
-from ..photo import Photo
-from ..auth.models import User
-from ..page.models import Page
-from ..shipping.models import Carrier
-from . import UnknownStatus
+from ... import app, db, get_locale, payment
+from ...mail import send_message
+from ...mongo import TranslationsField
+from ...auth.models import User
+from ...shipping.models import Carrier
+from .. import UnknownStatus
 
+from .category import *
+from .product import *
+from .tax import *
+from .url import *
 
-class Tax(db.Document):
-    name = db.StringField(required=True, max_length=100,
-                          verbose_name=lazy_gettext('Name'))
-    rate = db.DecimalField(verbose_name=lazy_gettext('Rate'), default=0)
-
-    meta = {
-        'ordering': ['name']
-    }
-
-    def __unicode__(self):
-        return self.name
-
-
-def next_category_rank():
-    # Very very unlikely collisions, because new categories are created
-    # only by an administrator
-    last = Category.objects.only('rank').order_by('-rank').first()
-    if last: return last.rank + 1
-    else: return 1
-
-
-class Category(db.Document):
-    rank = db.IntField(required=True, unique=True, default=next_category_rank)
-    slug = db.StringField(required=True, max_length=50,
-                          verbose_name=lazy_gettext('Slug'))
-    parent = db.ReferenceField('self', verbose_name=lazy_gettext('Parent'),
-                               reverse_delete_rule=db.DENY)
-    name = TranslationsField(max_length=50)
-
-    meta = {
-        'ordering': ['rank']
-    }
-
-    @property
-    def short_name(self):
-        return self.name.get(get_locale(), u'')
-
-    @property
-    def url(self):
-        return Url.objects(document=self).only('url').first().url
-
-    @property
-    def nb_products(self):
-        return Product.objects(category=self, on_sale=True).count()
-
-    @property
-    def onsale_products(self):
-        return Product.objects(category=self, on_sale=True)
-
-    @property
-    def children(self):
-        return Category.objects(parent=self)
-
-    @property
-    def onsale_products_recursive(self):
-        p = list(self.onsale_products)
-        for child in self.children:
-            p.extend(child.onsale_products_recursive)
-        p.sort(key=unicode)
-        return p
-
-    def __unicode__(self):
-        if self.parent:
-            return u'{} » {}'.format(self.parent.short_name,
-                                          self.short_name)
-        else:
-            return unicode(self.short_name)
-
-    @classmethod
-    def hierarchy(cls, parent=None):
-        hierarchy = []
-        for o in cls.objects(parent=parent):
-            hierarchy.append((o, cls.hierarchy(o.id)))
-        return hierarchy
-
-
-
-class Product(db.Document, StockedItem):
-    on_sale = db.BooleanField(db_field='sale',
-                              verbose_name=lazy_gettext('Is on sale'))
-    slug = db.StringField(required=True, max_length=50,
-                          verbose_name=lazy_gettext('Slug'))
-    reference = db.StringField(db_field='ref',
-                               max_length=50, unique=True, required=True,
-                               verbose_name=lazy_gettext('Reference'))
-    purchasing_price = db.DecimalField(
-                            db_field='pprice',
-                            verbose_name=lazy_gettext('Purchasing price')
-                            )
-    gross_price = db.DecimalField(
-                            db_field='gprice',
-                            required=True,
-                            verbose_name=lazy_gettext('Gross price')
-                            )
-    tax = db.ReferenceField(Tax,
-                            reverse_delete_rule=db.DENY,
-                            verbose_name=lazy_gettext('Tax'))
-    category = db.ReferenceField(Category, db_field='cat',
-                                 reverse_delete_rule=db.DENY,
-                                 verbose_name=lazy_gettext('Category'))
-    weight = db.IntField(default=0, verbose_name=lazy_gettext('Weight'))# grams
-    stock = db.IntField(default=0, verbose_name=lazy_gettext('Stock'))
-    stock_alert = db.IntField(db_field='alert', default=0,
-                              verbose_name=lazy_gettext('Stock alert'))
-    documentation = db.ReferenceField(
-                            Page,
-                            db_field='doc',
-                            reverse_delete_rule=db.DENY,
-                            verbose_name=lazy_gettext('Documentation')
-                            )
-    name = TranslationsField(max_length=100, verbose_name=lazy_gettext('Name'))
-    description = TranslationsField(db_field='desc',
-                                    verbose_name=lazy_gettext('Description'))
-    keywords = db.StringField(db_field='kw', max_length=200,
-                              verbose_name=lazy_gettext('Keywords'))
-    related_products = db.ListField(
-                            db.ReferenceField('self'),
-                            db_field='rel',
-                            verbose_name=lazy_gettext('Related products')
-                            )
-    photos = db.EmbeddedDocumentListField(Photo)
-
-    meta = {
-        'ordering': ['reference']
-    }
-
-    def __unicode__(self):
-        return self.name.get(get_locale(), u'')
-
-    def __repr__(self):
-        return unicode(self).encode('utf8')
-
-    @property
-    def output_description(self):
-        parts = docutils.core.publish_parts(
-                    source=self.description.get(get_locale(), u''),
-                    writer_name='html')
-        return parts['body']
-
-    @property
-    def output_documentation(self):
-        parts = docutils.core.publish_parts(
-                    source=self.documentation.text.get(get_locale(), u''),
-                    settings_overrides = {
-                        'initial_header_level': 3
-                        },
-                    writer_name='html')
-        return parts['body']
-
-    @property
-    def url(self):
-        return Url.objects(document=self).only('url').first().url
-
-    def get_price_per_item(self):
-        gross = self.gross_price
-        net = gross * ( 1 + self.tax.rate )
-        return prices.Price(net, gross)
-
-    def get_stock(self):
-        return self.stock
-
-    @classmethod
-    def remove_photos_from_disk(cls, sender, document, **kwargs):
-        for p in document.photos:
-            p.delete_files()
-
-signals.pre_delete.connect(Product.remove_photos_from_disk, sender=Product)
 
 
 def slugify_slug(sender, document, **kwargs):
     document.slug = slugify(document.slug)
 signals.pre_save.connect(slugify_slug, sender=Category)
-signals.pre_save.connect(slugify_slug, sender=Product)
-
-
-class Url(db.Document):
-    url = db.StringField(required=True, max_length=100)
-    document = db.GenericReferenceField(db_field='doc')
-
-def update_url(sender, document, url, created, **kwargs):
-    if not created:
-        remove_url(sender, document)
-    Url(url=url, document=document).save()
-def update_category_url(sender, document, **kwargs):
-    if document.parent:
-        url = document.parent.url + '/' + document.slug
-    else:
-        url = document.slug
-    update_url(sender, document, url, **kwargs)
-def update_product_url(sender, document, **kwargs):
-    url = document.category.url + '/' + document.slug
-    update_url(sender, document, url, **kwargs)
-signals.post_save.connect(update_category_url, sender=Category)
-signals.post_save.connect(update_product_url, sender=Product)
-
-def remove_url(sender, document, **kwargs):
-    Url.objects(document=document).delete()
-signals.pre_delete.connect(remove_url, sender=Category)
-signals.pre_delete.connect(remove_url, sender=Product)
+signals.pre_save.connect(slugify_slug, sender=BaseProduct)
 
 
 
 class DbCartLine(db.EmbeddedDocument):
-    product = db.ReferenceField(Product, db_field='prod')
+    product = db.ReferenceField(BaseProduct, db_field='prod')
     quantity = db.IntField(db_field='qty')
 
     @property
@@ -314,7 +121,7 @@ class OrderProduct(db.EmbeddedDocument):
     line_gross_price = db.StringField(db_field='lgprice')
     line_net_price = db.StringField(db_field='lnprice')
     quantity = db.IntField(db_field='qty')
-    product = db.ReferenceField(Product)
+    product = db.ReferenceField(BaseProduct)
     name = db.StringField(max_length=100)
 
     @classmethod
@@ -410,8 +217,10 @@ class Order(db.Document):
                                    default=app.config['ORDER_PREFIX'])
     date = db.DateTimeField(default=datetime.datetime.now, required=True)
     invoice_number = db.IntField(db_field='inb', unique=True, sparse=True)
-    invoice_number_prefix = db.StringField(db_field='inb_pfix',
-                                           default=app.config['INVOICE_PREFIX'])
+    invoice_number_prefix = db.StringField(
+                                    db_field='inb_pfix',
+                                    default=app.config['INVOICE_PREFIX']
+                                    )
     invoice_date = db.DateTimeField(db_field='idate')
     delivery = db.StringField(required=True)
     billing = db.StringField(db_field='bill', required=True)
@@ -507,7 +316,7 @@ class Order(db.Document):
 
     def _put_products_back_in_stock(self):
         for prod in self.products:
-            if type(prod.product) == Product:
+            if prod.product._cls.starts_with('BaseProduct'):
                 prod.product.stock += prod.quantity
                 prod.product.save()
 

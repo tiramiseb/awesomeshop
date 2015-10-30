@@ -81,6 +81,9 @@ if app.config['DEBUG']:
     from flask_debugtoolbar import DebugToolbarExtension
     toolbar = DebugToolbarExtension(app)
 
+from . import autoupgrade
+autoupgrade.upgrade()
+
 # Initialize flask-login (code must not directly be here
 # or there is an import loop)
 from . import auth 

@@ -20,9 +20,10 @@
 from functools import wraps
 
 from flask import abort, current_app, render_template as orig_render_template
+from flask.ext.babel import lazy_gettext
 from flask.ext.login import current_user, fresh_login_required, login_required
 
-from . import get_locale
+from . import db, get_locale
 from .shop.cart import Cart
 from .page.models import Page
 from .shop.models import Category
@@ -53,3 +54,10 @@ def admin_required(func):
         abort(403)
     return decorated_view
 
+class Setting(db.Document):
+    name = db.StringField(required=True, unique=True, max_length=100,
+                          verbose_name=lazy_gettext('Name'))
+    value = db.DynamicField()
+
+    def __str__(self):
+        return 'Setting: {} = {}'.format(self.name, self.value)

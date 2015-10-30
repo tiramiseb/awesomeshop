@@ -38,9 +38,9 @@ def dashboard():
     paid_orders = Order.objects(status='payment_received').order_by('number')
     prep_orders = Order.objects(status='preparation').order_by('number')
     awaiting_payment_orders = Order.objects(status='awaiting_payment').order_by('number')
-    out_of_stock_products = Product.objects(stock=0)
-    stock_alert_products = [Product.objects.get(id=i['_id']) for i in \
-            Product.objects.aggregate(
+    out_of_stock_products = BaseProduct.objects(stock=0)
+    stock_alert_products = [BaseProduct.objects.get(id=i['_id']) for i in \
+            BaseProduct.objects.aggregate(
                 {'$project': {
                     'below_alert': {'$lte': ['$stock', '$alert']},
                     'stock': True

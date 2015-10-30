@@ -23,24 +23,24 @@ from ... import app
 from ...helpers import admin_required, render_template
 from ...photo import Photo
 from ...page.models import Page
-from ...shop.models import Product
-from ..forms import ProductForm
+from ...shop.models import BaseProduct, product_types
+from ..forms import get_product_form
 
 @app.route('/dashboard/products')
 @admin_required
 def dashboard_products():
     return render_template('dashboard/products.html',
-                           products=Product.objects)
+                           products=BaseProduct.objects)
 
-@app.route('/dashboard/product', methods=['GET', 'POST'])
+@app.route('/dashboard/new-<product_type>-product', methods=['GET', 'POST'])
 @app.route('/dashboard/product-<product_id>', methods=['GET', 'POST'])
 @admin_required
-def dashboard_product(product_id=None):
+def dashboard_product(product_id=None, product_type=None):
     if product_id:
-        prod = Product.objects.get_or_404(id=product_id)
+        prod = BaseProduct.objects.get_or_404(id=product_id)
     else:
-        prod = Product()
-    form = ProductForm(request.form, prod)
+        prod = product_types[product_type]()
+    form = get_product_form(request.form, prod)
     form.documentation.queryset = Page.objects(pagetype='doc')
     if form.validate_on_submit():
         form.populate_obj(prod)
@@ -58,14 +58,14 @@ def dashboard_product(product_id=None):
 @app.route('/dashboard/product-<product_id>/remove')
 @admin_required
 def dashboard_remove_product(product_id):
-    Product.objects(id=product_id).delete()
+    BaseProduct.objects(id=product_id).delete()
     return redirect(url_for('dashboard_products'))
 
 
 @app.route('/dashboard/product-<product_id>/addphoto', methods=['POST'])
 @admin_required
 def dashboard_add_product_photo(product_id):
-    prod = Product.objects.get_or_404(id=product_id)
+    prod = BaseProduct.objects.get_or_404(id=product_id)
     for f in request.files.getlist('photo[]'):
         photo = Photo.from_request(f)
         prod.photos.append(photo)
@@ -78,7 +78,7 @@ def dashboard_add_product_photo(product_id):
 @app.route('/dashboard/product-<product_id>/removephoto/<filename>')
 @admin_required
 def dashboard_remove_product_photo(product_id, filename):
-    prod = Product.objects.get_or_404(id=product_id)
+    prod = BaseProduct.objects.get_or_404(id=product_id)
     for p in prod.photos:
         if p.filename == filename:
             p.delete_files()

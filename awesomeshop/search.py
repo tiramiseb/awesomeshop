@@ -24,7 +24,7 @@ from whoosh.index import open_dir
 
 from . import app
 from .page.models import Page
-from .shop.models import Category, Product
+from .shop.models import Category, BaseProduct
 
 doc_index = open_dir(app.config['SEARCH_INDEX_PATH'], indexname='doc')
 category_index = open_dir(app.config['SEARCH_INDEX_PATH'],indexname='category')
@@ -58,9 +58,9 @@ def search(terms):
         products = []
         for hit in searcher.search(product_parser.parse(terms), collapse='doc', limit=None):
             try:
-                product = Product.objects.get(id=hit['doc'])
+                product = BaseProduct.objects.get(id=hit['doc'])
                 products.append(product)
-            except Product.DoesNotExist:
+            except BaseProduct.DoesNotExist:
                 pass
     return {
             'docs_result': docs,

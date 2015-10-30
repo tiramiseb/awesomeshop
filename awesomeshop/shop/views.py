@@ -25,16 +25,17 @@ from .. import app, payment, search as search_mod
 from ..helpers import render_front, login_required
 from ..auth.models import Address
 from ..shipping.models import Carrier
-from .models import Category, Product, Url, DbCart, Order, OrderProduct
+from .models import Category, BaseProduct, Url, DbCart, Order, OrderProduct
 from .cart import Cart
 
 @app.route('/<path:path>')
 def category_or_product(path):
     url = Url.objects.get_or_404(url=path.strip('/'))
+    print url.document._cls
     if type(url.document) == Category:
         return render_front('shop/category.html', category=url.document,
                             active=url.document.id)
-    elif type (url.document) == Product and url.document.on_sale:
+    elif url.document._cls.startswith('BaseProduct') and url.document.on_sale:
         return render_front('shop/product.html', product=url.document,
                             active=url.document.category.id)
     abort(404)
@@ -53,7 +54,7 @@ def add_to_cart():
         try: quantity = int(request.form['quantity'])
         except: quantity = 1
         try:
-            Cart.from_session().add(Product.objects.get(id=product_id),
+            Cart.from_session().add(BaseProduct.objects.get(id=product_id),
                                     quantity)
         except InsufficientStock:
             return render_front('shop/insufficient_stock.html',
@@ -94,7 +95,7 @@ def cart():
 
 @app.route('/cart/remove-<product_id>')
 def remove_from_cart(product_id):
-    product = Product.objects.get_or_404(id=product_id)
+    product = BaseProduct.objects.get_or_404(id=product_id)
     Cart.from_session().add(product, 0, replace=True)
     return redirect(url_for('cart'))
 

@@ -21,7 +21,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {% block title %}{{ _('Dashboard') }} - {{ _('Products') }}{% endblock %}
 {% block content %}
 <h1>{{ _('Products') }}</h1>
-<p><a href="{{ url_for('dashboard_product') }}" class="btn btn-primary">
+<p><a href="{{ url_for('dashboard_product', product_type='simple') }}" class="btn btn-primary">
     <i class="fa fa-plus"></i>
     {{ _('Add a product') }}
 </a></p>
@@ -30,6 +30,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <th></th>
         <th>{{ _('Reference') }}</th>
         <th>{{ _('Name') }}</th>
+        <th>{{ _('Type') }}</th>
         <th>{{ _('Stock') }}</th>
         <th>{{ _('Net price') }}</th>
         <th></th>
@@ -46,6 +47,9 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </td>
         <td class="pointer" onclick="document.location='{{ url_for('dashboard_product', product_id=product.id) }}'">
             {{ product }}
+        </td>
+        <td class="pointer" onclick="document.location='{{ url_for('dashboard_product', product_id=product.id) }}'">
+            {{ product.type }}
         </td>
         <td class="pointer" onclick="document.location='{{ url_for('dashboard_product', product_id=product.id) }}'">
             {{ product.stock }}

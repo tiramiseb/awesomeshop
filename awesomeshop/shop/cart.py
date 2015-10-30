@@ -20,7 +20,7 @@
 from flask import session
 from satchless import cart
 
-from .models import Product
+from .models import BaseProduct
 
 class CartLine(cart.CartLine):
 
@@ -41,7 +41,7 @@ class CartLine(cart.CartLine):
     @classmethod
     def from_session(cls, session_data):
         """Create cart from session data"""
-        product = Product.objects.get(id=session_data['product_id'])
+        product = BaseProduct.objects.get(id=session_data['product_id'])
         quantity = session_data['quantity']
         return cls(product, quantity)
 
@@ -91,7 +91,7 @@ class Cart(cart.Cart):
             for line in session.get('cart'):
                 try:
                     cart._state.append(CartLine.from_session(line))
-                except Product.DoesNotExist:
+                except BaseProduct.DoesNotExist:
                     pass
         return cart
 

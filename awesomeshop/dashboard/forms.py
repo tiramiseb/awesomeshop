@@ -60,6 +60,10 @@ CategoryForm = model_form(Category, field_args={
     })
 
 ProductForm = model_form(Product)
+def get_product_form(form, prod):
+    if type(prod) == Product:
+        return ProductForm(form, prod)
+    return None
 
 PageForm = model_form(Page)
 
