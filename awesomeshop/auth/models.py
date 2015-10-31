@@ -98,17 +98,17 @@ class User(db.Document, UserMixin):
 
     @property
     def addresses(self):
-        return Address.objects(user=current_user.to_dbref())
+        return Address.objects(user=self.to_dbref())
 
     @property
     def carts(self):
         from ..shop.models import DbCart
-        return DbCart.objects(user=current_user.to_dbref())
+        return DbCart.objects(user=self.to_dbref())
 
     @property
     def orders(self):
         from ..shop.models import Order
-        return Order.objects(customer=current_user.to_dbref())
+        return Order.objects(customer=self.to_dbref())
 
     def send_confirmation_email(self):
         self.confirm_code = str(uuid.uuid4())
