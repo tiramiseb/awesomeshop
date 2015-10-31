@@ -29,7 +29,12 @@ from ...page.models import Page
 from .category import Category
 from .tax import Tax
 
-
+# When adding a new product type:
+#
+# * it should inherit from BaseProduct
+# * unless otherwise stated, all functions raising NotImplementedError must be
+#   overriden
+# * signals must be added in .shop_signals, copying signals for Product
 
 class BaseProduct(db.Document, StockedItem):
     slug = db.StringField(required=True, max_length=50,
@@ -96,34 +101,44 @@ class BaseProduct(db.Document, StockedItem):
         from .url import Url
         return Url.objects(document=self).only('url').first().url
 
+    def get_price_per_item(self):
+        gross = self.gross_price
+        net = gross * ( 1 + self.tax.rate )
+        return prices.Price(net, gross)
+
+    def get_stock(self):
+        return self.stock
+
     @property
     def type(self):
+        """Must be statically implemented as a string
+        
+        A corresponding entry must be added to the product_types dict"""
         raise NotImplementedError
 
     @property
     def purchasing_price(self):
+        """Must be implemented as a Decimal"""
         raise NotImplementedError
 
     @property
     def gross_price(self):
+        """Must be implemented as a Decimal"""
         raise NotImplementedError
 
     @property
     def weight(self):
+        """Must be implemented as an integer"""
         raise NotImplementedError
 
     @property
     def stock(self):
+        """Must be implemented as an integer"""
         raise NotImplementedError
 
     @property
     def stock_alert(self):
-        raise NotImplementedError
-
-    def get_price_per_item(self):
-        raise NotImplementedError
-
-    def get_stock(self):
+        """Must be implemented as an integer"""
         raise NotImplementedError
 
     @classmethod
@@ -151,14 +166,6 @@ class Product(BaseProduct):
                         default=0,
                         verbose_name=lazy_gettext('Stock alert')
                         )
-
-    def get_price_per_item(self):
-        gross = self.gross_price
-        net = gross * ( 1 + self.tax.rate )
-        return prices.Price(net, gross)
-
-    def get_stock(self):
-        return self.stock
 
 
 product_types = {
