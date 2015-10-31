@@ -19,7 +19,7 @@
 
 from ... import app
 from ...rendering import admin_required, render_template
-from ...shop.models import Order, Product
+from ...shop.models import Order, BaseProduct
 
 # Load other views when running the app
 from . import carrier
