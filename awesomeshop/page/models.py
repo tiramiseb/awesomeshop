@@ -20,9 +20,9 @@
 import docutils.core
 from flask.ext.babel import lazy_gettext
 from mongoengine import signals
-from slugify import slugify
 
 from .. import db, get_locale
+from ..helpers import slugify_slug
 from ..mongo import TranslationsField
 from ..photo import Photo
 
@@ -79,13 +79,9 @@ class Page(db.Document):
         return BaseProduct.objects(documentation=self)
 
     @classmethod
-    def slugify_slug(cls, sender, document, **kwargs):
-        document.slug = slugify(document.slug)
-
-    @classmethod
     def remove_photos_from_disk(cls, sender, document, **kwargs):
         for p in document.photos:
             p.delete_files()
 
-signals.pre_save.connect(Page.slugify_slug, sender=Page)
+signals.pre_save.connect(slugify_slug, sender=Page)
 signals.pre_delete.connect(Page.remove_photos_from_disk, sender=Page)

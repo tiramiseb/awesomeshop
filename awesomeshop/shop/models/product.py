@@ -20,7 +20,6 @@
 import docutils.core
 import prices
 from flask.ext.babel import lazy_gettext
-from mongoengine import signals
 from satchless.item import StockedItem
 
 from ... import db, get_locale
@@ -29,6 +28,7 @@ from ...photo import Photo
 from ...page.models import Page
 from .category import Category
 from .tax import Tax
+
 
 
 class BaseProduct(db.Document, StockedItem):
@@ -131,11 +131,6 @@ class BaseProduct(db.Document, StockedItem):
         for p in document.photos:
             p.delete_files()
 
-signals.pre_delete.connect(
-            BaseProduct.remove_photos_from_disk,
-            sender=BaseProduct
-            )
-
 
 
 class Product(BaseProduct):
@@ -151,8 +146,11 @@ class Product(BaseProduct):
                             )
     weight = db.IntField(default=0, verbose_name=lazy_gettext('Weight'))# grams
     stock = db.IntField(default=0, verbose_name=lazy_gettext('Stock'))
-    stock_alert = db.IntField(db_field='alert', default=0,
-                              verbose_name=lazy_gettext('Stock alert'))
+    stock_alert = db.IntField(
+                        db_field='alert',
+                        default=0,
+                        verbose_name=lazy_gettext('Stock alert')
+                        )
 
     def get_price_per_item(self):
         gross = self.gross_price
@@ -161,7 +159,6 @@ class Product(BaseProduct):
 
     def get_stock(self):
         return self.stock
-
 
 
 product_types = {

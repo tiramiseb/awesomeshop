@@ -18,7 +18,7 @@
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 from ... import app
-from ...helpers import admin_required, render_template
+from ...rendering import admin_required, render_template
 from ...shop.models import Order, Product
 
 # Load other views when running the app

@@ -20,7 +20,7 @@
 from flask import redirect, request, url_for
 
 from ... import app
-from ...helpers import admin_required, render_template
+from ...rendering import admin_required, render_template
 from ...photo import Photo
 from ...page.models import Page
 from ...shop.models import BaseProduct, product_types

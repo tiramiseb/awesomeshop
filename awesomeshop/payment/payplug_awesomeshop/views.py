@@ -23,7 +23,7 @@ from flask.ext.login import current_user
 import payplug
 
 from ... import app
-from ...helpers import render_front, login_required
+from ...rendering import render_front, login_required
 from ...shop.models import Order
 
 @app.route('/orders/<order_number>/payplug_return')

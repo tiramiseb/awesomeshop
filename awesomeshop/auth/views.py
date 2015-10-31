@@ -23,7 +23,7 @@ from flask.ext.babel import _
 from flask.ext.login import current_user, login_user, logout_user
 
 from .. import app
-from ..helpers import fresh_login_required, login_required, render_front, \
+from ..rendering import fresh_login_required, login_required, render_front, \
                       render_template
 from ..shop.models import Order
 from .models import User, Address

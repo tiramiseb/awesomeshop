@@ -23,8 +23,6 @@ import prices
 from flask import abort, session
 from flask.ext.babel import _, lazy_gettext
 from flask.ext.login import current_user
-from mongoengine import signals
-from slugify import slugify
 
 from ... import app, db, get_locale, payment
 from ...mail import send_message
@@ -37,13 +35,7 @@ from .category import *
 from .product import *
 from .tax import *
 from .url import *
-
-
-
-def slugify_slug(sender, document, **kwargs):
-    document.slug = slugify(document.slug)
-signals.pre_save.connect(slugify_slug, sender=Category)
-signals.pre_save.connect(slugify_slug, sender=BaseProduct)
+from .shop_signals import *
 
 
 

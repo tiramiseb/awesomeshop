@@ -20,7 +20,7 @@
 from flask import redirect, request, url_for
 
 from ... import app
-from ...helpers import admin_required, render_template
+from ...rendering import admin_required, render_template
 from ...shop.models import Tax
 from ..forms import TaxForm
 

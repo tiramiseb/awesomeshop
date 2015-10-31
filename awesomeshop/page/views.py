@@ -20,7 +20,7 @@
 from flask import redirect, url_for
 
 from .. import app
-from ..helpers import render_front
+from ..rendering import render_front
 from .models import Page
 
 @app.route('/info')

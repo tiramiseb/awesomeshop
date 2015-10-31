@@ -20,7 +20,7 @@
 from flask.ext.login import current_user
 
 from .. import app
-from ..helpers import render_front, login_required
+from ..rendering import render_front, login_required
 from ..shop.models import Order
 from .payplug_awesomeshop import views
 

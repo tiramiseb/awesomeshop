@@ -18,7 +18,7 @@
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 from . import app
-from .helpers import render_front
+from .rendering import render_front
 
 @app.errorhandler(500)
 def page_not_found(e):

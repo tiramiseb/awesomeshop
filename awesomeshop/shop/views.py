@@ -22,7 +22,7 @@ from flask.ext.login import current_user
 from satchless.item import InsufficientStock
 
 from .. import app, payment, search as search_mod
-from ..helpers import render_front, login_required
+from ..rendering import render_front, login_required
 from ..auth.models import Address
 from ..shipping.models import Carrier
 from .models import Category, BaseProduct, Url, DbCart, Order, OrderProduct

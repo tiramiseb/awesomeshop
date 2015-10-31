@@ -17,13 +17,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
-from mongoengine import signals
-
 from ... import db
-from .category import Category
-# Cannot use BaseProduct for signals
-from .product import Product
-
 
 class Url(db.Document):
     url = db.StringField(required=True, max_length=100)
@@ -42,9 +36,5 @@ def update_category_url(sender, document, **kwargs):
 def update_product_url(sender, document, **kwargs):
     url = document.category.url + '/' + document.slug
     update_url(sender, document, url, **kwargs)
-signals.post_save.connect(update_category_url, sender=Category)
-signals.post_save.connect(update_product_url, sender=Product)
 def remove_url(sender, document, **kwargs):
     Url.objects(document=document).delete()
-signals.pre_delete.connect(remove_url, sender=Category)
-signals.pre_delete.connect(remove_url, sender=Product)

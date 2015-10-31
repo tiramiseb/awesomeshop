@@ -20,7 +20,7 @@
 from flask import request, redirect, url_for
 
 from ... import app
-from ...helpers import admin_required, render_template
+from ...rendering import admin_required, render_template
 from ...shipping.models import Carrier
 from ..forms import CarrierForm
 
