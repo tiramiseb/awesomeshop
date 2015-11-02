@@ -85,6 +85,12 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                         <div class="col-xs-6">
                             <div class="checkbox">
                                 <label>
+                                    {{ form.on_demand }}
+                                    {{ _('On demand if out of stock') }}
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
                                     {{ form.on_sale }}
                                     {{ _('Is on sale') }}
                                 </label>

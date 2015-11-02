@@ -35,6 +35,8 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     {{ product.reference }},
                     {{ product }}{% if show_stock %},
                     <b>{{ _('%(qty)d left', qty=product.stock) }}</b>
+                    {%- endif %}{% if product.on_demand %}
+                    ({{ _('available on demand') }})
                     {%- endif %}
                 </a>
                 {%- endfor %}

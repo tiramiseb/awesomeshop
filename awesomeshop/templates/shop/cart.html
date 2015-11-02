@@ -27,7 +27,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         {%- for line in cart %}
         <div class="list-group-item cart-list">
             <div class="row">
-                <div class="col-xs-6 col-sm-4 col-md-6 col-lg-8">
+                <div class="col-xs-6 col-sm-4 col-md-6 col-lg-7">
                     <a href="{{ line.product.url }}">
                         <span class="hidden-xs hidden-sm">
                         {%- if line.product.photos %}
@@ -55,7 +55,9 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                         </a>
                     </div>
                 </div>
-                <div class="col-sm-4 col-md-3 col-lg-2 text-right">
+                <div class="col-sm-4 col-md-3 text-right">
+                    {{ line.stock_message|safe }}
+                    <br>
                     {{ _('Unit:') }} {{ line.get_price_per_item().quantize('0.01').net }} {{ config.CURRENCY }}
                     <br>
                     <strong>
@@ -65,6 +67,17 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
              </div>
         </div>
         {%- endfor %}
+        {%- if cart.must_recalc %}
+        <div class="list-group-item">
+            <div class="text-right">
+                {{ cart.stock_message|safe }}
+                <br>
+                <button type="submit" class="btn btn-warning">
+                    {{ _('Recalculate') }}
+                </button>
+            </div>
+        </div>
+        {%- else %}
         <div class="list-group-item">
             <div class="text-right">
                 <div id="recalculate" class="hidden">
@@ -73,6 +86,8 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     </button>
                 </div>
                 <div id="total">
+                    {{ cart.stock_message|safe }}
+                    <br>
                     <strong>
                         {{ _('Total:') }} {{ cart.get_total().quantize('0.01').net }} {{ config.CURRENCY }}
                     </strong>
@@ -119,6 +134,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 </div>
             </div>
         </div>
+        {%- endif %}
     </div>
 </form>
 <div id="alert-overlay" class="hidden" onclick="this.className='hidden';">
@@ -131,28 +147,41 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     </div>
 </div>
 <script>
+    {%- if not cart.must_recalc %}
     function disp_recalc() {
         document.getElementById('recalculate').className = "";
         document.getElementById('total').className = "hidden";
         document.getElementById('proceed').className = "hidden";
     }
+    {%- endif %}
     {% for line in cart %}
     document.getElementById('inc_{{ line.product.id }}').addEventListener('click', function(e) {
         e.preventDefault();
         var orig = parseInt(document.getElementById('quantity_{{ line.product.id }}').value);
-        if (orig < {{ line.product.get_stock() }}) {
+        {%- if line.product.on_demand %}
+        document.getElementById('quantity_{{ line.product.id }}').value = orig + 1;
+        {%- if not cart.must_recalc %}
+        disp_recalc();
+        {%- endif %}
+        {%- else %}
+        if (orig < {{ line.product.stock }}) {
             document.getElementById('quantity_{{ line.product.id }}').value = orig + 1;
+            {%- if not cart.must_recalc %}
             disp_recalc();
+            {%- endif %}
         } else {
             document.getElementById("alert-overlay").className = "";
         }
+        {%- endif %}
     });
     document.getElementById('dec_{{ line.product.id }}').addEventListener('click', function(e) {
         e.preventDefault();
         var orig = parseInt(document.getElementById('quantity_{{ line.product.id }}').value);
         if (orig > 0) {
             document.getElementById('quantity_{{ line.product.id }}').value = orig - 1;
+            {%- if not cart.must_recalc %}
             disp_recalc();
+            {%- endif %}
         };
     });
     {% endfor %}

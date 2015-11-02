@@ -34,6 +34,7 @@ from .tax import Tax
 # * it should inherit from BaseProduct
 # * unless otherwise stated, all functions raising NotImplementedError must be
 #   overriden
+# * a new entry must be added to the product_types dict
 # * signals must be added in .shop_signals, copying signals for Product
 
 class BaseProduct(db.Document, StockedItem):
@@ -111,34 +112,52 @@ class BaseProduct(db.Document, StockedItem):
 
     @property
     def type(self):
-        """Must be statically implemented as a string
+        """Human-readable product type (for dashboard display)
         
-        A corresponding entry must be added to the product_types dict"""
+        Must be statically implemented as a string"""
         raise NotImplementedError
 
     @property
     def purchasing_price(self):
-        """Must be implemented as a Decimal"""
+        """The price we pay the provicer
+        
+        Must be implemented as a Decimal"""
         raise NotImplementedError
 
     @property
     def gross_price(self):
-        """Must be implemented as a Decimal"""
+        """Gross price paid by the customers
+        
+        Must be implemented as a Decimal"""
         raise NotImplementedError
 
     @property
     def weight(self):
-        """Must be implemented as an integer"""
+        """Weight of the product, for shipping
+        
+        Must be implemented as an integer"""
+        raise NotImplementedError
+
+    @property
+    def on_demand(self):
+        """When there is no stock left, is it possible to order this product
+        on demand ?
+        
+        Must be implemented as a boolean"""
         raise NotImplementedError
 
     @property
     def stock(self):
-        """Must be implemented as an integer"""
+        """How much stock is left
+        
+        Must be implemented as an integer"""
         raise NotImplementedError
 
     @property
     def stock_alert(self):
-        """Must be implemented as an integer"""
+        """If the stock is lower than that many items, there may be an alert
+        
+        Must be implemented as an integer"""
         raise NotImplementedError
 
     @classmethod
@@ -160,12 +179,43 @@ class Product(BaseProduct):
                             verbose_name=lazy_gettext('Gross price')
                             )
     weight = db.IntField(default=0, verbose_name=lazy_gettext('Weight'))# grams
+    on_demand = db.BooleanField(
+                        db_field='dem',
+                        default=False,
+                        verbose_name=lazy_gettext('On demand')
+                        )
     stock = db.IntField(default=0, verbose_name=lazy_gettext('Stock'))
     stock_alert = db.IntField(
                         db_field='alert',
                         default=0,
                         verbose_name=lazy_gettext('Stock alert')
                         )
+
+
+#class ProductModule(db.EmbeddedDocument):
+#    """A module for modular products"""
+#    reference = db.StringField(db_field='ref',
+#                               max_length=50, unique=True, required=True,
+#                               verbose_name=lazy_gettext('Reference'))
+#    name = TranslationsField(max_length=100, verbose_name=lazy_gettext('Name'))
+#    description = TranslationsField(db_field='desc',
+#                                    verbose_name=lazy_gettext('Description'))
+#    photo = db.EmbeddedDocument(Photo)
+#    purchasing_price = db.DecimalField(
+#                            db_field='pprice',
+#                            verbose_name=lazy_gettext('Purchasing price')
+#                            )
+#    gross_price = db.DecimalField(
+#                            db_field='gprice',
+#                            required=True,
+#                            verbose_name=lazy_gettext('Gross price')
+#                            )
+#    weight = db.IntField(default=0, verbose_name=lazy_gettext('Weight'))# grams
+#    stock = db.IntField(default=0, verbose_name=lazy_gettext('Stock'))
+#    stock_alert = db.IntField(db_field='alert', default=0,
+#                              verbose_name=lazy_gettext('Stock alert'))
+
+
 
 
 product_types = {

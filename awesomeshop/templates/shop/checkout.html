@@ -62,6 +62,16 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                  </div>
             </div>
             {%- endfor %}
+            {%- if cart_modified_because_of_stock %}
+            <div class="list-group-item">
+                <b class="text-danger">{{ _('Your cart has been modified because stock is insufficient for one or more products.') }}</b>
+            </div>
+            {%- endif %}
+            {%- if cart.stock_status == 'on_demand' %}
+            <div class="list-group-item">
+                <b class="text-danger">{{ _('Your cart contains products to be ordered on demand. Shipping will be delayed for %(min)d-%(max)d days.', min=config.ON_DEMAND_DELAY_MIN, max=config.ON_DEMAND_DELAY_MAX) }}</b>
+            </div>
+            {%- endif %}
         </div>
     </div>
     {%- if current_user.addresses %}
@@ -208,17 +218,21 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     <textarea placeholder="{{ _('If you have any message for us about this order, write it here!') }}" id="checkout-message" class="form-control"></textarea>
     <div class="panel panel-default">
         <div class="panel-body text-right">
-                <label class="reused-package">
-                    <i class="fa fa-recycle"></i>
-                    {{ _('I accept that my order is shipped in a reused package') }}
-                    <input type="checkbox" name="reused_package"{% if current_user.latest_reused_package %} checked="checked"{% endif %} onclick="save_reused_package_status()">
-                </label>
-                <label>
-                    <i class="fa fa-check"></i>
-                    <b>{{ _('I agree to the %(terms)s and adhere to them unconditionally', terms='<a href="'|safe+url_for('info', slug='terms_of_purchase')+'" target="_blank">'|safe+_('terms of purchase')+'</a>'|safe) }}</b>
-                    <input type="checkbox" name="accept_terms" onchange="maybe_activate_payment_button()">
-                </label>
-            </div>
+            <label class="reused-package">
+                <i class="fa fa-recycle"></i>
+                {{ _('I accept that my order is shipped in a reused package') }}
+                <input type="checkbox" name="reused_package"{% if current_user.latest_reused_package %} checked="checked"{% endif %} onclick="save_reused_package_status()">
+            </label>
+            <label>
+                <i class="fa fa-check"></i>
+                <b>{{ _('I agree to the %(terms)s and adhere to them unconditionally', terms='<a href="'|safe+url_for('info', slug='terms_of_purchase')+'" target="_blank">'|safe+_('terms of purchase')+'</a>'|safe) }}</b>
+                <input type="checkbox" name="accept_terms" onchange="maybe_activate_payment_button()">
+            </label>
+            {%- if cart.stock_status == 'on_demand' %}
+            <br>
+            <b class="text-danger">{{ _('I understand that the cart contains products to be ordered on demand and that shipping will be delayed for %(min)d-%(max)d days.', min=config.ON_DEMAND_DELAY_MIN, max=config.ON_DEMAND_DELAY_MAX) }}</b>
+            {%- endif %}
+        </div>
     </div>
     <button type="submit" id="proceed" class="btn btn-lg btn-success pull-right" disabled="disabled">
         {{ _('Verify and confirm the order') }}

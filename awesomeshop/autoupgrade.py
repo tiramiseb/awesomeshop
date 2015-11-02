@@ -18,7 +18,7 @@
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 from .helpers import Setting
-from .shop.models import BaseProduct
+from .shop.models import BaseProduct, Order
 from .shop.models import Url
 
 ###############################################################################
@@ -37,11 +37,15 @@ def add_product_cls():
             {'$set':{'doc._cls': 'BaseProduct.Product'}}
             )
 
+def add_ondemand():
+    products = BaseProduct._get_collection()
+    products.update_many({'dem': None}, {'$set': {'dem': False}})
 
 ###############################################################################
 # Ordered list of all upgrade functions
 upgrades = [
-    add_product_cls
+    add_product_cls,
+    add_ondemand
     ]
 
 def upgrade():

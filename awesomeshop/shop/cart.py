@@ -18,18 +18,49 @@
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 from flask import session
+from flask.ext.babel import lazy_gettext
 from satchless import cart
 
+from .. import app
 from .models import BaseProduct
 
+stock_messages = {
+        'in_stock': '<span class="text-success">{}</span>'.format(
+                lazy_gettext('In stock')
+                ),
+        'out_of_stock': '<span class="text-danger">{}</span>'.format(
+                lazy_gettext('Out of stock')
+                ),
+        'insufficient_stock': '<span class="text-danger">{}</span>'.format(
+                lazy_gettext('Insufficient stock')
+                ),
+        'on_demand': '<span class="text-info">{}</span>'.format(
+                lazy_gettext(
+                    'Delay %(min)d-%(max)d days',
+                    min=app.config['ON_DEMAND_DELAY_MIN'],
+                    max=app.config['ON_DEMAND_DELAY_MAX']
+                    )
+                )
+        }
 class CartLine(cart.CartLine):
-
-    def get_stock(self):
-        return self.product.get_stock() - self.quantity
 
     @property
     def weight(self):
         return self.product.weight * self.quantity
+
+    @property
+    def stock_status(self):
+        if self.quantity <= self.product.stock:
+            return 'in_stock'
+        if self.product.on_demand:
+            return 'on_demand'
+        if self.product.stock > 0:
+            return 'insufficient_stock'
+        return 'out_of_stock'
+
+    @property
+    def stock_message(self):
+        return stock_messages[self.stock_status]
 
     def for_session(self):
         """Export data for session storage"""
@@ -78,6 +109,25 @@ class Cart(cart.Cart):
         else:
             return sum(line.weight for line in self)
 
+    @property
+    def stock_status(self):
+        all_stocks = [l.stock_status for l in self]
+        if 'out_of_stock' in all_stocks:
+            return 'out_of_stock'
+        if 'insufficient_stock' in all_stocks:
+            return 'insufficient_stock'
+        if 'on_demand' in all_stocks:
+            return 'on_demand'
+        return 'in_stock'
+
+    @property
+    def stock_message(self):
+        return stock_messages[self.stock_status]
+
+    @property
+    def must_recalc(self):
+        return self.stock_status in ('out_of_stock', 'insufficient_stock')
+
     # Session storage
     def to_session(self):
         """Export data for session storage"""
@@ -96,5 +146,7 @@ class Cart(cart.Cart):
         return cart
 
     def add(self, product, quantity, replace=False):
-        cart.Cart.add(self, product, quantity, replace=replace)
+        # If the product allows "on demand" orders, do not check the quantity
+        cart.Cart.add(self, product, quantity, replace=replace,
+                      check_quantity = not product.on_demand)
         self.to_session()

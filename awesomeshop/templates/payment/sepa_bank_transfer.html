@@ -23,7 +23,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <h1>{{ _('SEPA bank transfer') }}</h1>
 <div class="panel panel-default">
     <div class="panel-body">
-        <p>{{ _('Please execute a SEPA bank transfer within %(num)d weeks with the following criteria:', num=config.PAYMENT_DELAY) }}</p>
+        <p>{{ _('Please execute a SEPA bank transfer within %(num)d days with the following criteria:', num=config.PAYMENT_DELAY) }}</p>
         <table class="table">
             <tr><td>{{ _('Recipient account owner') }}</td><td>{{ config.SEPA_TRANSFER_RECIPIENT }}</td></tr>
             <tr><td>{{ _('Recipient account BIC') }}</td><td><b>{{ config.SEPA_TRANSFER_BIC }}</b></td></tr>
@@ -34,4 +34,8 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </table>
     </div>
 </div>
+<a href="{{ url_for('order', order_number=order.number) }}" class="btn btn-lg btn-success pull-right">
+    <i class="fa fa-chevron-left"></i>
+    {{ _('Back to order') }}
+</a>
 {%- endblock %}

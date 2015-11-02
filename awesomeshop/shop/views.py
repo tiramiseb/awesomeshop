@@ -31,7 +31,6 @@ from .cart import Cart
 @app.route('/<path:path>')
 def category_or_product(path):
     url = Url.objects.get_or_404(url=path.strip('/'))
-    print url.document._cls
     if type(url.document) == Category:
         return render_front('shop/category.html', category=url.document,
                             active=url.document.id)
@@ -80,13 +79,16 @@ def cart():
                                 )
             saved_cart.save()
         else:
-            for item in cart:
-                inputname = 'quantity_{}'.format(item.product.id)
+            # Recalculate the cart
+            for line in cart:
+                inputname = 'quantity_{}'.format(line.product.id)
                 if inputname in request.form:
                     try: quantity = int(request.form[inputname])
                     except: continue
+                    if not line.product.on_demand:
+                        quantity = min(quantity, line.product.stock)
                     try:
-                        cart.add(item.product, quantity, replace=True)
+                        cart.add(line.product, quantity, replace=True)
                     except InsufficientStock:
                         return render_front('shop/insufficient_stock.html',
                                             next=request.args.get('next') or \
@@ -129,15 +131,37 @@ def load_saved_cart(cart_id):
 @app.route('/checkout')
 @login_required
 def checkout():
-    return render_front('shop/checkout.html', modes_of_payment=payment.modes)
+    cart_modified_because_of_stock = False
+    cart = Cart.from_session()
+    # Verify quantities
+    for line in cart:
+        if not line.product.on_demand:
+            if line.quantity > line.product.stock:
+                cart_modified_because_of_stock = True
+                cart.add(line.product, line.product.stock, replace=True)
+    return render_front(
+                'shop/checkout.html',
+                modes_of_payment=payment.modes,
+                cart_modified_because_of_stock=cart_modified_because_of_stock
+                )
 
 @app.route('/confirm', methods=['POST'])
 @login_required
 def confirm_order():
     # If there is any error in gathering the data, tell it and don't go further
     try:
-        # Get the cart
+        # Get the cart, remove insufficient stock
+        insufficient_stock = []
+        on_demand_products = []
         cart = Cart.from_session()
+        for line in cart:
+            p = line.product
+            if line.quantity > p.stock:
+                if p.on_demand:
+                    on_demand_products.append(p)
+                else:
+                    insufficient_stock.append(p)
+                    cart.add(p, p.stock, replace=True)
         cart_total = cart.get_total().quantize('0.01')
         # Get data from the request
         delivery_id = request.form['delivery']
@@ -145,7 +169,10 @@ def confirm_order():
         carrier_id = request.form['shipping']
         payment_id = request.form['payment']
         accept_terms = request.form['accept_terms'] # Exception if terms
-                                                    # are not accepted
+                                                    # are not accepted: the
+                                                    # field does not exist
+                                                    # That's why we do not
+                                                    # use ".get"
         delivery_as_billing = not not request.form.get('delivery_as_billing')
         reused_package = not not request.form.get('reused_package')
         # Get data from the database
@@ -170,17 +197,13 @@ def confirm_order():
     order = Order()
     order.set_status('unconfirmed')
     order.customer = current_user.to_dbref()
-    out_of_stock = []
     for line in cart:
-        if line.product.stock < line.quantity:
-            out_of_stock.append(line.product)
-            Cart.from_session().add(line.product, line.product.stock, replace=True)
-        else:
-            order.products.append(OrderProduct.from_product(line.product,
-                                                            line.quantity))
-    if out_of_stock:
-        return render_front('shop/out_of_stock_before_confirmation.html',
-                            products=out_of_stock)
+        p = line.product
+        qty = line.quantity
+        insuf_stock = p in insufficient_stock
+        order.products.append(OrderProduct.from_product(p, qty, insuf_stock))
+        p.stock -= min(line.quantity, p.stock)
+        p.save()
     order.set_delivery_address(delivery)
     order.set_billing_address(billing)
     order.set_subtotal(cart_total.gross, cart_total.net)
@@ -191,12 +214,10 @@ def confirm_order():
     total_net = cart_total.net + shipping_price['net']
     order.set_total(total_gross, total_net)
     order.accept_reused_package = reused_package
-    # A new loop because quantities should not be reduced if there is
-    # at least one product without sufficient stock ("if out_of_stock" above)
-    for line in cart:
-        p = line.product
-        p.stock -= line.quantity
-        p.save()
+    if on_demand_products:
+        order.on_demand = True
+        order.on_demand_delay_min = app.config['ON_DEMAND_DELAY_MIN']
+        order.on_demand_delay_max = app.config['ON_DEMAND_DELAY_MAX']
     cart.clear()
     cart.to_session()
     order.save()

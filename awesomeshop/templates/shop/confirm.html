@@ -79,6 +79,15 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     {{ product.line_net_price }}
                 </div>
              </div>
+             {%- if product.qty_reduced_because_of_stock %}
+             <div class="text-info">
+                 {{ _('The quantity for this product has been reduced due to a last minute change in our stock. The current quantity is reserved for you.') }}
+             </div>
+             {%- elif product.on_demand %}
+             <div class="text-info">
+                 {{ _('This is an on-demand product, it will be ordered or manufactured as soon as the payment is received.') }}
+             </div>
+             {%- endif %}
         </div>
         {%- endfor %}
         <div class="list-group-item">
@@ -119,10 +128,15 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <div class="panel panel-default">
     <div class="panel-heading">
         <i class="fa fa-question"></i>
-        {{ _('Options') }}
+        {{ _('Details') }}
     </div>
     <div class="panel-body">
         <ul>
+            {%- if order.on_demand %}
+            <li>
+                {{ _('This order includes on demand products, shipping is delayed for %(min)d-%(max)d days', min=order.on_demand_delay_min, max=order.on_demand_delay_max) }}
+            </li>
+            {%- endif %}
             <li>{{_('Payment:') }} {{ order.payment_description|safe }}</li>
             {%- if order.accept_reused_package %}
             <li>

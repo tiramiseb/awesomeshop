@@ -32,6 +32,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <th>{{ _('Name') }}</th>
         <th>{{ _('Type') }}</th>
         <th>{{ _('Stock') }}</th>
+        <th>{{ _('On demand') }}</th>
         <th>{{ _('Net price') }}</th>
         <th></th>
     </tr>
@@ -53,6 +54,13 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </td>
         <td class="pointer" onclick="document.location='{{ url_for('dashboard_product', product_id=product.id) }}'">
             {{ product.stock }}
+        </td>
+        <td class="pointer" onclick="document.location='{{ url_for('dashboard_product', product_id=product.id) }}'">
+            {%- if product.on_demand %}
+                {{ _('Yes') }}
+            {%- else %}
+                {{ _('No') }}
+            {%- endif %}
         </td>
         <td class="pointer" onclick="document.location='{{ url_for('dashboard_product', product_id=product.id) }}'">
             {{ product.get_price_per_item().quantize('0.01').net }} {{ config.CURRENCY }}

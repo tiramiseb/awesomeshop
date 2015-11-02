@@ -39,6 +39,9 @@
 .bottom-space {
     margin-bottom: 15px !important;
 }
+.bottom-no-space {
+    margin-bottom: 0 !important;
+}
 .navbar-static-bottom {
     border-radius: 0;
     margin-top: 20px;

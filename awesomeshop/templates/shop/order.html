@@ -45,21 +45,21 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </b>
         {%- endif %}
         {%- if order.status == 'unconfirmed' %}
-        <div class="text-right">
+        <div class="text-right hidden-print">
             <a href="{{ url_for('pay_order', order_number=order.number) }}" class="btn btn-lg btn-success">
                 {{ _('Proceed to payment') }}
                 <i class="fa fa-chevron-right"></i>
             </a>
         </div>
         {%- elif order.status == 'awaiting_payment' %}
-        <div class="text-right">
+        <div class="text-right hidden-print">
             <a href="{{ url_for('pay_order', order_number=order.number) }}" class="btn btn-lg btn-success btn-wrap">
                 {{ order.replay_payment_button_text }}
                 <i class="fa fa-chevron-right"></i>
             </a>
         </div>
         {%- elif order.status == 'payment_failed' %}
-        <div class="text-right">
+        <div class="text-right hidden-print">
             <a href="{{ url_for('pay_order', order_number=order.number) }}" class="btn btn-lg btn-success">
                 {{ _('Retry payment') }}
                 <i class="fa fa-chevron-right"></i>
@@ -166,6 +166,11 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <div class="panel panel-default">
     <div class="panel-body">
         <ul>
+            {%- if order.on_demand %}
+            <li>
+                {{ _('This order includes on demand products, shipping is delayed for %(min)d-%(max)d days', min=order.on_demand_delay_min, max=order.on_demand_delay_max) }}
+            </li>
+            {%- endif %}
             <li>{{_('Payment:') }} {{ order.payment_description|safe }}</li>
             {%- if order.accept_reused_package %}
             <li>
