@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
+import datetime
+
 from .helpers import Setting
 from .shop.models import BaseProduct, Order
 from .shop.models import Url
@@ -41,11 +43,17 @@ def add_ondemand():
     products = BaseProduct._get_collection()
     products.update_many({'dem': None}, {'$set': {'dem': False}})
 
+def add_creationdate():
+    old_date = datetime.datetime(1970, 1, 1)
+    products = BaseProduct._get_collection()
+    products.update_many({'create': None}, {'$set': {'create': old_date}})
+
 ###############################################################################
 # Ordered list of all upgrade functions
 upgrades = [
     add_product_cls,
-    add_ondemand
+    add_ondemand,
+    add_creationdate
     ]
 
 def upgrade():

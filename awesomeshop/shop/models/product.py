@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
+import datetime
+
 import docutils.core
 import prices
 from flask.ext.babel import lazy_gettext
@@ -38,6 +40,8 @@ from .tax import Tax
 # * signals must be added in .shop_signals, copying signals for Product
 
 class BaseProduct(db.Document, StockedItem):
+    created_at = db.DateTimeField(db_field='create',
+                                  default=datetime.datetime.now, required=True)
     slug = db.StringField(required=True, max_length=50,
                           verbose_name=lazy_gettext('Slug'))
     reference = db.StringField(db_field='ref',
