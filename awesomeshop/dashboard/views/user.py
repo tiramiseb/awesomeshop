@@ -22,6 +22,7 @@ from flask import redirect, request, url_for
 from ... import app
 from ...rendering import admin_required, render_template
 from ...auth.models import User, Address
+from ...shop.models import DbCart
 from ..forms import UserForm, AddressForm
 
 @app.route('/dashboard/users')
@@ -52,10 +53,12 @@ def dashboard_user(user_id=None):
             a.save()
             return redirect(url_for('dashboard_user',
                                     user_id=user_id)+'#addresses')
+        saved_carts = user.carts
     else:
         user = User()
         addresses = None
         newaddress = None
+        saved_carts = None
     form = UserForm(request.form, user, prefix="user")
     if form.validate_on_submit():
         if form.email.data:
@@ -72,7 +75,8 @@ def dashboard_user(user_id=None):
     return render_template('dashboard/user.html', user_id=user_id,
                                                   form=form,
                                                   addresses=addresses,
-                                                  newaddress=newaddress)
+                                                  newaddress=newaddress,
+                                                  saved_carts=saved_carts)
 
 @app.route('/dashboard/user-<user_id>/remove')
 @admin_required
@@ -85,3 +89,12 @@ def dashboard_remove_user(user_id):
 def dashboard_remove_address(user_id, address_id):
     Address.objects(id=address_id).delete()
     return redirect(url_for('dashboard_user', user_id=user_id)+'#addresses')
+
+
+@app.route('/dashboard/delete-savedcart-<cart_id>')
+@admin_required
+def dashboard_delete_savedcart(cart_id):
+    cart = DbCart.objects.get_or_404(id=cart_id)
+    user = cart.user
+    cart.delete()
+    return redirect(url_for('dashboard_user', user_id=user.id))

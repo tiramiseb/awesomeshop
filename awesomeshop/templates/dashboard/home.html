@@ -25,7 +25,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     ({{ order.full_number}}),
                     {{ order.customer }},
                     {{ order.formated_invoice_date }},
-                    {{ ngettext('%(num)d product', '%(num)d products', order.quantity) }},
+                    {{ ngettext('%(num)d product', '%(num)d products', order.quantity) }}
                 </a>
                 {%- endfor %}
 {%- endmacro %}
@@ -71,6 +71,23 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             </div>
             <div class="list-group">
                 {{- orderlines(awaiting_payment_orders) }}
+            </div>
+        </div>
+        {%- endif %}
+        {%- if saved_carts %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                {{ _('Saved carts') }}
+            </div>
+            <div class="list-group">
+                {%- for cart in saved_carts %}
+                <a href="{{ url_for('dashboard_user', user_id=cart.user.id) }}" class="list-group-item">
+                    {{ cart.name }},
+                    {{ cart.user }},
+                    {{ ngettext('%(num)d product', '%(num)d products', cart.total_quantity) }},
+                    {{ cart.total_price.quantize('0.01').net }} {{ config.CURRENCY }}
+                </a>
+                {%- endfor %}
             </div>
         </div>
         {%- endif %}

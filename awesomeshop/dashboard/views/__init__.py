@@ -19,7 +19,7 @@
 
 from ... import app
 from ...rendering import admin_required, render_template
-from ...shop.models import Order, BaseProduct
+from ...shop.models import Order, BaseProduct, DbCart
 
 # Load other views when running the app
 from . import carrier
@@ -49,8 +49,13 @@ def dashboard():
                 },
                 {'$match':{'below_alert': True, 'stock': {'$gt': 0}}}
                 )]
-    return render_template('dashboard/home.html', paid_orders=paid_orders,
-                           prep_orders=prep_orders,
-                           awaiting_payment_orders=awaiting_payment_orders,
-                           out_of_stock_products=out_of_stock_products,
-                           stock_alert_products=stock_alert_products)
+    saved_carts = DbCart.objects
+    return render_template(
+                        'dashboard/home.html',
+                        paid_orders=paid_orders,
+                        prep_orders=prep_orders,
+                       awaiting_payment_orders=awaiting_payment_orders,
+                       out_of_stock_products=out_of_stock_products,
+                       stock_alert_products=stock_alert_products,
+                       saved_carts=saved_carts
+                       )

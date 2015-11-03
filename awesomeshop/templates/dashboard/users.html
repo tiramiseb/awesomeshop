@@ -35,6 +35,12 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             {%- endif %}
             {{ user.email }}
         </td>
+        <td class="pointer" onclick="document.location='{{ url_for('dashboard_user', user_id=user.id) }}'">
+            {{ ngettext('%(num)d address', '%(num)d addresses', user.addresses.count()) }}
+        </td>
+        <td class="pointer" onclick="document.location='{{ url_for('dashboard_user', user_id=user.id) }}'">
+            {{ ngettext('%(num)d cart', '%(num)d carts', user.carts.count()) }}
+        </td>
         <td>
             <div class="btn-group pull-right" role="group">
                 <a class="btn btn-success" href="{{ url_for('dashboard_user', user_id=user.id) }}">

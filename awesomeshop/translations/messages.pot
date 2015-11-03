@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-11-02 11:57+0100\n"
+"POT-Creation-Date: 2015-11-03 07:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Generated-By: Babel 2.1.1\n"
 
 #: awesomeshop/helpers.py:27 awesomeshop/shipping/models.py:46
-#: awesomeshop/shipping/models.py:67 awesomeshop/shop/models/product.py:46
+#: awesomeshop/shipping/models.py:67 awesomeshop/shop/models/product.py:50
 #: awesomeshop/shop/models/tax.py:28
 #: awesomeshop/templates/dashboard/products.html:32
 #: awesomeshop/templates/dashboard/taxes.html:27
@@ -104,7 +104,7 @@ msgid "Rank"
 msgstr ""
 
 #: awesomeshop/page/models.py:34 awesomeshop/shop/models/category.py:38
-#: awesomeshop/shop/models/product.py:42
+#: awesomeshop/shop/models/product.py:46
 msgid "Slug"
 msgstr ""
 
@@ -178,7 +178,7 @@ msgstr ""
 msgid "Countries"
 msgstr ""
 
-#: awesomeshop/shipping/models.py:69 awesomeshop/shop/models/product.py:48
+#: awesomeshop/shipping/models.py:69 awesomeshop/shop/models/product.py:52
 msgid "Description"
 msgstr ""
 
@@ -203,7 +203,7 @@ msgid "In stock"
 msgstr ""
 
 #: awesomeshop/shop/cart.py:32 awesomeshop/templates/skeleton.html:46
-#: awesomeshop/templates/dashboard/home.html:82
+#: awesomeshop/templates/dashboard/home.html:99
 #: awesomeshop/templates/shop/product.html:101
 msgid "Out of stock"
 msgstr ""
@@ -229,52 +229,52 @@ msgstr ""
 msgid "Unnamed cart"
 msgstr ""
 
-#: awesomeshop/shop/models/order.py:92
+#: awesomeshop/shop/models/order.py:87
 msgid "unconfirmed"
 msgstr ""
 
-#: awesomeshop/shop/models/order.py:97
+#: awesomeshop/shop/models/order.py:92
 msgid "awaiting payment"
 msgstr ""
 
-#: awesomeshop/shop/models/order.py:102
+#: awesomeshop/shop/models/order.py:97
 msgid "awaiting a response from the payment provider"
 msgstr ""
 
-#: awesomeshop/shop/models/order.py:107
+#: awesomeshop/shop/models/order.py:102
 msgid "payment received"
 msgstr ""
 
-#: awesomeshop/shop/models/order.py:112
+#: awesomeshop/shop/models/order.py:107
 msgid "payment failed ({})"
 msgstr ""
 
-#: awesomeshop/shop/models/order.py:117
+#: awesomeshop/shop/models/order.py:112
 msgid "in preparation"
 msgstr ""
 
-#: awesomeshop/shop/models/order.py:122
+#: awesomeshop/shop/models/order.py:117
 msgid "shipped on {}"
 msgstr ""
 
-#: awesomeshop/shop/models/order.py:127
+#: awesomeshop/shop/models/order.py:122
 msgid "awaiting return"
 msgstr ""
 
-#: awesomeshop/shop/models/order.py:132
+#: awesomeshop/shop/models/order.py:127
 msgid "refund"
 msgstr ""
 
-#: awesomeshop/shop/models/order.py:137
+#: awesomeshop/shop/models/order.py:132
 msgid "cancelled"
 msgstr ""
 
-#: awesomeshop/shop/models/product.py:45
+#: awesomeshop/shop/models/product.py:49
 #: awesomeshop/templates/dashboard/products.html:31
 msgid "Reference"
 msgstr ""
 
-#: awesomeshop/shop/models/product.py:53
+#: awesomeshop/shop/models/product.py:57
 #: awesomeshop/templates/skeleton.html:141
 #: awesomeshop/templates/dashboard/skeleton.html:54
 #: awesomeshop/templates/shop/product.html:124
@@ -282,57 +282,57 @@ msgstr ""
 msgid "Documentation"
 msgstr ""
 
-#: awesomeshop/shop/models/product.py:57
+#: awesomeshop/shop/models/product.py:61
 #: awesomeshop/templates/dashboard/category.html:21
 msgid "Category"
 msgstr ""
 
-#: awesomeshop/shop/models/product.py:59
+#: awesomeshop/shop/models/product.py:63
 msgid "Keywords"
 msgstr ""
 
-#: awesomeshop/shop/models/product.py:63
+#: awesomeshop/shop/models/product.py:67
 msgid "Tax"
 msgstr ""
 
-#: awesomeshop/shop/models/product.py:65
+#: awesomeshop/shop/models/product.py:69
 #: awesomeshop/templates/dashboard/product.html:95
 msgid "Is on sale"
 msgstr ""
 
-#: awesomeshop/shop/models/product.py:69
+#: awesomeshop/shop/models/product.py:73
 #: awesomeshop/templates/page/page.html:31
 #: awesomeshop/templates/shop/product.html:112
 msgid "Related products"
 msgstr ""
 
-#: awesomeshop/shop/models/product.py:171
+#: awesomeshop/shop/models/product.py:175
 msgid "Simple"
 msgstr ""
 
-#: awesomeshop/shop/models/product.py:174
+#: awesomeshop/shop/models/product.py:178
 msgid "Purchasing price"
 msgstr ""
 
-#: awesomeshop/shop/models/product.py:179
+#: awesomeshop/shop/models/product.py:183
 msgid "Gross price"
 msgstr ""
 
-#: awesomeshop/shop/models/product.py:181
+#: awesomeshop/shop/models/product.py:185
 msgid "Weight"
 msgstr ""
 
-#: awesomeshop/shop/models/product.py:185
+#: awesomeshop/shop/models/product.py:189
 #: awesomeshop/templates/dashboard/products.html:35
 msgid "On demand"
 msgstr ""
 
-#: awesomeshop/shop/models/product.py:187
+#: awesomeshop/shop/models/product.py:191
 #: awesomeshop/templates/dashboard/products.html:34
 msgid "Stock"
 msgstr ""
 
-#: awesomeshop/shop/models/product.py:191
+#: awesomeshop/shop/models/product.py:195
 msgid "Stock alert"
 msgstr ""
 
@@ -532,13 +532,13 @@ msgstr ""
 
 #: awesomeshop/templates/auth/address_from_checkout.html:45
 #: awesomeshop/templates/auth/addresses.html:83
-#: awesomeshop/templates/dashboard/user.html:119
+#: awesomeshop/templates/dashboard/user.html:161
 msgid "Create"
 msgstr ""
 
 #: awesomeshop/templates/auth/addresses.html:21
 #: awesomeshop/templates/auth/profile.html:36
-#: awesomeshop/templates/dashboard/user.html:65
+#: awesomeshop/templates/dashboard/user.html:107
 msgid "Addresses"
 msgstr ""
 
@@ -548,7 +548,7 @@ msgid "Configure your addresses"
 msgstr ""
 
 #: awesomeshop/templates/auth/addresses.html:47
-#: awesomeshop/templates/dashboard/user.html:86
+#: awesomeshop/templates/dashboard/user.html:128
 msgid "Change"
 msgstr ""
 
@@ -557,12 +557,12 @@ msgstr ""
 #: awesomeshop/templates/dashboard/carrier.html:269
 #: awesomeshop/templates/dashboard/page.html:74
 #: awesomeshop/templates/dashboard/product.html:149
-#: awesomeshop/templates/dashboard/user.html:91
+#: awesomeshop/templates/dashboard/user.html:133
 msgid "Remove"
 msgstr ""
 
 #: awesomeshop/templates/auth/addresses.html:66
-#: awesomeshop/templates/dashboard/user.html:100
+#: awesomeshop/templates/dashboard/user.html:142
 #: awesomeshop/templates/shop/checkout.html:105
 #: awesomeshop/templates/shop/checkout.html:144
 msgid "New address"
@@ -584,6 +584,7 @@ msgstr ""
 #: awesomeshop/templates/auth/carts.html:30
 #: awesomeshop/templates/auth/orders.html:35
 #: awesomeshop/templates/dashboard/home.html:28
+#: awesomeshop/templates/dashboard/home.html:87
 #, python-format
 msgid "%(num)d product"
 msgid_plural "%(num)d products"
@@ -686,6 +687,8 @@ msgid "Modify your email address and password"
 msgstr ""
 
 #: awesomeshop/templates/auth/profile.html:43
+#: awesomeshop/templates/dashboard/home.html:80
+#: awesomeshop/templates/dashboard/user.html:65
 msgid "Saved carts"
 msgstr ""
 
@@ -861,7 +864,7 @@ msgstr ""
 msgid "Awaiting payment"
 msgstr ""
 
-#: awesomeshop/templates/dashboard/home.html:92
+#: awesomeshop/templates/dashboard/home.html:109
 msgid "Out of stock soon"
 msgstr ""
 
@@ -1167,6 +1170,18 @@ msgstr ""
 msgid "New user"
 msgstr ""
 
+#: awesomeshop/templates/dashboard/user.html:92
+msgid "Delete"
+msgstr ""
+
+#: awesomeshop/templates/dashboard/user.html:97
+#: awesomeshop/templates/shop/cart.html:64
+#: awesomeshop/templates/shop/cart.html:92
+#: awesomeshop/templates/shop/saved_cart.html:46
+#: awesomeshop/templates/shop/saved_cart.html:61
+msgid "Total:"
+msgstr ""
+
 #: awesomeshop/templates/dashboard/users.html:27
 msgid "Add an user"
 msgstr ""
@@ -1174,6 +1189,20 @@ msgstr ""
 #: awesomeshop/templates/dashboard/users.html:34
 msgid "admin"
 msgstr ""
+
+#: awesomeshop/templates/dashboard/users.html:39
+#, python-format
+msgid "%(num)d address"
+msgid_plural "%(num)d addresses"
+msgstr[0] ""
+msgstr[1] ""
+
+#: awesomeshop/templates/dashboard/users.html:42
+#, python-format
+msgid "%(num)d cart"
+msgid_plural "%(num)d carts"
+msgstr[0] ""
+msgstr[1] ""
 
 #: awesomeshop/templates/payment/payplug_cancel.html:21
 #: awesomeshop/templates/payment/payplug_cancel.html:23
@@ -1266,13 +1295,6 @@ msgstr ""
 #: awesomeshop/templates/shop/cart.html:61
 #: awesomeshop/templates/shop/saved_cart.html:41
 msgid "Unit:"
-msgstr ""
-
-#: awesomeshop/templates/shop/cart.html:64
-#: awesomeshop/templates/shop/cart.html:92
-#: awesomeshop/templates/shop/saved_cart.html:46
-#: awesomeshop/templates/shop/saved_cart.html:61
-msgid "Total:"
 msgstr ""
 
 #: awesomeshop/templates/shop/cart.html:76

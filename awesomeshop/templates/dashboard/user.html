@@ -61,6 +61,48 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </div>
     </div>
 </form>
+{%- if saved_carts %}
+<h2>{{ _('Saved carts') }}</h2>
+<div class="list-group">
+    {%- for cart in saved_carts %}
+    <div class="list-group">
+        {%- for line in cart.lines %}
+        <a href="{{ url_for('dashboard_product', product_id=line.product.id) }}" class="list-group-item cart-list">
+            <div class="row">
+                <div class="col-xs-8 col-md-9 col-lg-10">
+                    {{ line.product }}
+                </div>
+                <div class="col-xs-4 col-md-3 col-lg-2 text-right">
+                    {{ line.get_price_per_item().quantize('0.01').net }} {{ config.CURRENCY }}
+                    ×
+                    {{ line.available_quantity }}
+                    =
+                    <strong>
+                        {{ line.get_total().quantize('0.01').net }} {{ config.CURRENCY }}
+                    </strong>
+                </div>
+             </div>
+        </a>
+        {%- endfor %}
+        <div class="list-group-item">
+            <div class="row">
+                <div class="col-xs-6">
+                    <a href="{{ url_for('dashboard_delete_savedcart', cart_id=cart.id) }}" class="btn btn-danger">
+                        <i class="fa fa-trash"></i>
+                        {{ _('Delete') }}
+                    </a>
+                </div>
+                <div class="col-xs-6 text-right">
+                    <strong>
+                        {{ _('Total:') }} {{ cart.total_price.quantize('0.01').net }} {{ config.CURRENCY }}
+                    </strong>
+                </div>
+            </div>
+        </div>
+    </div>
+    {%- endfor %}
+</div>
+{%- endif %}
 {%- if addresses or newaddress %}
 <h2 id="addresses">{{ _('Addresses') }}</h2>
 <div class="panel panel-default">
