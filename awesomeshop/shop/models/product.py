@@ -154,14 +154,18 @@ class BaseProduct(db.Document, StockedItem):
     def stock(self):
         """How much stock is left
         
-        Must be implemented as an integer"""
+        Must be implemented as an integer
+        
+        Can equal 0 if the product is on-demand only"""
         raise NotImplementedError
 
     @property
     def stock_alert(self):
         """If the stock is lower than that many items, there may be an alert
         
-        Must be implemented as an integer"""
+        Must be implemented as an integer
+        
+        Can equal -1 if the product is on-demand only"""
         raise NotImplementedError
 
     @classmethod
@@ -194,32 +198,6 @@ class Product(BaseProduct):
                         default=0,
                         verbose_name=lazy_gettext('Stock alert')
                         )
-
-
-#class ProductModule(db.EmbeddedDocument):
-#    """A module for modular products"""
-#    reference = db.StringField(db_field='ref',
-#                               max_length=50, unique=True, required=True,
-#                               verbose_name=lazy_gettext('Reference'))
-#    name = TranslationsField(max_length=100, verbose_name=lazy_gettext('Name'))
-#    description = TranslationsField(db_field='desc',
-#                                    verbose_name=lazy_gettext('Description'))
-#    photo = db.EmbeddedDocument(Photo)
-#    purchasing_price = db.DecimalField(
-#                            db_field='pprice',
-#                            verbose_name=lazy_gettext('Purchasing price')
-#                            )
-#    gross_price = db.DecimalField(
-#                            db_field='gprice',
-#                            required=True,
-#                            verbose_name=lazy_gettext('Gross price')
-#                            )
-#    weight = db.IntField(default=0, verbose_name=lazy_gettext('Weight'))# grams
-#    stock = db.IntField(default=0, verbose_name=lazy_gettext('Stock'))
-#    stock_alert = db.IntField(db_field='alert', default=0,
-#                              verbose_name=lazy_gettext('Stock alert'))
-
-
 
 
 product_types = {
