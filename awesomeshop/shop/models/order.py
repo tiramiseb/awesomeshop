@@ -35,7 +35,7 @@ class UnknownStatus(Exception):
     pass
 
 class OrderProduct(db.EmbeddedDocument):
-    reference = db.StringField(db_field='ref', max_length=50)
+    reference = db.StringField(db_field='ref', max_length=200)
     gross_price = db.StringField(db_field='gprice')
     net_price = db.StringField(db_field='nprice')
     line_gross_price = db.StringField(db_field='lgprice')
@@ -48,8 +48,8 @@ class OrderProduct(db.EmbeddedDocument):
     on_demand = db.BooleanField(db_field='dem', default=False)
 
     @classmethod
-    def from_product(cls, product, quantity, qty_reduced=False):
-        prices = product.get_price_per_item()
+    def from_product(cls, product, quantity, data=None, qty_reduced=False):
+        prices = product.get_price_per_item(data)
         gross_price = u'{} {}'.format(prices.quantize('0.01').gross,
                                       app.config['CURRENCY'])
         net_price = u'{} {}'.format(prices.quantize('0.01').net,
@@ -61,16 +61,17 @@ class OrderProduct(db.EmbeddedDocument):
                                          app.config['CURRENCY'])
         on_demand = quantity > product.stock and product.on_demand
         return cls(
-                reference=product.reference,
+                reference=product.get_full_reference(data),
                 gross_price=gross_price,
                 net_price=net_price,
                 line_gross_price=line_gross_price,
                 line_net_price=line_net_price,
                 quantity=quantity,
                 product=product,
-                name=unicode(product),
+                name=product.get_full_name(data),
                 qty_reduced_because_of_stock=qty_reduced,
-                on_demand=on_demand
+                on_demand=on_demand,
+                data=data
                 )
 
 def next_invoice_number():

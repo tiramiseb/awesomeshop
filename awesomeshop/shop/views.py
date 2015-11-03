@@ -201,8 +201,8 @@ def confirm_order():
         p = line.product
         qty = line.quantity
         insuf_stock = p in insufficient_stock
-        order.products.append(OrderProduct.from_product(p, qty, insuf_stock))
-        p.stock -= min(line.quantity, p.stock)
+        order.products.append(OrderProduct.from_product(p, qty, line.data, insuf_stock))
+        p.remove_from_stock(line.quantity)
         p.save()
     order.set_delivery_address(delivery)
     order.set_billing_address(billing)

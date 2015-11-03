@@ -106,11 +106,6 @@ class BaseProduct(db.Document, StockedItem):
         from .url import Url
         return Url.objects(document=self).only('url').first().url
 
-    def get_price_per_item(self):
-        gross = self.gross_price
-        net = gross * ( 1 + self.tax.rate )
-        return prices.Price(net, gross)
-
     def get_stock(self):
         return self.stock
 
@@ -168,6 +163,23 @@ class BaseProduct(db.Document, StockedItem):
         Can equal -1 if the product is on-demand only"""
         raise NotImplementedError
 
+    def get_full_name(self, data):
+        """Get the product full reference, including data"""
+        raise NotImplementedError
+
+    def get_full_name(self, data):
+        """Get the product full name, including data"""
+        raise NotImplementedError
+
+    def get_price_per_item(self, data):
+        """Return a prices.Price object representing the price of this product
+        with the given data"""
+        raise NotImplementedError
+
+    def remove_from_stock(self, quantity):
+        """Remove products from stock"""
+        raise NotImplementedError
+
     @classmethod
     def remove_photos_from_disk(cls, sender, document, **kwargs):
         for p in document.photos:
@@ -199,6 +211,19 @@ class Product(BaseProduct):
                         verbose_name=lazy_gettext('Stock alert')
                         )
 
+    def remove_from_stock(self, quantity):
+        self.stock -= min(quantity, self.stock)
+
+    def get_full_reference(self, data=None):
+        return self.reference
+
+    def get_full_name(self, data=None):
+        return unicode(self)
+
+    def get_price_per_item(self, data=None):
+        gross = self.gross_price
+        net = gross * ( 1 + self.tax.rate )
+        return prices.Price(net, gross)
 
 product_types = {
         'simple': Product

@@ -32,6 +32,7 @@ from .product import BaseProduct
 class DbCartLine(db.EmbeddedDocument):
     product = db.ReferenceField(BaseProduct, db_field='prod')
     quantity = db.IntField(db_field='qty')
+    data = db.DictField()
 
     @property
     def available_quantity(self):
@@ -40,8 +41,8 @@ class DbCartLine(db.EmbeddedDocument):
         else:
             return min(self.product.stock, self.quantity)
 
-    def get_price_per_item(self):
-        return self.product.get_price_per_item()
+    def get_price_per_item(self, **kwargs):
+        return self.product.get_price(data=self.data, **kwargs)
 
     def get_total(self):
         return self.get_price_per_item() * self.available_quantity
@@ -49,8 +50,12 @@ class DbCartLine(db.EmbeddedDocument):
     def for_session(self):
         return {
             'product_id': str(self.product.id),
-            'quantity': self.available_quantity
+            'quantity': self.available_quantity,
+            'data': self.data
             }
+
+    def get_full_name(self):
+        return self.product.get_full_name(self.data)
 
 class DbCart(db.Document):
     user = db.ReferenceField(User, required=True)
@@ -96,5 +101,5 @@ class DbCart(db.Document):
     def total_price(self):
         price = prices.Price(0)
         for line in self.lines:
-            price += line.product.get_price_per_item()*line.available_quantity
+            price += line.get_total()*line.available_quantity
         return price

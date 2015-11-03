@@ -66,7 +66,8 @@ class CartLine(cart.CartLine):
         """Export data for session storage"""
         return {
             'product_id': str(self.product.id),
-            'quantity': self.quantity
+            'quantity': self.quantity,
+            'data': self.data
         }
 
     @classmethod
@@ -74,7 +75,15 @@ class CartLine(cart.CartLine):
         """Create cart from session data"""
         product = BaseProduct.objects.get(id=session_data['product_id'])
         quantity = session_data['quantity']
-        return cls(product, quantity)
+        data = session_data.get('data', None)
+        return cls(product, quantity, data)
+
+    def get_price_per_item(self, **kwargs):
+        """Get the price and give the data along"""
+        return cart.CartLine.get_price_per_item(self, data=self.data, **kwargs)
+
+    def get_full_name(self):
+        return self.product.get_full_name(self.data)
 
 class Cart(cart.Cart):
 

@@ -35,7 +35,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     </span>
                     {%- endif %}
                     </span>
-                    {{ line.product }}
+                    {{ line.get_full_name() }}
             </div>
             <div class="col-xs-4 col-md-3 col-lg-2 text-right">
                 {{ _('Unit:') }} {{ line.get_price_per_item().quantize('0.01').net }} {{ config.CURRENCY }}

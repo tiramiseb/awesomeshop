@@ -70,7 +70,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <a href="{{ url_for('dashboard_product', product_id=line.product.id) }}" class="list-group-item cart-list">
             <div class="row">
                 <div class="col-xs-8 col-md-9 col-lg-10">
-                    {{ line.product }}
+                    {{ line.get_full_name() }}
                 </div>
                 <div class="col-xs-4 col-md-3 col-lg-2 text-right">
                     {{ line.get_price_per_item().quantize('0.01').net }} {{ config.CURRENCY }}

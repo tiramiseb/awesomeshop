@@ -46,7 +46,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             <div class="list-group-item">
                 <div class="row">
                     <div class="col-sm-6">
-                        {{ line.product }}
+                        {{ line.get_full_name() }}
                     </div>
                     <div class="col-xs-4 col-sm-2 text-right">
                         {{ line.quantity }}
