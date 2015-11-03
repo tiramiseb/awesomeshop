@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  N/A\n"
 "Report-Msgid-Bugs-To: sebastien@domotego.com\n"
-"POT-Creation-Date: 2015-11-03 07:12+0100\n"
+"POT-Creation-Date: 2015-11-03 19:53+0100\n"
 "PO-Revision-Date: 2015-10-22 09:00+0200\n"
 "Last-Translator: Sebastien Maccagnoni-Munch <sebastien@domotego.com>\n"
 "Language: en\n"
@@ -211,17 +211,17 @@ msgstr "Weights"
 msgid "Tracking URL (if any) - use \"@\" in place of the number"
 msgstr "Tracking URL (if any) - use \"@\" in place of the number"
 
-#: awesomeshop/shop/cart.py:29
+#: awesomeshop/shop/cart.py:28
 msgid "In stock"
 msgstr "In stock"
 
-#: awesomeshop/shop/cart.py:32 awesomeshop/templates/skeleton.html:46
+#: awesomeshop/shop/cart.py:30 awesomeshop/templates/skeleton.html:46
 #: awesomeshop/templates/dashboard/home.html:99
 #: awesomeshop/templates/shop/product.html:101
 msgid "Out of stock"
 msgstr "Out of stock"
 
-#: awesomeshop/shop/cart.py:35
+#: awesomeshop/shop/cart.py:33
 #: awesomeshop/templates/shop/insufficient_stock.html:21
 #: awesomeshop/templates/shop/insufficient_stock.html:23
 #: awesomeshop/templates/shop/out_of_stock_before_confirmation.html:21
@@ -229,7 +229,7 @@ msgstr "Out of stock"
 msgid "Insufficient stock"
 msgstr "Insufficient stock."
 
-#: awesomeshop/shop/cart.py:38
+#: awesomeshop/shop/cart.py:35
 #, python-format
 msgid "Delay %(min)d-%(max)d days"
 msgstr "Delay %(min)d-%(max)d days"
@@ -238,47 +238,47 @@ msgstr "Delay %(min)d-%(max)d days"
 msgid "Parent"
 msgstr "Parent"
 
-#: awesomeshop/shop/models/dbcart.py:69
+#: awesomeshop/shop/models/dbcart.py:74
 msgid "Unnamed cart"
 msgstr "Unnamed cart"
 
-#: awesomeshop/shop/models/order.py:87
+#: awesomeshop/shop/models/order.py:88
 msgid "unconfirmed"
 msgstr "unconfirmed"
 
-#: awesomeshop/shop/models/order.py:92
+#: awesomeshop/shop/models/order.py:93
 msgid "awaiting payment"
 msgstr "awaiting payment"
 
-#: awesomeshop/shop/models/order.py:97
+#: awesomeshop/shop/models/order.py:98
 msgid "awaiting a response from the payment provider"
 msgstr "awaiting a response from the payment provider"
 
-#: awesomeshop/shop/models/order.py:102
+#: awesomeshop/shop/models/order.py:103
 msgid "payment received"
 msgstr "payment received"
 
-#: awesomeshop/shop/models/order.py:107
+#: awesomeshop/shop/models/order.py:108
 msgid "payment failed ({})"
 msgstr "payment failed ({})"
 
-#: awesomeshop/shop/models/order.py:112
+#: awesomeshop/shop/models/order.py:113
 msgid "in preparation"
 msgstr "in preparation"
 
-#: awesomeshop/shop/models/order.py:117
+#: awesomeshop/shop/models/order.py:118
 msgid "shipped on {}"
 msgstr "shipped on {}"
 
-#: awesomeshop/shop/models/order.py:122
+#: awesomeshop/shop/models/order.py:123
 msgid "awaiting return"
 msgstr "awaiting return"
 
-#: awesomeshop/shop/models/order.py:127
+#: awesomeshop/shop/models/order.py:128
 msgid "refund"
 msgstr "refund"
 
-#: awesomeshop/shop/models/order.py:132
+#: awesomeshop/shop/models/order.py:133
 msgid "cancelled"
 msgstr "cancelled"
 
@@ -319,33 +319,33 @@ msgstr "Is on sale"
 msgid "Related products"
 msgstr "Related products"
 
-#: awesomeshop/shop/models/product.py:175
-msgid "Simple"
-msgstr "Simple"
-
-#: awesomeshop/shop/models/product.py:178
-msgid "Purchasing price"
-msgstr "Purchasing price"
-
-#: awesomeshop/shop/models/product.py:183
-msgid "Gross price"
-msgstr "Gross price"
-
-#: awesomeshop/shop/models/product.py:185
-msgid "Weight"
-msgstr "Weight"
-
-#: awesomeshop/shop/models/product.py:189
+#: awesomeshop/shop/models/product.py:78
 #: awesomeshop/templates/dashboard/products.html:35
 msgid "On demand"
 msgstr "On demand"
 
-#: awesomeshop/shop/models/product.py:191
+#: awesomeshop/shop/models/product.py:172
+msgid "Simple"
+msgstr "Simple"
+
+#: awesomeshop/shop/models/product.py:175
+msgid "Purchasing price"
+msgstr "Purchasing price"
+
+#: awesomeshop/shop/models/product.py:180
+msgid "Gross price"
+msgstr "Gross price"
+
+#: awesomeshop/shop/models/product.py:182
+msgid "Weight"
+msgstr "Weight"
+
+#: awesomeshop/shop/models/product.py:183
 #: awesomeshop/templates/dashboard/products.html:34
 msgid "Stock"
 msgstr "Stock"
 
-#: awesomeshop/shop/models/product.py:195
+#: awesomeshop/shop/models/product.py:187
 msgid "Stock alert"
 msgstr "Stock alert"
 

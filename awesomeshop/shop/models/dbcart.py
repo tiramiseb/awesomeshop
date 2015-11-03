@@ -39,7 +39,7 @@ class DbCartLine(db.EmbeddedDocument):
         if self.product.on_demand:
             return self.quantity
         else:
-            return min(self.product.stock, self.quantity)
+            return min(self.product.get_stock(data=self.data), self.quantity)
 
     def get_price_per_item(self, **kwargs):
         return self.product.get_price(data=self.data, **kwargs)

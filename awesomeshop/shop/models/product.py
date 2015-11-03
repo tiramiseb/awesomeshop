@@ -72,6 +72,11 @@ class BaseProduct(db.Document, StockedItem):
                             db_field='rel',
                             verbose_name=lazy_gettext('Related products')
                             )
+    on_demand = db.BooleanField(
+                        db_field='dem',
+                        default=False,
+                        verbose_name=lazy_gettext('On demand')
+                        )
     meta = {
         'collection': 'product',
         'ordering': ['reference'],
@@ -106,52 +111,11 @@ class BaseProduct(db.Document, StockedItem):
         from .url import Url
         return Url.objects(document=self).only('url').first().url
 
-    def get_stock(self):
-        return self.stock
-
     @property
     def type(self):
         """Human-readable product type (for dashboard display)
         
         Must be statically implemented as a string"""
-        raise NotImplementedError
-
-    @property
-    def purchasing_price(self):
-        """The price we pay the provicer
-        
-        Must be implemented as a Decimal"""
-        raise NotImplementedError
-
-    @property
-    def gross_price(self):
-        """Gross price paid by the customers
-        
-        Must be implemented as a Decimal"""
-        raise NotImplementedError
-
-    @property
-    def weight(self):
-        """Weight of the product, for shipping
-        
-        Must be implemented as an integer"""
-        raise NotImplementedError
-
-    @property
-    def on_demand(self):
-        """When there is no stock left, is it possible to order this product
-        on demand ?
-        
-        Must be implemented as a boolean"""
-        raise NotImplementedError
-
-    @property
-    def stock(self):
-        """How much stock is left
-        
-        Must be implemented as an integer
-        
-        Can equal 0 if the product is on-demand only"""
         raise NotImplementedError
 
     @property
@@ -163,17 +127,34 @@ class BaseProduct(db.Document, StockedItem):
         Can equal -1 if the product is on-demand only"""
         raise NotImplementedError
 
-    def get_full_name(self, data):
-        """Get the product full reference, including data"""
+    def get_full_reference(self, data=None):
+        """Get the product full reference, including data
+        
+        Must return a string"""
         raise NotImplementedError
 
-    def get_full_name(self, data):
-        """Get the product full name, including data"""
+    def get_full_name(self, data=None):
+        """Get the product full name, including data
+        
+        Must return a string"""
         raise NotImplementedError
 
-    def get_price_per_item(self, data):
-        """Return a prices.Price object representing the price of this product
-        with the given data"""
+    def get_price_per_item(self, data=None):
+        """Returns the price of this product with the given data
+        
+        Must return a prices.Price object"""
+        raise NotImplementedError
+
+    def get_weight(self, data=None):
+        """Weight of the product, for shipping
+
+        Must returns an integer"""
+        raise NotImplementedError
+
+    def get_stock(self, data=None):
+        """Stock for this product
+
+        Must returns an integer"""
         raise NotImplementedError
 
     def remove_from_stock(self, quantity):
@@ -199,11 +180,6 @@ class Product(BaseProduct):
                             verbose_name=lazy_gettext('Gross price')
                             )
     weight = db.IntField(default=0, verbose_name=lazy_gettext('Weight'))# grams
-    on_demand = db.BooleanField(
-                        db_field='dem',
-                        default=False,
-                        verbose_name=lazy_gettext('On demand')
-                        )
     stock = db.IntField(default=0, verbose_name=lazy_gettext('Stock'))
     stock_alert = db.IntField(
                         db_field='alert',
@@ -224,6 +200,12 @@ class Product(BaseProduct):
         gross = self.gross_price
         net = gross * ( 1 + self.tax.rate )
         return prices.Price(net, gross)
+
+    def get_weight(self, data=None):
+        return self.weight
+
+    def get_stock(self, data=None):
+        return self.stock
 
 product_types = {
         'simple': Product

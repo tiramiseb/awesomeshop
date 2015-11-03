@@ -18,49 +18,47 @@
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 from flask import session
-from flask.ext.babel import lazy_gettext
+from flask.ext.babel import _, ngettext
 from satchless import cart
 
 from .. import app
 from .models import BaseProduct
 
+def msg_in_stock():
+    return u'<span class="text-success">{}</span>'.format(_('In stock'))
+def msg_out_of_stock():
+    return u'<span class="text-danger">{}</span>'.format(_('Out of stock'))
+def msg_insufficient_stock():
+    return u'<span class="text-danger">{}</span>'.format(
+                                                       _('Insufficient stock'))
+def msg_on_demand():
+    return u'<span class="text-info">{}</span>'.format(_(
+                                        'Delay %(min)d-%(max)d days',
+                                        min=app.config['ON_DEMAND_DELAY_MIN'],
+                                        max=app.config['ON_DEMAND_DELAY_MAX']
+                                        ))
 stock_messages = {
-        'in_stock': '<span class="text-success">{}</span>'.format(
-                lazy_gettext('In stock')
-                ),
-        'out_of_stock': '<span class="text-danger">{}</span>'.format(
-                lazy_gettext('Out of stock')
-                ),
-        'insufficient_stock': '<span class="text-danger">{}</span>'.format(
-                lazy_gettext('Insufficient stock')
-                ),
-        'on_demand': '<span class="text-info">{}</span>'.format(
-                lazy_gettext(
-                    'Delay %(min)d-%(max)d days',
-                    min=app.config['ON_DEMAND_DELAY_MIN'],
-                    max=app.config['ON_DEMAND_DELAY_MAX']
-                    )
-                )
+        'in_stock': msg_in_stock,
+        'out_of_stock': msg_out_of_stock,
+        'insufficient_stock': msg_insufficient_stock,
+        'on_demand': msg_on_demand
         }
 class CartLine(cart.CartLine):
 
     @property
-    def weight(self):
-        return self.product.weight * self.quantity
-
-    @property
     def stock_status(self):
-        if self.quantity <= self.product.stock:
+        stock = self.get_stock()
+        if self.quantity <= stock:
             return 'in_stock'
         if self.product.on_demand:
             return 'on_demand'
-        if self.product.stock > 0:
+        if stock > 0:
             return 'insufficient_stock'
         return 'out_of_stock'
 
     @property
     def stock_message(self):
-        return stock_messages[self.stock_status]
+        return stock_messages[self.stock_status]()
 
     def for_session(self):
         """Export data for session storage"""
@@ -85,6 +83,12 @@ class CartLine(cart.CartLine):
     def get_full_name(self):
         return self.product.get_full_name(self.data)
 
+    def get_stock(self):
+        return self.product.get_stock(data=self.data)
+
+    def get_weight(self):
+        return self.product.get_weight(self.data) * self.quantity
+
 class Cart(cart.Cart):
 
     def create_line(self, product, quantity, data):
@@ -104,19 +108,19 @@ class Cart(cart.Cart):
         else:
             return sum(line.quantity for line in self)
 
-    def weight(self, product=None):
+    def get_weight(self, product=None, data=None):
         """Return the products weight
 
         If "product" is None, returns total weight of the cart
         If "product" is not none, returns total weight for the product
         """
         if product:
-            line = self.get_line(product)
+            line = self.get_line(product, data)
             if line:
-                return line.weight
+                return line.get_weight()
             return 0
         else:
-            return sum(line.weight for line in self)
+            return sum(line.get_weight() for line in self)
 
     @property
     def stock_status(self):
@@ -131,7 +135,7 @@ class Cart(cart.Cart):
 
     @property
     def stock_message(self):
-        return stock_messages[self.stock_status]
+        return stock_messages[self.stock_status]()
 
     @property
     def must_recalc(self):

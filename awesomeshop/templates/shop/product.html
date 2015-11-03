@@ -69,7 +69,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <div class="well">
             <p class="price">{{ product.get_price_per_item().quantize('0.01').net }} {{ config.CURRENCY }}</p>
         <hr>
-        {%- if product.stock - cart.quantity(product) or product.on_demand %}
+        {%- if product.stock - cart.quantity(product) > 0 or product.on_demand %}
         <form method="POST" action="{{ url_for('add_to_cart') }}">
             <input type="hidden" name="product" value="{{ product.id }}">
             <div class="form-group">

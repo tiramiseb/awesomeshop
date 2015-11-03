@@ -39,6 +39,7 @@ def dashboard():
     prep_orders = Order.objects(status='preparation').order_by('number')
     awaiting_payment_orders = Order.objects(
                                   status='awaiting_payment').order_by('number')
+    # TODO Do not use directly the "stock" variable here
     out_of_stock_products = BaseProduct.objects(stock=0)
     stock_alert_products = [BaseProduct.objects.get(id=i['_id']) for i in \
             BaseProduct.objects.aggregate(

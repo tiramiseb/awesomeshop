@@ -59,7 +59,7 @@ class OrderProduct(db.EmbeddedDocument):
                                            app.config['CURRENCY'])
         line_net_price = u'{} {}'.format(line_prices.quantize('0.01').net,
                                          app.config['CURRENCY'])
-        on_demand = quantity > product.stock and product.on_demand
+        on_demand = quantity > product.get_stock(data=data) and product.on_demand
         return cls(
                 reference=product.get_full_reference(data),
                 gross_price=gross_price,
@@ -251,6 +251,7 @@ class Order(db.Document):
             # items have been removed from stock, they are not put back
             if prod.product._cls.starts_with('BaseProduct') and \
                not prod.on_demand:
+                # TODO Do not modify directly the "stock" variable
                 prod.product.stock += prod.quantity
                 prod.product.save()
 

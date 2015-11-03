@@ -164,7 +164,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         disp_recalc();
         {%- endif %}
         {%- else %}
-        if (orig < {{ line.product.stock }}) {
+        if (orig < {{ line.get_stock() }}) {
             document.getElementById('quantity_{{ line.product.id }}').value = orig + 1;
             {%- if not cart.must_recalc %}
             disp_recalc();

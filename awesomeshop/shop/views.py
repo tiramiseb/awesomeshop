@@ -86,7 +86,7 @@ def cart():
                     try: quantity = int(request.form[inputname])
                     except: continue
                     if not line.product.on_demand:
-                        quantity = min(quantity, line.product.stock)
+                        quantity = min(quantity, line.get_stock())
                     try:
                         cart.add(line.product, quantity, replace=True)
                     except InsufficientStock:
@@ -136,9 +136,9 @@ def checkout():
     # Verify quantities
     for line in cart:
         if not line.product.on_demand:
-            if line.quantity > line.product.stock:
+            if line.quantity > line.get_stock():
                 cart_modified_because_of_stock = True
-                cart.add(line.product, line.product.stock, replace=True)
+                cart.add(line.product, line.get_stock(), replace=True)
     return render_front(
                 'shop/checkout.html',
                 modes_of_payment=payment.modes,
@@ -156,12 +156,13 @@ def confirm_order():
         cart = Cart.from_session()
         for line in cart:
             p = line.product
-            if line.quantity > p.stock:
+            stock = line.get_stock()
+            if line.quantity > stock:
                 if p.on_demand:
                     on_demand_products.append(p)
                 else:
                     insufficient_stock.append(p)
-                    cart.add(p, p.stock, replace=True)
+                    cart.add(p, stock, replace=True)
         cart_total = cart.get_total().quantize('0.01')
         # Get data from the request
         delivery_id = request.form['delivery']
@@ -184,7 +185,7 @@ def confirm_order():
             billing = Address.objects.get(id=billing_id,
                                           user=current_user.to_dbref())
         carrier = Carrier.objects.get(id=carrier_id)
-        carriers = delivery.carriers(cart.weight())
+        carriers = delivery.carriers(cart.get_weight())
         for c in carriers:
             if c[0] == carrier:
                 shipping_price = c[1]
@@ -202,6 +203,7 @@ def confirm_order():
         qty = line.quantity
         insuf_stock = p in insufficient_stock
         order.products.append(OrderProduct.from_product(p, qty, line.data, insuf_stock))
+        # TODO Deal with different stock with different data
         p.remove_from_stock(line.quantity)
         p.save()
     order.set_delivery_address(delivery)

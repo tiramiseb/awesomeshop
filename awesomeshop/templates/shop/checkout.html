@@ -247,7 +247,7 @@ var addresses = {
             address: "{{ address.firstname }} {{ address.lastname }}\n{{ address.address|replace('\n','\\n')|replace('\r', '') }}\n{{ address.country }}",
             modifyurl: "{{ url_for('address_from_checkout', address_id=address.id) }}",
             carriers: [
-                {%- for carrier in address.carriers(weight=cart.weight()) %}
+                {%- for carrier in address.carriers(weight=cart.get_weight()) %}
                 {
                     name: "{{ carrier[0] }}",
                     id: "{{ carrier[0].id }}",

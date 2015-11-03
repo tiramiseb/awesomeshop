@@ -29,7 +29,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             <div class="caption">
                 <p class="text-center">{{ product }}</p>
                 <p class="text-center">{{ product.get_price_per_item().quantize('0.01').net }} {{ config.CURRENCY }}</p>
-                {%- if product.stock - cart.quantity(product) > 0 %}
+                {%- if product.get_stock() - cart.quantity(product) > 0 %}
                 <form method="POST" action="{{ url_for('add_to_cart') }}">
                     <input type="hidden" name="product" value="{{ product.id }}">
                     <input type="hidden" name="quantity" value="1">

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-11-03 07:12+0100\n"
+"POT-Creation-Date: 2015-11-03 19:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -198,17 +198,17 @@ msgstr ""
 msgid "Tracking URL (if any) - use \"@\" in place of the number"
 msgstr ""
 
-#: awesomeshop/shop/cart.py:29
+#: awesomeshop/shop/cart.py:28
 msgid "In stock"
 msgstr ""
 
-#: awesomeshop/shop/cart.py:32 awesomeshop/templates/skeleton.html:46
+#: awesomeshop/shop/cart.py:30 awesomeshop/templates/skeleton.html:46
 #: awesomeshop/templates/dashboard/home.html:99
 #: awesomeshop/templates/shop/product.html:101
 msgid "Out of stock"
 msgstr ""
 
-#: awesomeshop/shop/cart.py:35
+#: awesomeshop/shop/cart.py:33
 #: awesomeshop/templates/shop/insufficient_stock.html:21
 #: awesomeshop/templates/shop/insufficient_stock.html:23
 #: awesomeshop/templates/shop/out_of_stock_before_confirmation.html:21
@@ -216,7 +216,7 @@ msgstr ""
 msgid "Insufficient stock"
 msgstr ""
 
-#: awesomeshop/shop/cart.py:38
+#: awesomeshop/shop/cart.py:35
 #, python-format
 msgid "Delay %(min)d-%(max)d days"
 msgstr ""
@@ -225,47 +225,47 @@ msgstr ""
 msgid "Parent"
 msgstr ""
 
-#: awesomeshop/shop/models/dbcart.py:69
+#: awesomeshop/shop/models/dbcart.py:74
 msgid "Unnamed cart"
 msgstr ""
 
-#: awesomeshop/shop/models/order.py:87
+#: awesomeshop/shop/models/order.py:88
 msgid "unconfirmed"
 msgstr ""
 
-#: awesomeshop/shop/models/order.py:92
+#: awesomeshop/shop/models/order.py:93
 msgid "awaiting payment"
 msgstr ""
 
-#: awesomeshop/shop/models/order.py:97
+#: awesomeshop/shop/models/order.py:98
 msgid "awaiting a response from the payment provider"
 msgstr ""
 
-#: awesomeshop/shop/models/order.py:102
+#: awesomeshop/shop/models/order.py:103
 msgid "payment received"
 msgstr ""
 
-#: awesomeshop/shop/models/order.py:107
+#: awesomeshop/shop/models/order.py:108
 msgid "payment failed ({})"
 msgstr ""
 
-#: awesomeshop/shop/models/order.py:112
+#: awesomeshop/shop/models/order.py:113
 msgid "in preparation"
 msgstr ""
 
-#: awesomeshop/shop/models/order.py:117
+#: awesomeshop/shop/models/order.py:118
 msgid "shipped on {}"
 msgstr ""
 
-#: awesomeshop/shop/models/order.py:122
+#: awesomeshop/shop/models/order.py:123
 msgid "awaiting return"
 msgstr ""
 
-#: awesomeshop/shop/models/order.py:127
+#: awesomeshop/shop/models/order.py:128
 msgid "refund"
 msgstr ""
 
-#: awesomeshop/shop/models/order.py:132
+#: awesomeshop/shop/models/order.py:133
 msgid "cancelled"
 msgstr ""
 
@@ -306,33 +306,33 @@ msgstr ""
 msgid "Related products"
 msgstr ""
 
-#: awesomeshop/shop/models/product.py:175
-msgid "Simple"
-msgstr ""
-
-#: awesomeshop/shop/models/product.py:178
-msgid "Purchasing price"
-msgstr ""
-
-#: awesomeshop/shop/models/product.py:183
-msgid "Gross price"
-msgstr ""
-
-#: awesomeshop/shop/models/product.py:185
-msgid "Weight"
-msgstr ""
-
-#: awesomeshop/shop/models/product.py:189
+#: awesomeshop/shop/models/product.py:78
 #: awesomeshop/templates/dashboard/products.html:35
 msgid "On demand"
 msgstr ""
 
-#: awesomeshop/shop/models/product.py:191
+#: awesomeshop/shop/models/product.py:172
+msgid "Simple"
+msgstr ""
+
+#: awesomeshop/shop/models/product.py:175
+msgid "Purchasing price"
+msgstr ""
+
+#: awesomeshop/shop/models/product.py:180
+msgid "Gross price"
+msgstr ""
+
+#: awesomeshop/shop/models/product.py:182
+msgid "Weight"
+msgstr ""
+
+#: awesomeshop/shop/models/product.py:183
 #: awesomeshop/templates/dashboard/products.html:34
 msgid "Stock"
 msgstr ""
 
-#: awesomeshop/shop/models/product.py:195
+#: awesomeshop/shop/models/product.py:187
 msgid "Stock alert"
 msgstr ""
 
