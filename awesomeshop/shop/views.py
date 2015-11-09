@@ -31,12 +31,13 @@ from .cart import Cart
 @app.route('/<path:path>')
 def category_or_product(path):
     url = Url.objects.get_or_404(url=path.strip('/'))
-    if type(url.document) == Category:
-        return render_front('shop/category.html', category=url.document,
-                            active=url.document.id)
-    elif url.document._cls.startswith('BaseProduct') and url.document.on_sale:
-        return render_front('shop/product.html', product=url.document,
-                            active=url.document.category.id)
+    doc = url.document
+    if type(doc) == Category:
+        return render_front('shop/category.html', category=doc, active=doc.id)
+    else:
+        if doc.on_sale:
+            return render_front('shop/product/{}.html'.format(doc.type),
+                                product=doc, active=doc.category.id)
     abort(404)
     
 @app.route('/search')

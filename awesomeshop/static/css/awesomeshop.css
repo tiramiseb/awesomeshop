@@ -80,7 +80,7 @@ h3 {
 }
 
 /***** TEXT AREAS *****/
-textarea.large-textarea, select[multiple] {
+textarea.large-textarea, select[multiple].large-select {
     height: 20em;
 }
 

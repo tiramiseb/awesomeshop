@@ -23,7 +23,7 @@ from ... import app
 from ...rendering import admin_required, render_template
 from ...photo import Photo
 from ...page.models import Page
-from ...shop.models import BaseProduct, product_types
+from ...shop.models import BaseProduct, type_to_product
 from ..forms import get_product_form
 
 @app.route('/dashboard/products')
@@ -39,7 +39,7 @@ def dashboard_product(product_id=None, product_type=None):
     if product_id:
         prod = BaseProduct.objects.get_or_404(id=product_id)
     else:
-        prod = product_types[product_type]()
+        prod = type_to_product[product_type]()
     form = get_product_form(request.form, prod)
     form.documentation.queryset = Page.objects(pagetype='doc')
     if form.validate_on_submit():
@@ -51,8 +51,8 @@ def dashboard_product(product_id=None, product_type=None):
         else:
             # For a new product, open the product page
             return redirect(url_for('dashboard_product', product_id=prod.id))
-    return render_template('dashboard/product.html', product=prod,
-                           form=form, photos=prod.photos)
+    return render_template('dashboard/product/{}.html'.format(prod.type),
+                           product=prod, form=form, photos=prod.photos)
 
 
 @app.route('/dashboard/product-<product_id>/remove')

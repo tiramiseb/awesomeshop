@@ -1,3 +1,4 @@
+
 {#
 Copyright 2015 Sébastien Maccagnoni-Munch
 
@@ -60,6 +61,8 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     </div>
                     <div class="panel-body page-content">
                         <p>{{ product.output_description|safe }}</p>
+                        <hr>
+                        <p>{{ _('Reference:') }} <i>{{ product.reference }}</i></p>
                     </div>
                 </div>
             </div>
@@ -67,43 +70,15 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     </div>
     <div class="col-xs-5 col-md-4 col-lg-3">
         <div class="well">
-            <p class="price">{{ product.get_price_per_item().quantize('0.01').net }} {{ config.CURRENCY }}</p>
-        <hr>
-        {%- if product.stock - cart.quantity(product) > 0 or product.on_demand %}
-        <form method="POST" action="{{ url_for('add_to_cart') }}">
-            <input type="hidden" name="product" value="{{ product.id }}">
-            <div class="form-group">
-                <label for="quantity">{{ _('Quantity') }}</label>
-                <div class="input-group">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" id="dec_quantity">-</button>
-                    </span>
-                    <input type="text" id="quantity" name="quantity" class="form-control text-center" value="1">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" id="inc_quantity">+</button>
-                    </span>
-                </div>
-            </div>
-            <div id="quantity-message" class="alert alert-danger hidden">{{ _('Sorry, insufficient stock.') }}</div>
-            {%- if product.stock - cart.quantity(product) > 0 %}
-            <button id="add-to-cart" class="btn btn-success btn-lg btn-wrap btn-block">
-                {{ _('Add to cart') }}
-            </button>
-            {%- else %}
-            <button id="add-to-cart" class="btn btn-info btn-lg btn-wrap btn-block">
-                {{ _('Add to cart') }}
-            </button>
-            <p class="text-center bottom-no-space">{{ _('Available on demand, delay %(min)d-%(max)d days', min=config.ON_DEMAND_DELAY_MIN, max=config.ON_DEMAND_DELAY_MAX) }}</p>
-            {%- endif %}
-        </form>
-        {%- else -%}
-        <button class="btn btn-danger btn-lg btn-block disabled">
-            {{ _('Out of stock') }}
-        </button>
-        {%- endif %}
+            <p class="price">{% block price %}{% endblock %} {{ config.CURRENCY }}</p>
+            <hr>
+            {% block add_to_cart %}
+            {%- endblock %}
         </div>
     </div>
 </div>
+{% block details %}
+{%- endblock %}
 {%- if product.related_products %}
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -128,47 +103,4 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         {{ product.output_documentation|safe }}
     </div>
 </div>
-<div id="alert-overlay" class="hidden" onclick="this.className='hidden';">
-    <div class="overlay">
-    </div>
-    <div class="alert alert-danger overlay-content">
-        <i class="fa fa-exclamation-triangle"></i>
-        <span class="sr-only">{{ _('Warning:') }}</span>
-        {{ _('Sorry, insufficient stock.') }}
-    </div>
-</div>
-<div id="image-overlay" class="hidden" onclick="this.className='hidden';">
-    <div class="overlay">
-    </div>
-    <div id="overlay-image-container">
-        <img src="" id="overlay-image">
-    </div>
-</div>
-<script>
-    function display(img_url) {
-        document.getElementById("overlay-image").src = img_url;
-        document.getElementById("image-overlay").className = "";
-    };
-    document.getElementById('inc_quantity').addEventListener('click', function(e) {
-        e.preventDefault();
-        var orig = parseInt(document.getElementById('quantity').value);
-        {%- if product.on_demand %}
-        document.getElementById('quantity').value = orig + 1;
-        {%- else %}
-        if (orig < {{ product.stock - cart.quantity(product) }}) {
-            document.getElementById('quantity').value = orig + 1;
-        } else {
-            document.getElementById("alert-overlay").className = "";
-        };
-        {%- endif %}
-    });
-    document.getElementById('dec_quantity').addEventListener('click', function(e) {
-        e.preventDefault();
-        var orig = parseInt(document.getElementById('quantity').value);
-        if (orig > 1) {
-            document.getElementById('quantity').value = orig - 1;
-        };
-    });
-</script>
 {%- endblock %}
-

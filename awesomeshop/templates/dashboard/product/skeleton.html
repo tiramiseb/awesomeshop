@@ -1,3 +1,4 @@
+
 {#
 Copyright 2015 Sébastien Maccagnoni-Munch
 
@@ -17,9 +18,8 @@ You should have received a copy of the GNU Affero General Public License
 along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
 {% extends "dashboard/skeleton.html" %}
-
-
 {% block title %}{{ _('Dashboard') }} - {{ _('Product') }}{% endblock %}
+
 {% block content %}
 <h1>{% if form.slug.data %}{{ form.slug.data }} {% if product.id %}<small><a href="/{{ product.url }}" target="_blank">({{ _('see in the shop') }})</a></small>{% endif %}{% else %}{{ _('New product') }}{% endif %}</h1>
 
@@ -41,68 +41,30 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     {{ forminput(form.documentation) }}
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">{{ _('Price') }}</div>
-        <div class="panel-body">
             <div class="row">
-                <div class="col-sm-3 col-xs-6">
-                    {{ forminput(form.purchasing_price, after=config.CURRENCY) }}
-                </div>
-                <div class="col-sm-3 col-xs-6">
-                    {{ forminput(form.gross_price, after=config.CURRENCY) }}
-                </div>
-                <div class="col-sm-3 col-xs-6">
-                    {{ forminput(form.tax) }}
-                </div>
-                <div class="col-sm-3 col-xs-6">
-                    {{ _('Net:') }}<br>
-                    {% if product.tax -%}
-                    {{ product.get_price_per_item().quantize('0.01').net }} {{ config.CURRENCY }}
-                    {%- else -%}
-                    ?
-                    {%- endif %}
-                   </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">{{ _('Stock and shipping') }}</div>
-                <div class="panel-body">
+                <div class="col-md-6">
                     <div class="row">
-                        <div class="col-xs-6">
-                            {{ forminput(form.stock) }}
+                        <div class="col-md-6">
+                            {{ forminput(form.keywords) }}
+                            {{ forminput(form.tax) }}
                         </div>
-                        <div class="col-xs-6">
-                            {{ forminput(form.stock_alert) }}
-                        </div>
-                        <div class="col-xs-6">
-                            {{ forminput(form.weight, after='g') }}
-                        </div>
-                        <div class="col-xs-6">
-                            <div class="checkbox">
-                                <label>
-                                    {{ form.on_demand }}
-                                    {{ _('On demand if out of stock') }}
-                                </label>
-                            </div>
+                        <div class="col-md-6">
                             <div class="checkbox">
                                 <label>
                                     {{ form.on_sale }}
                                     {{ _('Is on sale') }}
                                 </label>
                             </div>
+                            <div class="checkbox">
+                                <label>
+                                    {{ form.on_demand }}
+                                    {{ _('On demand if out of stock') }}
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="panel panel-default">
-                <div class="panel-body">
+                <div class="col-md-6">
                     {{ forminput(form.related_products) }}
                 </div>
             </div>
@@ -114,11 +76,13 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             {%- for l in config.LANGS %}
             <div class="col-sm-6">
                 {{ forminput(form.name.entries[l]) }}
-                {{ forminput(form.description.entries[l], class='large-textarea') }}
+                {{ forminput(form.description.entries[l]) }}
             </div>
             {%- endfor %}
         </div>
     </div>
+{%- block specific %}
+{%- endblock %}
     <div class="form-group text-right">
         <div class="btn-group">
             <button type="submit" class="btn btn-success">

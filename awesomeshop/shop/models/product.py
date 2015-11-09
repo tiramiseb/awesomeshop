@@ -113,6 +113,10 @@ class BaseProduct(db.Document, StockedItem):
 
     @property
     def type(self):
+        return product_to_type[self.__class__]
+
+    @property
+    def human_type(self):
         """Human-readable product type (for dashboard display)
         
         Must be statically implemented as a string"""
@@ -169,7 +173,7 @@ class BaseProduct(db.Document, StockedItem):
 
 
 class Product(BaseProduct):
-    type = lazy_gettext('Simple')
+    human_type = lazy_gettext('Simple')
     purchasing_price = db.DecimalField(
                             db_field='pprice',
                             verbose_name=lazy_gettext('Purchasing price')
@@ -207,6 +211,12 @@ class Product(BaseProduct):
     def get_stock(self, data=None):
         return self.stock
 
-product_types = {
-        'simple': Product
-        }
+product_types = (
+    ('simple', Product),
+    )
+
+type_to_product = {}
+product_to_type = {}
+for a, b in product_types:
+    type_to_product[a] = b
+    product_to_type[b] = a
