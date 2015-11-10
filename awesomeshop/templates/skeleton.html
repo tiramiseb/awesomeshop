@@ -132,6 +132,9 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     {{ _('Categories') }}
                 </div>
                 <div class="list-group">
+                    <a href="{{ url_for('new_products') }}" class="list-group-item">
+                        {{ _('New products') }}
+                    </a>
                     {{- categories_rows(categories, level=0) }}
                 </div>
             </div>

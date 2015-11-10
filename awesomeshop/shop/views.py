@@ -39,6 +39,11 @@ def category_or_product(path):
             return render_front('shop/product/{}.html'.format(doc.type),
                                 product=doc, active=doc.category.id)
     abort(404)
+
+@app.route('/new')
+def new_products():
+    products = BaseProduct.objects.order_by('-created_at').limit(12)
+    return render_front('shop/new_products.html', products=products)
     
 @app.route('/search')
 def search():
