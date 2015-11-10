@@ -28,8 +28,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <div class="list-group-item cart-list">
             <div class="row">
                 <div class="col-xs-6 col-sm-4 col-md-6 col-lg-7">
-                    <a href="{{ line.product.url }}">
-                        <span class="hidden-xs hidden-sm">
+                    <a href="{{ line.product.url }}" class="hidden-xs hidden-sm pull-left">
                         {%- if line.product.photos %}
                         <img class="cart-illustration" src="{{ line.product.photos[0].thumbnail_url }}">
                         {%- else -%}
@@ -37,9 +36,14 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                             <i class="fa fa-ban"></i>
                         </span>
                         {%- endif %}
-                        </span>
-                        {{ line.get_full_name() }}
                     </a>
+                        <a href="{{ line.product.url }}">
+                            {{ line.get_full_name() }}
+                        </a>
+                        {%- if line.stock_status == 'on_demand' and line.get_stock() > 0%}
+                        <br>
+                        ({{ _('for an immediate shipping, buy %(num)d or less', num=line.get_stock()) }})
+                        {%- endif %}
                 </div>
                 <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
                     <input type="text" id="quantity_{{ line.product.id }}" name="quantity_{{ line.product.id }}" class="form-control text-center cart-quantity" value="{{ line.quantity }}">

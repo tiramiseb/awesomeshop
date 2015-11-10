@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  N/A\n"
 "Report-Msgid-Bugs-To: sebastien@domotego.com\n"
-"POT-Creation-Date: 2015-11-10 08:21+0100\n"
-"PO-Revision-Date: 2015-10-22 09:00+0200\n"
+"POT-Creation-Date: 2015-11-10 09:09+0100\n"
+"PO-Revision-Date: 2015-11-10 09:10+0100\n"
 "Last-Translator: Sebastien Maccagnoni-Munch <sebastien@domotego.com>\n"
 "Language: fr\n"
 "Language-Team: Sébastien Maccagnoni-Munch <sebastien@domotego.com>\n"
@@ -324,28 +324,28 @@ msgstr "Produits liés"
 msgid "On demand"
 msgstr "Sur commande"
 
-#: awesomeshop/shop/models/product.py:176
+#: awesomeshop/shop/models/product.py:177
 msgid "Simple"
 msgstr "Simple"
 
-#: awesomeshop/shop/models/product.py:179
+#: awesomeshop/shop/models/product.py:180
 msgid "Purchasing price"
 msgstr "Prix d'achat"
 
-#: awesomeshop/shop/models/product.py:184
+#: awesomeshop/shop/models/product.py:185
 msgid "Gross price"
 msgstr "Prix brut"
 
-#: awesomeshop/shop/models/product.py:186
+#: awesomeshop/shop/models/product.py:187
 msgid "Weight"
 msgstr "Poids"
 
-#: awesomeshop/shop/models/product.py:187
+#: awesomeshop/shop/models/product.py:188
 #: awesomeshop/templates/dashboard/products.html:34
 msgid "Stock"
 msgstr "Stock"
 
-#: awesomeshop/shop/models/product.py:191
+#: awesomeshop/shop/models/product.py:192
 msgid "Stock alert"
 msgstr "Alerte sur le stock"
 
@@ -1181,8 +1181,8 @@ msgid "Delete"
 msgstr "Supprimer"
 
 #: awesomeshop/templates/dashboard/user.html:97
-#: awesomeshop/templates/shop/cart.html:64
-#: awesomeshop/templates/shop/cart.html:92
+#: awesomeshop/templates/shop/cart.html:68
+#: awesomeshop/templates/shop/cart.html:96
 #: awesomeshop/templates/shop/saved_cart.html:46
 #: awesomeshop/templates/shop/saved_cart.html:61
 msgid "Total:"
@@ -1322,23 +1322,28 @@ msgstr "Feuille de styles spécifique à la boutique"
 msgid "My Cart"
 msgstr "Mon panier"
 
-#: awesomeshop/templates/shop/cart.html:61
+#: awesomeshop/templates/shop/cart.html:45
+#, python-format
+msgid "for an immediate shipping, buy %(num)d or less"
+msgstr "pour une livraison sans délai, achetez-en %(num)d ou moins"
+
+#: awesomeshop/templates/shop/cart.html:65
 #: awesomeshop/templates/shop/saved_cart.html:41
 msgid "Unit:"
 msgstr "PU :"
 
-#: awesomeshop/templates/shop/cart.html:76
-#: awesomeshop/templates/shop/cart.html:85
+#: awesomeshop/templates/shop/cart.html:80
+#: awesomeshop/templates/shop/cart.html:89
 #: awesomeshop/templates/shop/saved_cart.html:56
 msgid "Recalculate"
 msgstr "Recalculer"
 
-#: awesomeshop/templates/shop/cart.html:95
+#: awesomeshop/templates/shop/cart.html:99
 #: awesomeshop/templates/shop/saved_cart.html:64
 msgid "+ shipping fee"
 msgstr "+ frais de livraison"
 
-#: awesomeshop/templates/shop/cart.html:98
+#: awesomeshop/templates/shop/cart.html:102
 #: awesomeshop/templates/shop/checkout.html:241
 #: awesomeshop/templates/shop/confirm.html:154
 #: awesomeshop/templates/shop/order.html:184
@@ -1346,36 +1351,36 @@ msgstr "+ frais de livraison"
 msgid "TVA non applicable, article 293 B du Code général des impôts"
 msgstr "TVA non applicable, article 293 B du Code général des impôts"
 
-#: awesomeshop/templates/shop/cart.html:107
+#: awesomeshop/templates/shop/cart.html:111
 #, python-format
 msgid "Cart has been saved (%(name)s)"
 msgstr "Le panier a été enregistré (%(name)s)"
 
-#: awesomeshop/templates/shop/cart.html:111
-#: awesomeshop/templates/shop/cart.html:123
+#: awesomeshop/templates/shop/cart.html:115
+#: awesomeshop/templates/shop/cart.html:127
 msgid "Empty cart"
 msgstr "Vider le panier"
 
-#: awesomeshop/templates/shop/cart.html:115
+#: awesomeshop/templates/shop/cart.html:119
 msgid "Cart name"
 msgstr "Nom du panier"
 
-#: awesomeshop/templates/shop/cart.html:119
+#: awesomeshop/templates/shop/cart.html:123
 msgid "Save cart"
 msgstr "Enregistrer le panier"
 
-#: awesomeshop/templates/shop/cart.html:131
+#: awesomeshop/templates/shop/cart.html:135
 msgid "Proceed to checkout"
 msgstr "Commander"
 
-#: awesomeshop/templates/shop/cart.html:146
+#: awesomeshop/templates/shop/cart.html:150
 #: awesomeshop/templates/shop/insufficient_stock.html:26
 #: awesomeshop/templates/shop/product/simple.html:38
 #: awesomeshop/templates/shop/product/simple.html:64
 msgid "Sorry, insufficient stock."
 msgstr "Désolé, stock insuffisant."
 
-#: awesomeshop/templates/shop/cart.html:193
+#: awesomeshop/templates/shop/cart.html:197
 #: awesomeshop/templates/shop/checkout.html:402
 msgid "Your cart is empty!"
 msgstr "Votre panier est vide !"
