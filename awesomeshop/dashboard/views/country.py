@@ -42,7 +42,7 @@ def dashboard_country(country_id=None):
     if form.validate_on_submit():
         form.populate_obj(c)
         c.save()
-        return redirect(url_for('dashboard_countries'))
+        return redirect(url_for('dashboard_country', country_id=c.id))
     return render_template('dashboard/country.html', form=form)
 
 @app.route('/dashboard/country-<country_id>/remove')
@@ -70,7 +70,8 @@ def dashboard_countries_group(countries_group_id=None):
     if form.validate_on_submit():
         form.populate_obj(c)
         c.save()
-        return redirect(url_for('dashboard_countries_groups'))
+        return redirect(url_for('dashboard_countries_group',
+                                countries_group_id=c.id))
     return render_template('dashboard/countries_group.html', form=form)
 
 @app.route('/dashboard/countries_group-<countries_group_id>/remove')

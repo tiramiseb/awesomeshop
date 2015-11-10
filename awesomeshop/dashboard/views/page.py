@@ -49,8 +49,17 @@ def dashboard_page(pagetype, page_id=None):
         form.populate_obj(page)
         page.pagetype = pagetype
         page.save()
-        return redirect(url_for('dashboard_pages', pagetype=pagetype))
-    return render_template('dashboard/page.html', page=page, form=form, pagetype=pagetype)
+        return redirect(url_for(
+                            'dashboard_page',
+                            pagetype=pagetype,
+                            page_id=page.id
+                            ))
+    return render_template(
+                    'dashboard/page.html',
+                    page=page,
+                    form=form,
+                    pagetype=pagetype
+                    )
 
 
 @app.route('/dashboard/page/<pagetype>/<page_id>/remove')

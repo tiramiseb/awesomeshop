@@ -46,8 +46,3 @@ def dashboard_change_order_status(order_number, status):
     order.save()
     return redirect(url_for('dashboard_order', order_number=order_number))
 
-#@app.route('/dashboard/order-<category_id>/remove')
-#@admin_required
-#def dashboard_remove_order(category_id):
-#    Order.objects(id=order_id).delete()
-#    return redirect(url_for('dashboard_orders'))

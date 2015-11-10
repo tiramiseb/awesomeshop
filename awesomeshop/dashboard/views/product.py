@@ -45,12 +45,7 @@ def dashboard_product(product_id=None, product_type=None):
     if form.validate_on_submit():
         form.populate_obj(prod)
         prod.save()
-        if product_id:
-            # For an existing product, go back to the products list
-            return redirect(url_for('dashboard_products'))
-        else:
-            # For a new product, open the product page
-            return redirect(url_for('dashboard_product', product_id=prod.id))
+        return redirect(url_for('dashboard_product', product_id=prod.id))
     return render_template('dashboard/product/{}.html'.format(prod.type),
                            product=prod, form=form, photos=prod.photos)
 

@@ -42,7 +42,7 @@ def dashboard_category(category_id=None):
     if form.validate_on_submit():
         form.populate_obj(cat)
         cat.save()
-        return redirect(url_for('dashboard_categories'))
+        return redirect(url_for('dashboard_category', category_id=cat.id))
     return render_template('dashboard/category.html', form=form)
 
 

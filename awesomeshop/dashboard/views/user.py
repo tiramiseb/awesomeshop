@@ -67,11 +67,7 @@ def dashboard_user(user_id=None):
         if form.password.data:
             user.set_password(form.password.data)
         user.save()
-        if user_id:
-            return redirect(url_for('dashboard_users'))
-        else:
-            return redirect(url_for('dashboard_user', user_id=user.id))
-
+        return redirect(url_for('dashboard_user', user_id=user.id))
     return render_template('dashboard/user.html', user_id=user_id,
                                                   form=form,
                                                   addresses=addresses,
