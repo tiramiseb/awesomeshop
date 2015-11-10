@@ -43,7 +43,7 @@ def dashboard_category(category_id=None):
         form.populate_obj(cat)
         cat.save()
         return redirect(url_for('dashboard_category', category_id=cat.id))
-    return render_template('dashboard/category.html', form=form)
+    return render_template('dashboard/category.html', form=form, category=cat)
 
 
 @app.route('/dashboard/category-<category_id>/remove')

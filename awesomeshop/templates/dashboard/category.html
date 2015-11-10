@@ -20,7 +20,17 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 {% block title %}{{ _('Dashboard') }} - {{ _('Category') }}{% endblock %}
 {% block content %}
-<h1>{% if form.slug.data %}{{ form.slug.data }}{% else %}{{ _('New category') }}{% endif %}</h1>
+<h1>
+    {%- if category.slug %}
+    {{ category.slug }}
+    <a href="/{{ category.url }}" class="btn btn-primary btn-sm" target="_blank">
+        <i class="fa fa-search"></i>
+        {{ _('see in the shop') }}
+    </a>
+    {%- else %}
+    {{ _('New category') }}
+    {%- endif %}
+</h1>
 <form method="POST">
     {{ form.hidden_tag() }}
     <div class="panel panel-default">

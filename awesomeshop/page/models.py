@@ -78,6 +78,10 @@ class Page(db.Document):
         from ..shop.models import BaseProduct
         return BaseProduct.objects(documentation=self)
 
+    @property
+    def url(self):
+        return '{}/{}'.format(self.pagetype, self.slug)
+
     @classmethod
     def remove_photos_from_disk(cls, sender, document, **kwargs):
         for p in document.photos:

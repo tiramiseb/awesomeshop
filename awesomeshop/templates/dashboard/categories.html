@@ -26,6 +26,9 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </td>
         <td>
             <div class="btn-group pull-right">
+                <a class="btn btn-primary" href="/{{ category[0].url }}" target="_blank">
+                    <i class="fa fa-search"></i>
+                </a>
                 <a class="btn btn-success" href="{{ url_for('dashboard_category', category_id=category[0].id) }}">
                     <i class="fa fa-pencil"></i>
                 </a>
