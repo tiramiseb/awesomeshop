@@ -25,14 +25,12 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     <div class="col-md-6">
         <div class="panel panel-default">
             <div class="panel-body">
+                <div class="text-right">
+                    <a href="{{ url_for('order', order_number=order.number) }}" class="btn btn-primary" target="_blank">
+                        {{ _("View the customer's (printable) version") }}
+                    </a>
+                </div>
                 <table>
-                    <tr>
-                        <td colspan="2">
-                            <a href="{{ url_for('order', order_number=order.number) }}" target="_blank">
-                                {{ _("View the customer's (printable) version") }}
-                            </a>
-                        </td>
-                    </tr>
                     <tr>
                         <td>{{ _('Customer') }}</td>
                         <td>{% if order.customer.email %}{{ order.customer }}{% else %}{{ _('Deleted user') }}{% endif %}</td>
