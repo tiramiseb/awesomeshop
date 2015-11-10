@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
+import docutils
 from flask.ext.babel import lazy_gettext
 
 from ... import db, get_locale
@@ -39,6 +40,7 @@ class Category(db.Document):
     parent = db.ReferenceField('self', verbose_name=lazy_gettext('Parent'),
                                reverse_delete_rule=db.DENY)
     name = TranslationsField(max_length=50)
+    description = TranslationsField()
 
     meta = {
         'ordering': ['rank']
@@ -47,6 +49,17 @@ class Category(db.Document):
     @property
     def short_name(self):
         return self.name.get(get_locale(), u'')
+
+    @property
+    def output_description(self):
+        desc = self.description.get(get_locale(), u'')
+        if desc:
+            parts = docutils.core.publish_parts(source=desc,writer_name='html')
+            return parts['body']
+        elif self.parent:
+            return self.parent.output_description
+        return u''
+
 
     @property
     def url(self):

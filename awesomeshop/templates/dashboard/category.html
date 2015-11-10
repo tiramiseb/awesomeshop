@@ -42,6 +42,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 {%- for l in config.LANGS %}
                 <div class="col-sm-6">
                     {{ forminput(form.name.entries[l]) }}
+                    {{ forminput(form.description.entries[l]) }}
                 </div>
                 {%- endfor %}
             </div>

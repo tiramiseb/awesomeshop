@@ -21,6 +21,13 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {% block title %}{{ category }}{% endblock %}
 {% block content %}
 <h1>{{ category.short_name }}</h1>
+{%- if category.output_description %}
+<div class="panel panel-default">
+    <div class="panel-body">
+        {{ category.output_description|safe }}
+    </div>
+</div>
+{%- endif %}
 <div class="row">
 {{- products_grid(category.onsale_products_recursive) }}
 </div>
