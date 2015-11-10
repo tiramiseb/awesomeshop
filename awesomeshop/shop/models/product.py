@@ -122,15 +122,6 @@ class BaseProduct(db.Document, StockedItem):
         Must be statically implemented as a string"""
         raise NotImplementedError
 
-    @property
-    def stock_alert(self):
-        """If the stock is lower than that many items, there may be an alert
-        
-        Must be implemented as an integer
-        
-        Can equal -1 if the product is on-demand only"""
-        raise NotImplementedError
-
     def get_full_reference(self, data=None):
         """Get the product full reference, including data
         
@@ -160,6 +151,16 @@ class BaseProduct(db.Document, StockedItem):
 
         Must returns an integer"""
         raise NotImplementedError
+
+    def too_few_in_stock(self, data=None):
+        """Return True if this product should be restocked"""
+        raise NotImplementedError
+
+    def out_of_stock(self, data=None):
+        """Return True if the product is out of stock
+        
+        (may be overriden)"""
+        return self.get_stock(data) == 0
 
     def remove_from_stock(self, quantity):
         """Remove products from stock"""
@@ -210,6 +211,9 @@ class Product(BaseProduct):
 
     def get_stock(self, data=None):
         return self.stock
+
+    def too_few_in_stock(self, data=None):
+        return self.stock <= self.stock_alert and self.stock > 0
 
 product_types = (
     ('simple', Product),

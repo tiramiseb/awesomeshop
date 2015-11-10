@@ -39,17 +39,10 @@ def dashboard():
     prep_orders = Order.objects(status='preparation').order_by('number')
     awaiting_payment_orders = Order.objects(
                                   status='awaiting_payment').order_by('number')
-    # TODO Do not use directly the "stock" variable here
-    out_of_stock_products = BaseProduct.objects(stock=0)
-    stock_alert_products = [BaseProduct.objects.get(id=i['_id']) for i in \
-            BaseProduct.objects.aggregate(
-                {'$project': {
-                    'below_alert': {'$lte': ['$stock', '$alert']},
-                    'stock': True
-                    }
-                },
-                {'$match':{'below_alert': True, 'stock': {'$gt': 0}}}
-                )]
+    out_of_stock_products = [ p for p in BaseProduct.objects \
+                              if p.out_of_stock() ]
+    stock_alert_products = [ p for p in BaseProduct.objects \
+                             if p.too_few_in_stock() ]
     saved_carts = DbCart.objects
     return render_template(
                         'dashboard/home.html',
