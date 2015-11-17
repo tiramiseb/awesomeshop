@@ -141,7 +141,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         {%- endif %}
     </div>
 </form>
-<div id="alert-overlay" class="hidden" onclick="this.className='hidden';">
+<div id="overlay" class="hidden" onclick="this.className='hidden';">
     <div class="overlay">
     </div>
     <div class="alert alert-danger overlay-content">
@@ -174,7 +174,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             disp_recalc();
             {%- endif %}
         } else {
-            document.getElementById("alert-overlay").className = "";
+            document.getElementById("overlay").className = "";
         }
         {%- endif %}
     });

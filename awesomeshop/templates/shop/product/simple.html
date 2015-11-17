@@ -55,7 +55,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {%- endblock %}
 
 {% block details %}
-<div id="alert-overlay" class="hidden" onclick="this.className='hidden';">
+<div id="overlay" class="hidden" onclick="this.className='hidden';">
     <div class="overlay">
     </div>
     <div class="alert alert-danger overlay-content">
@@ -85,7 +85,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         if (orig < {{ product.stock - cart.quantity(product) }}) {
             document.getElementById('quantity').value = orig + 1;
         } else {
-            document.getElementById("alert-overlay").className = "";
+            document.getElementById("overlay").className = "";
         };
         {%- endif %}
     });
