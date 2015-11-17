@@ -37,6 +37,10 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     {{ _('See the shop') }}</a>
             </li>
             <li>{{ _('Day-to-day') }}</li>
+            <li><a href="{{ url_for('dashboard_orders') }}">
+                    <i class="fa fa-shopping-cart"></i>
+                    {{ _('Orders') }}</a>
+            </li>
             <li><a href="{{ url_for('dashboard_products') }}">
                     <i class="fa fa-cubes"></i>
                     {{ _('Products') }}
@@ -44,10 +48,6 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             <li><a href="{{ url_for('dashboard_categories') }}">
                     <i class="fa fa-th-list"></i>
                     {{ _('Categories') }}</a>
-            </li>
-            <li><a href="{{ url_for('dashboard_orders') }}">
-                    <i class="fa fa-shopping-cart"></i>
-                    {{ _('Orders') }}</a>
             </li>
             <li><a href="{{ url_for('dashboard_pages', pagetype='doc') }}">
                     <i class="fa fa-file-text"></i>
