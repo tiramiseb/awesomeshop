@@ -38,12 +38,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             </div>
             <div class="row">
                 <div class="col-sm-6">
-                    <div class="checkbox">
-                        <label>
-                            {{ form.is_admin }}
-                            {{ _('Is an administrator') }}
-                        </label>
-                    </div>
+                    {{ forminput(form.is_admin) }}
                 </div>
                 <div class="col-sm-6">
                     <div class="btn-group pull-right">

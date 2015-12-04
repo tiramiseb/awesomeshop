@@ -75,7 +75,7 @@ class BaseProduct(db.Document, StockedItem):
     on_demand = db.BooleanField(
                         db_field='dem',
                         default=False,
-                        verbose_name=lazy_gettext('On demand')
+                        verbose_name=lazy_gettext('On demand if out of stock')
                         )
     meta = {
         'collection': 'product',
@@ -174,6 +174,7 @@ class BaseProduct(db.Document, StockedItem):
 
 
 class Product(BaseProduct):
+    """Basic products, with no option and no variants"""
     human_type = lazy_gettext('Simple')
     purchasing_price = db.DecimalField(
                             db_field='pprice',

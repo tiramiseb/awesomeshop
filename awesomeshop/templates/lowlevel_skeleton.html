@@ -17,6 +17,14 @@ You should have received a copy of the GNU Affero General Public License
 along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
 {%- macro forminput(field, after=None, class=None) -%}
+{%- if field.type == 'BooleanField' %}
+<div class="checkbox">
+    <label>
+        {{ field }}
+        {{ field.label.text }}
+    </label>
+</div>
+{%- else %}
 <div class="form-group{% if field.errors %} has-error{% endif %}">
     {{- field.label(class='control-label') }}
     {%- for e in field.errors -%}
@@ -34,6 +42,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     <span class="input-group-addon">{{ after }}</span></div>
     {%- endif -%}
 </div>
+{%- endif %}
 {%- endmacro %}
 {%- macro formsubmit(message, icon) -%}
 <div class="form-group"><button type="submit" class="btn btn-success form-control"><i class="fa fa-{{ icon }}"></i> {{ message }}</button></div>

@@ -58,18 +58,8 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                             {{ forminput(form.tax) }}
                         </div>
                         <div class="col-md-6">
-                            <div class="checkbox">
-                                <label>
-                                    {{ form.on_sale }}
-                                    {{ _('Is on sale') }}
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    {{ form.on_demand }}
-                                    {{ _('On demand if out of stock') }}
-                                </label>
-                            </div>
+                            {{ forminput(form.on_sale) }}
+                            {{ forminput(form.on_demand) }}
                         </div>
                     </div>
                 </div>
