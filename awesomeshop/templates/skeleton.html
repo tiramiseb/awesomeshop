@@ -66,7 +66,9 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                         {%- if c[0].nb_products %}
                         <span class="badge">{{ c[0].nb_products }}</span>
                         {%- endif %}
-                        <span class="category_hierarchy_{{ level }}">{{ c[0].short_name }}</span>
+                        <span class="category_hierarchy_{{ level }}">
+                            {{ c[0].short_name }}
+                        </span>
                     </a>
                     {{- categories_rows(c[1], level=level+1) }}
                     {%- endfor %}
@@ -133,7 +135,9 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 </div>
                 <div class="list-group">
                     <a href="{{ url_for('new_products') }}" class="list-group-item">
-                        {{ _('New products') }}
+                        <span class="category_hierarchy_0">
+                            {{ _('New products') }}
+                        </span>
                     </a>
                     {{- categories_rows(categories, level=0) }}
                 </div>
