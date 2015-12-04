@@ -32,7 +32,8 @@ from .shop.models import Url
 
 def add_product_cls():
     products = BaseProduct._get_collection()
-    products.update_many({'_cls': None}, {'$set': {'_cls': 'BaseProduct.Product'}})
+    products.update_many({'_cls': None},
+                         {'$set': {'_cls': 'BaseProduct.Product'}})
     urls = Url._get_collection()
     urls.update_many(
             {'doc._cls': 'Product'},
