@@ -30,7 +30,8 @@ from ..forms import get_product_form
 @admin_required
 def dashboard_products():
     return render_template('dashboard/products.html',
-                           products=BaseProduct.objects)
+                           products=BaseProduct.objects,
+                           product_types=type_to_product)
 
 @app.route('/dashboard/new-<product_type>-product', methods=['GET', 'POST'])
 @app.route('/dashboard/product-<product_id>', methods=['GET', 'POST'])
@@ -47,7 +48,8 @@ def dashboard_product(product_id=None, product_type=None):
         prod.save()
         return redirect(url_for('dashboard_product', product_id=prod.id))
     return render_template('dashboard/product/{}.html'.format(prod.type),
-                           product=prod, form=form, photos=prod.photos)
+                           product=prod, form=form, photos=prod.photos,
+                           all_products=BaseProduct.objects)
 
 
 @app.route('/dashboard/product-<product_id>/remove')
