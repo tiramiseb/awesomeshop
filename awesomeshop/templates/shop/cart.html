@@ -99,7 +99,11 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     {{ _('+ shipping fee') }}
                 </div>
             </div>
-            <small class="push-left">{% if locale == 'fr' %}{{ _('TVA non applicable, article 293 B du Code général des impôts') }}{% endif %}</small>
+            <small class="push-left">
+                {{ _('The price and availability of these products may change. The cart is a temporary list which does not mean the products are reserved.') }}
+                <br>
+                {{ _('TVA non applicable, article 293 B du Code général des impôts') }}
+            </small>
         </div>
         <div id="proceed">
             <br>
@@ -141,7 +145,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         {%- endif %}
     </div>
 </form>
-<div id="overlay" class="hidden" onclick="this.className='hidden';">
+<div id="stock-overlay" class="hidden" onclick="this.className='hidden';">
     <div class="overlay">
     </div>
     <div class="alert alert-danger overlay-content">
@@ -174,7 +178,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             disp_recalc();
             {%- endif %}
         } else {
-            document.getElementById("overlay").className = "";
+            document.getElementById('stock-overlay').className = "";
         }
         {%- endif %}
     });
