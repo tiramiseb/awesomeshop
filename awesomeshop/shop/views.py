@@ -176,8 +176,8 @@ def confirm_order():
         carrier_id = request.form['shipping']
         payment_id = request.form['payment']
         accept_terms = request.form['accept_terms'] # Exception if terms
-                                                    # are not accepted: the
-                                                    # field does not exist
+                                                    # are not accepted because
+                                                    # the field does not exist.
                                                     # That's why we do not
                                                     # use ".get"
         delivery_as_billing = not not request.form.get('delivery_as_billing')
@@ -208,9 +208,9 @@ def confirm_order():
         p = line.product
         qty = line.quantity
         insuf_stock = p in insufficient_stock
-        order.products.append(OrderProduct.from_product(p, qty, line.data, insuf_stock))
-        # TODO Deal with different stock with different data
-        p.remove_from_stock(line.quantity)
+        order.products.append(OrderProduct.from_product(p, qty, line.data,
+                                                        insuf_stock))
+        p.remove_from_stock(qty, line.data)
         p.save()
     order.set_delivery_address(delivery)
     order.set_billing_address(billing)

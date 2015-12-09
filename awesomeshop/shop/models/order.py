@@ -46,10 +46,11 @@ class OrderProduct(db.EmbeddedDocument):
     qty_reduced_because_of_stock = db.BooleanField(db_field='insuff_stock',
                                                    default=False)
     on_demand = db.BooleanField(db_field='dem', default=False)
+    data = db.DictField()
 
     @classmethod
     def from_product(cls, product, quantity, data=None, qty_reduced=False):
-        prices = product.get_price_per_item(data)
+        prices = product.get_price_per_item(data=data)
         gross_price = u'{} {}'.format(prices.quantize('0.01').gross,
                                       app.config['CURRENCY'])
         net_price = u'{} {}'.format(prices.quantize('0.01').net,
@@ -59,20 +60,25 @@ class OrderProduct(db.EmbeddedDocument):
                                            app.config['CURRENCY'])
         line_net_price = u'{} {}'.format(line_prices.quantize('0.01').net,
                                          app.config['CURRENCY'])
-        on_demand = quantity > product.get_stock(data=data) and product.on_demand
+        on_demand = quantity > product.get_stock(data=data) and \
+                    product.on_demand
         return cls(
-                reference=product.get_full_reference(data),
+                reference=product.get_full_reference(data=data),
                 gross_price=gross_price,
                 net_price=net_price,
                 line_gross_price=line_gross_price,
                 line_net_price=line_net_price,
                 quantity=quantity,
                 product=product,
-                name=product.get_full_name(data),
+                name=product.get_full_name(data=data),
                 qty_reduced_because_of_stock=qty_reduced,
                 on_demand=on_demand,
                 data=data
                 )
+
+    def _put_back_in_stock(self):
+        self.product.add_to_stock(self.quantity, self.data)
+        self.product.save()
 
 def next_invoice_number():
     last = Order.objects.only('invoice_number').order_by('-invoice_number').first()
@@ -248,12 +254,10 @@ class Order(db.Document):
         for prod in self.products:
             # TODO For on-demand product, add the stock that was removed before
             # For the moment, when cancelling a on-demand product, even if some
-            # items have been removed from stock, they are not put back
-            if prod.product._cls.starts_with('BaseProduct') and \
+            # items have been removed from stock, they are not put back in
+            if prod.product._cls.startswith('BaseProduct') and \
                not prod.on_demand:
-                # TODO Do not modify directly the "stock" variable
-                prod.product.stock += prod.quantity
-                prod.product.save()
+                    prod._put_back_in_stock()
 
     @property
     def next_states(self):
