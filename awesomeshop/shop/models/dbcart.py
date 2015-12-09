@@ -101,5 +101,5 @@ class DbCart(db.Document):
     def total_price(self):
         price = prices.Price(0)
         for line in self.lines:
-            price += line.get_total()*line.available_quantity
+            price += line.get_total()
         return price
