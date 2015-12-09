@@ -157,7 +157,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 {{ _('Shipping') }}
             </h2>
         </div>
-        <div class="list-group order-options" id="carriers-list">
+        <div class="list-group" id="carriers-list">
         </div>
     </div>
     {%- else -%}
@@ -206,7 +206,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 {{_('Payment') }}
             </h2>
         </div>
-        <div class="list-group order-options">
+        <div class="list-group">
             {%- for mode in modes_of_payment %}
             <label class="list-group-item">
                 <input type="radio" name="payment" value="{{ mode.id }}"{% if mode.id|string == current_user.latest_payment %} checked="checked"{% endif %} onchange="payment_changed('{{ mode.id }}')">

@@ -224,7 +224,7 @@ p.price {
     cursor: pointer;
     font-weight: normal;
 }
-.order-options label:hover {
+label.list-group-item:hover {
     background: #f5f5f5;
 }
 textarea#checkout-message {
