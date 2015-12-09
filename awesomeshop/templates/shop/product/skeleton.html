@@ -72,13 +72,11 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <div class="well">
             <p class="price">{% block price %}{% endblock %} {{ config.CURRENCY }}</p>
             <hr>
-            {% block add_to_cart %}
-            {%- endblock %}
+            {% block add_to_cart %}{% endblock %}
         </div>
     </div>
 </div>
-{% block details %}
-{%- endblock %}
+{% block details %}{% endblock %}
 {%- if product.related_products %}
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -103,4 +101,26 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         {{ product.output_documentation|safe }}
     </div>
 </div>
+<div id="stock-overlay" class="hidden" onclick="this.className='hidden';">
+    <div class="overlay">
+    </div>
+    <div class="alert alert-danger overlay-content">
+        <i class="fa fa-exclamation-triangle"></i>
+        <span class="sr-only">{{ _('Warning:') }}</span>
+        {{ _('Sorry, insufficient stock.') }}
+    </div>
+</div>
+<div id="image-overlay" class="hidden" onclick="this.className='hidden';">
+    <div class="overlay">
+    </div>
+    <div id="overlay-image-container">
+        <img src="" id="overlay-image">
+    </div>
+</div>
+<script>
+    function display(img_url) {
+        document.getElementById("overlay-image").src = img_url;
+        document.getElementById("image-overlay").className = "";
+    };
+</script>
 {%- endblock %}

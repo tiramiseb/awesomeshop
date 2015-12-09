@@ -55,27 +55,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {%- endblock %}
 
 {% block details %}
-<div id="overlay" class="hidden" onclick="this.className='hidden';">
-    <div class="overlay">
-    </div>
-    <div class="alert alert-danger overlay-content">
-        <i class="fa fa-exclamation-triangle"></i>
-        <span class="sr-only">{{ _('Warning:') }}</span>
-        {{ _('Sorry, insufficient stock.') }}
-    </div>
-</div>
-<div id="image-overlay" class="hidden" onclick="this.className='hidden';">
-    <div class="overlay">
-    </div>
-    <div id="overlay-image-container">
-        <img src="" id="overlay-image">
-    </div>
-</div>
 <script>
-    function display(img_url) {
-        document.getElementById("overlay-image").src = img_url;
-        document.getElementById("image-overlay").className = "";
-    };
     document.getElementById('inc_quantity').addEventListener('click', function(e) {
         e.preventDefault();
         var orig = parseInt(document.getElementById('quantity').value);
@@ -85,7 +65,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         if (orig < {{ product.stock - cart.quantity(product) }}) {
             document.getElementById('quantity').value = orig + 1;
         } else {
-            document.getElementById("overlay").className = "";
+            document.getElementById('stock-overlay').className = "";
         };
         {%- endif %}
     });

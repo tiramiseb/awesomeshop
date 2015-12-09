@@ -20,24 +20,16 @@
 import datetime
 
 import docutils.core
-import prices
 from flask.ext.babel import lazy_gettext
 from satchless.item import StockedItem
 
-from ... import db, get_locale
-from ...mongo import TranslationsField
-from ...photo import Photo
-from ...page.models import Page
-from .category import Category
-from .tax import Tax
+from .... import db, get_locale
+from ....mongo import TranslationsField
+from ....photo import Photo
+from ....page.models import Page
+from ..category import Category
+from ..tax import Tax
 
-# When adding a new product type:
-#
-# * it should inherit from BaseProduct
-# * unless otherwise stated, all functions raising NotImplementedError must be
-#   overriden
-# * a new entry must be added to the product_types dict
-# * signals must be added in .shop_signals, copying signals for Product
 
 class BaseProduct(db.Document, StockedItem):
     created_at = db.DateTimeField(db_field='create',
@@ -108,12 +100,24 @@ class BaseProduct(db.Document, StockedItem):
 
     @property
     def url(self):
-        from .url import Url
+        from ..url import Url
         return Url.objects(document=self).only('url').first().url
 
     @property
     def type(self):
         return product_to_type[self.__class__]
+
+    @property
+    def list_icon(self):
+        from ....rendering import render_front
+        return render_front('shop/producticon/{}.html'.format(self.type),
+                            product=self)
+
+    def out_of_stock(self, data=None):
+        """Return True if the product is out of stock
+        
+        (may be overriden)"""
+        return self.get_stock(data) == 0
 
     @property
     def human_type(self):
@@ -156,13 +160,11 @@ class BaseProduct(db.Document, StockedItem):
         """Return True if this product should be restocked"""
         raise NotImplementedError
 
-    def out_of_stock(self, data=None):
-        """Return True if the product is out of stock
-        
-        (may be overriden)"""
-        return self.get_stock(data) == 0
+    def add_to_stock(self, quantity, data=None):
+        """Add products to stock"""
+        raise NotImplementedError
 
-    def remove_from_stock(self, quantity):
+    def remove_from_stock(self, quantity, data=None):
         """Remove products from stock"""
         raise NotImplementedError
 
@@ -171,57 +173,6 @@ class BaseProduct(db.Document, StockedItem):
         for p in document.photos:
             p.delete_files()
 
-
-
-class Product(BaseProduct):
-    """Basic products, with no option and no variants"""
-    human_type = lazy_gettext('Simple')
-    purchasing_price = db.DecimalField(
-                            db_field='pprice',
-                            verbose_name=lazy_gettext('Purchasing price')
-                            )
-    gross_price = db.DecimalField(
-                            db_field='gprice',
-                            required=True,
-                            verbose_name=lazy_gettext('Gross price')
-                            )
-    weight = db.IntField(default=0, verbose_name=lazy_gettext('Weight'))# grams
-    stock = db.IntField(default=0, verbose_name=lazy_gettext('Stock'))
-    stock_alert = db.IntField(
-                        db_field='alert',
-                        default=0,
-                        verbose_name=lazy_gettext('Stock alert')
-                        )
-
-    def remove_from_stock(self, quantity):
-        self.stock -= min(quantity, self.stock)
-
-    def get_full_reference(self, data=None):
-        return self.reference
-
-    def get_full_name(self, data=None):
-        return unicode(self)
-
-    def get_price_per_item(self, data=None):
-        gross = self.gross_price
-        net = gross * ( 1 + self.tax.rate )
-        return prices.Price(net, gross)
-
-    def get_weight(self, data=None):
-        return self.weight
-
-    def get_stock(self, data=None):
-        return self.stock
-
-    def too_few_in_stock(self, data=None):
-        return self.stock <= self.stock_alert and self.stock > 0
-
-product_types = (
-    ('simple', Product),
-    )
-
+product_types = []
 type_to_product = {}
 product_to_type = {}
-for a, b in product_types:
-    type_to_product[a] = b
-    product_to_type[b] = a

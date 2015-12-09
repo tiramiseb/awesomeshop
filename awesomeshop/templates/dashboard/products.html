@@ -21,10 +21,17 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {% block title %}{{ _('Dashboard') }} - {{ _('Products') }}{% endblock %}
 {% block content %}
 <h1>{{ _('Products') }}</h1>
-<p><a href="{{ url_for('dashboard_product', product_type='simple') }}" class="btn btn-primary">
-    <i class="fa fa-plus"></i>
-    {{ _('Add a product') }}
-</a></p>
+<p class="btn-group">
+    <a href="#" class="btn btn-default disabled">
+        <i class="fa fa-plus"></i>
+        {{ _('Add a product') }}
+    </a>
+    {%- for type, obj in product_types.iteritems() %}
+    <a href="{{ url_for('dashboard_product', product_type=type) }}" class="btn btn-primary">
+        {{ obj().human_type }}
+    </a>
+    {%- endfor %}
+</p>
 <table class="table table-hover">
     <tr>
         <th></th>
@@ -32,6 +39,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <th>{{ _('Name') }}</th>
         <th>{{ _('Type') }}</th>
         <th>{{ _('Stock') }}</th>
+        <th>{{ _('On sale') }}</th>
         <th>{{ _('On demand') }}</th>
         <th>{{ _('Net price') }}</th>
         <th></th>
@@ -53,7 +61,14 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             {{ product.human_type }}
         </td>
         <td class="pointer" onclick="document.location='{{ url_for('dashboard_product', product_id=product.id) }}'">
-            {{ product.stock }}
+            {{ product.get_stock() }}
+        </td>
+        <td class="pointer" onclick="document.location='{{ url_for('dashboard_product', product_id=product.id) }}'">
+            {%- if product.on_sale %}
+                {{ _('Yes') }}
+            {%- else %}
+                {{ _('No') }}
+            {%- endif %}
         </td>
         <td class="pointer" onclick="document.location='{{ url_for('dashboard_product', product_id=product.id) }}'">
             {%- if product.on_demand %}
