@@ -81,13 +81,13 @@ class CartLine(cart.CartLine):
         return cart.CartLine.get_price_per_item(self, data=self.data, **kwargs)
 
     def get_full_name(self):
-        return self.product.get_full_name(self.data)
+        return self.product.get_full_name(data=self.data)
 
     def get_stock(self):
         return self.product.get_stock(data=self.data)
 
     def get_weight(self):
-        return self.product.get_weight(self.data) * self.quantity
+        return self.product.get_weight(data=self.data) * self.quantity
 
 class Cart(cart.Cart):
 
