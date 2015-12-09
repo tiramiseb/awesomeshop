@@ -24,8 +24,8 @@ class Url(db.Document):
     document = db.GenericReferenceField(db_field='doc')
 
 def update_url(sender, document, url, created, **kwargs):
-    if not created:
-        remove_url(sender, document)
+    remove_url(sender, document)
+    Url.objects(url=url).delete()
     Url(url=url, document=document).save()
 def update_category_url(sender, document, **kwargs):
     if document.parent:
