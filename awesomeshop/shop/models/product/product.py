@@ -21,6 +21,7 @@ import prices
 from flask.ext.babel import lazy_gettext
 
 from .... import db
+from ....mongo import model_form
 from .core import BaseProduct, product_types
 
 class Product(BaseProduct):
@@ -69,6 +70,9 @@ class Product(BaseProduct):
     def too_few_in_stock(self, data=None):
         return self.stock <= self.stock_alert and self.stock > 0
 
+    def get_form(self, formdata):
+        return ProductForm(formdata, self)
 
+ProductForm = model_form(Product)
 
 product_types.append(('simple', Product))

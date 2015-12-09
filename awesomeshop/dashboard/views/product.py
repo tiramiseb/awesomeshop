@@ -24,7 +24,7 @@ from ...rendering import admin_required, render_template
 from ...photo import Photo
 from ...page.models import Page
 from ...shop.models import BaseProduct, type_to_product
-from ..forms import get_product_form
+from ..forms import ProductForm
 
 @app.route('/dashboard/products')
 @admin_required
@@ -41,7 +41,7 @@ def dashboard_product(product_id=None, product_type=None):
         prod = BaseProduct.objects.get_or_404(id=product_id)
     else:
         prod = type_to_product[product_type]()
-    form = get_product_form(request.form, prod)
+    form = ProductForm(request.form, prod)
     form.documentation.queryset = Page.objects(pagetype='doc')
     if form.validate_on_submit():
         form.populate_obj(prod)

@@ -26,7 +26,7 @@ from ..mongo import model_form
 from ..auth.models import User, Address
 from ..page.models import Page
 from ..shipping.models import Country, CountriesGroup, Carrier
-from ..shop.models import Tax, Category, Product
+from ..shop.models import Tax, Category
 
 UserForm = model_form(User)
 class UserForm(Form):
@@ -59,11 +59,8 @@ CategoryForm = model_form(Category, field_args={
         }
     })
 
-ProductForm = model_form(Product)
-def get_product_form(form, prod):
-    if type(prod) == Product:
-        return ProductForm(form, prod)
-    return None
+def ProductForm(formdata, product):
+    return product.get_form(formdata)
 
 PageForm = model_form(Page)
 

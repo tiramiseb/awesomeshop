@@ -168,6 +168,12 @@ class BaseProduct(db.Document, StockedItem):
         """Remove products from stock"""
         raise NotImplementedError
 
+    def get_form(self, formdata):
+        """Return a form specific to this product type
+        (see ....mongo.model_form)"""
+        # return SomeProductForm(formdata, self)
+        raise NotImplementedError
+
     @classmethod
     def remove_photos_from_disk(cls, sender, document, **kwargs):
         for p in document.photos:
