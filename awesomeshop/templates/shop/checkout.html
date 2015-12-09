@@ -218,7 +218,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     <textarea placeholder="{{ _('If you have any message for us about this order, write it here!') }}" id="checkout-message" class="form-control"></textarea>
     <div class="panel panel-default">
         <div class="panel-body text-right">
-            <label class="reused-package">
+            <label class="reused-package text-normal">
                 <i class="fa fa-recycle"></i>
                 {{ _('I accept that my order is shipped in a reused package') }}
                 <input type="checkbox" name="reused_package"{% if current_user.latest_reused_package %} checked="checked"{% endif %} onclick="save_reused_package_status()">

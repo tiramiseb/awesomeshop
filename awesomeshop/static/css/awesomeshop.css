@@ -63,6 +63,10 @@ textarea {
     text-align: left;
 }
 
+.text-normal {
+    font-weight: normal;
+}
+
 /***** SMALLER HEADERS *****/
 h1 {
     font-size: 1.8em;
@@ -220,7 +224,7 @@ p.price {
 .total-cost {
     font-size: 21px;
 }
-#checkout-form label {
+label.list-group-item {
     cursor: pointer;
     font-weight: normal;
 }
