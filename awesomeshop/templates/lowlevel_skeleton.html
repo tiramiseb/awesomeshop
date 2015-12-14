@@ -48,7 +48,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <div class="form-group"><button type="submit" class="btn btn-success form-control"><i class="fa fa-{{ icon }}"></i> {{ message }}</button></div>
 {%- endmacro %}
 <!DOCTYPE html>
-<html>
+<html ng-app="awesomeshop">
 <head>
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8">
 <meta name="generator" content="AwesomeShop">
@@ -56,6 +56,9 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <link href="/static/css/bootstrap.min.css" rel="stylesheet">
 <link href="/static/css/font-awesome.min.css" rel="stylesheet">        
 <link href="/static/css/awesomeshop.css" rel="stylesheet">
+<script src="/static/js/angular.min.js"></script>
+<script src="/static/js/ui-bootstrap-tpls-0.14.3.min.js"></script>
+<script src="/static/js/awesomeshop.js"></script>
 {%- block head %}{% endblock %}
 <title>{{ config.SHOP_NAME }} - {% block title %}AwesomeShop{% endblock %}</title>
 </head>
