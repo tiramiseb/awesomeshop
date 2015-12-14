@@ -19,7 +19,8 @@
 
 from .core import BaseProduct, product_types, type_to_product, product_to_type
 from .product import Product
-from .modularproduct import ModularProduct
+# This one will be imported later. Committed too soon
+#from .modularproduct import ModularProduct
 
 # When adding a new product type:
 #
