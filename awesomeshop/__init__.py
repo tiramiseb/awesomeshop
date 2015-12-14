@@ -62,7 +62,7 @@ def get_locale(from_user=True):
         except:
             pass
     if not locale:
-        # Fallback locale
+        # Fallback locale, defined app-wide
         locale = app.config['LANGS'][0]
     return locale
 

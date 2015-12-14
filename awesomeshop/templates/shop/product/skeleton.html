@@ -19,9 +19,9 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
 {% extends "skeleton.html" %}
 
-{% block title %}{{ product }}{% endblock %}
+{% block title %}{{ product.loc_name }}{% endblock %}
 {% block content %}
-<h1>{{ product }}</h1>
+<h1>{{ product.loc_name }}</h1>
 <div class="row">
     <div class="col-xs-7 col-md-8 col-lg-9">
         <div class="row">
@@ -60,7 +60,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                         </h2>
                     </div>
                     <div class="panel-body page-content">
-                        <p>{{ product.output_description|safe }}</p>
+                        <p>{{ product.get_description()|safe }}</p>
                         <hr>
                         <p>{{ _('Reference:') }} <i>{{ product.reference }}</i></p>
                     </div>
@@ -98,7 +98,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </h2>
     </div>
     <div class="panel-body page-content">
-        {{ product.output_documentation|safe }}
+        {{ product.get_documentation()|safe }}
     </div>
 </div>
 <div id="stock-overlay" class="hidden" onclick="this.className='hidden';">

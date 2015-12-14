@@ -23,7 +23,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             <img src="{{ product.photos[0].preview_url }}">
             {%- endif %}
             <div class="caption">
-                <p class="text-center">{{ product }}</p>
+                <p class="text-center">{{ product.loc_name }}</p>
                 <p class="text-center">{% block price %}{% endblock %}</p>
                 {% block button %}{% endblock %}
             </div>

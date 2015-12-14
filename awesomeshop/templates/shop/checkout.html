@@ -244,7 +244,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 var addresses = {
         {%- for address in current_user.addresses %}
         "{{ address.id }}": {
-            address: "{{ address.firstname }} {{ address.lastname }}\n{{ address.address|replace('\n','\\n')|replace('\r', '') }}\n{{ address.country }}",
+            address: "{{ address.firstname }} {{ address.lastname }}\n{{ address.address|replace('\n','\\n')|replace('\r', '') }}\n{{ address.country.prefixed_name }}",
             modifyurl: "{{ url_for('address_from_checkout', address_id=address.id) }}",
             carriers: [
                 {%- for carrier in address.carriers(weight=cart.get_weight()) %}

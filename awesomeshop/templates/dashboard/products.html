@@ -55,7 +55,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             {{ product.reference }}
         </td>
         <td class="pointer" onclick="document.location='{{ url_for('dashboard_product', product_id=product.id) }}'">
-            {{ product }}
+            {{ product.loc_name }}
         </td>
         <td class="pointer" onclick="document.location='{{ url_for('dashboard_product', product_id=product.id) }}'">
             {{ product.human_type }}

@@ -30,7 +30,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     {%- for carrier in carriers %}
     <tr>
         <td class="pointer" onclick="document.location='{{ url_for('dashboard_carrier', carrier_id=carrier.id) }}'">
-            <p>{{ carrier }}</p>
+            <p>{{ carrier.description_and_name }}</p>
         </td>
         <td>
             <div class="btn-group pull-right">

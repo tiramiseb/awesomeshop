@@ -51,15 +51,30 @@ class Category(db.Document):
         return self.name.get(get_locale(), u'')
 
     @property
-    def output_description(self):
-        desc = self.description.get(get_locale(), u'')
+    def full_name(self):
+        if self.parent:
+            return u'{} » {}'.format(self.parent.full_name, self.short_name)
+        else:
+            return self.short_name
+
+    @property
+    def loc_description(self):
+        return self.description.get(get_locale(), u'')
+
+    def get_description(self, initial_header_level=3):
+        desc = self.loc_description
         if desc:
-            parts = docutils.core.publish_parts(source=desc,writer_name='html')
+            parts = docutils.core.publish_parts(
+                            source=desc,
+                            settings_overrides = {
+                                'initial_header_level': initial_header_level
+                                },
+                            writer_name='html'
+                            )
             return parts['body']
         elif self.parent:
-            return self.parent.output_description
+            return self.parent.get_description()
         return u''
-
 
     @property
     def url(self):
@@ -87,13 +102,6 @@ class Category(db.Document):
             p.extend(child.onsale_products_recursive)
         p.sort(key=unicode)
         return p
-
-    def __unicode__(self):
-        if self.parent:
-            return u'{} » {}'.format(self.parent.short_name,
-                                          self.short_name)
-        else:
-            return unicode(self.short_name)
 
     @classmethod
     def hierarchy(cls, parent=None):

@@ -18,12 +18,12 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
 {% extends "skeleton.html" %}
 
-{% block title %}{{ page }}{% endblock %}
+{% block title %}{{ page.loc_title }}{% endblock %}
 {% block content %}
-<h1>{{ page }}</h1>
+<h1>{{ page.loc_title }}</h1>
 <div class="panel panel-default">
 <div class="panel-body page-content">
-{{ page.output_text|safe }}
+{{ page.get_text()|safe }}
 </div>
 </div>
 {%- if page.products %}

@@ -283,7 +283,7 @@ class Order(db.Document):
 
     def set_carrier(self, carrier):
         self.carrier = carrier
-        self.carrier_description = unicode(carrier)
+        self.carrier_description = carrier.description_and_name
 
     def set_payment(self, pay):
         for mode in payment.modes:

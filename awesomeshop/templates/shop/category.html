@@ -18,13 +18,13 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
 {% extends "skeleton.html" %}
 
-{% block title %}{{ category }}{% endblock %}
+{% block title %}{{ category.full_name }}{% endblock %}
 {% block content %}
 <h1>{{ category.short_name }}</h1>
 {%- if category.output_description %}
 <div class="panel panel-default">
     <div class="panel-body">
-        {{ category.output_description|safe }}
+        {{ category.get_description()|safe }}
     </div>
 </div>
 {%- endif %}

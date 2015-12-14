@@ -33,7 +33,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 {%- for product in products %}
                 <a class="list-group-item" href="{{ url_for('dashboard_product', product_id=product.id) }}">
                     {{ product.reference }},
-                    {{ product }}{% if show_stock %},
+                    {{ product.loc_name }}{% if show_stock %},
                     <b>{{ _('%(qty)d left', qty=product.get_stock()) }}</b>
                     {%- endif %}{% if product.on_demand %}
                     ({{ _('available on demand') }})

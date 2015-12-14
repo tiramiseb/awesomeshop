@@ -31,7 +31,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <h2>{{ _('Categories') }}</h2>
 <ul>
     {%- for category in categories_result %}
-    <li><a href="/{{ category.url }}">{{ category }}</a></li>
+    <li><a href="/{{ category.url }}">{{ category.full_name }}</a></li>
     {%- endfor %}
 </ul>
 {%- endif %}

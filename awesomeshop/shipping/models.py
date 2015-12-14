@@ -37,9 +37,13 @@ class Country(db.Document):
         'ordering': ['code']
     }
 
-    def __unicode__(self):
-        return u'{} - {}'.format(self.code,
-                                self.name.get(get_locale(), self.default_name))
+    @property
+    def loc_name(self):
+        return self.name.get(get_locale(), self.default_name)
+
+    @property
+    def prefixed_name(self):
+        return u'{} - {}'.format(self.code, self.loc_name)
 
 
 class CountriesGroup(db.Document):
@@ -90,9 +94,13 @@ class Carrier(db.Document):
         'ordering': ['name']
     }
 
-    def __unicode__(self):
-        return u'{} ({})'.format(self.description.get(get_locale(), u''),
-                                 self.name)
+    @property
+    def loc_description(self):
+        return self.description.get(get_locale(), u'')
+
+    @property
+    def description_and_name(self):
+        return u'{} ({})'.format(self.loc_description, self.name)
 
     def get_price(self, country_or_group, weight, which=None, exact=False):
         """Get the price for the association of a country and a weight

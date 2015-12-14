@@ -30,7 +30,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     {%- for country in countries %}
     <tr>
         <td class="pointer" onclick="document.location='{{ url_for('dashboard_country', country_id=country.id) }}'">
-            <p>{{ country }}</p>
+            <p>{{ country.prefixed_name }}</p>
         </td>
         <td>
             <div class="btn-group pull-right" role="group">

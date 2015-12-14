@@ -75,28 +75,21 @@ class BaseProduct(db.Document, StockedItem):
         'allow_inheritance': True
     }
 
-    def __unicode__(self):
+    @property
+    def loc_name(self):
         return self.name.get(get_locale(), u'')
 
-    def __repr__(self):
-        return unicode(self).encode('utf8')
-
-    @property
-    def output_description(self):
+    def get_description(self, initial_header_level=3):
         parts = docutils.core.publish_parts(
                     source=self.description.get(get_locale(), u''),
-                    writer_name='html')
-        return parts['body']
-
-    @property
-    def output_documentation(self):
-        parts = docutils.core.publish_parts(
-                    source=self.documentation.text.get(get_locale(), u''),
                     settings_overrides = {
-                        'initial_header_level': 3
+                        'initial_header_level': initial_header_level
                         },
                     writer_name='html')
         return parts['body']
+
+    def get_documentation(self, initial_header_level=3):
+        return self.documentation.get_text(initial_header_level)
 
     @property
     def url(self):

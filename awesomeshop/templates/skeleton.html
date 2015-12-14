@@ -122,7 +122,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <div class="list-group">
                     {%- for page in docpages %}
                     <a href="{{ url_for('doc', slug=page.slug) }}" class="list-group-item{% if page.id == active %} active{% endif %}">
-                        {{ page }}
+                        {{ page.loc_title }}
                     </a>
                     {%- endfor %}
                 </div>
@@ -163,7 +163,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <div class="list-group">
                     {%- for page in infopages %}
                     <a href="{{ url_for('info', slug=page.slug) }}" class="list-group-item{% if page.id == active %} active{% endif %}">
-                        {{ page }}
+                        {{ page.loc_title }}
                     </a>
                     {%- endfor %}
                 </div>

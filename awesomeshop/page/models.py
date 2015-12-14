@@ -42,7 +42,8 @@ class Page(db.Document):
         'ordering': ['rank']
     }
 
-    def __unicode__(self):
+    @property
+    def loc_title(self):
         return self.title.get(get_locale(), u'')
 
     def move(self, direction):
@@ -64,11 +65,14 @@ class Page(db.Document):
             target.save()
 
     @property
-    def output_text(self):
+    def loc_text(self):
+        return self.text.get(get_locale(), u'')
+
+    def get_text(self, initial_header_level=2):
         parts = docutils.core.publish_parts(
-                    source=self.text.get(get_locale(), u''),
+                    source=self.loc_text,
                     settings_overrides = {
-                        'initial_header_level': 2
+                        'initial_header_level': initial_header_level
                         },
                     writer_name='html')
         return parts['body']
