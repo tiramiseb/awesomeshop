@@ -103,7 +103,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                                     <i class="fa fa-pencil"></i>
                                     {{ _('Modify') }}
                                 </a>
-                                <a href="{{ url_for('address_from_checkout', address_destination='delivery') }}" class="btn btn-warning" onclick="sessionStorage.removeItem('delivery-address')">
+                                <a href="{{ url_for('address_from_checkout', address_destination='delivery') }}" class="btn btn-warning">
                                     <i class="fa fa-plus"></i>
                                     {{ _('New address') }}
                                 </a>
@@ -137,7 +137,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                                         <i class="fa fa-pencil"></i>
                                         {{ _('Modify') }}
                                     </a>
-                                    <a href="{{ url_for('address_from_checkout', address_destination='billing') }}" class="btn btn-warning" onclick="sessionStorage.removeItem('billing-address')">
+                                    <a href="{{ url_for('address_from_checkout', address_destination='billing') }}" class="btn btn-warning">
                                         <i class="fa fa-plus"></i>
                                         {{ _('New address') }}
                                     </a>
