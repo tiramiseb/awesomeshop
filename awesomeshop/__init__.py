@@ -21,10 +21,11 @@ from flask import Flask, request, session
 from flask.ext.babel import Babel
 from flask.ext.login import current_user
 from flask.ext.mongoengine import MongoEngine
-
+from flask_restful import Api
 
 app = Flask(__name__)
 app.config.from_object('awesomeshop.defaultconfig')
+rest = Api(app)
 try:
     app.config.from_object('config')
 except ImportError:
@@ -96,3 +97,6 @@ from .page import views
 from .payment import views
 from .shop import views
 from . import error_views
+
+from .auth import api
+from .shop import api
