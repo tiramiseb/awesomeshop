@@ -25,7 +25,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <h1 class="panel-title">{{ _('Create an account') }}</h1>
     </div>
     <div class="panel-body">
-        <form method="POST">
+        <form method="POST" action>
             {{ form.hidden_tag() }}
             {{ forminput(form.email) }}
             <div class="row">

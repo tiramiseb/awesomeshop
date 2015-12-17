@@ -68,6 +68,14 @@ class CartLine(cart.CartLine):
             'data': self.data
         }
 
+    def as_dict(self):
+        return {
+            'name': self.product.loc_name,
+            'quantity': self.quantity,
+            'price': str(self.get_price_per_item().quantize('0.01').net),
+            'total': str(self.get_total().quantize('0.01').net)
+        }
+
     @classmethod
     def from_session(cls, session_data):
         """Create cart from session data"""
@@ -145,6 +153,13 @@ class Cart(cart.Cart):
     def to_session(self):
         """Export data for session storage"""
         session['cart'] = [ line.for_session() for line in self ]
+
+    def as_dict(self):
+        return {
+            'lines': [ line.as_dict() for line in self ],
+            'weight': self.get_weight(),
+            'total': str(self.get_total().quantize('0.01').net)
+            }
 
     @classmethod
     def from_session(cls):

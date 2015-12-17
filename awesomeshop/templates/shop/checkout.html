@@ -20,126 +20,90 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 {% block title %}{{ _('Checkout') }}{% endblock %}
 {% block content %}
-{%- if cart %}
-<form method="POST" action="{{ url_for('confirm_order') }}" id="checkout-form">
-    <h1>{{ _('Checkout') }}</h1>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <div class="row">
-                <div class="col-sm-6">
-                    <i class="fa fa-cube"></i>
-                    {{ _('Product') }}
-                </div>
-                <div class="col-xs-4 col-sm-2 text-right">
-                    {{ _('Qty') }}
-                </div>
-                <div class="col-xs-4 col-sm-2 text-right">
-                    {{ _('Unit') }}
-                </div>
-                <div class="col-xs-4 col-sm-2 text-right">
-                    {{ _('Total') }}
-                </div>
-            </div>
-        </div>
-        <div class="list-group">
-            {%- for line in cart %}
-            <div class="list-group-item">
+<div ng-controller="CheckoutCtrl">
+    <div ng-show="cart.lines" ng-cloak>
+        <h1>{{ _('Checkout') }}</h1>
+        <div class="panel panel-default">
+            <div class="panel-heading">
                 <div class="row">
                     <div class="col-sm-6">
-                        {{ line.get_full_name() }}
+                        <i class="fa fa-cube"></i>
+                        {{ _('Product') }}
                     </div>
                     <div class="col-xs-4 col-sm-2 text-right">
-                        {{ line.quantity }}
+                        {{ _('Qty') }}
                     </div>
                     <div class="col-xs-4 col-sm-2 text-right">
-                        {{ line.get_price_per_item().quantize('0.01').net }} {{ config.CURRENCY }}
+                        {{ _('Unit') }}
                     </div>
                     <div class="col-xs-4 col-sm-2 text-right">
-                        <strong>
-                            {{ line.get_total().quantize('0.01').net }} {{ config.CURRENCY }}
-                        </strong>
+                        {{ _('Total') }}
                     </div>
-                 </div>
-            </div>
-            {%- endfor %}
-            {%- if cart_modified_because_of_stock %}
-            <div class="list-group-item">
-                <b class="text-danger">{{ _('Your cart has been modified because stock is insufficient for one or more products.') }}</b>
-            </div>
-            {%- endif %}
-            {%- if cart.stock_status == 'on_demand' %}
-            <div class="list-group-item">
-                <b class="text-danger">{{ _('Your cart contains products to be ordered on demand. Shipping will be delayed for %(min)d-%(max)d days.', min=config.ON_DEMAND_DELAY_MIN, max=config.ON_DEMAND_DELAY_MAX) }}</b>
-            </div>
-            {%- endif %}
-        </div>
-    </div>
-    {%- if current_user.addresses %}
-    <div class="row checkout-addresses">
-        <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        <i class="fa fa-map-marker"></i>
-                        {{ _('Delivery address') }}
-                    </h3>
                 </div>
-                <div class="panel-body">
-                    <div class="form-group">
-                        <select id="delivery-select" class="form-control" name="delivery" onchange="update_delivery_address()">
-                            {%- for address in current_user.addresses %}
-                            <option value="{{ address.id }}"{% if address.id|string == current_user.latest_delivery_address %} selected="selected"{% endif %}>{{ address.title }}</option>
-                            {%- endfor %}
-                        </select>
+            </div>
+            <div class="list-group">
+                <div class="list-group-item" ng-repeat="product in cart.lines">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            [[ product.name ]]
+                        </div>
+                        <div class="col-xs-4 col-sm-2 text-right">
+                            [[ product.quantity ]]
+                        </div>
+                        <div class="col-xs-4 col-sm-2 text-right">
+                            [[ product.price ]] {{ config.CURRENCY }}
+                        </div>
+                        <div class="col-xs-4 col-sm-2 text-right">
+                            <strong>
+                                [[ product.total ]] {{ config.CURRENCY }}
+                            </strong>
+                        </div>
                     </div>
-                    <p>{{ _('The package will be shipped to:') }}</p>
-                    <div class="delivery-display">
-                        <pre class="well" id="delivery-address"></pre>
-                        <div class="btn-group btn-group-justified">
-                            <a href="#" class="btn btn-info" id="delivery-modify-address">
-                                <i class="fa fa-pencil"></i>
-                                {{ _('Modify') }}
-                            </a>
-                            <a href="{{ url_for('address_from_checkout', address_destination='delivery') }}" class="btn btn-warning" onclick="sessionStorage.removeItem('delivery-address')">
-                                <i class="fa fa-plus"></i>
-                                {{ _('New address') }}
-                            </a>
+                </div>
+                <div class="list-group-item" ng-show="cart.modified">
+                    <b class="text-danger">{{ _('Your cart has been modified because stock is insufficient for one or more products.') }}</b>
+                </div>
+                <div class="list-group-item" ng-show="cart.on_demand">
+                    <b class="text-danger">{{ _('Your cart contains products to be ordered on demand. Shipping will be delayed for %(min)d-%(max)d days.', min=config.ON_DEMAND_DELAY_MIN, max=config.ON_DEMAND_DELAY_MAX) }}</b>
+                </div>
+                <div class="list-group-item">
+                    <div class="row">
+                        <div class="col-xs-8 col-sm-10">
+                            <b>
+                            {{ _('Subtotal') }}
+                            </b>
+                        </div>
+                        <div class="col-xs-4 col-sm-2 text-right">
+                            <b>
+                                [[ cart.total ]] {{ config.CURRENCY }}
+                            </b>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        <i class="fa fa-file-text-o"></i>
-                        {{ _('Billing address') }}
-                    </h3>
-                </div>
-                <div class="panel-body">
-                    <div id="billing-checkbox" class="checkbox">
-                        <label>
-                            <input type="checkbox"{% if current_user.latest_delivery_as_billing %} checked="checked"{% endif %} name="delivery_as_billing" id="delivery-as-billing" onchange="change_delivery_as_billing()">
-                            {{ _('Use the delivery address') }}
-                        </label> 
-                    </div>
-                    <div id="billing-container" class="hidden">
-                        <div class="form-group">
-                            <select id="billing-select" class="form-control" name="billing" onchange="update_billing_address()">
-                                {%- for address in current_user.addresses %}
-                                <option value="{{ address.id }}"{% if address.id|string == current_user.latest_billing_address %} selected="selected"{% endif %}>{{ address.title }}</option>
-                                {%- endfor %}
-                            </select>
+        <div ng-show="addresses">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <i class="fa fa-map-marker"></i>
+                                {{ _('Delivery address') }}
+                            </h3>
                         </div>
-                        <div class="delivery-display">
-                            <pre class="well" id="billing-address"></pre>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <select class="form-control" name="delivery" ng-model="choices.delivery_address" ng-options="address as address.title for address in addresses" ng-change="update_carriers()"></select>
+                            </div>
+                            <p>{{ _('The package will be shipped to:') }}</p>
+                            <pre class="well" ng-bind="choices.delivery_address.full_address"></pre>
                             <div class="btn-group btn-group-justified">
-                                <a href="#" class="btn btn-info" id="billing-modify-address">
+                                <a ng-href="/checkout/address-[[ choices.delivery_address.id ]]" class="btn btn-info">
                                     <i class="fa fa-pencil"></i>
                                     {{ _('Modify') }}
                                 </a>
-                                <a href="{{ url_for('address_from_checkout', address_destination='billing') }}" class="btn btn-warning" onclick="sessionStorage.removeItem('billing-address')">
+                                <a href="{{ url_for('address_from_checkout', address_destination='delivery') }}" class="btn btn-warning">
                                     <i class="fa fa-plus"></i>
                                     {{ _('New address') }}
                                 </a>
@@ -147,45 +111,79 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                         </div>
                     </div>
                 </div>
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <i class="fa fa-map-marker"></i>
+                                {{ _('Billing address') }}
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary btn-block" ng-model="choices.delivery_as_billing" uib-btn-checkbox>
+                                    <i class="fa fa-check" ng-show="choices.delivery_as_billing"></i>
+                                    <i class="fa fa-times" ng-hide="choices.delivery_as_billing"></i>
+                                    {{ _('Use the delivery address') }}
+                                </button>
+                            </div>
+                            <div ng-hide="choices.delivery_as_billing">
+                                <div class="form-group">
+                                    <select class="form-control" name="billing" ng-model="choices.billing_address" ng-options="address as address.title for address in addresses"></select>
+                                </div>
+                                <pre class="well" ng-bind="choices.billing_address.full_address"></pre>
+                                <div class="btn-group btn-group-justified">
+                                    <a ng-href="/checkout/address-[[ choices.billing_address.id ]]" class="btn btn-info">
+                                        <i class="fa fa-pencil"></i>
+                                        {{ _('Modify') }}
+                                    </a>
+                                    <a href="{{ url_for('address_from_checkout', address_destination='billing') }}" class="btn btn-warning">
+                                        <i class="fa fa-plus"></i>
+                                        {{ _('New address') }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h2 class="panel-title">
-                <i class="fa fa-truck"></i>
-                {{ _('Shipping') }}
-            </h2>
-        </div>
-        <div class="list-group" id="carriers-list">
-        </div>
-    </div>
-    {%- else -%}
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <p class="lead text-center">{{ _('You must define at least one address for delivery') }}</p>
-            <a href="{{ url_for('address_from_checkout', address_destination='delivery') }}" class="btn btn-lg btn-block btn-success">
-                <i class="fa fa-home"></i>
-                {{ _('Create an address') }}
-            </a>
-        </div>
-    </div>
-    {%- endif %}
-    <div class="well">
-        <div class="row">
-            <div class="col-xs-8 col-md-9 text-right">
-                {{ _('Subtotal') }}
+        <div class="panel panel-default" ng-show="addresses">
+            <div class="panel-heading">
+                <h2 class="panel-title">
+                    <i class="fa fa-truck"></i>
+                    {{ _('Shipping') }}
+                </h2>
             </div>
-            <div class="col-xs-4 col-md-3 text-right">
-                {{ cart.get_total().quantize('0.01').net }} {{ config.CURRENCY }}
+            <div class="list-group" id="carriers-list">
+                <label class="list-group-item" ng-repeat="carrier in carriers">
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <input type="radio" ng-model="choices.carrier" ng-value="carrier.id">
+                            [[ carrier.name ]]
+                        </div>
+                        <div class="col-xs-4 text-right">
+                            <b>[[ carrier.price ]] {{ config.CURRENCY }}</b>
+                        </div>
+                    </div>
+                </label>
             </div>
         </div>
-        <div class="shippingtotal">
+        <div class="well" ng-show="addresses">
+            <div class="row">
+                <div class="col-xs-8 col-md-9 text-right">
+                    {{ _('Subtotal') }}
+                </div>
+                <div class="col-xs-4 col-md-3 text-right">
+                    [[ cart.total ]] {{ config.CURRENCY }}
+                </div>
+            </div>
             <div class="row">
                 <div class="col-xs-8 col-md-9 text-right">
                     {{ _('Shipping fee') }}
                 </div>
-                <div class="col-xs-4 col-md-3 text-right" id="shipping-fee">
+                <div class="col-xs-4 col-md-3 text-right">
+                    [[ shipping_fee ]] {{ config.CURRENCY }}
                 </div>
             </div>
             <div class="row total-cost text-info">
@@ -193,213 +191,78 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     {{ _('Total') }}
                 </div>
                 <div class="col-xs-4 col-md-3 text-right">
-                    <b id="total">
-                    </b>
+                    <b>[[ order_total ]] {{ config.CURRENCY }}</b>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h2 class="panel-title">
-                <i class="fa fa-money"></i>
-                {{_('Payment') }}
-            </h2>
+        <div class="panel panel-default" ng-show="addresses">
+            <div class="panel-heading">
+                <h2 class="panel-title">
+                    <i class="fa fa-money"></i>
+                    {{_('Payment') }}
+                </h2>
+            </div>
+            <div class="list-group">
+                {%- for mode in modes_of_payment %}
+                <label class="list-group-item">
+                    <input type="radio" ng-model="choices.payment" value="{{ mode.id }}">
+                    {{ mode.text|safe }}
+                </label>
+                {% endfor %}
+            </div>
         </div>
-        <div class="list-group">
-            {%- for mode in modes_of_payment %}
-            <label class="list-group-item">
-                <input type="radio" name="payment" value="{{ mode.id }}"{% if mode.id|string == current_user.latest_payment %} checked="checked"{% endif %} onchange="payment_changed('{{ mode.id }}')">
-                {{ mode.text|safe }}
-            </label>
-            {% endfor %}
+        <textarea placeholder="{{ _('If you have any message for us about this order, write it here!') }}" id="checkout-message" ng-model="choices.message" class="form-control"></textarea>
+
+    
+        <div class="panel panel-default">
+            <div class="panel-body text-right">
+                <label class="reused-package text-normal">
+                    <i class="fa fa-recycle"></i>
+                    {{ _('I accept that my order is shipped in a reused package') }}
+                    <input type="checkbox" ng-model="choices.reused_package">
+                </label>
+                <label>
+                    <i class="fa fa-check"></i>
+                    <b>{{ _('I agree to the %(terms)s and adhere to them unconditionally', terms='<a href="'|safe+url_for('info', slug='terms_of_purchase')+'" target="_blank">'|safe+_('terms of purchase')+'</a>'|safe) }}</b>
+                    <input type="checkbox" ng-model="choices.accept_terms">
+                </label>
+                <div ng-show="cart.on_demand">
+                    <br>
+                    <b class="text-danger">{{ _('I understand that the cart contains products to be ordered on demand and that shipping will be delayed for %(min)d-%(max)d days.', min=config.ON_DEMAND_DELAY_MIN, max=config.ON_DEMAND_DELAY_MAX) }}</b>
+                </div>
+            </div>
         </div>
-    </div>
-    <textarea placeholder="{{ _('If you have any message for us about this order, write it here!') }}" id="checkout-message" class="form-control"></textarea>
-    <div class="panel panel-default">
-        <div class="panel-body text-right">
-            <label class="reused-package text-normal">
-                <i class="fa fa-recycle"></i>
-                {{ _('I accept that my order is shipped in a reused package') }}
-                <input type="checkbox" name="reused_package"{% if current_user.latest_reused_package %} checked="checked"{% endif %} onclick="save_reused_package_status()">
-            </label>
-            <label>
-                <i class="fa fa-check"></i>
-                <b>{{ _('I agree to the %(terms)s and adhere to them unconditionally', terms='<a href="'|safe+url_for('info', slug='terms_of_purchase')+'" target="_blank">'|safe+_('terms of purchase')+'</a>'|safe) }}</b>
-                <input type="checkbox" name="accept_terms" onchange="maybe_activate_payment_button()">
-            </label>
-            {%- if cart.stock_status == 'on_demand' %}
-            <br>
-            <b class="text-danger">{{ _('I understand that the cart contains products to be ordered on demand and that shipping will be delayed for %(min)d-%(max)d days.', min=config.ON_DEMAND_DELAY_MIN, max=config.ON_DEMAND_DELAY_MAX) }}</b>
-            {%- endif %}
+
+        <div class="panel panel-default" ng-hide="addresses">
+            <div class="panel-body">
+                <p class="lead text-center">{{ _('You must define at least one address for delivery') }}</p>
+                <a href="{{ url_for('address_from_checkout', address_destination='delivery') }}" class="btn btn-lg btn-block btn-success">
+                    <i class="fa fa-home"></i>
+                    {{ _('Create an address') }}
+                </a>
+            </div>
         </div>
+        {#-
+            This form allows a 95% compatibility with the previous "old-way"
+            form "receiver", which will be completely rewritten later.
+        #}
+        <form method="POST" action="{{ url_for('confirm_order') }}">
+            <input type="hidden" name="delivery" value="[[ choices.delivery_address.id ]]">
+            <input type="hidden" name="delivery_as_billing" value="[[ choices.delivery_as_billing ]]">
+            <input type="hidden" name="billing" value="[[ choices.billing_address.id ]]">
+            <input type="hidden" name="shipping" value="[[ choices.carrier ]]">
+            <input type="hidden" name="payment" value="[[ choices.payment ]]">
+            <input type="hidden" name="reused_package" value="[[ choices.reused_package ]]">
+            <button type="submit" id="proceed" class="btn btn-lg btn-success pull-right" ng-disabled="!(choices.delivery_address && (choices.delivery_as_billing || choices.billing_address) && choices.payment && choices.accept_terms)">
+            {{ _('Verify and confirm the order') }}
+            <i class="fa fa-chevron-right"></i>
+        </button>
+        </form>
+        <small>{{ _('TVA non applicable, article 293 B du Code général des impôts') }}</small>
     </div>
-    <button type="submit" id="proceed" class="btn btn-lg btn-success pull-right" disabled="disabled">
-        {{ _('Verify and confirm the order') }}
-        <i class="fa fa-chevron-right"></i>
-    </button>
-    <small>{{ _('TVA non applicable, article 293 B du Code général des impôts') }}</small>
-</form>
-<script>
-var addresses = {
-        {%- for address in current_user.addresses %}
-        "{{ address.id }}": {
-            address: "{{ address.firstname }} {{ address.lastname }}\n{{ address.address|replace('\n','\\n')|replace('\r', '') }}\n{{ address.country.prefixed_name }}",
-            modifyurl: "{{ url_for('address_from_checkout', address_id=address.id) }}",
-            carriers: [
-                {%- for carrier in address.carriers(weight=cart.get_weight()) %}
-                {
-                    name: "{{ carrier[0] }}",
-                    id: "{{ carrier[0].id }}",
-                    gross: "{{ carrier[1].gross }} {{ config.CURRENCY }}",
-                    net: "{{ carrier[1].net }} {{ config.CURRENCY }}",
-                    total_net: "{{ carrier[1].net + cart.get_total().quantize('0.01').net }} {{ config.CURRENCY }}"
-                    },
-            {%- endfor %}
-                ]
-            },
-        {%- endfor %}
-        };
-function update_delivery_address() {
-    var id = document.getElementById('delivery-select').value,
-        address = addresses[id],
-        carriers_list = document.getElementById('carriers-list');
-    // Display the delivery address
-    document.getElementById('delivery-address').innerHTML = address.address;
-    document.getElementById('delivery-modify-address').href = address.modifyurl;
-    // Save the address in the session
-    sessionStorage.setItem('delivery-address', id);
-    // Remove all carriers options
-    while (carriers_list.firstChild) {
-        carriers_list.removeChild(carriers_list.firstChild);
-    };
-    // Reinitialize the price display
-    document.getElementById('shipping-fee').innerHTML = "...";
-    document.getElementById('total').innerHTML = "...";
-    // Create new carriers options
-    address.carriers.forEach(function(c){
-        var label = document.createElement('label');
-        label.className = "list-group-item";
-        var row = document.createElement('div');
-        row.className = "row";
-        var col1 = document.createElement('div');
-        col1.className = "col-xs-8";
-        var radio = document.createElement('input');
-        radio.type = "radio";
-        radio.name = "shipping";
-        radio.value = c.id;
-        radio.setAttribute('onchange', "carrier_changed('"+c.net+"', '"+c.total_net+"', '"+c.id+"')");
-        if (c.id == '{{ current_user.latest_carrier }}') {
-            radio.setAttribute('checked', 'checked');
-            document.getElementById('shipping-fee').innerHTML = c.net;
-            document.getElementById('total').innerHTML = c.total_net;
-        };
-        var name = document.createElement('span');
-        name.innerHTML = c.name;
-        var col2 = document.createElement('div');
-        col2.className = "col-xs-4 text-right";
-        var cost = document.createElement('b');
-        cost.innerHTML = c.net;
-        col2.appendChild(cost);
-        col1.appendChild(radio);
-        col1.appendChild(name);
-        row.appendChild(col1);
-        row.appendChild(col2);
-        label.appendChild(row);
-        carriers_list.appendChild(label);
-    });
-    maybe_activate_payment_button();
-}
-function update_billing_address() {
-    var id=document.getElementById('billing-select').value;
-    // Display the billing address
-    document.getElementById('billing-address').innerHTML = addresses[id].address;
-    document.getElementById('billing-modify-address').href = addresses[id].modifyurl;
-    // Save the address in the session
-    sessionStorage.setItem('billing-address', id);
-}
-function change_delivery_as_billing() {
-    var cont = document.getElementById('billing-container'),
-        checked = document.getElementById('delivery-as-billing').checked;
-    if (checked == true) {
-        cont.className="hidden";
-    } else {
-        cont.className="";
-    };
-    sessionStorage.setItem('delivery-as-billing', checked);
-}
-function carrier_changed(net, total_net, id) {
-    document.getElementById('shipping-fee').innerHTML = net;
-    document.getElementById('total').innerHTML = total_net;
-    sessionStorage.setItem('carrier', id);
-    maybe_activate_payment_button();
-}
-function payment_changed(id) {
-    sessionStorage.setItem('payment', id);
-    maybe_activate_payment_button();
-}
-function save_reused_package_status() {
-    sessionStorage.setItem(
-            'reused-package', 
-            document.getElementById('checkout-form').reused_package.checked
-            );
-}
-function maybe_activate_payment_button() {
-    var form = document.getElementById('checkout-form');
-    if (form['delivery'].value && form['shipping'].value &&
-        form['payment'].value && form['accept_terms'].checked) {
-        document.getElementById('proceed').disabled = "";
-    } else {;
-        document.getElementById('proceed').disabled = "disabled";
-    };
-}
-function initialize() {
-    // Get data from the session (to keep recent changes)
-    delivery = sessionStorage.getItem('delivery-address');
-    if (delivery) {
-        document.getElementById('delivery-select').value = delivery;
-    };
-    delivery_as_billing = sessionStorage.getItem('delivery-as-billing');
-    if (delivery_as_billing) {
-        var checkbox = document.getElementById('delivery-as-billing');
-        if (delivery_as_billing == "true") {
-            checkbox.checked = "checked";
-        } else if (delivery_as_billing == "false") {
-            checkbox.checked = "";
-        }
-    }
-    billing = sessionStorage.getItem('billing-address');
-    if (billing) {
-        document.getElementById('billing-select').value = billing;
-    };
-    payment = sessionStorage.getItem('payment');
-    if (payment) {
-        document.getElementById('checkout-form').payment.value = payment;
-    };
-    update_delivery_address();
-    // Carrier must be changed after updating the delivery address, or the
-    // value from the database overrides the value from the session
-    //
-    // TODO: set the carrier from the session... harder than initially planned
-    // carrier = sessionStorage.getItem('carrier');
-    update_billing_address();
-    change_delivery_as_billing();
-    reused = sessionStorage.getItem('reused-package');
-    if (reused) {
-        var checkbox = document.getElementById('checkout-form').reused_package;
-        if (reused == "true") {
-            checkbox.checked = "checked";
-        } else if (reused == "false") {
-            checkbox.checked = "";
-        };
-    }
-    maybe_activate_payment_button();
-}
-// Initialize everything after loading the page
-initialize();
-</script>
-{%- else -%}
-<div class="alert alert-danger text-center">{{ _('Your cart is empty!') }}</div>
-{%- endif %}
+    <div ng-hide="cart.lines" class="alert alert-danger text-center" ng-cloak>
+        {{ _('Your cart is empty!') }}
+    </div>
+</div>
 {%- endblock %}
 
