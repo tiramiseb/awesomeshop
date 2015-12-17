@@ -37,6 +37,9 @@ class Country(db.Document):
         'ordering': ['code']
     }
 
+    def __unicode__(self):
+        return self.loc_name
+
     @property
     def loc_name(self):
         return self.name.get(get_locale(), self.default_name)

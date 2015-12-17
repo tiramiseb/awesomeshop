@@ -54,7 +54,7 @@ class Product(BaseProduct):
         return self.reference
 
     def get_full_name(self, data=None):
-        return unicode(self)
+        return self.loc_name
 
     def get_price_per_item(self, data=None):
         gross = self.gross_price
