@@ -114,6 +114,17 @@ class User(db.Document, UserMixin):
         self.confirm_code = str(uuid.uuid4())
         send_message(self.email, 'email_confirmation', code=self.confirm_code)
 
+    def preferences_as_dict(self):
+        return {
+            'delivery_address': self.latest_delivery_address,
+            'billing_address': self.latest_billing_address,
+            'delivery_as_billing': self.latest_delivery_as_billing,
+            'carrier': self.latest_carrier,
+            'payment': self.latest_payment,
+            'reused_package': self.latest_reused_package
+            }
+
+
 def geolocate_country():
     lookup = geolite2.lookup(request.remote_addr)
     if lookup:
@@ -174,3 +185,21 @@ class Address(db.Document):
         
         carriers.sort(key=lambda c: c[1]['net'])
         return carriers
+
+    def as_dict(self):
+        return {
+            'id': str(self.id),
+            'title': self.title,
+            'firstname': self.firstname,
+            'lastname': self.lastname,
+            'address': self.address,
+            'country': self.country.prefixed_name,
+            'phone': self.phone,
+            'full_address': '{f} {l}\n{a}\n{c}'.format(
+                                    f=self.firstname,
+                                    l=self.lastname,
+                                    a=self.address,
+                                    c=self.country.prefixed_name
+                                    )
+            }
+
