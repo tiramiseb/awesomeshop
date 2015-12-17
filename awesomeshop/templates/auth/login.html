@@ -26,7 +26,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     </div>
     <div class="panel-body">
         <p class="lead text-center"><a href="{{ url_for('register', next=request.args.next) }}">{{ _("Don't have an account yet? Register now!") }}</a></p>
-        <form method="POST">
+        <form method="POST" action>
             {{ form.hidden_tag() }}
             {{ forminput(form.email) }}
             {{ forminput(form.password) }}

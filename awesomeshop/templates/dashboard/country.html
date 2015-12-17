@@ -21,7 +21,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {% block title %}{{ _('Dashboard') }} - {{ _('Country') }}{% endblock %}
 {% block content %}
 <h1>{% if form.code.data %}{{ form.code.data }}{% else %}{{ _('New country') }}{% endif %}</h1>
-<form method="POST">
+<form method="POST" action>
 {{ form.hidden_tag() }}
     <div class="panel panel-default">
         <div class="panel-body">

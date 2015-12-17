@@ -26,7 +26,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     <div class="col-sm-6">
         <div class="panel panel-default">
             <div class="panel-body">
-                <form method="POST">
+                <form method="POST" action>
                     {{ form.hidden_tag() }}
                     {{ forminput(form.title) }}
                     <div class="row">
@@ -66,7 +66,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 {{ _('New address') }}
             </div>
             <div class="panel-body">
-                <form method="POST">
+                <form method="POST" action>
                     {{ newform.hidden_tag() }}
                     {{ forminput(newform.title) }}
                     <div class="row">

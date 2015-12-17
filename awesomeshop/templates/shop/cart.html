@@ -22,7 +22,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {% block content %}
 <h1>{{ _('My Cart') }}</h1>
 {%- if cart %}
-<form method="POST">
+<form method="POST" action>
     <div class="list-group">
         {%- for line in cart %}
         <div class="list-group-item cart-list">

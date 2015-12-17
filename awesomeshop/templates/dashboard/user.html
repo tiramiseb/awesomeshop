@@ -21,7 +21,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {% block title %}{{ _('Dashboard') }} - {{ _('User') }}{% endblock %}
 {% block content %}
 <h1>{% if form.email.data %}{{ form.email.data }}{% else %}{{ _('New user') }}{% endif %}</h1>
-<form method="POST">
+<form method="POST" action>
     <div class="panel panel-default">
         <div class="panel-body">
             {{ form.hidden_tag() }}
@@ -104,7 +104,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     <div class="list-group">
         {%- for address in addresses %}
         <div class="list-group-item">
-            <form method="POST">
+            <form method="POST" action>
                 {{ address.hidden_tag() }}
                 <div class="row">
                     <div class="col-sm-6">
@@ -135,7 +135,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         {%- endfor %}
         <div class="list-group-item">
             <h3>{{ _('New address') }}</h3>
-            <form method="POST">
+            <form method="POST" action>
                 {{ newaddress.hidden_tag() }}
                 <div class="row">
                     <div class="col-sm-6">
