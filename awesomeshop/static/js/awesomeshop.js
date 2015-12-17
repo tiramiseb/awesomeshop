@@ -73,4 +73,16 @@ app.config(['$interpolateProvider', function($interpolateProvider) {
                     });
                 });
         });
-});
+})
+
+.controller('ProductCtrl', function ($scope) {
+    $scope.quantity = 1;
+    $scope.dec_quantity = function() {
+        if ($scope.quantity > 1) {
+            $scope.quantity -= 1;
+        }
+    }
+    $scope.inc_quantity = function() {
+        $scope.quantity += 1;
+    }
+})
