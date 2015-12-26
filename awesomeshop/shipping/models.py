@@ -30,19 +30,11 @@ class Country(db.Document):
     }
 
     @property
-    def loc_name(self):
-        return self.name.get(get_locale(), self.default_name)
-
-    @property
     def prefixed_name(self):
-        return u'{} - {}'.format(self.code, self.loc_name)
-
-    def as_dict(self):
-        return {
-            'id': str(self.id),
-            'code': self.code,
-            'name': self.prefixed_name
-            }
+        return u'{} - {}'.format(
+                            self.code,
+                            self.name.get(get_locale(), self.default_name)
+                            )
 
 
 

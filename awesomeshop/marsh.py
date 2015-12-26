@@ -19,25 +19,49 @@
 
 from marshmallow import fields
 
+from . import get_locale
+
 class Count(fields.Field):
+    """
+    Dump only: count the number of objects in a queryset
+    """
     def _serialize(self, value, attr, obj):
         return value.count()
 
-class LocName(fields.Field):
+class Loc(fields.Field):
+    """
+    Dump only: localize a TranslationField
+    """
     def _serialize(self, value, attr, obj):
-        return value.loc_name
+        return value.get(get_locale(), '')
+
+class LocObjField(fields.Field):
+    """
+    Dump only: localize a TranslationField from a linked object
+
+    * f: the field in the object
+    """
+    def _serialize(self, value, attr, obj):
+        return getattr(value, self.metadata['f']).get(get_locale(), '')
 
 class NetPrice(fields.Field):
+    """
+    Dump only: net price for a Price object
+    """
     def _serialize(self, value, attr, obj):
         return str(value.quantize('0.01').net)
 
 class ObjField(fields.Field):
     """
+    Dump: select a field from an object
+    Load: select an object from the field value
+
     Needed arguments:
-    * f: the field for the object
+    * f: the field used to find the object
     * obj: the object class
     """
     def _serialize(self, value, attr, obj):
         return getattr(value, self.metadata['f'])
+
     def _deserialize(self, value, attr, data):
         return self.metadata['obj'].objects.get(**{self.metadata['f']: value})

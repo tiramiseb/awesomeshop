@@ -19,13 +19,20 @@
 
 from flask import request
 from flask_restful import Resource
+from marshmallow import Schema, fields
 
 from .. import login_required, rest
 from .models import Country
 
+class CountrySchema(Schema):
+    id = fields.String()
+    code = fields.String()
+    name = fields.Function(lambda obj: obj.prefixed_name)
+
+
 class Countries(Resource):
     @login_required
     def get(self):
-        return [ c.as_dict() for c in Country.objects ]
+        return CountrySchema(many=True).dump(Country.objects).data
 rest.add_resource(Countries, '/api/countries')
 

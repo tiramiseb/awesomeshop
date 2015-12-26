@@ -19,17 +19,18 @@
 
 from marshmallow import Schema, fields
 
-from ..marsh import LocName, NetPrice
+from ..marsh import LocObjField, NetPrice
 
 class CartlineSchema(Schema):
-    product = LocName()
-    quantity = fields.Integer()
-    unit_price = NetPrice()
-    total_price = NetPrice()
+    product = LocObjField(f='name')
+    quantity = fields.Integer(dump_only=True)
+    unit_price = NetPrice(dump_only=True)
+    total_price = NetPrice(dump_only=True)
+
 
 class CartSchema(Schema):
-    id = fields.String()
-    name = fields.String()
-    date = fields.DateTime()
-    lines = fields.Nested(CartlineSchema, many=True)
-    total_price = NetPrice()
+    id = fields.String(dump_only=True)
+    name = fields.String(dump_only=True)
+    date = fields.DateTime(dump_only=True)
+    lines = fields.Nested(CartlineSchema, dump_only=True, many=True)
+    total_price = NetPrice(dump_only=True)
