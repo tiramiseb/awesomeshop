@@ -8,6 +8,8 @@ dependencies:
 Python dependencies installed with pip:
 
 * *Flask*: web framework
+* *Flask-RESTful*: serving the API
+* *Marshmallow*: objects transformation for the API
 * *MongoDB*: data storage
 * *PayPlug*: online credit card payment
 * *Pillow*: images manipulation
