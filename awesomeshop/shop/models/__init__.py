@@ -23,4 +23,3 @@ from .order import *
 from .product import *
 from .tax import *
 from .url import *
-from .shop_signals import *

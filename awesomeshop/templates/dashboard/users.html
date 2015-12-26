@@ -1,4 +1,4 @@
-{#
+{#-
 Copyright 2015 Sébastien Maccagnoni-Munch
 
 This file is part of AwesomeShop.
@@ -16,42 +16,25 @@ details.
 You should have received a copy of the GNU Affero General Public License
 along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
-{% extends "dashboard/skeleton.html" %}
-
-
-{% block title %}{{ _('Dashboard') }} - {{ _('Users') }}{% endblock %}
-{% block content %}
 <h1>{{ _('Users') }}</h1>
-<p><a href="{{ url_for('dashboard_user') }}" class="btn btn-primary">
-    <i class="fa fa-plus"></i>
+<p><a class="btn btn-primary" ui-sref="newuser">
+   <i class="fa fa-plus"></i>
     {{ _('Add an user') }}
 </a></p>
-<table class="table table-hover">
-    {%- for user in users %}
-    <tr>
-        <td class="pointer" onclick="document.location='{{ url_for('dashboard_user', user_id=user.id) }}'">
-            {%- if user.is_admin %}
-            <span class="label label-warning">{{ _('admin') }}</span>
-            {%- endif %}
-            {{ user.email }}
-        </td>
-        <td class="pointer" onclick="document.location='{{ url_for('dashboard_user', user_id=user.id) }}'">
-            {{ ngettext('%(num)d address', '%(num)d addresses', user.addresses.count()) }}
-        </td>
-        <td class="pointer" onclick="document.location='{{ url_for('dashboard_user', user_id=user.id) }}'">
-            {{ ngettext('%(num)d cart', '%(num)d carts', user.carts.count()) }}
-        </td>
-        <td>
-            <div class="btn-group pull-right" role="group">
-                <a class="btn btn-success" href="{{ url_for('dashboard_user', user_id=user.id) }}">
-                    <i class="fa fa-pencil"></i>
-                </a>
-                <a class="btn btn-danger" href="{{ url_for('dashboard_remove_user', user_id=user.id) }}">
-                    <i class="fa fa-trash"></i>
-                </a>
+<div class="list-group">
+    <div class="list-group-item">
+        <input class="form-control" type="text" ng-model="query">
+    </div>
+    <a class="list-group-item" ng-repeat="user in users | filter:query" ui-sref="user({user_id:user.id})">
+        <div class="row">
+            <div class="col-xs-8">
+                [[ user.email ]]
             </div>
-        </td>
-    </tr>
-    {%- endfor %}
-</table>
-{%- endblock %}
+            <div class="col-xs-4 text-right">
+                [[ user.addresses ]] <i class="fa fa-map-marker"></i>
+                &ndash;
+                [[ user.carts ]] <i class="fa fa-shopping-cart"></i>
+            </div>
+        </div>
+    </a>
+</div>

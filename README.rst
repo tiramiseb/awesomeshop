@@ -17,6 +17,8 @@ Python dependencies installed with pip:
 
 Front-end libraries/frameworks included:
 
+* `AngularJS <https://angularjs.org/>`_
+* some Angular additional modules
 * `Bootstrap <http://getbootstrap.com/>`_
 * `Font Awesome <http://fontawesome.io/>`_
 * `Start Bootstap Simple Sidebar <http://startbootstrap.com/template-overviews/simple-sidebar/>`_

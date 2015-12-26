@@ -110,8 +110,8 @@ class AwesomeShopConverter(ModelConverter):
             unbound_field = f.TextAreaField(**field_args)
         return TranslationsList(unbound_field, **kwargs)
 
-    # Exactly the same as the original one, but there, the correct model_form
-    # will be used, with conv_Translations
+    # Exactly the same as the original one, but if it is defined there,
+    # the correct model_form will be used, with conv_Translations
     @converts('EmbeddedDocumentField')
     def conv_EmbeddedDocument(self, model, field, kwargs):
         kwargs = {

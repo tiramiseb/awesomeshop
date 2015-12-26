@@ -17,18 +17,17 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
-from flask.ext.babel import lazy_gettext
-from slugify import slugify
+#from flask.ext.babel import lazy_gettext
+#from slugify import slugify
 
 from . import db
 
 class Setting(db.Document):
-    name = db.StringField(required=True, unique=True, max_length=100,
-                          verbose_name=lazy_gettext('Name'))
+    name = db.StringField()
+# XXX TODO Remove because unused with AngularJS?
+#                          required=True, unique=True, max_length=100,
+#                          verbose_name=lazy_gettext('Name'))
     value = db.DynamicField()
 
     def __str__(self):
         return 'Setting: {} = {}'.format(self.name, self.value)
-
-def slugify_slug(sender, document, **kwargs):
-    document.slug = slugify(document.slug)

@@ -17,24 +17,19 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
-from flask_restful import Resource
+from marshmallow import Schema, fields
 
-from .. import rest
-from .cart import Cart
+from ..marsh import LocName, NetPrice
 
-class SessionCart(Resource):
-    def get(self):
-        cart_modified_because_of_stock = False
-        cart = Cart.from_session()
-        # Verify quantities
-        for line in cart:
-            if not line.product.on_demand:
-                if line.quantity > line.get_stock():
-                    cart_modified_because_of_stock = True
-                    cart.add(line.product, line.get_stock(), replace=True)
-        ret = cart.as_dict()
-        ret['modified'] = cart_modified_because_of_stock
-        ret['on_demand'] = cart.stock_status == 'on_demand'
-        return ret
-rest.add_resource(SessionCart, '/api/cart')
+class CartlineSchema(Schema):
+    product = LocName()
+    quantity = fields.Integer()
+    unit_price = NetPrice()
+    total_price = NetPrice()
 
+class CartSchema(Schema):
+    id = fields.String()
+    name = fields.String()
+    date = fields.DateTime()
+    lines = fields.Nested(CartlineSchema, many=True)
+    total_price = NetPrice()

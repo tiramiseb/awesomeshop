@@ -1,0 +1,61 @@
+/* Copyright 2015 Sébastien Maccagnoni-Munch
+ *
+ * This file is part of AwesomeShop.
+ *
+ * AwesomeShop is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU Affero General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/* Loading spinner */
+#spinner {
+    font-size: 200%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -2.5em;
+    margin-left: -2.5em;
+    z-index: 200;
+}
+
+/* Button to toggle the menu */
+#menu-toggle {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 100;
+}
+/* Buttons related to the page */
+#page-buttons {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+}
+#page-buttons * {
+    text-shadow: 1px 1px 5px #999;
+}
+#page-buttons *:hover {
+    text-shadow: 1px 1px 15px #000;
+}
+#page-buttons *:disabled * {
+    text-shadow: none;
+}
+/* Smaller text for the menu */
+.sidebar-nav li {
+    font-size: 90%;
+    line-height: 3em !important;
+}
+/* Text area with monospace, better for writing ReST */
+textarea {
+    font-family: monospace;
+}

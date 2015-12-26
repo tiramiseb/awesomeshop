@@ -19,22 +19,8 @@
 
 from ... import db
 
+
+
 class Url(db.Document):
     url = db.StringField(required=True, max_length=100)
     document = db.GenericReferenceField(db_field='doc')
-
-def update_url(sender, document, url, created, **kwargs):
-    remove_url(sender, document)
-    Url.objects(url=url).delete()
-    Url(url=url, document=document).save()
-def update_category_url(sender, document, **kwargs):
-    if document.parent:
-        url = document.parent.url + '/' + document.slug
-    else:
-        url = document.slug
-    update_url(sender, document, url, **kwargs)
-def update_product_url(sender, document, **kwargs):
-    url = document.category.url + '/' + document.slug
-    update_url(sender, document, url, **kwargs)
-def remove_url(sender, document, **kwargs):
-    Url.objects(document=document).delete()

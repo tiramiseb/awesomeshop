@@ -1,0 +1,54 @@
+{#-
+Copyright 2015 Sébastien Maccagnoni-Munch
+
+This file is part of AwesomeShop.
+
+AwesomeShop is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+details.
+
+You should have received a copy of the GNU Affero General Public License
+along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+#}
+
+{% macro _generic(field, label, name, errormessage) %}
+<div class="form-group" ng-class="{ 'has-error' : form.{{ name }}.$invalid && !form.{{ name }}.$pristine }">
+    <label for="{{ name }}">{{ label }}</label>
+    {{ field|safe }}
+    {%- if errormessage %}
+    <p ng-show="form.{{ name }}.$invalid" class="text-danger">
+        {{ errormessage }}
+    </p>
+    {%- endif %}
+</div>
+{% endmacro %}
+
+{% macro _input_generic(type, label, name, ngmodel, options, errormessage) %}
+{{ _generic('<input type="%s" id="%s" name="%s" class="form-control" ng-model="%s" %s>'|format(type, name, name, ngmodel, options), label, name, errormessage) }}
+{% endmacro %}
+
+{% macro input_email(label, name, ngmodel, options, errormessage) %}
+{{ _input_generic('email', label, name, ngmodel, options, errormessage) }}
+{% endmacro %}
+
+{% macro input_password(label, name, ngmodel, options, errormessage) %}
+{{ _input_generic('password', label, name, ngmodel, options, errormessage) }}
+{% endmacro %}
+
+{% macro input_text(label, name, ngmodel, options, errormessage) %}
+{{ _input_generic('text', label, name, ngmodel, options, errormessage) }}
+{% endmacro %}
+
+{% macro textarea(label, name, ngmodel, options, errormessage) %}
+{{ _generic('<textarea id="%s" name="%s" class="form-control" ng-model="%s" %s></textarea>'|format(name, name, ngmodel, options), label, name, errormessage) }}
+{% endmacro %}
+
+{% macro select(label, name, ngmodel, ngoptions, options, errormessage) %}
+{{ _generic('<select id="%s" name="%s" class="form-control" ng-model="%s" ng-options="%s" %s></select>'|format(name, name, ngmodel, ngoptions, options), label, name, errormessage) }}
+{% endmacro %}

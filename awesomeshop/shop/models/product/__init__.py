@@ -17,17 +17,5 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
-from .core import BaseProduct, product_types, type_to_product, product_to_type
+from .core import BaseProduct
 from .product import Product
-# This one will be imported later. Committed too soon
-#from .modularproduct import ModularProduct
-
-# When adding a new product type:
-#
-# * it must inherit from core.BaseProduct
-# * all functions raising NotImplementedError must be overriden
-# * a new entry must be added to the .core.product_types dict
-
-for a, b in product_types:
-    type_to_product[a] = b
-    product_to_type[b] = a

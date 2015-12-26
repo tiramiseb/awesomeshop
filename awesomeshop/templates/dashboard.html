@@ -1,0 +1,109 @@
+{#-
+Copyright 2015 Sébastien Maccagnoni-Munch
+
+This file is part of AwesomeShop.
+
+AwesomeShop is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+details.
+
+You should have received a copy of the GNU Affero General Public License
+along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+#}
+<!DOCTYPE html>
+<html ng-app="dashboard" trigger-auth>
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8">
+<meta name="generator" content="AwesomeShop">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link href="/static/libs/bootstrap.min.css" rel="stylesheet">
+<link href="/static/libs/font-awesome.min.css" rel="stylesheet">        
+<link href="/static/libs/simple-sidebar.css" rel="stylesheet">
+<link href="/static/awesomeshop/dashboard.css" rel="stylesheet">
+<script src="/static/libs/angular.min.js"></script>
+<script src="/static/libs/l10n/angular-locale_{{ get_locale() }}.js"></script>
+<script src="/static/libs/angular-animate.min.js"></script>
+<script src="/static/libs/angular-ui-router.min.js"></script>
+<script src="/static/libs/angular-validation-match.min.js"></script>
+<script src="/static/libs/ui-bootstrap-tpls-0.14.3.min.js"></script>
+<script src="/static/libs/http-auth-interceptor.js"></script>
+<script src="/static/awesomeshop/common.js"></script>
+<script src="/static/awesomeshop/dashboard/users.js"></script>
+<script src="/static/awesomeshop/dashboard.js"></script>
+<title>{{ config.SHOP_NAME }} - {{ _('Dashboard') }}</title>
+</head>
+<body ng-init="title='{{ _('Home') }}'">
+<div id="spinner">
+    <i class="fa fa-spinner fa-pulse fa-5x text-primary"></i>
+</div>
+<div id="wrapper" ng-class="{toggled: menuToggle}">
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <li class="sidebar-brand">
+                <a ui-sref="index">{{ _('Dashboard') }}</a>
+            </li>
+            <li><a href="/" target="_blank">
+                    <i class="fa fa-eye"></i>
+                    {{ _('See the shop') }}</a>
+            </li>
+            <li>{{ _('Day-to-day') }}</li>
+            <li><a href="#/orders">
+                    <i class="fa fa-shopping-cart"></i>
+                    {{ _('Orders') }}</a>
+            </li>
+            <li><a href="#/products">
+                    <i class="fa fa-cubes"></i>
+                    {{ _('Products') }}
+            </a></li>
+            <li><a href="#/categories">
+                    <i class="fa fa-th-list"></i>
+                    {{ _('Categories') }}</a>
+            </li>
+            <li><a href="#/documentations">
+                    <i class="fa fa-file-text"></i>
+                    {{ _('Documentation') }}
+            </a></li>
+            <li>{{ _('Configuration') }}</li>
+            <li><a href="#/carriers">
+                    <i class="fa fa-truck"></i>
+                    {{ _('Carriers') }}
+            </a></li>
+            <li><a href="#/countries">
+                    <i class="fa fa-flag"></i>
+                    {{ _('Countries') }}
+            </a></li>
+            <li><a href="#/countriesgroups">
+                    <i class="fa fa-globe"></i>
+                    {{ _('Countries groups') }}
+            </a></li>
+            <li><a href="#/taxes">
+                    <i class="fa fa-calculator"></i>
+                    {{ _('Taxes') }}
+            </a></li>
+            <li><a href="#/infopages">
+                    <i class="fa fa-file-text"></i>
+                    {{ _('Information') }}
+            </a></li>
+            <li><a ui-sref="users">
+                    <i class="fa fa-users"></i>
+                    {{ _('Users') }}
+            </a></li>
+        </ul>
+    </div>
+
+    <div id="page-content-wrapper">
+        <button type="button" class="btn btn-default" id="menu-toggle" ng-model="menuToggle" uib-btn-checkbox>
+            <i class="fa fa-bars"></i>
+        </button>
+        <div class="container-fluid" ui-view>
+        </div>
+    </div>
+</div>
+</body>
+</html>
