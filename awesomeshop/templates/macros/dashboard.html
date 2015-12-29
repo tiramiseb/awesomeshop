@@ -17,7 +17,7 @@ You should have received a copy of the GNU Affero General Public License
 along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
 
-{%- macro submit_back(state) %}
+{%- macro _generic_submit_back(option) %}
 <div id="page-buttons">
     <button class="btn btn-link" ng-click="submit()" ng-disabled="form.$invalid">
         <i class="fa fa-check-circle fa-4x text-success"></i>
@@ -25,9 +25,16 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     <button class="btn btn-link" ng-click="delete()" ng-hide="new">
         <i class="fa fa-times-circle fa-4x text-danger"></i>
     </button>
-    <a class="btn btn-link" ui-sref="{{ state }}">
+    <a class="btn btn-link" {{ option|safe }}>
         <i class="fa fa-arrow-circle-left fa-4x text-primary"></i>
     </a>
 </div>
 {%- endmacro %}
 
+{%- macro submit_back(state) %}
+{{ _generic_submit_back('ui-sref="%s"'|format(state)) }}
+{%- endmacro %}
+
+{%- macro submit_back_dynamic(statego) %}
+{{ _generic_submit_back('ng-click="$state.go(%s)"'|format(statego)) }}
+{%- endmacro %}
