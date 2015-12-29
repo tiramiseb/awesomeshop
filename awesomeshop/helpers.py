@@ -24,9 +24,6 @@ from . import db
 
 class Setting(db.Document):
     name = db.StringField()
-# XXX TODO Remove because unused with AngularJS?
-#                          required=True, unique=True, max_length=100,
-#                          verbose_name=lazy_gettext('Name'))
     value = db.DynamicField()
 
     def __str__(self):

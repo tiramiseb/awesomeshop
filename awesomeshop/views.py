@@ -29,18 +29,6 @@ def root():
 
 @app.route('/login', methods=['GET','POST'])
 def login():
-#    if current_user.is_authenticated:
-#        return redirect(request.args.get('next') or '/')
-#    form = LoginForm()
-#    if form.validate_on_submit():
-#        try:
-#            user = User.objects.get(email=form.email.data)
-#        except User.DoesNotExist:
-#            user = None
-#        if user and user.check_password(form.password.data):
-#            login_user(user)
-#            return redirect(request.args.get('next') or url_for('home'))
-#        form.email.errors.append(_('Email address or Password is invalid.'))
     return render_template('login.html')
 
 @app.route('/part/<partname>')
@@ -62,6 +50,12 @@ def dashboard_part(partname):
         return render_template('dashboard/{}.html'.format(partname))
     except TemplateNotFound:
         abort(404)
+
+@app.route('/api/config')
+def api_config():
+    return jsonify(
+            languages=app.config['LANGS']
+            )
 
 @app.errorhandler(401)
 def unauthorized(e):
