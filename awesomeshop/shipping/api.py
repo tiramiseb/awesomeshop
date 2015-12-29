@@ -27,8 +27,7 @@ from .models import Country
 class CountrySchema(Schema):
     id = fields.String()
     code = fields.String()
-    name = fields.Function(lambda obj: obj.prefixed_name)
-
+    name = fields.String(attribute='prefixed_name', dump_only=True)
 
 class Countries(Resource):
     @login_required
