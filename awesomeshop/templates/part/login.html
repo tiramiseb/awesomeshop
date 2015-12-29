@@ -22,7 +22,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     <h3 class="modal-title">{{ _('%(shopname)s Login', shopname=config.SHOP_NAME) }}</h3>
 </div>
 <div class="modal-body">
-    {{ f.input_text(_('Email address'), 'authemail', 'auth.email' 'ng-focus="auth.success=undefined" required') }}
+    {{ f.input_text(_('Email address'), 'authemail', 'auth.email', 'ng-focus="auth.success=undefined" required') }}
     {{ f.input_password(_('Password'), 'authpassword', 'auth.password', 'ng-focus="auth.success=undefined" required') }}
     <uib-alert type="danger" ng-show="auth.success==false" close="auth.success=undefined">
         {{ _('Email address or Password is invalid.') }}
