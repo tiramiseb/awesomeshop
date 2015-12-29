@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('dashboard', [
+angular.module('awesomeshop', [
         // External modules
-        'authentication', 'ngAnimate', 'ui.router', 'validation.match',
+        'ngAnimate', 'ui.router', 'validation.match',
         // Common awesomeshop modules
-        'authentication', 'spinner', 
+        'authentication', 'config', 'spinner', 
         // Dashboard modules
         'dashboardUsers'
 ])

@@ -15,6 +15,20 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
  */
+
+// Adapted from here: http://stackoverflow.com/a/21189057
+(function() {
+  var $http = angular.injector(['ng']).get('$http');
+  $http.get('/api/config').then(
+    function (response) {
+      angular.module('config', []).constant('CONFIG', response.data);
+      angular.element(document).ready(function() {
+        angular.bootstrap(document, ['awesomeshop']);
+      });
+    }
+  );
+})();
+
 angular.module('spinner', [])
 .config(function($httpProvider) {
     loading_count = 0;
