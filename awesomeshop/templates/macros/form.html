@@ -52,3 +52,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {% macro select(label, name, ngmodel, ngoptions, options, errormessage) %}
 {{ _generic('<select id="%s" name="%s" class="form-control" ng-model="%s" ng-options="%s" %s></select>'|format(name, name, ngmodel, ngoptions, options), label, name, errormessage) }}
 {% endmacro %}
+
+{% macro checkbox_button(labelyes, labelno, name, ngmodel) %}
+{{ _generic('<button type="button" class="btn form-control" ng-class="{\'btn-success\': %s, \'btn-danger\': !%s}" ng-model="%s" uib-btn-checkbox><span ng-show="%s">%s</span><span ng-hide="%s">%s</span></button>'|format(ngmodel, ngmodel, ngmodel, ngmodel, labelyes, ngmodel, labelno), labelyes, name) }}
+{% endmacro %}
