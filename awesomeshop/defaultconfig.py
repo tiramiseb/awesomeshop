@@ -38,10 +38,10 @@ LANGS = ['en']
 CURRENCY = u'€'
 
 ## Size of the images in lists, etc
-#THUMBNAIL_SIZE = [100, 100]
+THUMBNAIL_SIZE = [100, 100]
 
 ## Size of the images in grid, etc
-#PREVIEW_SIZE = [350, 350]
+PREVIEW_SIZE = [350, 350]
 
 ## Account names (for social networks) and blog URL
 #FACEBOOK_ACCOUNT = ''
