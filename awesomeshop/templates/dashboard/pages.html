@@ -26,7 +26,14 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <input class="form-control" type="text" ng-model="query">
     </div>
     <a class="list-group-item" ng-repeat="page in pages | filter:query" ui-sref="page({page_id:page.id})" sv-element="sortoptions">
-        <i class="fa fa-bars" sv-handle></i>&nbsp;
-        [[ page.title || page.slug ]]
+        <div class="row">
+            <div class="col-xs-10">
+                <i class="fa fa-bars" sv-handle></i>&nbsp;
+                [[ page.title || page.slug ]]
+            </div>
+            <div class="col-xs-2 text-right">
+                <i class="fa fa-th-list" ng-show="page.in_menu" uib-tooltip="{{ _('Display in menu') }}" tooltip-placement="left"></i>
+            </div>
+        </div>
     </a>
 </div>
