@@ -1,0 +1,32 @@
+{#-
+Copyright 2015 Sébastien Maccagnoni-Munch
+
+This file is part of AwesomeShop.
+
+AwesomeShop is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+details.
+
+You should have received a copy of the GNU Affero General Public License
+along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+#}
+<h1>{{ _('Pages') }} <small>([[ pagetype ]])</small></h1>
+<p><a class="btn btn-primary" ui-sref="newpage({type:pagetype})">
+   <i class="fa fa-plus"></i>
+    {{ _('Add a page') }}
+</a></p>
+<div class="list-group" id="pages-list" sv-root sv-part="pages" sv-on-sort="sort($item, $indexTo)">
+    <div class="list-group-item">
+        <input class="form-control" type="text" ng-model="query">
+    </div>
+    <a class="list-group-item" ng-repeat="page in pages | filter:query" ui-sref="page({page_id:page.id})" sv-element="sortoptions">
+        <i class="fa fa-bars" sv-handle></i>&nbsp;
+        [[ page.title || page.slug ]]
+    </a>
+</div>

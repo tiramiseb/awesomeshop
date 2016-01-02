@@ -37,6 +37,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <script src="/static/libs/http-auth-interceptor.js"></script>
 <script src="/static/libs/ui-bootstrap-tpls-0.14.3.min.js"></script>
 <script src="/static/awesomeshop/common.js"></script>
+<script src="/static/awesomeshop/dashboard/pages.js"></script>
 <script src="/static/awesomeshop/dashboard/users.js"></script>
 <script src="/static/awesomeshop/dashboard.js"></script>
 <title>{{ config.SHOP_NAME }} - {{ _('Dashboard') }}</title>
@@ -68,7 +69,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     <i class="fa fa-th-list"></i>
                     {{ _('Categories') }}</a>
             </li>
-            <li><a href="#/documentations">
+            <li><a ui-sref="docs">
                     <i class="fa fa-file-text"></i>
                     {{ _('Documentation') }}
             </a></li>
@@ -89,7 +90,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     <i class="fa fa-calculator"></i>
                     {{ _('Taxes') }}
             </a></li>
-            <li><a href="#/infopages">
+            <li><a ui-sref="infos">
                     <i class="fa fa-file-text"></i>
                     {{ _('Information') }}
             </a></li>
