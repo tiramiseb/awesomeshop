@@ -36,12 +36,6 @@ except ImportError:
     import sys
     sys.exit(1)
 db = MongoEngine(app)
-#class ExtDocument(db.Document):
-#    meta = {'allow_inheritance': True}
-#    def from_dict(data, *fields):
-#        print data
-#        print fields
-#db.Document = ExtDocument
 
 # Initialize flask-babel
 babel = Babel(app)
@@ -84,8 +78,6 @@ def load_user(uid):
         return User.objects.get(id=uid)
     except User.DoesNotExist:
         return None
-
-
 def admin_required(func):
     """Decorator when a request can only be made by admins
     
