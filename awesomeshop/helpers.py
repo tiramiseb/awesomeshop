@@ -17,9 +17,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
-#from flask.ext.babel import lazy_gettext
-#from slugify import slugify
-
 from . import db
 
 class Setting(db.Document):
