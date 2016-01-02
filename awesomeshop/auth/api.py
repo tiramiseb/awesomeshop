@@ -139,4 +139,5 @@ class ApiUser(Resource):
     @admin_required
     def delete(self, user_id):
         User.objects.get_or_404(id=user_id).delete()
+        return { 'status': 'OK' }
 rest.add_resource(ApiUser, '/api/user/<user_id>')
