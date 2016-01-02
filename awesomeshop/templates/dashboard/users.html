@@ -31,9 +31,13 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 [[ user.email ]]
             </div>
             <div class="col-xs-4 text-right">
-                [[ user.addresses ]] <i class="fa fa-map-marker"></i>
+                <span uib-tooltip="{{ _('Addresses') }}" tooltip-placement="left">
+                    [[ user.addresses ]] <i class="fa fa-map-marker"></i>
+                </span>
                 &ndash;
-                [[ user.carts ]] <i class="fa fa-shopping-cart"></i>
+                <span uib-tooltip="{{ _('Saved carts') }}" tooltip-placement="left">
+                    [[ user.carts ]] <i class="fa fa-shopping-cart"></i>
+                </span>
             </div>
         </div>
     </a>
