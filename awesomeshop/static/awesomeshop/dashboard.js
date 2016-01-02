@@ -17,7 +17,7 @@
  */
 angular.module('awesomeshop', [
         // External modules
-        'ngAnimate', 'ui.router', 'validation.match',
+        'ngAnimate', 'ui.bootstrap', 'ui.router', 'validation.match',
         // Common awesomeshop modules
         'authentication', 'config', 'spinner', 
         // Dashboard modules
