@@ -27,6 +27,12 @@
     z-index: 200;
 }
 
+/* Smaller text for the menu */
+.sidebar-nav li {
+    font-size: 90%;
+    line-height: 3em !important;
+}
+
 /* Button to toggle the menu */
 #menu-toggle {
     position: fixed;
@@ -50,12 +56,15 @@
 #page-buttons *:disabled * {
     text-shadow: none;
 }
-/* Smaller text for the menu */
-.sidebar-nav li {
-    font-size: 90%;
-    line-height: 3em !important;
-}
+
 /* Text area with monospace, better for writing ReST */
 textarea {
     font-family: monospace;
+}
+/* Display a "move" cursor on handles */
+[sv-handle] {
+    cursor: move;
+}
+[sv-handle]:hover {
+    text-shadow: 0 0 4px #58f;
 }
