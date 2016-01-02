@@ -26,7 +26,8 @@ angular.module('dbUsers', [])
         .state('newuser', {
             url: '/user',
             templateUrl: 'user',
-            controller: 'NewUserCtrl'
+            controller: 'UserCtrl'
+            //controller: 'NewUserCtrl'
         })
         .state('user', {
             url: '/user/:user_id',
@@ -46,40 +47,38 @@ angular.module('dbUsers', [])
         $scope.user.addresses.splice(index, 1);
     }
     $scope.submit = function() {
-        $http.post('/api/user/'+uid, $scope.user)
-            .then(function(response) {
-                $scope.user = response.data;
-            });
+        if (uid) {
+            $http.post('/api/user/'+uid, $scope.user)
+                .then(function(response) {
+                    $scope.user = response.data;
+                });
+        } else {
+            $http.post('/api/users', $scope.user)
+                .then(function(response) {
+                    $state.go('user', {user_id:response.data.id})
+                });
+        }
     }
     $scope.delete = function() {
-        $http.delete('/api/user/'+uid)
-            .then(function(response) {
-                $state.go('users');
-            });
+        if (uid) {
+            $http.delete('/api/user/'+uid)
+                .then(function(response) {
+                    $state.go('users');
+                });
+        } else {
+            $state.go('users');
+        }
     };
     $http.get('/api/countries')
         .then(function(response) {
             $scope.countries = response.data;
         });
-    $http.get('/api/user/'+uid)
-        .then(function(response) {
-            $scope.user = response.data;
-        });
-})
-.controller('NewUserCtrl', function($scope, $http, $state) {
-    $scope.user = {addresses:[]};
-    $scope.new = true;
-    $scope.delete_address = function(index) {
-        $scope.user.addresses.splice(index, 1);
-    }
-    $scope.submit = function() {
-        $http.post('/api/users', $scope.user)
+    if (uid) {
+        $http.get('/api/user/'+uid)
             .then(function(response) {
-                $state.go('user', {user_id:response.data.id})
+                $scope.user = response.data;
             });
+    } else {
+        $scope.user = {addresses:[]};
     }
-    $http.get('/api/countries')
-        .then(function(response) {
-            $scope.countries = response.data;
-        });
 })
