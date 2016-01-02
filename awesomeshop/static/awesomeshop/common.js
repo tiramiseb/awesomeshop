@@ -16,7 +16,7 @@
  * along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Adapted from here: http://stackoverflow.com/a/21189057
+// Adapted from http://stackoverflow.com/a/21189057
 (function() {
   var $http = angular.injector(['ng']).get('$http');
   $http.get('/api/config').then(
@@ -29,7 +29,7 @@
   );
 })();
 
-angular.module('spinner', [])
+angular.module('spinner', ['ui.bootstrap'])
 .config(function($httpProvider) {
     loading_count = 0;
     function show_or_hide_spinner(inc) {
@@ -40,7 +40,7 @@ angular.module('spinner', [])
             document.getElementById('spinner').className="ng-hide";
         };
     }
-    $httpProvider.interceptors.push(function($q) {
+    $httpProvider.interceptors.push(function($rootScope, $q) {
         return {
             'response': function(response) {
                 show_or_hide_spinner(-1);
@@ -48,6 +48,7 @@ angular.module('spinner', [])
             },
             'responseError': function(rejection) {
                 show_or_hide_spinner(-1);
+                $rootScope.$emit('apierror', rejection.data.message)
                 return $q.reject(rejection);
             }
         };
@@ -57,6 +58,19 @@ angular.module('spinner', [])
         return data;
     });
 })
+.directive('enableErrorHandler', function($uibModal){
+    return {
+        link: function(scope, elem, attrs) {
+                scope.$on('apierror', function(evt, msg) {
+                    scope.message = msg;
+                    $uibModal.open({
+                            templateUrl: '/part/errormessage'
+                    });
+                });
+        }
+    };
+});
+
 angular.module('authentication', ['http-auth-interceptor', 'ui.bootstrap'])
 .controller('AuthenticationCtrl', function($scope, $http, authService) {
     $scope.login = function() {
@@ -79,7 +93,6 @@ angular.module('authentication', ['http-auth-interceptor', 'ui.bootstrap'])
         link: function(scope, elem, attrs) {
                 scope.$on('event:auth-loginRequired', function() {
                     var modalInstance = $uibModal.open({
-                        animation: true,
                         backdrop: 'static',
                         templateUrl: '/part/login',
                         controller: 'AuthenticationCtrl'
