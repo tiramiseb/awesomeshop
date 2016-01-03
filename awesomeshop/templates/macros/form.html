@@ -17,7 +17,7 @@ You should have received a copy of the GNU Affero General Public License
 along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
 
-{% macro _generic(field, label, name, errormessage) %}
+{%- macro _generic(field, label, name, errormessage) %}
 <div class="form-group" ng-class="{ 'has-error' : form.{{ name }}.$invalid && !form.{{ name }}.$pristine }">
     <label for="{{ name }}">{{ label }}</label>
     {{ field|safe }}
@@ -27,32 +27,32 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     </p>
     {%- endif %}
 </div>
-{% endmacro %}
+{%- endmacro %}
 
-{% macro _input_generic(type, label, name, ngmodel, options, errormessage) %}
+{%- macro _input_generic(type, label, name, ngmodel, options, errormessage) %}
 {{ _generic('<input type="%s" id="%s" name="%s" class="form-control" ng-model="%s" %s>'|format(type, name, name, ngmodel, options), label, name, errormessage) }}
-{% endmacro %}
+{%- endmacro %}
 
-{% macro input_email(label, name, ngmodel, options, errormessage) %}
+{%- macro input_email(label, name, ngmodel, options, errormessage) %}
 {{ _input_generic('email', label, name, ngmodel, options, errormessage) }}
-{% endmacro %}
+{%- endmacro %}
 
-{% macro input_password(label, name, ngmodel, options, errormessage) %}
+{%- macro input_password(label, name, ngmodel, options, errormessage) %}
 {{ _input_generic('password', label, name, ngmodel, options, errormessage) }}
-{% endmacro %}
+{%- endmacro %}
 
-{% macro input_text(label, name, ngmodel, options, errormessage) %}
+{%- macro input_text(label, name, ngmodel, options, errormessage) %}
 {{ _input_generic('text', label, name, ngmodel, options, errormessage) }}
-{% endmacro %}
+{%- endmacro %}
 
-{% macro textarea(label, name, ngmodel, options, errormessage) %}
+{%- macro textarea(label, name, ngmodel, options, errormessage) %}
 {{ _generic('<textarea id="%s" name="%s" class="form-control" ng-model="%s" %s></textarea>'|format(name, name, ngmodel, options), label, name, errormessage) }}
-{% endmacro %}
+{%- endmacro %}
 
-{% macro select(label, name, ngmodel, ngoptions, options, errormessage) %}
+{%- macro select(label, name, ngmodel, ngoptions, options, errormessage) %}
 {{ _generic('<select id="%s" name="%s" class="form-control" ng-model="%s" ng-options="%s" %s></select>'|format(name, name, ngmodel, ngoptions, options), label, name, errormessage) }}
-{% endmacro %}
+{%- endmacro %}
 
-{% macro checkbox_button(labelyes, labelno, name, ngmodel) %}
+{%- macro checkbox_button(labelyes, labelno, name, ngmodel) %}
 {{ _generic('<button type="button" class="btn form-control" ng-class="{\'btn-success\': %s, \'btn-danger\': !%s}" ng-model="%s" uib-btn-checkbox><span ng-show="%s">%s</span><span ng-hide="%s">%s</span></button>'|format(ngmodel, ngmodel, ngmodel, ngmodel, labelyes, ngmodel, labelno), labelyes, name) }}
-{% endmacro %}
+{%- endmacro %}
