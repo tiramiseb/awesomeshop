@@ -99,7 +99,7 @@ class ApiPage(Resource):
             Page.objects.get_or_404(id=page_id).delete()
         except OperationError as e:
             if re.match('Could not delete document (.*Product.documentation refers to it)', e.message):
-                abort(400, _('Could not delete : this documentation is used in a product.'))
+                abort(400, { 'type': 'message', 'message': _('Could not delete : this documentation is used in a product.')})
             raise
         return { 'status': 'OK' }
 

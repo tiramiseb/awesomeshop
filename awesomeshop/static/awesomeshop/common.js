@@ -61,10 +61,17 @@ angular.module('spinner', ['ui.bootstrap'])
 .directive('enableErrorHandler', function($uibModal){
     return {
         link: function(scope, elem, attrs) {
-                scope.$on('apierror', function(evt, msg) {
-                    scope.message = msg;
+                scope.$on('apierror', function(evt, data) {
+                    var template_url;
+                    if (data.type == 'message') {
+                        scope.message = data.message;
+                        template_url = '/part/stringerror'
+                    } else if (data.type == 'fields') {
+                        scope.errors = data.errors;
+                        template_url = '/part/fieldserror'
+                    };
                     $uibModal.open({
-                            templateUrl: '/part/errormessage'
+                            templateUrl: template_url
                     });
                 });
         }
