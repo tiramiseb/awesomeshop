@@ -1,0 +1,83 @@
+{#-
+Copyright 2015 Sébastien Maccagnoni-Munch
+
+This file is part of AwesomeShop.
+
+AwesomeShop is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+details.
+
+You should have received a copy of the GNU Affero General Public License
+along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+#}
+{% import "macros/form.html" as f %}
+<h1>{{ _('Tax rates') }}</h1>
+<div class="list-group">
+    <div class="list-group-item">
+        <input class="form-control" type="text" ng-model="query">
+    </div>
+    <div class="list-group-item" ng-repeat="rate in taxrates | filter:query">
+        <div class="row">
+            <div class="col-xs-4">
+                <div class="form-group">
+                    <input class="form-control" type="text" ng-model="rate.name" placeholder="{{ _('Name') }}" required>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input class="form-control" type="text" ng-model="rate.rate" placeholder="{{ _('Rate') }}" required>
+                        <span class="input-group-addon">%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-4 text-right">
+                <div class="btn-group">
+                    <button class="btn btn-success" ng-click="save(rate)">
+                        <i class="fa fa-check"></i>
+                        <span class="hidden-xs hidden-sm">
+                            {{ _('Save') }}
+                        </span>
+                    </button>
+                    <button class="btn btn-danger" ng-click="delete(rate)">
+                        <i class="fa fa-times"></i>
+                        <span class="hidden-xs hidden-sm">
+                            {{ _('Delete') }}
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="list-group-item">
+        <div class="row">
+            <div class="col-xs-4">
+                <div class="form-group">
+                    <input class="form-control" type="text" ng-model="newrate.name" placeholder="{{ _('Name') }}" required>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input class="form-control" type="text" ng-model="newrate.rate" placeholder="{{ _('Rate') }}" required>
+                        <span class="input-group-addon">%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-4 text-right">
+                <button class="btn btn-primary" ng-click="add()">
+                    <i class="fa fa-plus"></i>
+                    <span class="hidden-xs hidden-sm">
+                        {{ _('Add') }}
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

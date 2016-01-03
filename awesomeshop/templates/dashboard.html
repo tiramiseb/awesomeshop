@@ -38,6 +38,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <script src="/static/libs/ui-bootstrap-tpls-0.14.3.min.js"></script>
 <script src="/static/awesomeshop/common.js"></script>
 <script src="/static/awesomeshop/dashboard/pages.js"></script>
+<script src="/static/awesomeshop/dashboard/taxrates.js"></script>
 <script src="/static/awesomeshop/dashboard/users.js"></script>
 <script src="/static/awesomeshop/dashboard.js"></script>
 <title>{{ config.SHOP_NAME }} - {{ _('Dashboard') }}</title>
@@ -86,7 +87,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     <i class="fa fa-globe"></i>
                     {{ _('Countries groups') }}
             </a></li>
-            <li><a href="#/taxes">
+            <li><a ui-sref="taxrates">
                     <i class="fa fa-calculator"></i>
                     {{ _('Taxes') }}
             </a></li>
