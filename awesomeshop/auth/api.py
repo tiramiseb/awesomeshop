@@ -119,7 +119,6 @@ class Users(Resource):
     def post(self):
         schema = UserSchema()
         result, errors = schema.load(request.get_json())
-        result.save()
         return {'id': str(result.id)}
 rest.add_resource(Users, '/api/users')
 
