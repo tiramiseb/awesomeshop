@@ -1,0 +1,42 @@
+{#-
+Copyright 2015 Sébastien Maccagnoni-Munch
+
+This file is part of AwesomeShop.
+
+AwesomeShop is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+details.
+
+You should have received a copy of the GNU Affero General Public License
+along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+#}
+<h1>{{ _('Countries') }}</h1>
+<p><a class="btn btn-primary" ui-sref="newcountry">
+   <i class="fa fa-plus"></i>
+    {{ _('Add a country') }}
+</a></p>
+<div class="list-group" id="pages-list">
+    <div class="list-group-item">
+        <input class="form-control" type="text" ng-model="query">
+    </div>
+    <a class="list-group-item" ng-repeat="country in countries | filter:query" ui-sref="country({country_id:country.id})">
+        [[ country.name ]]
+        {#
+        <div class="row">
+            <div class="col-xs-10">
+                <i class="fa fa-bars" sv-handle></i>&nbsp;
+                [[ page.title || page.slug ]]
+            </div>
+            <div class="col-xs-2 text-right">
+                <i class="fa fa-th-list" ng-show="page.in_menu" uib-tooltip="{{ _('Display in menu') }}" tooltip-placement="left"></i>
+            </div>
+        </div>
+        #}
+    </a>
+</div>

@@ -65,7 +65,7 @@ angular.module('dbUsers', [])
             $state.go('users');
         }
     };
-    $http.get('/api/countries')
+    $http.get('/api/country')
         .then(function(response) {
             $scope.countries = response.data;
         });

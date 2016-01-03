@@ -37,6 +37,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <script src="/static/libs/http-auth-interceptor.js"></script>
 <script src="/static/libs/ui-bootstrap-tpls-0.14.3.min.js"></script>
 <script src="/static/awesomeshop/common.js"></script>
+<script src="/static/awesomeshop/dashboard/countries.js"></script>
 <script src="/static/awesomeshop/dashboard/pages.js"></script>
 <script src="/static/awesomeshop/dashboard/taxrates.js"></script>
 <script src="/static/awesomeshop/dashboard/users.js"></script>
@@ -79,7 +80,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     <i class="fa fa-truck"></i>
                     {{ _('Carriers') }}
             </a></li>
-            <li><a href="#/countries">
+            <li><a ui-sref="countries">
                     <i class="fa fa-flag"></i>
                     {{ _('Countries') }}
             </a></li>
