@@ -59,7 +59,7 @@ angular.module('dbPages', ['angular-sortable-view', 'angularFileUpload', 'slugif
         };
         $http.get('/api/page/'+from_id+'/move/'+to_id);
     };
-    $http.get('/api/pages/'+$stateParams.type)
+    $http.get('/api/page-'+$stateParams.type)
         .then(function(response) {
             $scope.pages = response.data;
         });
@@ -79,17 +79,14 @@ angular.module('dbPages', ['angular-sortable-view', 'angularFileUpload', 'slugif
         };
     }
     $scope.submit = function() {
-        if (pid) {
-            $http.post('/api/page/'+pid, $scope.page)
-                .then(function(response) {
+        $http.post('/api/page', $scope.page)
+            .then(function(response) {
+                if (pid) {
                     $scope.page = response.data;
-                });
-        } else {
-            $http.post('/api/pages', $scope.page)
-                .then(function(response) {
+                } else {
                     $state.go('page', {page_id:response.data.id})
-                });
-        }
+                }
+            });
     }
     $scope.delete = function() {
         if (pid) {

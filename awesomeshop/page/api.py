@@ -60,36 +60,24 @@ class PageSchema(Schema):
         page.save()
         return page
 
-class Pages(Resource):
-    @admin_required
-    def get(self):
-        return PageSchemaForList(many=True).dump(Page.objects).data
-
-    @admin_required
-    def post(self):
-        schema = PageSchema()
-        result, errors = schema.load(request.get_json())
-        return {'id': str(result.id)}
-rest.add_resource(Pages, '/api/pages')
-
-class TypedPages(Resource):
-    @admin_required
-    def get(self, page_type):
-        return PageSchemaForList(many=True).dump(
-                                    Page.objects.filter(pagetype=page_type)
-                                    ).data
-rest.add_resource(TypedPages, '/api/pages/<page_type>')
-
 class ApiPage(Resource):
     @admin_required
-    def get(self, page_id):
-        return PageSchema().dump(Page.objects.get_or_404(id=page_id)).data
+    def get(self, page_type=None, page_id=None):
+        if page_id:
+            return PageSchema().dump(Page.objects.get_or_404(id=page_id)).data
+        elif page_type:
+            return PageSchemaForList(many=True).dump(
+                                        Page.objects.filter(pagetype=page_type)
+                                        ).data
+        else:
+            return PageSchemaForList(many=True).dump(Page.objects).data
 
     @admin_required
-    def post(self, page_id):
+    def post(self, page_id=None):
         schema = PageSchema()
         data = request.get_json()
-        data['id'] = page_id
+        if page_id:
+            data['id'] = page_id
         result, errors = schema.load(data)
         return schema.dump(result).data
 
@@ -103,7 +91,6 @@ class ApiPage(Resource):
             raise
         return { 'status': 'OK' }
 
-rest.add_resource(ApiPage, '/api/page/<page_id>')
 
 class PagePhoto(Resource):
     def post(self, page_id):
@@ -112,7 +99,6 @@ class PagePhoto(Resource):
         page.photos.append(photo)
         page.save()
         return PhotoSchema().dump(photo).data
-rest.add_resource(PagePhoto, '/api/page/<page_id>/photo')
 
 class DeletePagePhoto(Resource):
     def get(self, page_id, filename):
@@ -124,7 +110,6 @@ class DeletePagePhoto(Resource):
                 break
         page.save()
         return { 'status': 'OK' }
-rest.add_resource(DeletePagePhoto, '/api/page/<page_id>/photo/<filename>/delete')
 
 class MovePage(Resource):
     def get(self, page_id, target_id):
@@ -136,4 +121,7 @@ class MovePage(Resource):
             page.move_before(target)
         return { 'status': 'OK' }
 
+rest.add_resource(ApiPage, '/api/page', '/api/page-<page_type>', '/api/page/<page_id>')
+rest.add_resource(PagePhoto, '/api/page/<page_id>/photo')
+rest.add_resource(DeletePagePhoto, '/api/page/<page_id>/photo/<filename>/delete')
 rest.add_resource(MovePage, '/api/page/<page_id>/move/<target_id>')

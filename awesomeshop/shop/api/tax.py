@@ -41,7 +41,7 @@ class TaxSchema(Schema):
         tax.save()
         return tax
 
-class Taxes(Resource):
+class ApiTax(Resource):
     @admin_required
     def get(self):
         return TaxSchema(many=True).dump(Tax.objects).data
@@ -53,10 +53,8 @@ class Taxes(Resource):
             abort(400, {'type': 'fields', 'errors': errors })
         return schema.dump(result).data
 
-class ApiTax(Resource):
     def delete(self, tax_id):
         Tax.objects.get_or_404(id=tax_id).delete()
         return { 'status': 'OK' }
 
-rest.add_resource(Taxes, '/api/taxrate')
-rest.add_resource(ApiTax, '/api/taxrate/<tax_id>')
+rest.add_resource(ApiTax, '/api/taxrate', '/api/taxrate/<tax_id>')

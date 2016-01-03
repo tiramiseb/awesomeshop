@@ -110,28 +110,20 @@ class UserLogout(Resource):
         return { 'auth': False }
 rest.add_resource(UserLogout, '/api/logout')
 
-class Users(Resource):
-    @admin_required
-    def get(self):
-        return UserSimpleSchema(many=True).dump(User.objects).data
-
-    @admin_required
-    def post(self):
-        schema = UserSchema()
-        result, errors = schema.load(request.get_json())
-        return {'id': str(result.id)}
-rest.add_resource(Users, '/api/users')
-
 class ApiUser(Resource):
     @admin_required
-    def get(self, user_id):
-        return UserSchema().dump(User.objects.get_or_404(id=user_id)).data
+    def get(self, user_id=None):
+        if (user_id):
+            return UserSchema().dump(User.objects.get_or_404(id=user_id)).data
+        else:
+            return UserSimpleSchema(many=True).dump(User.objects).data
 
     @admin_required
-    def post(self, user_id):
+    def post(self, user_id=None):
         schema = UserSchema()
         data = request.get_json()
-        data['id'] = user_id
+        if user_id:
+            data['id'] = user_id
         result, errors = schema.load(data)
         return schema.dump(result).data
 
@@ -139,4 +131,4 @@ class ApiUser(Resource):
     def delete(self, user_id):
         User.objects.get_or_404(id=user_id).delete()
         return { 'status': 'OK' }
-rest.add_resource(ApiUser, '/api/user/<user_id>')
+rest.add_resource(ApiUser, '/api/user', '/api/user/<user_id>')

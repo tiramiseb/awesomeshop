@@ -35,7 +35,7 @@ angular.module('dbUsers', [])
         })
 })
 .controller('UsersCtrl', function($scope, $http) {
-    $http.get('/api/users')
+    $http.get('/api/user')
         .then(function(response) {
             $scope.users = response.data;
         });
@@ -46,17 +46,14 @@ angular.module('dbUsers', [])
         $scope.user.addresses.splice(index, 1);
     }
     $scope.submit = function() {
-        if (uid) {
-            $http.post('/api/user/'+uid, $scope.user)
-                .then(function(response) {
+        $http.post('/api/user', $scope.user)
+            .then(function(response) {
+                if (uid) {
                     $scope.user = response.data;
-                });
-        } else {
-            $http.post('/api/users', $scope.user)
-                .then(function(response) {
+                } else {
                     $state.go('user', {user_id:response.data.id})
-                });
-        }
+                }
+            });
     }
     $scope.delete = function() {
         if (uid) {
