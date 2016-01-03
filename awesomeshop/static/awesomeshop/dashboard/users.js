@@ -27,7 +27,6 @@ angular.module('dbUsers', [])
             url: '/user',
             templateUrl: 'user',
             controller: 'UserCtrl'
-            //controller: 'NewUserCtrl'
         })
         .state('user', {
             url: '/user/:user_id',
