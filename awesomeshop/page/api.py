@@ -24,7 +24,7 @@ from flask_restful import Resource
 from marshmallow import Schema, fields, post_load
 from mongoengine import OperationError
 
-from .. import app, admin_required, rest
+from .. import admin_required, rest
 from ..marsh import Loc
 from ..photo import Photo, PhotoSchema
 from .models import Page
