@@ -2,28 +2,13 @@
 AwesomeShop
 ===========
 
-AwesomeShop is an e-boutique webapp written in Python with the following
-dependencies:
+AwesomeShop is an e-boutique webapp written in Python.
 
-Python dependencies installed with pip:
+AweshomeShop uses the following awesome tools:
 
-* *Flask*: web framework
-* *Flask-RESTful*: serving the API
-* *Marshmallow*: objects transformation for the API
-* *MongoDB*: data storage
-* *PayPlug*: online credit card payment
-* *Pillow*: images manipulation
-* *Satchless*: cart and stuff
-* *Scrypt*: passwords hashing
-* *Whoosh*: indexing and search engine
-
-Front-end libraries/frameworks included:
-
-* `AngularJS <https://angularjs.org/>`_
-* some Angular additional modules
-* `Bootstrap <http://getbootstrap.com/>`_
-* `Font Awesome <http://fontawesome.io/>`_
-* `Start Bootstap Simple Sidebar <http://startbootstrap.com/template-overviews/simple-sidebar/>`_
+* webpages serving and API interface: Flask with Flask-RESTful, Marshmallow...
+* data storage: MongoDB, MongoEngine...
+* frontend: AngularJS, Bootstrap, FontAwesome...
 
 General information
 ===================
@@ -42,13 +27,15 @@ Name
 
 Not related to *Font-Awesome* in any way... except that it uses it.
 
-This name is only because this app is awesome :)
+This name is only because this app is awesome, as all used modules. The world
+is awesome, Open Source is awesome, we are all awesome :)
 
 Licensing
 ---------
 
 GNU AGPL v3. You can take it, you can use it, you can modify it. But if you
-modify it, you must share your modifications. See ``COPYING``. Thanks!
+modify it and use it, you must share your modifications. See ``COPYING``.
+Thanks!
 
 Configuration
 =============
