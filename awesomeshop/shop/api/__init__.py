@@ -17,20 +17,5 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
-from marshmallow import Schema, fields
-
-from ..marsh import LocObjField, NetPrice
-
-class CartlineSchema(Schema):
-    product = LocObjField(f='name')
-    quantity = fields.Integer(dump_only=True)
-    unit_price = NetPrice(dump_only=True)
-    total_price = NetPrice(dump_only=True)
-
-
-class CartSchema(Schema):
-    id = fields.String(dump_only=True)
-    name = fields.String(dump_only=True)
-    date = fields.DateTime(dump_only=True)
-    lines = fields.Nested(CartlineSchema, dump_only=True, many=True)
-    total_price = NetPrice(dump_only=True)
+from .dbcart import *
+from .tax import *
