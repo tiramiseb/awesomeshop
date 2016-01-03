@@ -19,14 +19,14 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 {%- macro _generic_submit_back(option) %}
 <div id="page-buttons">
-    <button class="btn btn-link" ng-click="submit()" ng-disabled="form.$invalid">
+    <button class="btn btn-link" ng-click="submit()" uib-tooltip="{{ _('Save') }}" ng-disabled="form.$invalid">
         <i class="fa fa-check-circle fa-4x text-success"></i>
     </button>
-    <button class="btn btn-link" ng-click="delete()">
+    <button class="btn btn-link" ng-click="delete()" uib-tooltip="{{ _('Remove') }}">
         <i class="fa fa-times-circle fa-4x text-danger"></i>
     </button>
-    <a class="btn btn-link" {{ option|safe }}>
-        <i class="fa fa-arrow-circle-left fa-4x text-primary"></i>
+    <a class="btn btn-link" {{ option|safe }} uib-tooltip="{{ _('Back') }}">
+        <i class="fa fa-arrow-circle-left fa-4x" ng-class="{'text-primary': form.$pristine, 'text-danger': form.$dirty }"></i>
     </a>
 </div>
 {%- endmacro %}

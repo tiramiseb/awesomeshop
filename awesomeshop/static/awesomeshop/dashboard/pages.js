@@ -83,6 +83,7 @@ angular.module('dbPages', ['angular-sortable-view', 'angularFileUpload', 'slugif
             .then(function(response) {
                 if (pid) {
                     $scope.page = response.data;
+                    $scope.form.$setPristine();
                 } else {
                     $state.go('page', {page_id:response.data.id})
                 }

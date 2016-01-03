@@ -50,6 +50,7 @@ angular.module('dbUsers', [])
             .then(function(response) {
                 if (uid) {
                     $scope.user = response.data;
+                    $scope.form.$setPristine();
                 } else {
                     $state.go('user', {user_id:response.data.id})
                 }
