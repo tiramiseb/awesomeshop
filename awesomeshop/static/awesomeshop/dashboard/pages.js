@@ -65,10 +65,9 @@ angular.module('dbPages', ['angular-sortable-view', 'angularFileUpload', 'slugif
         });
 })
 .controller('PageCtrl', function($scope, $http, $state, $stateParams, FileUploader, Slug, CONFIG) {
-    var pid = $stateParams.page_id;
     $scope.langs = CONFIG.languages;
     $scope.$state = $state;
-    if (pid) {
+    function reinit(pid) {
         $scope.uploader = new FileUploader({
             url: '/api/page/'+pid+'/photo',
             autoUpload: true,
@@ -81,17 +80,18 @@ angular.module('dbPages', ['angular-sortable-view', 'angularFileUpload', 'slugif
     $scope.submit = function() {
         $http.post('/api/page', $scope.page)
             .then(function(response) {
-                if (pid) {
-                    $scope.page = response.data;
-                    $scope.form.$setPristine();
-                } else {
-                    $state.go('page', {page_id:response.data.id})
+                var is_new = !$scope.page.id;
+                $scope.page = response.data;
+                $scope.form.$setPristine();
+                if (is_new) {
+                    $state.go('page', {page_id:response.data.id}, {notify:false});
+                    reinit($scope.page.id);
                 }
             });
     }
     $scope.delete = function() {
-        if (pid) {
-            $http.delete('/api/page/'+pid)
+        if ($scope.page.id) {
+            $http.delete('/api/page/'+$scope.page.id)
                 .then(function(response) {
                     $state.go($scope.page.pagetype+'s');
                 });
@@ -103,15 +103,16 @@ angular.module('dbPages', ['angular-sortable-view', 'angularFileUpload', 'slugif
         $scope.page.slug = Slug.slugify(text);
     };
     $scope.delete_photo = function(filename, index) {
-        $http.get('/api/page/'+pid+'/photo/'+filename+'/delete')
+        $http.get('/api/page/'+$scope.page.id+'/photo/'+filename+'/delete')
             .then(function() {
                 $scope.page.photos.splice(index, 1);
             })
     }
-    if (pid) {
-        $http.get('/api/page/'+pid)
+    if ($stateParams.page_id) {
+        $http.get('/api/page/'+$stateParams.page_id)
             .then(function(response) {
                 $scope.page = response.data;
+                reinit($scope.page.id);
             });
     } else {
         $scope.page = {pagetype: $stateParams.type}

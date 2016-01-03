@@ -27,7 +27,7 @@ from flask_restful import Api
 
 app = Flask(__name__)
 app.config.from_object('awesomeshop.defaultconfig')
-rest = Api(app)
+rest = Api(app, catch_all_404s=True)
 try:
     app.config.from_object('config')
 except ImportError:

@@ -20,7 +20,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {% import "macros/form.html" as f %}
 {% import "macros/localization.html" as l %}
 <form name="form" novalidate>
-<h1>{{ _('Page:') }} [[ page.slug ]] <small>([[ page.pagetype ]])</small></h1>
+    <h1>{{ _('Page:') }} [[ page.slug || "{{ _('(please set a slug)') }}" ]] <small>([[ page.pagetype ]])</small></h1>
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="row">

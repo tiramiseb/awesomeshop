@@ -41,24 +41,23 @@ angular.module('dbUsers', [])
         });
 })
 .controller('UserCtrl', function($scope, $http, $stateParams, $state) {
-    var uid = $stateParams.user_id;
     $scope.delete_address = function(index) {
         $scope.user.addresses.splice(index, 1);
     }
     $scope.submit = function() {
         $http.post('/api/user', $scope.user)
             .then(function(response) {
-                if (uid) {
-                    $scope.user = response.data;
-                    $scope.form.$setPristine();
-                } else {
-                    $state.go('user', {user_id:response.data.id})
+                var is_new = !scope.user.id;
+                $scope.user = response.data;
+                $scope.form.$setPristine();
+                if (is_new) {
+                    $state.go('user', {user_id:response.data.id}, {notify:false});
                 }
             });
     }
     $scope.delete = function() {
-        if (uid) {
-            $http.delete('/api/user/'+uid)
+        if ($scope.page.id) {
+            $http.delete('/api/user/'+$scope.page.id)
                 .then(function(response) {
                     $state.go('users');
                 });
@@ -70,8 +69,8 @@ angular.module('dbUsers', [])
         .then(function(response) {
             $scope.countries = response.data;
         });
-    if (uid) {
-        $http.get('/api/user/'+uid)
+    if ($stateParams.user_id) {
+        $http.get('/api/user/'+$stateParams.user_id)
             .then(function(response) {
                 $scope.user = response.data;
             });
