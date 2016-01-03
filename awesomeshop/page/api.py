@@ -58,7 +58,6 @@ class PageSchema(Schema):
         page.title = data.get('title', {})
         page.text = data.get('text', {})
         page.save()
-        print page.title
         return page
 
 class Pages(Resource):
