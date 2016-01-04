@@ -18,7 +18,7 @@
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 from flask import request
-from flask.ext.login import login_user, logout_user
+from flask_login import login_user, logout_user
 from flask_restful import Resource
 from marshmallow import Schema, fields, post_load
 

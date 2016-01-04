@@ -18,7 +18,7 @@
 # along with eAwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 from flask import abort, jsonify, redirect, render_template, request
-from flask.ext.login import current_user
+from flask_login import current_user
 from jinja2.exceptions import TemplateNotFound
 
 from . import app, login_required, admin_required

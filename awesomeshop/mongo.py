@@ -18,8 +18,8 @@
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 import itertools
-from flask.ext.mongoengine.wtf.orm import converts, ModelConverter, \
-                                          model_form as orig_model_form
+from flask_mongoengine.wtf.orm import converts, ModelConverter, \
+                                      model_form as orig_model_form
 from mongoengine.fields import DictField, StringField
 from wtforms import fields as f
 from wtforms.utils import unset_value

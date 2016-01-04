@@ -19,7 +19,7 @@
 
 import base64
 import datetime
-from flask.ext.login import UserMixin
+from flask_login import UserMixin
 from os import urandom
 from scrypt import hash as scrypt_hash
 

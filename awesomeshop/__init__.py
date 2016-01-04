@@ -16,13 +16,14 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+"""AwesomeShop: an e-commerce webapp using Flask"""
 
 from functools import wraps
 
 from flask import abort, current_app, Flask, request, session
-from flask.ext.babel import Babel
-from flask.ext.login import current_user, LoginManager, login_required
-from flask.ext.mongoengine import MongoEngine
+from flask_babel import Babel
+from flask_login import current_user, LoginManager, login_required
+from flask_mongoengine import MongoEngine
 from flask_restful import Api
 
 app = Flask(__name__)
@@ -80,8 +81,8 @@ def load_user(uid):
         return None
 def admin_required(func):
     """Decorator when a request can only be made by admins
-    
-    Inspired by flask.ext.login.login_required
+
+    Inspired by flask_login.login_required
     """
     @wraps(func)
     @login_required
