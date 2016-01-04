@@ -26,7 +26,10 @@ class Count(fields.Field):
     Dump only: count the number of objects in a queryset
     """
     def _serialize(self, value, attr, obj):
-        return value.count()
+        if isinstance(value, list):
+            return len(value)
+        else:
+            return value.count()
 
 class Loc(fields.Field):
     """
@@ -65,3 +68,19 @@ class ObjField(fields.Field):
 
     def _deserialize(self, value, attr, data):
         return self.metadata['obj'].objects.get(**{self.metadata['f']: value})
+
+class MultiObjField(fields.Field):
+    """
+    Dump: get a list of fields from a list of objects (mongoengine's ListField)
+    Load: get a list of objects from a list of fields
+
+    Needed arguments:
+    * f: the field used to find the objects
+    * obj: the object class
+    """
+    def _serialize(self, value, attr, obj):
+        return [ getattr(v, self.metadata['f']) for v in value ]
+
+    def _deserialize(self, value, attr, data):
+        return [ self.metadata['obj'].objects.get(**{self.metadata['f']: v}) \
+                 for v in value ]
