@@ -60,6 +60,7 @@
 /* Text area with monospace, better for writing ReST */
 textarea {
     font-family: monospace;
+    height: 20em !important;
 }
 /* Display a "move" cursor on handles */
 [sv-handle] {
