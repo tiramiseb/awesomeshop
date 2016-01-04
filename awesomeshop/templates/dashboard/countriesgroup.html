@@ -1,0 +1,64 @@
+{#-
+Copyright 2015 Sébastien Maccagnoni-Munch
+
+This file is part of AwesomeShop.
+
+AwesomeShop is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+details.
+
+You should have received a copy of the GNU Affero General Public License
+along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+#}
+{% import "macros/dashboard.html" as d %}
+{% import "macros/form.html" as f %}
+
+<form name="form" novalidate>
+    <h1>{{ _('Countries group:') }} [[ group.name || "{{ _('(unnamed)') }}" ]]</h1>
+<div class="panel panel-default">
+    <div class="panel-body">
+        {{ f.input_text(_('Name'), 'name', 'group.name', 'required', _('Name is mandatory')) }}
+
+
+<div class="row">
+    <div class="col-xs-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">{{ _('Selected') }}</div>
+            <div class="list-group">
+                <button class="list-group-item" ng-repeat="code in group.countries" ng-click="remove(code)">
+                    [[ name_from_code(code) ]]
+                    <span class="pull-right">
+                        <i class="fa fa-arrow-right"></i>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">{{ _('Available') }}</div>
+            <div class="list-group">
+                <input class="list-group-item" type="text" ng-model="query" placeholder="{{ _('Filter') }}">
+                <button class="list-group-item" ng-repeat="country in filtered_countries() | filter:query" ng-click="add(country.code)">
+                    <i class="fa fa-arrow-left"></i>
+                    &nbsp;&nbsp;
+                    [[ country.name ]]
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+        {#{{ f.select_multiple(_('Countries'), 'countries', 'group.countries', 'country.code as country.name for country in countries') }}#}
+    </div>
+</div>
+{{ d.submit_back('countriesgroups') }}
+</form>
