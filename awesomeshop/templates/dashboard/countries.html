@@ -22,9 +22,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     {{ _('Add a country') }}
 </a></p>
 <div class="list-group" id="pages-list">
-    <div class="list-group-item">
-        <input class="form-control" type="text" ng-model="query">
-    </div>
+    <input class="list-group-item" type="text" ng-model="query" placeholder="{{ _('Filter') }}">
     <a class="list-group-item" ng-repeat="country in countries | filter:query" ui-sref="country({country_id:country.id})">
         [[ country.name ]]
     </a>

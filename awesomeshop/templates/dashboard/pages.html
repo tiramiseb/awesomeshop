@@ -22,9 +22,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     {{ _('Add a page') }}
 </a></p>
 <div class="list-group" id="pages-list" sv-root sv-part="pages" sv-on-sort="sort($item, $indexTo)">
-    <div class="list-group-item">
-        <input class="form-control" type="text" ng-model="query">
-    </div>
+    <input class="list-group-item" type="text" ng-model="query" placeholder="{{ _('Filter') }}">
     <a class="list-group-item" ng-repeat="page in pages | filter:query" ui-sref="page({page_id:page.id})" sv-element="sortoptions">
         <div class="row">
             <div class="col-xs-10">

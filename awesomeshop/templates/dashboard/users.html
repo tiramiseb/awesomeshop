@@ -21,10 +21,9 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
    <i class="fa fa-plus"></i>
     {{ _('Add an user') }}
 </a></p>
+<div class="panel panel-default">
 <div class="list-group">
-    <div class="list-group-item">
-        <input class="form-control" type="text" ng-model="query">
-    </div>
+    <input class="list-group-item" type="text" ng-model="query" placeholder="{{ _('Filter') }}">
     <a class="list-group-item" ng-repeat="user in users | filter:query" ui-sref="user({user_id:user.id})">
         <div class="row">
             <div class="col-xs-8">
@@ -41,4 +40,5 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             </div>
         </div>
     </a>
+</div>
 </div>

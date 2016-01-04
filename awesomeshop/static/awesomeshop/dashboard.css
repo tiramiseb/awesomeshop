@@ -69,3 +69,8 @@ textarea {
 [sv-handle]:hover {
     text-shadow: 0 0 4px #58f;
 }
+
+/* Filter inputs */
+input.list-group-item {
+    width: 100%;
+}
