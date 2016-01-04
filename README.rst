@@ -57,9 +57,6 @@ Example working on Ubuntu 15.10::
     ./init_searchindex.py
     ./run.py
 
-When run locally, the Flask debug toolbar extension is enabled (see in
-``run.py``).
-
 Local templates
 ===============
 
