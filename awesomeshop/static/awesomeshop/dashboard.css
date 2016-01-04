@@ -47,13 +47,13 @@
     right: 20px;
     z-index: 100;
 }
-#page-buttons * {
+#page-buttons i {
     text-shadow: 1px 1px 5px #999;
 }
-#page-buttons *:hover {
+#page-buttons *:hover i {
     text-shadow: 1px 1px 15px #000;
 }
-#page-buttons *:disabled * {
+#page-buttons *:disabled i {
     text-shadow: none;
 }
 
