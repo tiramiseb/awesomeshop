@@ -116,13 +116,8 @@ class ApiCountriesGroup(Resource):
         return schema.dump(result).data
 
     @admin_required
-    def delete(self, country_id):
-        try:
-            CountriesGroup.objects.get_or_404(id=country_id).delete()
-        except OperationError as e:
-            #if e.message == 'Could not delete document (CountriesGroup.countries refers to it)':
-            #    abort(400, { 'type': 'message', 'message': _('Could not delete : this country is part of a countries group.')})
-            raise
+    def delete(self, group_id):
+        CountriesGroup.objects.get_or_404(id=group_id).delete()
         return { 'status': 'OK' }
 
 rest.add_resource(ApiCountry, '/api/country', '/api/country/<country_id>')

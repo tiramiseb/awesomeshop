@@ -95,7 +95,7 @@ angular.module('dbCountries', [])
             $scope.countriesgroups = response.data;
         });
 })
-.controller('CountriesGroupCtrl', function($scope, $http, $stateParams) {
+.controller('CountriesGroupCtrl', function($scope, $http, $state, $stateParams) {
     $scope.submit = function () {
         $http.post('/api/countriesgroup', $scope.group)
             .then(function(response) {
@@ -109,7 +109,7 @@ angular.module('dbCountries', [])
     }
     $scope.delete = function() {
         if ($scope.group.id) {
-            $http.delete('/api/countriesgroup/'+$scope.country.id)
+            $http.delete('/api/countriesgroup/'+$scope.group.id)
                 .then(function(response) {
                     $state.go('countriesgroups');
                 });
