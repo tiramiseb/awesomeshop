@@ -2,3 +2,4 @@ venv/
 config.py
 *.pyc
 whoosh_index/
+awesomeshop/static/photos
