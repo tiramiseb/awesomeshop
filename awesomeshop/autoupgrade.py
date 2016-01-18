@@ -20,7 +20,8 @@
 import datetime
 
 from .helpers import Setting
-from .shop.models import BaseProduct, Order
+from .shipping.models import Carrier
+from .shop.models import BaseProduct
 from .shop.models import Url
 
 ###############################################################################
@@ -49,12 +50,55 @@ def add_creationdate():
     products = BaseProduct._get_collection()
     products.update_many({'create': None}, {'$set': {'create': old_date}})
 
+def merge_weights_and_costs():
+    # Old format:
+    #
+    # weights: list of weights (integers)
+    # costs : list of dicts associating countries IDs (strings) or
+    #         countriesgroups IDs (strings)
+    #         to dicts associating weights (strings) with costs (floats)
+    #
+    # New format:
+    #
+    # weights: list of lists, in which the first field is the weight (integer)
+    #          and the second field is a dict associating countries IDs
+    #          (strings) or countriesgroups IDs (strings) to costs (floats)
+    carriers = Carrier._get_collection()
+    for carrier in carriers.find(projection=('weights', 'costs')):
+        if 'weights' in carrier:
+            # If "weights" does not exist in the object, then it already used
+            # the new format
+            old_weights = carrier['weights']
+            old_weights.sort()
+            new_weights = {}
+            for weight in old_weights:
+                new_weights[str(weight)] = {}
+            for country, costs in carrier['costs'].iteritems():
+                for weight, cost in costs.iteritems():
+                    if weight in new_weights:
+                        # Lose data if the weight is not defined for this carrier
+                        new_weights[weight][country] = cost
+            new_costs_as_list = []
+            for weight in old_weights:
+                new_costs_as_list.append({
+                            'weight':weight,
+                            'costs': new_weights[str(weight)]
+                            })
+            carriers.update_one(
+                    {'_id': carrier['_id']},
+                    {
+                        '$set': {'costs': new_costs_as_list},
+                        '$unset': {'weights': ''}
+                        }
+                    )
+
 ###############################################################################
 # Ordered list of all upgrade functions
 upgrades = [
-    add_product_cls,
-    add_ondemand,
-    add_creationdate
+    add_product_cls, # 2015
+    add_ondemand, # 2015
+    add_creationdate, # 2015
+    merge_weights_and_costs, # 2016-01-18
     ]
 
 def upgrade():

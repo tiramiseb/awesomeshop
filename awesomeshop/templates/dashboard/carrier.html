@@ -1,0 +1,145 @@
+{#-
+Copyright 2015 Sébastien Maccagnoni-Munch
+
+This file is part of AwesomeShop.
+
+AwesomeShop is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+details.
+
+You should have received a copy of the GNU Affero General Public License
+along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+#}
+{% import "macros/dashboard.html" as d %}
+{% import "macros/form.html" as f %}
+
+<form name="form" novalidate>
+    <h1>{{ _('Carrier:') }} [[ carrier.name ]]</h1>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-6">
+                {{ f.input_text(_('Name'), 'name', 'carrier.name', 'required', _('Name is mandatory')) }}
+            </div>
+            <div class="col-sm-6">
+                {{ f.input_text(_('Tracking URL'), 'tracking_url', 'carrier.tracking_url', 'ng-pattern="/.*@.*/"', _('Character @ will be replaced by the tracking number')) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6" ng-repeat="lang in langs">
+                {{ f.input_text('[[ lang ]]', 'description_[[ lang ]]', 'carrier.description[lang]') }}
+            </div>
+        </div>
+    </div>
+</div>
+<uib-accordion>
+    <uib-accordion-group heading="{{ _('Countries') }}">
+        <p>{{ _('This carrier has special rates for the following countries or groups.') }} {{ _('Please note there is always a "rest of the world" option.') }}</p>
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">{{ _('Selected') }}</div>
+                    <div class="list-group">
+                        <button class="list-group-item" ng-repeat="groupid in carrier.countries_groups" ng-click="remove_countriesgroup(groupid)">
+                            [[ name_from_id(groupid) ]]
+                            <span class="pull-right">
+                                <i class="fa fa-arrow-right"></i>
+                            </span>
+                        </button>
+                        <button class="list-group-item" ng-repeat="code in carrier.countries" ng-click="remove_country(code)">
+                            [[ name_from_code(code) ]]
+                            <span class="pull-right">
+                                <i class="fa fa-arrow-right"></i>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">{{ _('Available') }}</div>
+                    <div class="list-group">
+                        <input class="list-group-item" type="text" ng-model="query" placeholder="{{ _('Filter') }}">
+                        <button class="list-group-item" ng-repeat="group in filtered_countriesgroups() | filter:query" ng-click="add_countriesgroup(group.id)">
+                            <i class="fa fa-arrow-left"></i>
+                            &nbsp;&nbsp;
+                            [[ group.name ]]
+                        </button>
+                        <button class="list-group-item" ng-repeat="country in filtered_countries() | filter:query" ng-click="add_country(country.code)">
+                            <i class="fa fa-arrow-left"></i>
+                            &nbsp;&nbsp;
+                            [[ country.name ]]
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </uib-accordion-group>
+</uib-accordion>
+<div class="panel panel-default">
+    <div class="panel-heading">{{ _('Buying price') }}</div>
+    <div class="panel-body">
+        <table>
+            <tr>
+                <td class="text-right">
+                    <button class="btn btn-success btn-sm" uib-tooltip="{{ _('Add a new weight') }}" ng-click="carrier.costs.unshift({weight:1})" ng-show="carrier.costs.length == 0 || carrier.costs[0].weight > 1">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </td>
+                <td class="text-center" ng-repeat="weight in carrier.costs track by $index">
+                    <button class="btn btn-danger btn-sm" uib-tooltip="{{ _('Delete this weight') }}" ng-click="carrier.costs.splice($index, 1)">
+                        <i class="fa fa-times"></i>
+                    </button>
+                    <button class="btn btn-success pull-right btn-sm" uib-tooltip="{{ _('Add a new weight') }}", ng-click="carrier.costs.splice($index+1,0,{weight:weight.weight+1})">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <th class="text-right">{{ _('grams') }}</th>
+                <th ng-repeat="weight in carrier.costs track by $index">
+                    <input type="number" min="1" class="form-control" ng-model="weight.weight" ng-if="carrier.costs.length==1">
+                    <input type="number" min="1" max="[[ carrier.costs[$index+1].weight - 1 ]]" class="form-control" ng-model="weight.weight" ng-if="$first&&!$last">
+                    <input type="number" min="[[ carrier.costs[$index-1].weight + 1 ]]" max="[[ carrier.costs[$index+1].weight - 1 ]]" class="form-control" ng-model="weight.weight" ng-if="$middle">
+                    <input type="number" min="[[ carrier.costs[$index-1].weight + 1 ]]" class="form-control" ng-model="weight.weight" ng-if="$last&&!$first">
+                </th>
+            </tr>
+            <tr ng-repeat="groupid in carrier.countries_groups">
+                <td class="nowrap text-right">[[ name_from_id(groupid) ]]</td>
+                <td ng-repeat="weight in carrier.costs track by $index">
+                    <div class="input-group">
+                        <input type="text" class="form-control" ng-model="weight.costs[groupid]">
+                        <span class="input-group-addon">{{ config.CURRENCY }}</span>
+                    </div>
+                </td>
+                </td>
+            </tr>
+            <tr ng-repeat="countrycode in carrier.countries">
+                <td class="nowrap text-right">[[ name_from_code(countrycode) ]]</td>
+                <td ng-repeat="weight in carrier.costs track by $index">
+                    <div class="input-group">
+                        <input type="number" step="0.01" class="form-control" ng-model="weight.costs[id_from_code(countrycode)]">
+                        <span class="input-group-addon">{{ config.CURRENCY }}</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="nowrap text-right">{{ _('Rest of the world') }}</td>
+                <td ng-repeat="weight in carrier.costs track by $index">
+                    <div class="input-group">
+                        <input type="number" step="0.01" class="form-control" ng-model="weight.costs.rest">
+                        <span class="input-group-addon">{{ config.CURRENCY }}</span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+{{ d.submit_back('carriers') }}
+</form>

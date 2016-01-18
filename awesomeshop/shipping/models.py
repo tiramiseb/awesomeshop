@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
+from mongoengine import signals
+
 from .. import db, get_locale
 from ..mongo import TranslationsField
 
@@ -62,7 +64,16 @@ class Carrier(db.Document):
                                 CountriesGroup,
                                 reverse_delete_rule=db.DENY,
                                 ), db_field='cgroups')
-    weights = db.SortedListField(db.IntField(choices=None))
     tracking_url = db.StringField(db_field='tr_url')
-    costs = db.DictField()
+    costs = db.SortedListField(db.DictField(), ordering='weight')
 
+def remove_null_costs(sender, document, **kwargs):
+    costs = document.costs
+    for entry in costs:
+        if 'costs' in entry:
+            for objectid, cost in entry['costs'].items():
+                if cost is None:
+                    entry['costs'].pop(objectid)
+    document.costs = costs
+
+signals.pre_save.connect(remove_null_costs, sender=Carrier)

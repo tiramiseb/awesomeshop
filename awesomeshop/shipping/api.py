@@ -24,8 +24,8 @@ from marshmallow import Schema, fields, post_load
 from mongoengine import OperationError
 
 from .. import admin_required, login_required, rest
-from ..marsh import Count, MultiObjField
-from .models import Country, CountriesGroup
+from ..marsh import Count, Loc, MultiObjField
+from .models import Country, CountriesGroup, Carrier
 
 class CountrySchemaForList(Schema):
     id = fields.String(dump_only=True)
@@ -48,6 +48,7 @@ class CountrySchema(Schema):
         country.default_name = data['default_name']
         country.name = data.get('name', {})
         country.save()
+        return country
 
 class CountriesGroupSchemaForList(Schema):
     id = fields.String(dump_only=True)
@@ -68,6 +69,51 @@ class CountriesGroupSchema(Schema):
         group.name = data['name']
         group.countries = data['countries']
         group.save()
+        return group
+
+class CarrierSchemaForList(Schema):
+    id = fields.String(dump_only=True)
+    name = fields.String(dump_only=True)
+    description = Loc()
+
+class CarrierSchema(Schema):
+    id = fields.String(allow_none=True)
+    name = fields.String(required=True)
+    description = fields.Dict(default={})
+    tracking_url = fields.String()
+    countries = MultiObjField(f='code', obj=Country)
+    countries_groups = MultiObjField(f='id', obj=CountriesGroup)
+    costs = fields.List(fields.Dict())
+
+    @post_load
+    def make_carrier(self, data):
+        if 'id' in data:
+            carrier = Carrier.objects.get_or_404(id=data['id'])
+        else:
+            carrier = Carrier()
+        carrier.name = data['name']
+        carrier.description = data.get('description', {})
+        carrier.tracking_url = data.get('tracking_url', '')
+        carrier.countries = data.get('countries', [])
+        carrier.countries_groups = data.get('countries_groups', [])
+        carrier.costs = data.get('costs', [])
+        try:
+            carrier.save()
+        except AttributeError as e:
+            # Workaround a possible bug in mongoengine when ordering is set and
+            # nothing has changed
+            #
+            #   File "[...]/mongoengine/base/document.py", line 582, in <lambda>
+            #     if any(map(lambda d: field._ordering in d._changed_fields, data)):
+            # AttributeError: 'dict' object has no attribute '_changed_fields'
+            if e.message not in (
+                    "'dict' object has no attribute '_changed_fields'",
+                    "'BaseDict' object has no attribute '_changed_fields'"
+                    ):
+                raise
+        return carrier
+
+
 
 class ApiCountry(Resource):
     @login_required
@@ -120,6 +166,32 @@ class ApiCountriesGroup(Resource):
         CountriesGroup.objects.get_or_404(id=group_id).delete()
         return { 'status': 'OK' }
 
+class ApiCarrier(Resource):
+    @admin_required
+    def get(self, carrier_id=None):
+        if carrier_id:
+            return CarrierSchema().dump(
+                                Carrier.objects.get_or_404(id=carrier_id)).data
+        else:
+            return CarrierSchemaForList(many=True).dump(Carrier.objects).data
+
+    @admin_required
+    def post(self, carrier_id=None):
+        schema = CarrierSchema()
+        data = request.get_json()
+        if carrier_id:
+            data['id'] = carrier_id
+        result, errors = schema.load(data)
+        return schema.dump(result).data
+
+    @admin_required
+    def delete(self, carrier_id):
+        Carrier.objects.get_or_404(id=carrier_id).delete()
+        return { 'status': 'OK' }
+
+
+
 rest.add_resource(ApiCountry, '/api/country', '/api/country/<country_id>')
 rest.add_resource(ApiCountriesGroup, '/api/countriesgroup',
                                      '/api/countriesgroup/<group_id>')
+rest.add_resource(ApiCarrier, '/api/carrier', '/api/carrier/<carrier_id>')
