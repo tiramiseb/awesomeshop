@@ -56,6 +56,10 @@
 #page-buttons *:disabled i {
     text-shadow: none;
 }
+#page-content-wrapper {
+    /* Buttons should never overlap the last lines of the page */
+    margin-bottom: 4em;
+}
 
 /* Text area with monospace, better for writing ReST */
 textarea {
@@ -73,4 +77,8 @@ textarea {
 /* Filter inputs */
 input.list-group-item {
     width: 100%;
+}
+
+.nowrap {
+    white-space: nowrap;
 }
