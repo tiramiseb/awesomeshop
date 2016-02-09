@@ -1,6 +1,7 @@
+
 # -*- coding: utf8 -*-
 
-# Copyright 2015 Sébastien Maccagnoni-Munch
+# Copyright 2015-2016 Sébastien Maccagnoni-Munch
 #
 # This file is part of AwesomeShop.
 #
@@ -21,15 +22,14 @@ import datetime
 
 from satchless.item import StockedItem
 
-from .... import db, get_locale
-from ....mongo import TranslationsField
-from ....photo import Photo
-from ....page.models import Page
-from ..category import Category
-from ..tax import Tax
+from ... import db, get_locale
+from ...mongo import TranslationsField
+from ...photo import Photo
+from ...page.models import Page
+from .category import Category
+from .tax import Tax
 
-
-class BaseProduct(db.Document, StockedItem):
+class Product(db.Document, StockedItem):
     created_at = db.DateTimeField(db_field='create',
                                   default=datetime.datetime.now)
     slug = db.StringField()
@@ -52,24 +52,17 @@ class BaseProduct(db.Document, StockedItem):
                             db_field='rel',
                             )
     on_demand = db.BooleanField(db_field='dem')
-    meta = {
-        'collection': 'product',
-        'ordering': ['reference'],
-        'allow_inheritance': True
-    }
-    
-    @property
-    def loc_name(self):
-        return self.name.get(get_locale(), u'')
+    purchasing_price = db.DecimalField(db_field='pprice')
+    gross_price = db.DecimalField(db_field='gprice')
+    weight = db.IntField()
+    stock = db.IntField()
+    stock_alert = db.IntField(db_field='alert')
 
-    def get_full_name(self, data=None):
-        """Get the product full name, including data
-        
-        Must return a string"""
-        raise NotImplementedError
+    meta = {
+        'ordering': ['reference']
+    }
 
     def get_price_per_item(self, data=None):
-        """Returns the price of this product with the given data
-        
-        Must return a prices.Price object"""
-        raise NotImplementedError
+        gross = self.gross_price
+        net = gross * ( 1 + self.tax.rate )
+        return prices.Price(net, gross)

@@ -24,12 +24,12 @@ from flask_babel import format_datetime
 
 from ... import db
 from ...auth.models import User
-from .product import BaseProduct
+from .product import Product
 
 
 
 class DbCartLine(db.EmbeddedDocument):
-    product = db.ReferenceField(BaseProduct, db_field='prod')
+    product = db.ReferenceField(Product, db_field='prod')
     quantity = db.IntField(db_field='qty')
     data = db.DictField()
 

@@ -23,7 +23,7 @@ from ... import app, db
 from ...auth.models import User
 from ...shipping.models import Carrier
 
-from .product import BaseProduct
+from .product import Product
 
 
 
@@ -34,7 +34,7 @@ class OrderProduct(db.EmbeddedDocument):
     line_gross_price = db.StringField(db_field='lgprice')
     line_net_price = db.StringField(db_field='lnprice')
     quantity = db.IntField(db_field='qty')
-    product = db.ReferenceField(BaseProduct)
+    product = db.ReferenceField(Product)
     name = db.StringField()
     qty_reduced_because_of_stock = db.BooleanField(db_field='insuff_stock')
     on_demand = db.BooleanField(db_field='dem')

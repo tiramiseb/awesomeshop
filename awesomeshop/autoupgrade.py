@@ -21,7 +21,7 @@ import datetime
 
 from .helpers import Setting
 from .shipping.models import Carrier
-from .shop.models import BaseProduct
+from .shop.models import Product
 from .shop.models import Url
 
 ###############################################################################
@@ -32,14 +32,16 @@ from .shop.models import Url
 # database)
 
 def add_product_cls():
-    products = BaseProduct._get_collection()
-    products.update_many({'_cls': None},
-                         {'$set': {'_cls': 'BaseProduct.Product'}})
-    urls = Url._get_collection()
-    urls.update_many(
-            {'doc._cls': 'Product'},
-            {'$set':{'doc._cls': 'BaseProduct.Product'}}
-            )
+    pass
+    # Deprecated because it has been reverted
+    #products = BaseProduct._get_collection()
+    #products.update_many({'_cls': None},
+    #                     {'$set': {'_cls': 'BaseProduct.Product'}})
+    #urls = Url._get_collection()
+    #urls.update_many(
+    #        {'doc._cls': 'Product'},
+    #        {'$set':{'doc._cls': 'BaseProduct.Product'}}
+    #        )
 
 def add_ondemand():
     products = BaseProduct._get_collection()
@@ -92,13 +94,24 @@ def merge_weights_and_costs():
                         }
                     )
 
+def reunite_products():
+    products = Product._get_collection()
+    products.update_many({},
+                         {'$unset': {'_cls': ''}})
+    urls = Url._get_collection()
+    urls.update_many(
+            {'doc._cls': 'BaseProduct.Product'},
+            {'$set':{'doc._cls': 'Product'}}
+            )
+
 ###############################################################################
 # Ordered list of all upgrade functions
 upgrades = [
-    add_product_cls, # 2015
-    add_ondemand, # 2015
-    add_creationdate, # 2015
-    merge_weights_and_costs, # 2016-01-18
+    (add_product_cls, '2015: allow subproducts (deprecated)'),
+    (add_ondemand, '2015: allow "on demand" products'),
+    (add_creationdate, '2015: add creation date to products'),
+    (merge_weights_and_costs, '18/01/2016: change how weights and costs are stored'),
+    (reunite_products, '09/02/2016: cancel the subproducts feature')
     ]
 
 def upgrade():
@@ -108,8 +121,13 @@ def upgrade():
     except:
         version = Setting(name='db_upgrade_version', value=0)
     if version.value < latest:
-        print 'Upgrading from version {} to {}'.format(version.value, latest)
-        for fct in upgrades[version.value:]:
+        print 'Upgrading database from version {} to version {}...'.format(
+                                                                version.value,
+                                                                latest
+                                                                )
+        for fct, desc in upgrades[version.value:]:
+            print '>', desc
             fct()
         version.value = latest
         version.save()
+        print 'Done upgrading!'
