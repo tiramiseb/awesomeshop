@@ -39,7 +39,7 @@ class BaseProduct(db.Document, StockedItem):
     documentation = db.ReferenceField(
                             Page,
                             db_field='doc',
-                            reverse_delete_rule=db.DENY,
+                            reverse_delete_rule=db.DENY
                             )
     category = db.ReferenceField(Category, db_field='cat',
                                  reverse_delete_rule=db.DENY)
