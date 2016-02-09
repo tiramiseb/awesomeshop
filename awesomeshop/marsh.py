@@ -64,10 +64,17 @@ class ObjField(fields.Field):
     * obj: the object class
     """
     def _serialize(self, value, attr, obj):
-        return getattr(value, self.metadata['f'])
+        if self.metadata['f'] == 'id':
+            return str(getattr(value, self.metadata['f'], ''))
+        else:
+            return getattr(value, self.metadata['f'], '')
 
     def _deserialize(self, value, attr, data):
-        return self.metadata['obj'].objects.get(**{self.metadata['f']: value})
+        if value:
+            return self.metadata['obj'].objects.get(
+                                                 **{self.metadata['f']: value})
+        else:
+            return None
 
 class MultiObjField(fields.Field):
     """
