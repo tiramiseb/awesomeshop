@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
-from ... import db
+from ... import db, get_locale
 from ...mongo import TranslationsField
 
 
@@ -32,3 +32,32 @@ class Category(db.Document):
     meta = {
         'ordering': ['rank']
     }
+
+    @classmethod
+    def ordered_all(self):
+        catlist = []
+        def add_cats(categories, level=0):
+            for cat in categories:
+                cat.level = level
+                catlist.append(cat)
+                add_cats(cat.children, level+1)
+        add_cats(self.objects(parent=None))
+        return catlist
+
+    @property
+    def children(self):
+        return Category.objects(parent=self)
+
+    @property
+    def products(self):
+        from .product import Product
+        return Product.objects(category=self).count()
+
+    @property
+    def full_name(self):
+        name = self.name.get(get_locale(), '')
+        if self.parent:
+            return u'{} » {}'.format(self.parent.full_name, name)
+        else:
+            return name
+
