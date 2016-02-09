@@ -21,7 +21,8 @@ angular.module('awesomeshop', [
         // Common awesomeshop modules
         'authentication', 'config', 'spinner', 
         // Dashboard modules
-        'dbCarriers', 'dbCountries', 'dbPages', 'dbTaxrates', 'dbUsers'
+        'dbCarriers', 'dbCategories', 'dbCountries', 'dbPages', 'dbTaxrates',
+        'dbUsers'
 ])
 .config(function($interpolateProvider, $stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider) {
     $interpolateProvider.startSymbol('[[');

@@ -38,6 +38,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <script src="/static/libs/ui-bootstrap-tpls-0.14.3.min.js"></script>
 <script src="/static/awesomeshop/common.js"></script>
 <script src="/static/awesomeshop/dashboard/carriers.js"></script>
+<script src="/static/awesomeshop/dashboard/categories.js"></script>
 <script src="/static/awesomeshop/dashboard/countries.js"></script>
 <script src="/static/awesomeshop/dashboard/pages.js"></script>
 <script src="/static/awesomeshop/dashboard/taxrates.js"></script>
@@ -68,7 +69,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     <i class="fa fa-cubes"></i>
                     {{ _('Products') }}
             </a></li>
-            <li><a href="#/categories">
+            <li><a ui-sref="categories">
                     <i class="fa fa-th-list"></i>
                     {{ _('Categories') }}</a>
             </li>

@@ -82,3 +82,17 @@ input.list-group-item {
 .nowrap {
     white-space: nowrap;
 }
+
+/* Categories list prefixes */
+.cat-0 {
+    margin-left: 0;
+}
+.cat-1 {
+    margin-left: 1.5em;
+}
+.cat-2 {
+    margin-left: 3em;
+}
+.cat-1:before, .cat-2:before {
+    content: '↳';
+}

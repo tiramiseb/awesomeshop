@@ -1,0 +1,52 @@
+{#-
+Copyright 2015 Sébastien Maccagnoni-Munch
+
+This file is part of AwesomeShop.
+
+AwesomeShop is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+details.
+
+You should have received a copy of the GNU Affero General Public License
+along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+#}
+{% import "macros/dashboard.html" as d %}
+{% import "macros/form.html" as f %}
+
+<form name="form" novalidate>
+    <h1>{{ _('Category:') }} [[ category.slug ]]</h1>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-6">
+                {{ f.input_text(_('Slug'), 'slug', 'category.slug', 'required', _('Slug is mandatory')) }}
+            </div>
+            <div class="col-sm-6">
+                {{ f.select(_('Parent'), 'parent', 'category.parent', 'cat.id as cat.full_name for cat in categories') }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6" ng-repeat="lang in langs">
+                {{ f.input_text('[[ lang ]]', 'name_[[ lang ]]', 'category.name[lang]') }}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">{{ _('Description') }}</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-6" ng-repeat="lang in langs">
+                {{ f.textarea('[[ lang ]]', 'description_[[ lang ]]', 'category.description[lang]') }}
+            </div>
+        </div>
+    </div>
+</div>
+{{ d.submit_back('categories') }}
+</form>
