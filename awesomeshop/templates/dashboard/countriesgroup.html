@@ -24,40 +24,34 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <div class="panel panel-default">
     <div class="panel-body">
         {{ f.input_text(_('Name'), 'name', 'group.name', 'required', _('Name is mandatory')) }}
-
-
-<div class="row">
-    <div class="col-xs-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">{{ _('Selected') }}</div>
-            <div class="list-group">
-                <button class="list-group-item" ng-repeat="code in group.countries" ng-click="remove(code)">
-                    [[ name_from_code(code) ]]
-                    <span class="pull-right">
-                        <i class="fa fa-arrow-right"></i>
-                    </span>
-                </button>
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">{{ _('Selected') }}</div>
+                    <div class="list-group">
+                        <button class="list-group-item" ng-repeat="code in group.countries" ng-click="remove(code)">
+                            [[ name_from_code(code) ]]
+                            <span class="pull-right">
+                                <i class="fa fa-arrow-right"></i>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">{{ _('Available') }}</div>
+                    <div class="list-group">
+                        <input class="list-group-item" type="text" ng-model="query" placeholder="{{ _('Filter') }}">
+                        <button class="list-group-item" ng-repeat="country in filtered_countries() | filter:query" ng-click="add(country.code)">
+                            <i class="fa fa-arrow-left"></i>
+                            &nbsp;&nbsp;
+                            [[ country.name ]]
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-xs-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">{{ _('Available') }}</div>
-            <div class="list-group">
-                <input class="list-group-item" type="text" ng-model="query" placeholder="{{ _('Filter') }}">
-                <button class="list-group-item" ng-repeat="country in filtered_countries() | filter:query" ng-click="add(country.code)">
-                    <i class="fa fa-arrow-left"></i>
-                    &nbsp;&nbsp;
-                    [[ country.name ]]
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-        {#{{ f.select_multiple(_('Countries'), 'countries', 'group.countries', 'country.code as country.name for country in countries') }}#}
     </div>
 </div>
 {{ d.submit_back('countriesgroups') }}
