@@ -67,7 +67,7 @@ class CountriesGroupSchema(Schema):
         else:
             group = CountriesGroup()
         group.name = data['name']
-        group.countries = data['countries']
+        group.countries = data.get('countries', [])
         group.save()
         return group
 
