@@ -27,6 +27,7 @@ from mongoengine.connection import get_db
 from awesomeshop import db, shipping
 from awesomeshop.auth.models import Address, User
 from awesomeshop.page.models import Page
+from awesomeshop.shipping import init as shipping_init
 from awesomeshop.shipping.models import Country, CountriesGroup, Carrier
 from awesomeshop.shop.models import Tax, Category, Product, Url, Order
 
@@ -56,5 +57,5 @@ admin.is_admin = True
 admin.save()
     
 print '* Creating countries'
-shipping.create_countries_from_restcountries()
-shipping.create_legal_groups()
+shipping_init.create_countries_from_restcountries()
+shipping_init.create_legal_groups()
