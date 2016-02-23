@@ -48,7 +48,17 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </div>
         <div class="row">
             <div class="col-sm-6" ng-repeat="lang in langs">
-                {{ f.input_text(_('Name') + ' [[ lang ]]', 'name[[ lang ]]', 'product.name[lang]') }}
+                <div class="row">
+                    <div class="col-xs-8">
+                        {{ f.input_text(_('Name') + ' [[ lang ]]', 'name[[ lang ]]', 'product.name[lang]') }}
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <label for="to_slug_[[ lang ]]">{{ _('To slug') }}</label>
+                            <button class="btn btn-primary form-control" id="to_slug_[[ lang ]]" ng-click="slug_from(product.name[lang])">{{ _('To slug') }}</button>
+                        </div>
+                    </div>
+                </div>
                 {{ f.textarea(_('Description') + ' [[ lang ]]', 'description_[[ lang ]]', 'product.description[lang]') }}
             </div>
         </div>

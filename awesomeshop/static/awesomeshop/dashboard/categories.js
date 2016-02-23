@@ -16,7 +16,7 @@
  * along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
  */
 
-angular.module('dbCategories', [])
+angular.module('dbCategories', ['slugifier'])
 .config(function($stateProvider) {
     $stateProvider
         .state('categories', {
@@ -108,7 +108,7 @@ angular.module('dbCategories', [])
     }
     */
 })
-.controller('CategoryCtrl', function($scope, $http, $stateParams, $state, CONFIG) {
+.controller('CategoryCtrl', function($scope, $http, $stateParams, $state, Slug, CONFIG) {
     $scope.langs = CONFIG.languages;
     $http.get('/api/category', {params: {'flat':'true'}})
         .then(function(response) {
@@ -138,6 +138,9 @@ angular.module('dbCategories', [])
         } else {
             $state.go('categories');
         }
+    };
+    $scope.slug_from = function(text) {
+        $scope.category.slug = Slug.slugify(text);
     };
     if ($stateParams.category_id) {
         $http.get('/api/category/'+$stateParams.category_id)

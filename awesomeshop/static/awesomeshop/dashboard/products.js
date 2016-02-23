@@ -16,7 +16,7 @@
  * along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
  */
 
-angular.module('dbProducts', ['angularFileUpload'])
+angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
 .config(function($stateProvider) {
     $stateProvider
         .state('products', {
@@ -41,7 +41,7 @@ angular.module('dbProducts', ['angularFileUpload'])
             $scope.products = response.data;
         });
 })
-.controller('ProductCtrl', function($scope, $http, $stateParams, $state, FileUploader, CONFIG) {
+.controller('ProductCtrl', function($scope, $http, $stateParams, $state, FileUploader, Slug, CONFIG) {
     $scope.langs = CONFIG.languages;
     $http.get('/api/category', {params: {'flat':'true'}})
         .then(function(response) {
@@ -129,6 +129,9 @@ angular.module('dbProducts', ['angularFileUpload'])
         } else {
             $state.go('products');
         }
+    };
+    $scope.slug_from = function(text) {
+        $scope.product.slug = Slug.slugify(text);
     };
     $scope.delete_photo = function(filename, index) {
         $http.get('/api/product/'+$scope.product.id+'/photo/'+filename+'/delete')
