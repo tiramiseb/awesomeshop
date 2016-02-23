@@ -100,8 +100,6 @@ class ApiProduct(Resource):
     def post(self, product_id=None):
         schema = ProductSchema()
         data = request.get_json()
-        print "=============="
-        print data
         if product_id:
             data['id'] = product_id
         result, errors = schema.load(data)
@@ -115,6 +113,7 @@ class ApiProduct(Resource):
         return { 'status': 'OK' }
 
 class ProductPhoto(Resource):
+    @admin_required
     def post(self, product_id):
         product = Product.objects.get_or_404(id=product_id)
         photo = Photo.from_request(request.files['file'])
@@ -123,6 +122,7 @@ class ProductPhoto(Resource):
         return PhotoSchema().dump(photo).data
 
 class DeleteProductPhoto(Resource):
+    @admin_required
     def get(self, product_id, filename):
         product = Product.objects.get_or_404(id=product_id)
         for p in product.photos:
@@ -136,7 +136,3 @@ class DeleteProductPhoto(Resource):
 rest.add_resource(ApiProduct, '/api/product', '/api/product/<product_id>')
 rest.add_resource(ProductPhoto, '/api/product/<product_id>/photo')
 rest.add_resource(DeleteProductPhoto, '/api/product/<product_id>/photo/<filename>/delete')
-
-
-##### TODO XXX TODO : /api/product/<id>/photo
-# Upload des photos, s'inspirer des pages.

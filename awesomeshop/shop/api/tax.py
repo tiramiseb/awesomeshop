@@ -46,6 +46,7 @@ class ApiTax(Resource):
     def get(self):
         return TaxSchema(many=True).dump(Tax.objects).data
 
+    @admin_required
     def post(self):
         schema = TaxSchema()
         result, errors = schema.load(request.get_json())
@@ -53,6 +54,7 @@ class ApiTax(Resource):
             abort(400, {'type': 'fields', 'errors': errors })
         return schema.dump(result).data
 
+    @admin_required
     def delete(self, tax_id):
         Tax.objects.get_or_404(id=tax_id).delete()
         return { 'status': 'OK' }

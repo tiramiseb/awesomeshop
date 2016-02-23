@@ -93,6 +93,7 @@ class ApiPage(Resource):
 
 
 class PagePhoto(Resource):
+    @admin_required
     def post(self, page_id):
         page = Page.objects.get_or_404(id=page_id)
         photo = Photo.from_request(request.files['file'])
@@ -101,6 +102,7 @@ class PagePhoto(Resource):
         return PhotoSchema().dump(photo).data
 
 class DeletePagePhoto(Resource):
+    @admin_required
     def get(self, page_id, filename):
         page = Page.objects.get_or_404(id=page_id)
         for p in page.photos:
@@ -112,6 +114,7 @@ class DeletePagePhoto(Resource):
         return { 'status': 'OK' }
 
 class MovePage(Resource):
+    @admin_required
     def get(self, page_id, target_id):
         page = Page.objects.get_or_404(id=page_id)
         if target_id == 'last':
