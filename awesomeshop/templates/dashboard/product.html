@@ -1,0 +1,161 @@
+{#-
+Copyright 2015 Sébastien Maccagnoni-Munch
+
+This file is part of AwesomeShop.
+
+AwesomeShop is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+details.
+
+You should have received a copy of the GNU Affero General Public License
+along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+#}
+{% import "macros/dashboard.html" as d %}
+{% import "macros/form.html" as f %}
+
+<form name="form" novalidate>
+    <h1>{{ _('Product:') }} [[ product.slug ]]</h1>
+<div class="panel panel-default">
+    <div class="panel-heading">{{ _('Description') }}</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-3 col-xs-6">
+                {{ f.input_text(_('Slug'), 'slug', 'product.slug', 'required', _('Slug is mandatory')) }}
+            </div>
+            <div class="col-md-3 col-xs-6">
+                {{ f.input_text(_('Reference'), 'reference', 'product.reference', 'required', _('Reference is mandatory')) }}
+            </div>
+            <div class="col-md-3 col-xs-6">
+                {{ f.select(_('Category'), 'category', 'product.category', 'cat.id as cat.full_name for cat in categories', 'required', _('Category is mandatory')) }}
+            </div>
+            <div class="col-md-3 col-xs-6">
+                {{ f.select(_('Documentation'), 'documentation', 'product.documentation', 'doc.id as doc.title for doc in documentations', 'required', _('Documentation is mandatory')) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-9">
+                {{ f.input_text(_('Keywords'), 'keywords', 'product.keywords') }}
+            </div>
+            <div class="col-md-3">
+                {{ f.checkbox_button(_('Is on sale'), _('Not on sale'), 'on_sale', 'product.on_sale') }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6" ng-repeat="lang in langs">
+                {{ f.input_text(_('Name') + ' [[ lang ]]', 'name[[ lang ]]', 'product.name[lang]') }}
+                {{ f.textarea(_('Description') + ' [[ lang ]]', 'description_[[ lang ]]', 'product.description[lang]') }}
+            </div>
+        </div>
+    </div>
+</div>
+<uib-accordion>
+    <uib-accordion-group heading="{{ _('Related products') }} ([[ product.related_products.length ]])">
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">{{ _('Selected') }}</div>
+                    <div class="list-group">
+                        <button class="list-group-item" ng-repeat="prodid in product.related_products" ng-click="remove_prod(prodid)">
+                            [[ name_from_id(prodid) ]]
+                            <span class="pull-right">
+                                <i class="fa fa-arrow-right"></i>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">{{ _('Available') }}</div>
+                    <div class="list-group">
+                        <input class="list-group-item" type="text" ng-model="query" placeholder="{{ _('Filter') }}">
+                        <button class="list-group-item" ng-repeat="prod in filtered_products() | filter:query" ng-click="add_prod(prod.id)">
+                            <i class="fa fa-arrow-left"></i>
+                            &nbsp;&nbsp;
+                            [[ prod.name ]]
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </uib-accordion-group>
+</uib-accordion>
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">{{ _('Pricing') }}</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-6">
+                        {{ f.input_text(_('Purchasing price'), 'purchasing_price', 'product.purchasing_price', suffix=config.CURRENCY) }}
+                    </div>
+                    <div class="col-xs-6">
+                        {{ f.input_text(_('Gross price'), 'gross_price', 'product.gross_price', suffix=config.CURRENCY) }}
+                    </div>
+                    <div class="col-xs-6">
+                        {{ f.select(_('Tax'), 'tax', 'product.tax', 'tax.id as tax.name for tax in taxrates') }}
+                    </div>
+                    <div class="col-xs-6">
+                        <label for="net_price">{{ _('Net price') }}</label>
+                        <div class="input-group">
+                            <input type="text" id="net_price" name="net_price" class="form-control" ng-value="net_price()" disabled>
+                            <span class="input-group-addon">{{ config.CURRENCY }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">{{ _('Stock and shipping') }}</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-6">
+                        {{ f.input_text(_('Stock'), 'stock', 'product.stock') }}
+                    </div>
+                    <div class="col-xs-6">
+                        {{ f.input_text(_('Stock alert'), 'stock_alert', 'product.stock_alert') }}
+                    </div>
+                    <div class="col-xs-6">
+                        {{ f.checkbox_button(_('Available on demand'), _('Not on demand'), 'on_demand', 'product.on_demand') }}
+                    </div>
+                    <div class="col-xs-6">
+                        {{ f.input_text(_('Weight'), 'weight', 'product.weight', suffix='g') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="pictures" class="panel panel-default">
+    <div class="panel-heading">{{ _('Pictures') }}</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ng-repeat="photo in product.photos">
+                <div class="thumbnail">
+                    <img ng-src="[[ photo.thumbnail_url ]]">
+                    <div class="caption text-center">
+                        <button class="btn btn-danger" ng-click="delete_photo(photo.filename, $index)">
+                            <i class="fa fa-trash"></i>
+                            {{ _('Remove') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-if="product.id">
+            <hr>
+            <input type="file" nv-file-select uploader="uploader">
+        </div>
+        <p ng-hide="product.id">{{ _('Please save the product before adding images') }}</p>
+    </div>
+</div>
+{{ d.submit_back('products') }}
+</form>

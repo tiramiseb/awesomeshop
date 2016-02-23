@@ -19,4 +19,5 @@
 
 from .category import *
 from .dbcart import *
+from .product import *
 from .tax import *
