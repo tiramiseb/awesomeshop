@@ -29,20 +29,24 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 </div>
 {%- endmacro %}
 
-{%- macro _input_generic(type, label, name, ngmodel, options, errormessage) %}
+{%- macro _input_generic(type, label, name, ngmodel, options, errormessage, suffix) %}
+{%- if suffix %}
+{{ _generic('<div class="input-group"><input type="%s" id="%s" name="%s" class="form-control" ng-model="%s" %s><span class="input-group-addon">%s</span></div>'|format(type, name, name, ngmodel, options, suffix), label, name, errormessage) }}
+{%- else %}
 {{ _generic('<input type="%s" id="%s" name="%s" class="form-control" ng-model="%s" %s>'|format(type, name, name, ngmodel, options), label, name, errormessage) }}
+{%- endif %}
 {%- endmacro %}
 
-{%- macro input_email(label, name, ngmodel, options, errormessage) %}
-{{ _input_generic('email', label, name, ngmodel, options, errormessage) }}
+{%- macro input_email(label, name, ngmodel, options, errormessage, suffix) %}
+{{ _input_generic('email', label, name, ngmodel, options, errormessage, suffix) }}
 {%- endmacro %}
 
-{%- macro input_password(label, name, ngmodel, options, errormessage) %}
-{{ _input_generic('password', label, name, ngmodel, options, errormessage) }}
+{%- macro input_password(label, name, ngmodel, options, errormessage, suffix) %}
+{{ _input_generic('password', label, name, ngmodel, options, errormessage, suffix) }}
 {%- endmacro %}
 
-{%- macro input_text(label, name, ngmodel, options, errormessage) %}
-{{ _input_generic('text', label, name, ngmodel, options, errormessage) }}
+{%- macro input_text(label, name, ngmodel, options, errormessage, suffix) %}
+{{ _input_generic('text', label, name, ngmodel, options, errormessage, suffix) }}
 {%- endmacro %}
 
 {%- macro textarea(label, name, ngmodel, options, errormessage) %}
