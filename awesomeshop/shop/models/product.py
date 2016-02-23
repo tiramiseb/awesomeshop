@@ -48,7 +48,10 @@ class Product(db.Document, StockedItem):
     tax = db.ReferenceField(Tax, reverse_delete_rule=db.DENY)
     on_sale = db.BooleanField(db_field='sale')
     related_products = db.ListField(
-                            db.ReferenceField('self'),
+                            db.ReferenceField(
+                                'self',
+                                reverse_delete_rule=db.PULL
+                                ),
                             db_field='rel',
                             )
     on_demand = db.BooleanField(db_field='dem')
