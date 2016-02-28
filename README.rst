@@ -48,7 +48,7 @@ Any directive defined in ``config.py`` will override the equivalent in
 Locally using AwesomeShop
 =========================
 
-Example working on Ubuntu 15.10::
+Example working on Ubuntu 16.04::
 
     apt-get install mongodb-server
     ./init_pythonapp.sh
