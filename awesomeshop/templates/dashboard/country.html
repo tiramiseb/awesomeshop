@@ -30,7 +30,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     </div>
 </div>
 <div ng-repeat="lang in langs">
-    {{ f.input_text(_('Name') + ' [[ lang ]]', 'name_[[ lang ]]', 'country.name[lang]') }}
+    {{ f.input_text(_('Name') + ' [[ lang ]]', 'name_[[ lang ]]', 'country.name[lang]', suffix='<span class="input-group-btn"><button class="btn btn-primary" ng-click="default_from(country.name[lang])">'|safe+_('&rarr; default')+'</button></span>'|safe) }}
 </div>
 {{ d.submit_back('countries') }}
 </form>

@@ -80,6 +80,9 @@ angular.module('dbCountries', [])
         }
 
     };
+    $scope.default_from = function(text) {
+        $scope.country.default_name = text;
+    }
     if ($stateParams.country_id) {
         $http.get('/api/country/'+$stateParams.country_id)
             .then(function(response) {
