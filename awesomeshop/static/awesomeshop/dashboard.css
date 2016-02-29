@@ -66,6 +66,9 @@ textarea {
     font-family: monospace;
     height: 20em !important;
 }
+textarea.small-textarea {
+    height: 6em !important;
+}
 /* Display a "move" cursor on handles */
 [sv-handle] {
     cursor: move;
