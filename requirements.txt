@@ -5,6 +5,7 @@ flask-login
 flask-mongoengine
 flask-restful
 jinja2
+marshmallow
 mongoengine
 pillow
 prices
