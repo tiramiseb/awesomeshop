@@ -21,19 +21,15 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {% import "macros/localization.html" as l %}
 <form name="form" novalidate>
 <h1>{{ _('User:') }} [[ form.email.$valid || form.email.$pristine ? user.email : "{{ _('incorrect email address') }}" ]]</h1>
-<div class="panel panel-default">
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-xs-12 col-md-4">
-                {{ f.input_email(_('Email address'), 'email', 'user.email', 'required', _('Incorrect email address')) }}
-            </div>
-            <div class="col-xs-6 col-md-4">
-                {{ f.input_password(_('Password'), 'password', 'user.password', 'ng-required="!user.id"', _('Password is mandatory for new users')) }}
-            </div>
-            <div class="col-xs-6 col-md-4">
-                {{ f.input_password(_('Password (again)'), 'password_again', 'user.password_confirm', 'match="user.password"', _('Passwords must match')) }}
-            </div>
-        </div>
+<div class="row">
+    <div class="col-xs-12 col-md-4">
+        {{ f.input_email(_('Email address'), 'email', 'user.email', 'required', _('Incorrect email address')) }}
+    </div>
+    <div class="col-xs-6 col-md-4">
+        {{ f.input_password(_('Password'), 'password', 'user.password', 'ng-required="!user.id"', _('Password is mandatory for new users')) }}
+    </div>
+    <div class="col-xs-6 col-md-4">
+        {{ f.input_password(_('Password (again)'), 'password_again', 'user.password_confirm', 'match="user.password"', _('Passwords must match')) }}
     </div>
 </div>
 <h2>{{ _('Addresses') }}</h2>
@@ -53,7 +49,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     {{ f.input_text(_('Phone'), 'address_p_[[ $index ]]', 'address.phone') }}
                 </div>
                 <div class="col-sm-6">
-                    {{ f.textarea(_('Adresse'), 'address_a_[[ $index ]]', 'address.address', 'required', _('Address is mandatory')) }}
+                    {{ f.textarea(_('Adresse'), 'address_a_[[ $index ]]', 'address.address', 'required', _('Address is mandatory'), small=True) }}
                     {{ f.select(_('Country'), 'address_c_[[ $index ]]', 'address.country', 'country.code as country.name for country in countries', 'required', _('Country is mandatory')) }}
                     <button class="btn btn-danger pull-right" ng-click="delete_address($index)">
                         <i class="fa fa-trash"></i>

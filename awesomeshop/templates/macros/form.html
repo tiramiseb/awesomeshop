@@ -31,10 +31,15 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 {%- macro _input_generic(type, label, name, ngmodel, options, errormessage, suffix) %}
 {%- if suffix %}
-{{ _generic('<div class="input-group"><input type="%s" id="%s" name="%s" class="form-control" ng-model="%s" %s><span class="input-group-addon">%s</span></div>'|format(type, name, name, ngmodel, options, suffix), label, name, errormessage) }}
+    {%- if suffix[0] == '<' %}
+        {%- set content='<div class="input-group"><input type="%s" id="%s" name="%s" class="form-control" ng-model="%s" %s>%s</div>'|format(type, name, name, ngmodel, options, suffix) %}
+    {%- else %}
+        {%- set content='<div class="input-group"><input type="%s" id="%s" name="%s" class="form-control" ng-model="%s" %s><span class="input-group-addon">%s</span></div>'|format(type, name, name, ngmodel, options, suffix) %}
+        {%- endif %}
 {%- else %}
-{{ _generic('<input type="%s" id="%s" name="%s" class="form-control" ng-model="%s" %s>'|format(type, name, name, ngmodel, options), label, name, errormessage) }}
+    {%- set content='<input type="%s" id="%s" name="%s" class="form-control" ng-model="%s" %s>'|format(type, name, name, ngmodel, options) %}
 {%- endif %}
+{{ _generic(content, label, name, errormessage) }}
 {%- endmacro %}
 
 {%- macro input_email(label, name, ngmodel, options, errormessage, suffix) %}
@@ -49,8 +54,12 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {{ _input_generic('text', label, name, ngmodel, options, errormessage, suffix) }}
 {%- endmacro %}
 
-{%- macro textarea(label, name, ngmodel, options, errormessage) %}
+{%- macro textarea(label, name, ngmodel, options, errormessage, small=False) %}
+{%- if small %}
+{{ _generic('<textarea id="%s" name="%s" class="form-control small-textarea" ng-model="%s" %s></textarea>'|format(name, name, ngmodel, options), label, name, errormessage) }}
+{%- else %}
 {{ _generic('<textarea id="%s" name="%s" class="form-control" ng-model="%s" %s></textarea>'|format(name, name, ngmodel, options), label, name, errormessage) }}
+{%- endif %}
 {%- endmacro %}
 
 {%- macro select(label, name, ngmodel, ngoptions, options, errormessage) %}

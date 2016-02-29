@@ -20,22 +20,18 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {% import "macros/form.html" as f %}
 
 <form name="form" novalidate>
-    <h1>{{ _('Carrier:') }} [[ carrier.name ]]</h1>
-<div class="panel panel-default">
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-sm-6">
-                {{ f.input_text(_('Name'), 'name', 'carrier.name', 'required', _('Name is mandatory')) }}
-            </div>
-            <div class="col-sm-6">
-                {{ f.input_text(_('Tracking URL'), 'tracking_url', 'carrier.tracking_url', 'ng-pattern="/.*@.*/"', _('Character @ will be replaced by the tracking number')) }}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6" ng-repeat="lang in langs">
-                {{ f.input_text('[[ lang ]]', 'description_[[ lang ]]', 'carrier.description[lang]') }}
-            </div>
-        </div>
+<h1>{{ _('Carrier:') }} [[ carrier.name ]]</h1>
+<div class="row">
+    <div class="col-sm-6">
+        {{ f.input_text(_('Name'), 'name', 'carrier.name', 'required', _('Name is mandatory')) }}
+    </div>
+    <div class="col-sm-6">
+        {{ f.input_text(_('Tracking URL'), 'tracking_url', 'carrier.tracking_url', 'ng-pattern="/.*@.*/"', _('Character @ will be replaced by the tracking number')) }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6" ng-repeat="lang in langs">
+        {{ f.input_text(_('Description')+' [[ lang ]]', 'description_[[ lang ]]', 'carrier.description[lang]') }}
     </div>
 </div>
 <uib-accordion>

@@ -19,17 +19,13 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {% import "macros/dashboard.html" as d %}
 {% import "macros/form.html" as f %}
 <form name="form" novalidate>
-    <h1>{{ _('Page:') }} [[ page.slug || "{{ _('(please set a slug)') }}" ]] <small>([[ page.pagetype ]])</small></h1>
-<div class="panel panel-default">
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-sm-6 col-md-8">
-                {{ f.input_text(_('Slug'), 'slug', 'page.slug', 'required', _('Slug is mandatory')) }}
-            </div>
-            <div class="col-sm-6 col-md-4">
-                {{ f.checkbox_button(_('Display in menu'), _('Do not display'), 'in_menu', 'page.in_menu') }}
-            </div>
-        </div>
+<h1>{{ _('Page:') }} [[ page.slug || "{{ _('(please set a slug)') }}" ]] <small>([[ page.pagetype ]])</small></h1>
+<div class="row">
+    <div class="col-sm-6 col-md-8">
+        {{ f.input_text(_('Slug'), 'slug', 'page.slug', 'required', _('Slug is mandatory')) }}
+    </div>
+    <div class="col-sm-6 col-md-4">
+        {{ f.checkbox_button(_('Display in menu'), _('Do not display'), 'in_menu', 'page.in_menu') }}
     </div>
 </div>
 <div class="row">
@@ -37,17 +33,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <div class="panel panel-default">
             <div class="panel-heading">[[ lang ]]</div>
             <div class="panel-body">
-                <div class="row">
-                    <div class="col-sm-6 col-md-8">
-                        {{ f.input_text(_('Title'), 'title_[[ lang ]]', 'page.title[lang]') }}
-                    </div>
-                    <div class="col-sm-6 col-md-4">
-                        <div class="form-group">
-                            <label for="to_slug_[[ lang ]]">{{ _('To slug') }}</label>
-                            <button class="btn btn-primary form-control" id="to_slug_[[ lang ]]" ng-click="slug_from(page.title[lang])">{{ _('To slug') }}</button>
-                        </div>
-                    </div>
-                </div>
+                {{ f.input_text(_('Title'), 'title_[[ lang ]]', 'page.title[lang]', suffix='<span class="input-group-btn"><button class="btn btn-primary" ng-click="slug_from(page.title[lang])">'|safe+_('&rarr; slug')+'</button></span>'|safe) }}
                 {{ f.textarea(_('Text'), 'text_[[ lang ]]', 'page.text[lang]') }}
             </div>
         </div>

@@ -20,21 +20,17 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {% import "macros/form.html" as f %}
 
 <form name="form" novalidate>
-    <h1>{{ _('Country:') }} [[ country.default_name ]]</h1>
-<div class="panel panel-default">
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-sm-4">
-                {{ f.input_text(_('Code'), 'code', 'country.code', 'required', _('Country code is mandatory')) }}
-            </div>
-            <div class="col-sm-8">
-                {{ f.input_text(_('Default name'), 'default_name', 'country.default_name', 'required', _('Default name is mandatory')) }}
-            </div>
-        </div>
-        <div ng-repeat="lang in langs">
-            {{ f.input_text('[[ lang ]]', 'name_[[ lang ]]', 'country.name[lang]') }}
-        </div>
+<h1>{{ _('Country:') }} [[ country.default_name ]]</h1>
+<div class="row">
+    <div class="col-sm-4">
+        {{ f.input_text(_('Code'), 'code', 'country.code', 'required', _('Country code is mandatory')) }}
     </div>
+    <div class="col-sm-8">
+        {{ f.input_text(_('Default name'), 'default_name', 'country.default_name', 'required', _('Default name is mandatory')) }}
+    </div>
+</div>
+<div ng-repeat="lang in langs">
+    {{ f.input_text(_('Name') + ' [[ lang ]]', 'name_[[ lang ]]', 'country.name[lang]') }}
 </div>
 {{ d.submit_back('countries') }}
 </form>
