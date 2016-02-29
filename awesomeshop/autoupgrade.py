@@ -44,12 +44,12 @@ def add_product_cls():
     #        )
 
 def add_ondemand():
-    products = BaseProduct._get_collection()
+    products = Product._get_collection()
     products.update_many({'dem': None}, {'$set': {'dem': False}})
 
 def add_creationdate():
     old_date = datetime.datetime(1970, 1, 1)
-    products = BaseProduct._get_collection()
+    products = Product._get_collection()
     products.update_many({'create': None}, {'$set': {'create': old_date}})
 
 def merge_weights_and_costs():
