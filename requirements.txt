@@ -1,3 +1,4 @@
+blinker
 flask
 flask-babel
 flask-login
