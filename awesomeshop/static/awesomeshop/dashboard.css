@@ -1,4 +1,4 @@
-/* Copyright 2015 Sébastien Maccagnoni-Munch
+/* Copyright 2015-2016 Sébastien Maccagnoni-Munch
  *
  * This file is part of AwesomeShop.
  *
@@ -15,17 +15,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* Loading spinner */
-#spinner {
-    font-size: 200%;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    margin-top: -2.5em;
-    margin-left: -2.5em;
-    z-index: 200;
-}
 
 /* Smaller text for the menu */
 .sidebar-nav li {
