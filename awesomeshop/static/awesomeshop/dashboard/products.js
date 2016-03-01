@@ -43,6 +43,10 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
 })
 .controller('ProductCtrl', function($scope, $http, $stateParams, $state, FileUploader, Slug, CONFIG) {
     $scope.langs = CONFIG.languages;
+    $scope.sortoptions = {containment:'#photos'};
+    $scope.sort_photo = function(from_rank, to_rank) {
+        $http.get('/api/product/'+$scope.product.id+'/photo/'+from_rank+'/move/'+to_rank);
+    };
     $http.get('/api/category', {params: {'flat':'true'}})
         .then(function(response) {
             $scope.categories = response.data;
@@ -67,6 +71,7 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
         });
         $scope.uploader.onSuccessItem = function(item, response, status, header) {
             $scope.product.photos.push(response);
+            $scope.photos.push(response);
         };
     }
     $scope.name_from_id = function(prodid) {
@@ -137,12 +142,15 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
         $http.get('/api/product/'+$scope.product.id+'/photo/'+filename+'/delete')
             .then(function() {
                 $scope.product.photos.splice(index, 1);
+                $scope.photos.splice(index, 1);
             })
     }
     if ($stateParams.product_id) {
         $http.get('/api/product/'+$stateParams.product_id)
             .then(function(response) {
                 $scope.product = response.data;
+                // angular-sortable-view doesn't seem to work with embedded lists
+                $scope.photos = $scope.product.photos;
                 reinit($scope.product.id);
             });
     } else {

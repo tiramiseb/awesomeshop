@@ -133,6 +133,17 @@ class DeleteProductPhoto(Resource):
         product.save()
         return { 'status': 'OK' }
 
+class MoveProductPhoto(Resource):
+    @admin_required
+    def get(self, product_id, from_rank, to_rank):
+        # TODO Test if from_rank and to_rank < len(product.photos)
+        product = Product.objects.get_or_404(id=product_id)
+        item = product.photos.pop(from_rank)
+        product.photos.insert(to_rank, item)
+        product.save()
+        return { 'status': 'OK' }
+
 rest.add_resource(ApiProduct, '/api/product', '/api/product/<product_id>')
 rest.add_resource(ProductPhoto, '/api/product/<product_id>/photo')
 rest.add_resource(DeleteProductPhoto, '/api/product/<product_id>/photo/<filename>/delete')
+rest.add_resource(MoveProductPhoto, '/api/product/<product_id>/photo/<int:from_rank>/move/<int:to_rank>')

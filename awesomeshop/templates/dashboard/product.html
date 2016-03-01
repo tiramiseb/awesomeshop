@@ -137,10 +137,10 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <div id="pictures" class="panel panel-default">
     <div class="panel-heading">{{ _('Pictures') }}</div>
     <div class="panel-body">
-        <div class="row">
-            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ng-repeat="photo in product.photos">
-                <div class="thumbnail">
-                    <img ng-src="[[ photo.thumbnail_url ]]">
+        <div class="row" id="photos" sv-root sv-part="photos" sv-on-sort="sort_photo($indexFrom, $indexTo)">
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ng-repeat="photo in photos" sv-element="sortoptions">
+                <div class="thumbnail" sv-handle>
+                    <img ng-src="[[ photo.thumbnail_url ]]" onmousedown="return false;">
                     <div class="caption text-center">
                         <button class="btn btn-danger" ng-click="delete_photo(photo.filename, $index)">
                             <i class="fa fa-trash"></i>
