@@ -103,3 +103,4 @@ import views
 from auth import api
 from page import api
 from shipping import api
+from shop import api
