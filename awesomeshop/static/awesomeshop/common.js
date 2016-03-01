@@ -40,6 +40,7 @@ angular.module('spinner', ['ui.bootstrap'])
             document.getElementById('spinner').className="ng-hide";
         };
     }
+    show_or_hide_spinner(0);
     $httpProvider.interceptors.push(function($rootScope, $q) {
         return {
             'response': function(response) {
