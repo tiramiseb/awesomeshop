@@ -105,7 +105,7 @@ class PagePhoto(Resource):
 
 class DeletePagePhoto(Resource):
     @admin_required
-    def get(self, page_id, filename):
+    def delete(self, page_id, filename):
         page = Page.objects.get_or_404(id=page_id)
         for p in page.photos:
             if p.filename == filename:
@@ -128,5 +128,5 @@ class MovePage(Resource):
 
 rest.add_resource(ApiPage, '/api/page', '/api/page-<page_type>', '/api/page/<page_id>')
 rest.add_resource(PagePhoto, '/api/page/<page_id>/photo')
-rest.add_resource(DeletePagePhoto, '/api/page/<page_id>/photo/<filename>/delete')
+rest.add_resource(DeletePagePhoto, '/api/page/<page_id>/photo/<filename>')
 rest.add_resource(MovePage, '/api/page/<page_id>/move/<target_id>')

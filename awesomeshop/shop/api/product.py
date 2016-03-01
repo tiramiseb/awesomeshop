@@ -123,7 +123,7 @@ class ProductPhoto(Resource):
 
 class DeleteProductPhoto(Resource):
     @admin_required
-    def get(self, product_id, filename):
+    def delete(self, product_id, filename):
         product = Product.objects.get_or_404(id=product_id)
         for p in product.photos:
             if p.filename == filename:
@@ -145,5 +145,5 @@ class MoveProductPhoto(Resource):
 
 rest.add_resource(ApiProduct, '/api/product', '/api/product/<product_id>')
 rest.add_resource(ProductPhoto, '/api/product/<product_id>/photo')
-rest.add_resource(DeleteProductPhoto, '/api/product/<product_id>/photo/<filename>/delete')
+rest.add_resource(DeleteProductPhoto, '/api/product/<product_id>/photo/<filename>')
 rest.add_resource(MoveProductPhoto, '/api/product/<product_id>/photo/<int:from_rank>/move/<int:to_rank>')

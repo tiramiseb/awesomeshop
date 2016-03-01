@@ -139,7 +139,7 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
         $scope.product.slug = Slug.slugify(text);
     };
     $scope.delete_photo = function(filename, index) {
-        $http.get('/api/product/'+$scope.product.id+'/photo/'+filename+'/delete')
+        $http.delete('/api/product/'+$scope.product.id+'/photo/'+filename)
             .then(function() {
                 $scope.product.photos.splice(index, 1);
                 $scope.photos.splice(index, 1);

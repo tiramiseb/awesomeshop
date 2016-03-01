@@ -103,7 +103,7 @@ angular.module('dbPages', ['angular-sortable-view', 'angularFileUpload', 'slugif
         $scope.page.slug = Slug.slugify(text);
     };
     $scope.delete_photo = function(filename, index) {
-        $http.get('/api/page/'+$scope.page.id+'/photo/'+filename+'/delete')
+        $http.delete('/api/page/'+$scope.page.id+'/photo/'+filename)
             .then(function() {
                 $scope.page.photos.splice(index, 1);
             })
