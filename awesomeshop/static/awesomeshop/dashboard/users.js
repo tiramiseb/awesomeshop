@@ -69,6 +69,9 @@ angular.module('dbUsers', [])
         .then(function(response) {
             $scope.countries = response.data;
         });
+    $scope.prefixed = function(country) {
+        return country.code+' - '+country.name;
+    }
     if ($stateParams.user_id) {
         $http.get('/api/user/'+$stateParams.user_id)
             .then(function(response) {

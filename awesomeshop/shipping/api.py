@@ -30,7 +30,8 @@ from .models import Country, CountriesGroup, Carrier
 class CountrySchemaForList(Schema):
     id = fields.String(dump_only=True)
     code = fields.String(dump_only=True)
-    name = fields.String(attribute='prefixed_name', dump_only=True)
+    name = Loc(dump_only=True)
+    #name = fields.String(attribute='prefixed_name', dump_only=True)
 
 class CountrySchema(Schema):
     id = fields.String()

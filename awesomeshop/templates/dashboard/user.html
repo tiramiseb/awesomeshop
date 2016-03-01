@@ -50,7 +50,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 </div>
                 <div class="col-sm-6">
                     {{ f.textarea(_('Adresse'), 'address_a_[[ $index ]]', 'address.address', 'required', _('Address is mandatory'), small=True) }}
-                    {{ f.select(_('Country'), 'address_c_[[ $index ]]', 'address.country', 'country.code as country.name for country in countries', 'required', _('Country is mandatory')) }}
+                    {{ f.select(_('Country'), 'address_c_[[ $index ]]', 'address.country', 'country.code as prefixed(country) for country in countries', 'required', _('Country is mandatory')) }}
                     <button class="btn btn-danger pull-right" ng-click="delete_address($index)">
                         <i class="fa fa-trash"></i>
                         {{ _('Remove') }}
