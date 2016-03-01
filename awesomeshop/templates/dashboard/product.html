@@ -96,7 +96,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                         {{ f.input_text(_('Purchasing price'), 'purchasing_price', 'product.purchasing_price', suffix=config.CURRENCY) }}
                     </div>
                     <div class="col-xs-6">
-                        {{ f.input_text(_('Gross price'), 'gross_price', 'product.gross_price', suffix=config.CURRENCY) }}
+                        {{ f.input_text(_('Gross price'), 'gross_price', 'product.gross_price', 'required', _('Gross price is mandatory'), suffix=config.CURRENCY) }}
                     </div>
                     <div class="col-xs-6">
                         {{ f.select(_('Tax'), 'tax', 'product.tax', 'tax.id as tax.name for tax in taxrates') }}
