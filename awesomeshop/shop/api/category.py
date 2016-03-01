@@ -93,6 +93,8 @@ class ApiCategory(Resource):
         if category_id:
             data['id'] = category_id
         result, errors = schema.load(data)
+        if errors:
+            abort(400, {'type': 'fields', 'errors': errors })
         return schema.dump(result).data
 
     @admin_required

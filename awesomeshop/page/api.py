@@ -79,6 +79,8 @@ class ApiPage(Resource):
         if page_id:
             data['id'] = page_id
         result, errors = schema.load(data)
+        if errors:
+            abort(400, {'type': 'fields', 'errors': errors })
         return schema.dump(result).data
 
     @admin_required

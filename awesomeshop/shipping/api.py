@@ -131,6 +131,8 @@ class ApiCountry(Resource):
         if country_id:
             data['id'] = country_id
         result, errors = schema.load(data)
+        if errors:
+            abort(400, {'type': 'fields', 'errors': errors })
         return schema.dump(result).data
 
     @admin_required
@@ -159,6 +161,8 @@ class ApiCountriesGroup(Resource):
         if group_id:
             data['id'] = group_id
         result, errors = schema.load(data)
+        if errors:
+            abort(400, {'type': 'fields', 'errors': errors })
         return schema.dump(result).data
 
     @admin_required
@@ -182,6 +186,8 @@ class ApiCarrier(Resource):
         if carrier_id:
             data['id'] = carrier_id
         result, errors = schema.load(data)
+        if errors:
+            abort(400, {'type': 'fields', 'errors': errors })
         return schema.dump(result).data
 
     @admin_required
