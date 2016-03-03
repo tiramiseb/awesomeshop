@@ -71,9 +71,11 @@ angular.module('spinner', ['ui.bootstrap'])
                         scope.errors = data.errors;
                         template_url = '/part/fieldserror'
                     };
-                    $uibModal.open({
-                            templateUrl: template_url
-                    });
+                    if (template_url) {
+                        $uibModal.open({
+                                templateUrl: template_url
+                        });
+                    };
                 });
         }
     };
@@ -91,7 +93,7 @@ angular.module('authentication', ['http-auth-interceptor', 'ui.bootstrap'])
                 $scope.auth.success = success;
                 if (success) {
                     $scope.$close();
-                    authService.loginConfirmed();
+                    authService.loginConfirmed(response.data);
                 }
             });
     }
