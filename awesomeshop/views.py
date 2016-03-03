@@ -17,15 +17,20 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with eAwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
-from flask import abort, jsonify, redirect, render_template, request
+from flask import abort, jsonify, redirect, \
+                  render_template as orig_render_template, request
 from flask_login import current_user
 from jinja2.exceptions import TemplateNotFound
 
-from . import app, login_required, admin_required
+from . import app, get_locale, login_required, admin_required
+
+def render_template(template, **context):
+    context['locale'] = get_locale()
+    return orig_render_template(template, **context)
 
 @app.route('/')
 def root():
-    return ''
+    return render_template('shop.html')
 
 @app.route('/login', methods=['GET','POST'])
 def login():
@@ -37,7 +42,14 @@ def part(partname):
         return render_template('part/{}.html'.format(partname))
     except TemplateNotFound:
         abort(404)
- 
+
+@app.route('/shop/<partname>')
+def shop_part(partname):
+    try:
+        return render_template('shop/{}.html'.format(partname))
+    except TemplateNotFound:
+        abort(404)
+
 @app.route('/dashboard')
 @app.route('/dashboard/')
 def dashboard():

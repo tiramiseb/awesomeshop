@@ -17,8 +17,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
-from flask import request
-from flask_login import login_user, logout_user
+from flask import request, session
+from flask_login import current_user, login_user, logout_user
 from flask_restful import Resource
 from marshmallow import Schema, fields, post_load
 
@@ -89,6 +89,12 @@ class UserSchema(Schema):
         # Ignore carts
         return user
 
+unauthentified_data = {
+        'auth': False,
+        'email': None,
+        'admin': False
+        }
+
 
 class UserLogin(Resource):
     def post(self):
@@ -100,15 +106,54 @@ class UserLogin(Resource):
         auth_ok = user.check_password(data['password'])
         if auth_ok:
             login_user(user)
-        return { 'auth': auth_ok }
+            return {
+                    'auth': True,
+                    'email': user.email,
+                    'admin': user.is_admin
+                    }
+        else:
+            return unauthentified_data
 rest.add_resource(UserLogin, '/api/login')
+
+class UserData(Resource):
+    def get(self):
+        if current_user.is_authenticated:
+            return {
+                    'auth': True,
+                    'email': current_user.email,
+                    'admin': current_user.is_admin
+                    }
+        else:
+            return unauthentified_data
+rest.add_resource(UserData, '/api/userdata')
 
 class UserLogout(Resource):
     @login_required
     def get(self):
         logout_user()
-        return { 'auth': False }
+        return unauthentified_data
 rest.add_resource(UserLogout, '/api/logout')
+
+class SetLang(Resource):
+    def put(self):
+        language = request.get_json().get('lang')
+        if language:
+            if current_user.is_authenticated:
+                # Save language in the user's preferences
+                current_user.locale = language
+                current_user.save()
+                return { 'status': 'ok' }
+            else:
+                # Store language in a cookie
+                session['locale'] = language
+                return { 'status': 'ok' }
+rest.add_resource(SetLang, '/api/setlang')
+
+class ForceLogin(Resource):
+    @login_required
+    def get(self):
+        return { 'status': 'ok' }
+rest.add_resource(ForceLogin, '/api/forcelogin')
 
 class ApiUser(Resource):
     @admin_required

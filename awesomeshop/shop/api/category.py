@@ -21,6 +21,7 @@ import re
 
 from flask import abort, request
 from flask_babel import _
+from flask_login import current_user
 from flask_restful import inputs, reqparse, Resource
 from marshmallow import Schema, fields, post_load
 from mongoengine import OperationError
@@ -71,27 +72,41 @@ class CategorySchema(Schema):
 reqparser = reqparse.RequestParser()
 reqparser.add_argument('flat', type=inputs.boolean)
 
+class ApiCategories(Resource):
+
+    def get(self):
+        options = reqparser.parse_args()
+        if options.flat:
+            return CategorySchemaForFlatList(many=True).dump(
+                                            Category.ordered_all()
+                                            ).data
+        else:
+            return CategorySchemaForList(many=True).dump(
+                                            Category.objects(parent=None)
+                                            ).data
+
+    @admin_required
+    def post(self):
+        schema = CategorySchema()
+        data = request.get_json()
+        result, errors = schema.load(data)
+        if errors:
+            abort(400, {'type': 'fields', 'errors': errors })
+        return schema.dump(result).data
+
 class ApiCategory(Resource):
     
     @admin_required
-    def get(self, category_id=None):
-        if (category_id):
-            return CategorySchema().dump(Category.objects.get_or_404(
-                                                          id=category_id)).data
-        else:
-            options = reqparser.parse_args()
-            if options.flat:
-                return CategorySchemaForFlatList(many=True).dump(
-                                                   Category.ordered_all()).data
-            else:
-                return CategorySchemaForList(many=True).dump(Category.objects(
-                                                             parent=None)).data
+    def get(self, category_id):
+        return CategorySchema().dump(
+                    Category.objects.get_or_404(id=category_id)
+                    ).data
+
     @admin_required
-    def post(self, category_id=None):
+    def post(self, category_id):
         schema = CategorySchema()
         data = request.get_json()
-        if category_id:
-            data['id'] = category_id
+        data['id'] = category_id
         result, errors = schema.load(data)
         if errors:
             abort(400, {'type': 'fields', 'errors': errors })
@@ -109,6 +124,7 @@ class ApiCategory(Resource):
             raise
         return { 'status': 'OK' }
 
-rest.add_resource(ApiCategory, '/api/category', '/api/category/<category_id>')
+rest.add_resource(ApiCategories, '/api/category')
+rest.add_resource(ApiCategory, '/api/category/<category_id>')
 
 # TODO: categories sorting

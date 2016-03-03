@@ -20,6 +20,7 @@
 import re
 from flask import abort, request
 from flask_babel import _
+from flask_login import current_user
 from flask_restful import Resource
 from marshmallow import Schema, fields, post_load
 from mongoengine import OperationError
@@ -34,6 +35,8 @@ class PageSchemaForList(Schema):
     id = fields.String(dump_only=True)
     slug = fields.String(dump_only=True)
     title = Loc(dump_only=True)
+
+class PageSchemaForAdminList(PageSchemaForList):
     in_menu = fields.Boolean(dump_only=True)
 
 
@@ -60,24 +63,39 @@ class PageSchema(Schema):
         page.save()
         return page
 
-class ApiPage(Resource):
-    @admin_required
-    def get(self, page_type=None, page_id=None):
-        if page_id:
-            return PageSchema().dump(Page.objects.get_or_404(id=page_id)).data
-        elif page_type:
-            return PageSchemaForList(many=True).dump(
+class ApiPages(Resource):
+    def get(self, page_type=None):
+        if current_user.is_authenticated and current_user.is_admin:
+            schema = PageSchemaForAdminList
+        else:
+            schema = PageSchemaForList
+        if page_type:
+            return schema(many=True).dump(
                                         Page.objects.filter(pagetype=page_type)
                                         ).data
         else:
-            return PageSchemaForList(many=True).dump(Page.objects).data
+            return schema(many=True).dump(Page.objects).data
 
     @admin_required
-    def post(self, page_id=None):
+    def post(self):
         schema = PageSchema()
         data = request.get_json()
-        if page_id:
-            data['id'] = page_id
+        result, errors = schema.load(data)
+        if errors:
+            abort(400, {'type': 'fields', 'errors': errors })
+        return schema.dump(result).data
+
+
+class ApiPage(Resource):
+    @admin_required
+    def get(self, page_id=None):
+        return PageSchema().dump(Page.objects.get_or_404(id=page_id)).data
+
+    @admin_required
+    def post(self, page_id):
+        schema = PageSchema()
+        data = request.get_json()
+        data['id'] = page_id
         result, errors = schema.load(data)
         if errors:
             abort(400, {'type': 'fields', 'errors': errors })
@@ -126,7 +144,8 @@ class MovePage(Resource):
             page.move_before(target)
         return { 'status': 'OK' }
 
-rest.add_resource(ApiPage, '/api/page', '/api/page-<page_type>', '/api/page/<page_id>')
+rest.add_resource(ApiPages, '/api/page', '/api/page-<page_type>')
+rest.add_resource(ApiPage, '/api/page/<page_id>')
 rest.add_resource(PagePhoto, '/api/page/<page_id>/photo')
 rest.add_resource(DeletePagePhoto, '/api/page/<page_id>/photo/<filename>')
 rest.add_resource(MovePage, '/api/page/<page_id>/move/<target_id>')

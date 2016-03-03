@@ -27,9 +27,9 @@ MONGODB_SETTINGS = {'DB': 'your_shop'}
 
 # The shop name and description, displayed for the customers
 SHOP_NAME = 'Your shop'
-#SHOP_DESCRIPTION = {
-#        'en': 'Selling things...'
-#        }
+SHOP_DESCRIPTION = {
+        'en': 'Selling things...'
+        }
 
 # Languages for the shop (optimized for 2 languages)
 LANGS = ['en']
