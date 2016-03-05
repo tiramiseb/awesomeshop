@@ -6,4 +6,5 @@ absent from this directory, its equivalent in ``placeholder/`` is used.
 
 Available templates:
 
+* ``logo.html``: the shop logo
 * ``home.html``: the homepage content
