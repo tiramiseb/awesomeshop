@@ -118,11 +118,14 @@ rest.add_resource(UserLogin, '/api/login')
 class UserData(Resource):
     def get(self):
         if current_user.is_authenticated:
-            return {
+            userdata = {
                     'auth': True,
                     'email': current_user.email,
                     'admin': current_user.is_admin
                     }
+            if current_user.confirm_code:
+                userdata['waiting_for_confirmation'] = True
+            return userdata
         else:
             return unauthentified_data
 rest.add_resource(UserData, '/api/userdata')
