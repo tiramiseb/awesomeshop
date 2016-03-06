@@ -41,6 +41,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <script src="/static/libs/ui-bootstrap-tpls-0.14.3.min.js"></script>
 <script src="/static/awesomeshop/common.js"></script>
 <script src="/static/awesomeshop/shop.js"></script>
+<script src="/static/awesomeshop/shop/user.js"></script>
 <title>{{ config.SHOP_NAME }}</title>
 </head>
 <body>
@@ -57,7 +58,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <a class="navbar-link" href="/dashboard" target="_blank"><i class="fa fa-tachometer"></i> {{ _('Dashboard') }}</a> |
             </span>
             <span ng-show="user().auth">
-                <a class="navbar-link" href=""><i class="fa fa-user"></i> [[ user().email ]]</a> |{# XXX link to account #}
+                <a class="navbar-link" ui-sref="profile"><i class="fa fa-user"></i> [[ user().email ]]</a> |
                 <a class="navbar-link" href="" ng-click="logout()"><i class="fa fa-sign-out"></i> {{ _('Logout') }}</a>
             </span>
             <span ng-hide="user().auth">
@@ -135,7 +136,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     {{ _('My account') }}
                 </div>
                 <div class="list-group" ng-if="user().auth" ng-cloak>
-                    <a class="list-group-item" href="">{# XXX link to account #}
+                    <a class="list-group-item" ui-sref="profile">
                         {{ _('My profile') }}
                     </a>
                     <a class="list-group-item" href="">{# XXX link to orders #}
@@ -176,8 +177,8 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     <a href="">{{ _('Send it again') }}</a>{# XXX link to send the validation email again #}
                 </i></p>
             </div>
-            <div ui-view>
-            </div>
+            <ui-view>
+            </ui-view>
         </div>
     </div>
 </div>

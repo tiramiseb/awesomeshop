@@ -1,4 +1,4 @@
-/* Copyright 2015 Sébastien Maccagnoni-Munch
+/* Copyright 2015-2016 Sébastien Maccagnoni-Munch
  *
  * This file is part of AwesomeShop.
  *
@@ -20,7 +20,9 @@ angular.module('awesomeshop', [
         //'ngAnimate', 'ui.bootstrap', 'ui.router', 'validation.match',
         'ui.bootstrap', 'ui.router',
         // Common awesomeshop modules
-        'authentication', 'config', 'spinner'
+        'authentication', 'config', 'spinner',
+        // Shop modules
+        'shopUser'
 ])
 .config(function($interpolateProvider, $stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider) {
     $interpolateProvider.startSymbol('[[');
@@ -33,6 +35,11 @@ angular.module('awesomeshop', [
             templateUrl: 'shop/index',
             controller: 'IndexCtrl'
         })
+})
+.run(function($rootScope) {
+    $rootScope.$on('$stateChangeSuccess', function() {
+        window.scroll(0,0);
+    });
 })
 .factory('UserData', function($http, $rootScope) {
     var userdata = {};
