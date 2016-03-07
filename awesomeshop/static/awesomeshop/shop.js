@@ -42,9 +42,8 @@ angular.module('awesomeshop', [
     });
     // Stuff related to the user
     $rootScope.$on('event:auth-loginConfirmed', function(event, data){
-        userdata.user = data;
+        $rootScope.user = data;
     });
-    var userdata = {};
     $rootScope.user = {};
     $rootScope.forcelogin = function() {
         $http.get('/api/forcelogin');
