@@ -23,6 +23,11 @@ angular.module('shopUser', ['validation.match'])
             templateUrl: 'shop/profile',
             controller: 'ProfileCtrl'
         })
+        .state('addresses', {
+            url: '/addresses',
+            templateUrl: 'shop/addresses',
+            controller: 'AddressesCtrl'
+        })
 })
 .controller('ProfileCtrl', function($scope, $state, $uibModal) {
     if (!$scope.user.auth) {
@@ -77,4 +82,26 @@ angular.module('shopUser', ['validation.match'])
                 $scope.$close();
             })
     }
+})
+.controller('AddressesCtrl', function($rootScope, $scope, $http) {
+    // Duplicate the addresses list so that the user object is not modified in
+    // place (which would result in an inconsistence if the user leaves the
+    // page without saving his/her modifications)
+    $scope.addresses = $rootScope.user.addresses.slice();
+    $scope.prefixed = function(country) {
+        return country.code+' - '+country.name;
+    }
+    $scope.is_last_odd = function(index) {
+        return ((index == $scope.addresses.length - 1) && (index % 2 == 0));
+    };
+    $scope.send = function() {
+        $http.post('/api/userdata', {'addresses': $scope.addresses})
+            .then(function(response) {
+                $rootScope.user = response.data;
+            });
+    };
+    $http.get('/api/country')
+        .then(function(response) {
+            $scope.countries = response.data;
+        });
 });

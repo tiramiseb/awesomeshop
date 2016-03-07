@@ -95,11 +95,11 @@ class UserSchema(Schema):
                     address = Address()
                 address.user = user
                 address.title = a['title']
-                address.firstname = a['firstname']
+                address.firstname = a.get('firstname', '')
                 address.lastname = a['lastname']
                 address.address = a['address']
                 address.country = a['country']
-                address.phone = a['phone']
+                address.phone = a.get('phone', '')
                 address.save()
             # Delete all addresses not in the request
             for a in user_s_addresses:
@@ -132,8 +132,6 @@ class UserData(Resource):
     def get(self):
         if current_user.is_authenticated:
             userdata = UserSchema().dump(current_user).data
-            #if current_user.confirm_code:
-            #    userdata['waiting_for_confirmation'] = True
             return userdata
         else:
             return unauthentified_data

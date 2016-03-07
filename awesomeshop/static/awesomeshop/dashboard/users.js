@@ -41,9 +41,6 @@ angular.module('dbUsers', [])
         });
 })
 .controller('UserCtrl', function($scope, $http, $stateParams, $state) {
-    $scope.delete_address = function(index) {
-        $scope.user.addresses.splice(index, 1);
-    }
     $scope.submit = function() {
         $http.post('/api/user', $scope.user)
             .then(function(response) {
