@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
-from flask import request, session
+from flask import abort, request, session
 from flask_login import current_user, login_user, logout_user
 from flask_restful import Resource
 from marshmallow import Schema, fields, post_load
@@ -64,31 +64,33 @@ class UserSchema(Schema):
         if 'password' in data:
             user.set_password(data['password'])
         user.save()
-        # Get a list of current addresses
-        user_s_addresses = [ str(i.id) for i in \
+        if 'addresses' in data:
+            # Get a list of current addresses
+            user_s_addresses = [ str(i.id) for i in \
                                       Address.objects(user=user).only('id') ]
-        # Save all addresses in the request
-        for a in data['addresses']:
-            address_id = a.get('id')
-            if address_id and address_id in user_s_addresses:
-                address = Address.objects.get(user=user, id=address_id)
-                user_s_addresses.remove(address_id)
-            else:
-                address = Address()
-            address.user = user
-            address.title = a['title']
-            address.firstname = a['firstname']
-            address.lastname = a['lastname']
-            address.address = a['address']
-            address.country = a['country']
-            address.phone = a['phone']
-            address.save()
-        # Delete all addresses not in the request
-        for a in user_s_addresses:
-            Address.objects.get(id=a).delete()
+            # Save all addresses in the request
+            for a in data['addresses']:
+                address_id = a.get('id')
+                if address_id and address_id in user_s_addresses:
+                    address = Address.objects.get(user=user, id=address_id)
+                    user_s_addresses.remove(address_id)
+                else:
+                    address = Address()
+                address.user = user
+                address.title = a['title']
+                address.firstname = a['firstname']
+                address.lastname = a['lastname']
+                address.address = a['address']
+                address.country = a['country']
+                address.phone = a['phone']
+                address.save()
+            # Delete all addresses not in the request
+            for a in user_s_addresses:
+                Address.objects.get(id=a).delete()
         # Ignore carts
         return user
 
+# XXX Use marshmallow instead!
 unauthentified_data = {
         'auth': False,
         'email': None,
@@ -128,6 +130,19 @@ class UserData(Resource):
             return userdata
         else:
             return unauthentified_data
+
+    @login_required
+    def post(self):
+        schema = UserSchema()
+        data = request.get_json()
+        data['id'] = str(current_user.id)
+        result, errors = schema.load(data)
+        if errors:
+            abort(400, {'type': 'fields', 'errors': errors })
+        # XXX re-read current_user to return the new email address
+        # ... or use marshmallox !
+        return self.get()
+
 rest.add_resource(UserData, '/api/userdata')
 
 class UserLogout(Resource):

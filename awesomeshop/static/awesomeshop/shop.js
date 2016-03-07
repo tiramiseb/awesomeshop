@@ -18,7 +18,7 @@
 angular.module('awesomeshop', [
         // External modules
         //'ngAnimate', 'ui.bootstrap', 'ui.router', 'validation.match',
-        'ui.bootstrap', 'ui.router',
+        'ngAnimate', 'ui.bootstrap', 'ui.router',
         // Common awesomeshop modules
         'authentication', 'config', 'spinner',
         // Shop modules
@@ -36,41 +36,35 @@ angular.module('awesomeshop', [
             controller: 'IndexCtrl'
         })
 })
-.run(function($rootScope) {
+.run(function($rootScope, $http) {
     $rootScope.$on('$stateChangeSuccess', function() {
         window.scroll(0,0);
     });
-})
-.factory('UserData', function($http, $rootScope) {
-    var userdata = {};
-    $http.get('/api/userdata')
-        .then(function(response) {
-            userdata.user = response.data;
-        });
+    // Stuff related to the user
     $rootScope.$on('event:auth-loginConfirmed', function(event, data){
         userdata.user = data;
     });
-    return userdata;
-})
-.controller('UserControls', function($http, $scope, $window, UserData) {
-    $scope.user = function() {
-        return UserData.user;
-    }
-    $scope.forcelogin = function() {
+    var userdata = {};
+    $rootScope.user = {};
+    $rootScope.forcelogin = function() {
         $http.get('/api/forcelogin');
     };
-    $scope.logout = function() {
+    $rootScope.logout = function() {
         $http.get('/api/logout')
             .then(function(response) {
-                UserData.user = response.data;
+                $rootScope.user = response.data;
             });
     };
-    $scope.setlang = function(lang) {
+    $rootScope.setlang = function(lang) {
         $http.put('/api/setlang', {'lang': lang})
             .then(function() {
                 $window.location.reload();
             })
     };
+    $http.get('/api/userdata')
+        .then(function(response) {
+            $rootScope.user = response.data;
+        });
 })
 .controller('CategoriesList', function($scope, $http) {
     $http.get('/api/category', {params: {'flat':'true'}})

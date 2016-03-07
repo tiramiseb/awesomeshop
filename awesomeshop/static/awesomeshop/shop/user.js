@@ -24,5 +24,21 @@ angular.module('shopUser', [])
             controller: 'ProfileCtrl'
         })
 })
-.controller('ProfileCtrl', function() {
+.controller('ProfileCtrl', function($scope, $uibModal) {
+    $scope.change_email = function() {
+        var modalInstance = $uibModal.open({
+                templateUrl: 'part/emailaddress',
+                controller: 'ChangeEmailCtrl'
+                })
+    };
 })
+.controller('ChangeEmailCtrl', function($rootScope, $scope, $http) {
+    $scope.change_email = function() {
+        $http.post('/api/userdata', {
+            email: $scope.email
+        })
+            .then(function(response) {
+                $rootScope.user = response.data;
+            })
+    }
+});

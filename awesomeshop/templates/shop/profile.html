@@ -16,7 +16,7 @@ details.
 You should have received a copy of the GNU Affero General Public License
 along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
-<h1 ng-controller="UserControls">{{ _('Welcome on your profile, [[ user().email ]]!') }}</h1>
+<h1>{{ _('Welcome on your profile, [[ user.email ]]!') }}</h1>
 <div class="list-group">
     <a href="" class="list-group-item">{# XXX link to addresses #}
         <h4 class="list-group-item-heading">
@@ -39,7 +39,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </h4>
         <p class="list-group-item-text">{{ _('View your orders') }}</p>
     </a>
-    <a href="" class="list-group-item">{# XXX link to email #}
+    <a href="" class="list-group-item" ng-click="change_email()">
         <h4 class="list-group-item-heading">
             <i class="fa fa-envelope-o"></i>
             {{ _('Email address' ) }}
