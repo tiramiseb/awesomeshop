@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-# Copyright 2015 Sébastien Maccagnoni-Munch
+# Copyright 2015-2016 Sébastien Maccagnoni-Munch
 #
 # This file is part of AwesomeShop.
 #
@@ -98,7 +98,6 @@ class UserSchema(Schema):
         # Ignore carts
         return user
 
-# XXX Use marshmallow instead!
 unauthentified_data = {
         'auth': False,
         'email': None,
@@ -140,6 +139,14 @@ class UserData(Resource):
             abort(400, {'type': 'fields', 'errors': errors })
         return schema.dump(result).data
 rest.add_resource(UserData, '/api/userdata')
+
+class UserDelete(Resource):
+    @login_required
+    def post(self):
+        current_user.delete()
+        logout_user()
+        return unauthentified_data
+rest.add_resource(UserDelete, '/api/userdata/delete')
 
 class UserLogout(Resource):
     @login_required

@@ -40,6 +40,12 @@ angular.module('shopUser', ['validation.match'])
                 controller: 'ChangePasswordCtrl'
                 })
     };
+    $scope.delete_account = function() {
+        var modalInstance = $uibModal.open({
+                templateUrl: 'part/deleteaccount',
+                controller: 'DeleteAccountCtrl'
+                })
+    };
 })
 .controller('ChangeEmailCtrl', function($rootScope, $scope, $http) {
     $scope.change_email = function() {
@@ -52,12 +58,22 @@ angular.module('shopUser', ['validation.match'])
             })
     }
 })
-.controller('ChangePasswordCtrl', function($rootScope, $scope, $http) {
+.controller('ChangePasswordCtrl', function($scope, $http) {
     $scope.change_password = function() {
         $http.post('/api/userdata', {
             password: $scope.password
         })
             .then(function(response) {
+                $scope.$close();
+            })
+    }
+})
+.controller('DeleteAccountCtrl', function($rootScope, $scope, $state, $http) {
+    $scope.delete_account = function() {
+        $http.post('/api/userdata/delete')
+            .then(function(response) {
+                $rootScope.user = response.data;
+                $state.go('index');
                 $scope.$close();
             })
     }
