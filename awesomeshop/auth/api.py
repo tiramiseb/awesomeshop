@@ -67,7 +67,8 @@ class UserSchema(Schema):
             user.email = data['email']
         if current_user.is_admin:
             # Only an admin can modify the admin state of a user
-            user.is_admin = data.get('is_admin', False)
+            if 'is_admin' in data:
+                user.is_admin = data['is_admin']
         if 'password' in data:
             user.set_password(data['password'])
         user.save()
