@@ -19,5 +19,11 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <h1>{{ _('Welcome on %(shop)s!', shop=config.SHOP_NAME) }}</h1>
 <div class="well">
     <p>{{ _('This is a default homepage from AwesomeShop.') }}</p>
-    <p>{{ _('Shop owner, you should create your own templates. Please read instructions in <tt>%(filename)s</tt>.', filename='awesomeshop/templates/local/README.rst') }}</p>
+    <p>{{ _('Shop owner, you should create your own templates. The following files are used:') }}</p>
+    <dl>
+        <dt><tt>awesomeshop/templates/local/logo.html</tt></dt>
+        <dd>{{ _('The logo displayed in the top left of the page') }}</dd>
+        <dt><tt>awesomeshop/templates/local/home.html</tt></dt>
+        <dd>{{ _('The home page (which will replace the current page)') }}</dd>
+    </dl>
 </div>
