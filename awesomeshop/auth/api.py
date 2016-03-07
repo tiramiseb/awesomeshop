@@ -65,6 +65,8 @@ class UserSchema(Schema):
             user = User()
         if 'email' in data:
             user.email = data['email']
+            if not current_user.is_authenticated or not current_user.is_admin:
+                user.send_confirmation_email()
         if current_user.is_authenticated and current_user.is_admin:
             # Only an admin can modify the admin state of a user
             if 'is_admin' in data:

@@ -92,6 +92,6 @@ INVOICE_PREFIX = 'INV_'
 #PAYPLUG_API_KEY='sk_test_11111111111111111111111111111111'
 
 ## Parameters for sending emails
-#MAIL_FROM="nobody@nowhere.com"
-#SMTP_SERVER="localhost"
+MAIL_FROM="nobody@nowhere.com"
+SMTP_SERVER="localhost"
 

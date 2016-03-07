@@ -36,6 +36,15 @@ def root():
 def login():
     return render_template('login.html')
 
+@app.route('/confirm/<code>')
+@login_required
+def confirm_email(code):
+    if code == current_user.confirm_code:
+        current_user.confirm_code = None
+        current_user.save()
+    # XXX Redirect the user to a specific message
+    return redirect('/')
+
 @app.route('/part/<partname>')
 def part(partname):
     try:

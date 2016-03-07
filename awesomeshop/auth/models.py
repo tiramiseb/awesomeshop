@@ -19,11 +19,13 @@
 
 import base64
 import datetime
+import uuid
 from flask_login import UserMixin
 from os import urandom
 from scrypt import hash as scrypt_hash
 
 from .. import db
+from ..mail import send_mail
 from ..shipping.models import Country
 
 class User(db.Document, UserMixin):
@@ -71,6 +73,10 @@ class User(db.Document, UserMixin):
                     password.encode('utf-8'),
                     self.passsalt.encode('utf-8')))
         return self.passhash.encode('utf-8') == candidate_hash
+
+    def send_confirmation_email(self):
+        self.confirm_code = str(uuid.uuid4())
+        send_mail(self.email, 'email_confirmation', code=self.confirm_code)
 
 
 
