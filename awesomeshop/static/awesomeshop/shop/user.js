@@ -39,6 +39,7 @@ angular.module('shopUser', [])
         })
             .then(function(response) {
                 $rootScope.user = response.data;
+                $scope.$close();
             })
     }
 });

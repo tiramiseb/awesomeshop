@@ -113,11 +113,7 @@ class UserLogin(Resource):
         auth_ok = user.check_password(data['password'])
         if auth_ok:
             login_user(user)
-            return {
-                    'auth': True,
-                    'email': user.email,
-                    'is_admin': user.is_admin
-                    }
+            return UserSchema().dump(user).data
         else:
             return unauthentified_data
 rest.add_resource(UserLogin, '/api/login')
@@ -125,11 +121,7 @@ rest.add_resource(UserLogin, '/api/login')
 class UserData(Resource):
     def get(self):
         if current_user.is_authenticated:
-            userdata = {
-                    'auth': True,
-                    'email': current_user.email,
-                    'is_admin': current_user.is_admin
-                    }
+            userdata = UserSchema().dump(current_user).data
             if current_user.confirm_code:
                 userdata['waiting_for_confirmation'] = True
             return userdata
@@ -144,10 +136,7 @@ class UserData(Resource):
         result, errors = schema.load(data)
         if errors:
             abort(400, {'type': 'fields', 'errors': errors })
-        # XXX re-read current_user to return the new email address
-        # ... or use marshmallow !
-        return self.get()
-
+        return schema.dump(result).data
 rest.add_resource(UserData, '/api/userdata')
 
 class UserLogout(Resource):
