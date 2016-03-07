@@ -29,7 +29,7 @@ from ..shop.api import CartSchema
 from .models import Address, User
 
 # Not using marshmallow_mongoengine here because it isn't made for modifying
-# multiple documents as once. Here, addresses are presented like
+# multiple documents at once. Here, addresses are presented like
 # embeddedocuments to the users but they are in fact independent documents.
 
 class AddressSchema(Schema):
@@ -39,17 +39,19 @@ class AddressSchema(Schema):
     lastname = fields.String(required=True)
     address = fields.String(required=True)
     country = ObjField(f='code', obj=Country, required=True)
-    phone = fields.String(missing='')
+    phone = fields.String(default='')
 
-class UserSimpleSchema(Schema):
-    id = fields.String()
-    email = fields.Email()
+class UserSchemaForList(Schema):
+    id = fields.String(dump_only=True)
+    email = fields.Email(dump_only=True)
+    is_admin = fields.Boolean(dump_only=True)
     addresses = Count()
     carts = Count()
 
 class UserSchema(Schema):
     id = fields.String(allow_none=True)
     email = fields.Email(required=True)
+    is_admin = fields.Boolean(default=False)
     password = fields.String(load_only=True)
     addresses = fields.Nested(AddressSchema, many=True)
     carts = fields.Nested(CartSchema, many=True)
@@ -63,6 +65,9 @@ class UserSchema(Schema):
         user.email = data['email']
         if 'password' in data:
             user.set_password(data['password'])
+        if current_user.is_admin:
+            # Only an admin can modify the admin state of a user
+            user.is_admin = data.get('is_admin', False)
         user.save()
         if 'addresses' in data:
             # Get a list of current addresses
@@ -96,7 +101,6 @@ unauthentified_data = {
         'email': None,
         'admin': False
         }
-
 
 class UserLogin(Resource):
     def post(self):
@@ -179,7 +183,7 @@ class ApiUser(Resource):
         if (user_id):
             return UserSchema().dump(User.objects.get_or_404(id=user_id)).data
         else:
-            return UserSimpleSchema(many=True).dump(User.objects).data
+            return UserSchemaForList(many=True).dump(User.objects).data
 
     @admin_required
     def post(self, user_id=None):

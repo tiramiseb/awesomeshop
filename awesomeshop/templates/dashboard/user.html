@@ -22,13 +22,16 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <form name="form" novalidate>
 <h1>{{ _('User:') }} [[ form.email.$valid || form.email.$pristine ? user.email : "{{ _('incorrect email address') }}" ]]</h1>
 <div class="row">
-    <div class="col-xs-12 col-md-4">
+    <div class="col-xs-8 col-md-4">
         {{ f.input_email(_('Email address'), 'email', 'user.email', 'required', _('Incorrect email address')) }}
     </div>
-    <div class="col-xs-6 col-md-4">
+    <div class="col-xs-4 col-md-2">
+        {{ f.checkbox_button(_('Admin'), _('Not admin'), 'is_admin', 'user.is_admin') }}
+    </div>
+    <div class="col-xs-6 col-md-3">
         {{ f.input_password(_('Password'), 'password', 'user.password', 'ng-required="!user.id"', _('Password is mandatory for new users')) }}
     </div>
-    <div class="col-xs-6 col-md-4">
+    <div class="col-xs-6 col-md-3">
         {{ f.input_password(_('Password (again)'), 'password_again', 'user.password_confirm', 'match="user.password"', _('Passwords must match')) }}
     </div>
 </div>
@@ -36,7 +39,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <uib-accordion>
     <uib-accordion-group ng-repeat="address in user.addresses" heading="[[ address.title || '{{ _('Untitled address') }}' ]]" is-open="address.new">
             <div class="row">
-                <div class="col-sm-6">
+                a<div class="col-sm-6">
                     {{ f.input_text(_('Address title'), 'address_t_[[ $index ]]', 'address.title', 'required', _('Title is mandatory')) }}
                     <div class="row">
                         <div class="col-xs-6">

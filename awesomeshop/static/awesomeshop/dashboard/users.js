@@ -47,7 +47,7 @@ angular.module('dbUsers', [])
     $scope.submit = function() {
         $http.post('/api/user', $scope.user)
             .then(function(response) {
-                var is_new = !scope.user.id;
+                var is_new = !$scope.user.id;
                 $scope.user = response.data;
                 $scope.form.$setPristine();
                 if (is_new) {

@@ -81,7 +81,7 @@ class Address(db.Document):
     lastname = db.StringField(db_field='lname')
     address = db.StringField(db_field='addr')
     country = db.ReferenceField(Country, reverse_delete_rule=db.DENY)
-    phone = db.StringField()
+    phone = db.StringField(default='')
 
     meta = {
         'ordering': ['title']

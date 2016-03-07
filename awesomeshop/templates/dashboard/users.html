@@ -30,6 +30,12 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 [[ user.email ]]
             </div>
             <div class="col-xs-4 text-right">
+                <span ng-show="user.is_admin">
+                    <span uib-tooltip="{{ _('Is an admin') }}" tooltip-placement="left">
+                        <i class="fa fa-user-md"></i>
+                    </span>
+                    &ndash;
+                </span>
                 <span uib-tooltip="{{ _('Addresses') }}" tooltip-placement="left">
                     [[ user.addresses ]] <i class="fa fa-map-marker"></i>
                 </span>
