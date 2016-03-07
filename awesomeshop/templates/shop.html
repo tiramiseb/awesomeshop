@@ -172,7 +172,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <p>{{ _('Please confirm your email address by clicking on the link in the email you have received.') }}</p>
                 <p><i>
                     {{ _('You have not received the validation email?') }}
-                    <a href="">{{ _('Send it again') }}</a>{# XXX link to send the validation email again #}
+                    <a href="" ng-click="resend_confirmation()">{{ _('Send it again') }}</a>
                 </i></p>
             </div>
             <ui-view>

@@ -59,6 +59,9 @@ angular.module('awesomeshop', [
                 controller: 'RegisterCtrl'
                 })
     };
+    $rootScope.resend_confirmation = function() {
+        $http.get('/api/register/resend');
+    };
     $rootScope.setlang = function(lang) {
         $http.put('/api/setlang', {'lang': lang})
             .then(function() {

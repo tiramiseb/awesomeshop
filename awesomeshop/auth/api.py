@@ -20,7 +20,7 @@
 from flask import abort, request, session
 from flask_login import current_user, login_user, logout_user
 from flask_restful import Resource
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields, post_dump, post_load
 
 from .. import admin_required, login_required, rest
 from ..marsh import Count, ObjField
@@ -50,12 +50,19 @@ class UserSchemaForList(Schema):
 
 class UserSchema(Schema):
     auth = fields.Constant(True, dump_only=True)
+    waiting_for_confirmation = fields.Boolean(attribute='confirm_code', dump_only=True)
     id = fields.String(allow_none=True)
     email = fields.Email()
     is_admin = fields.Boolean(default=False)
     password = fields.String(load_only=True)
     addresses = fields.Nested(AddressSchema, many=True)
     carts = fields.Nested(CartSchema, many=True)
+
+    @post_dump
+    def remove_unneeded_confirmation(self, data):
+        if data['waiting_for_confirmation'] == None:
+            data.pop('waiting_for_confirmation')
+        return data
 
     @post_load
     def make_user(self, data):
@@ -125,8 +132,8 @@ class UserData(Resource):
     def get(self):
         if current_user.is_authenticated:
             userdata = UserSchema().dump(current_user).data
-            if current_user.confirm_code:
-                userdata['waiting_for_confirmation'] = True
+            #if current_user.confirm_code:
+            #    userdata['waiting_for_confirmation'] = True
             return userdata
         else:
             return unauthentified_data
@@ -180,8 +187,16 @@ class Register(Resource):
         result, errors = schema.load(request.get_json())
         if errors:
             abort(400, {'type': 'fields', 'errors': errors })
+        login_user(result)
         return schema.dump(result).data
 rest.add_resource(Register, '/api/register')
+
+class ResendConfirmationEmail(Resource):
+    @login_required
+    def get(self):
+        current_user.send_confirmation_email()
+        return { 'status': 'ok' }
+rest.add_resource(ResendConfirmationEmail, '/api/register/resend')
 
 class ForceLogin(Resource):
     @login_required
