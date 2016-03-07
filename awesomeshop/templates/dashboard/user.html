@@ -39,7 +39,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <uib-accordion>
     <uib-accordion-group ng-repeat="address in user.addresses" heading="[[ address.title || '{{ _('Untitled address') }}' ]]" is-open="address.new">
             <div class="row">
-                a<div class="col-sm-6">
+                <div class="col-sm-6">
                     {{ f.input_text(_('Address title'), 'address_t_[[ $index ]]', 'address.title', 'required', _('Title is mandatory')) }}
                     <div class="row">
                         <div class="col-xs-6">
@@ -52,7 +52,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     {{ f.input_text(_('Phone'), 'address_p_[[ $index ]]', 'address.phone') }}
                 </div>
                 <div class="col-sm-6">
-                    {{ f.textarea(_('Adresse'), 'address_a_[[ $index ]]', 'address.address', 'required', _('Address is mandatory'), small=True) }}
+                    {{ f.textarea(_('Address'), 'address_a_[[ $index ]]', 'address.address', 'required', _('Address is mandatory'), small=True) }}
                     {{ f.select(_('Country'), 'address_c_[[ $index ]]', 'address.country', 'country.code as prefixed(country) for country in countries', 'required', _('Country is mandatory')) }}
                     <button class="btn btn-danger pull-right" ng-click="delete_address($index)">
                         <i class="fa fa-trash"></i>
