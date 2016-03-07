@@ -49,6 +49,7 @@ class UserSchemaForList(Schema):
     carts = Count()
 
 class UserSchema(Schema):
+    auth = fields.Constant(True, dump_only=True)
     id = fields.String(allow_none=True)
     email = fields.Email(required=True)
     is_admin = fields.Boolean(default=False)
@@ -108,7 +109,7 @@ class UserLogin(Resource):
         try:
             user = User.objects.get(email=data['email'])
         except User.DoesNotExist:
-            return { 'auth': False }
+            return unauthentified_data
         auth_ok = user.check_password(data['password'])
         if auth_ok:
             login_user(user)
