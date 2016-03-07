@@ -65,7 +65,7 @@ class UserSchema(Schema):
             user = User()
         if 'email' in data:
             user.email = data['email']
-        if current_user.is_admin:
+        if current_user.is_authenticated and current_user.is_admin:
             # Only an admin can modify the admin state of a user
             if 'is_admin' in data:
                 user.is_admin = data['is_admin']
@@ -169,6 +169,17 @@ class SetLang(Resource):
                 session['locale'] = language
                 return { 'status': 'ok' }
 rest.add_resource(SetLang, '/api/setlang')
+
+class Register(Resource):
+    def post(self):
+        schema = UserSchema()
+        if current_user.is_authenticated:
+            return schema.dump(current_user).data
+        result, errors = schema.load(request.get_json())
+        if errors:
+            abort(400, {'type': 'fields', 'errors': errors })
+        return schema.dump(result).data
+rest.add_resource(Register, '/api/register')
 
 class ForceLogin(Resource):
     @login_required

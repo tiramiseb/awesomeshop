@@ -35,7 +35,7 @@ angular.module('awesomeshop', [
             controller: 'IndexCtrl'
         })
 })
-.run(function($rootScope, $http) {
+.run(function($rootScope, $uibModal, $http) {
     $rootScope.$on('$stateChangeSuccess', function() {
         window.scroll(0,0);
     });
@@ -53,16 +53,34 @@ angular.module('awesomeshop', [
                 $rootScope.user = response.data;
             });
     };
+    $rootScope.register = function() {
+        var modalInstance = $uibModal.open({
+                templateUrl: 'part/register',
+                controller: 'RegisterCtrl'
+                })
+    };
     $rootScope.setlang = function(lang) {
         $http.put('/api/setlang', {'lang': lang})
             .then(function() {
-                $window.location.reload();
+                window.location.reload();
             })
     };
     $http.get('/api/userdata')
         .then(function(response) {
             $rootScope.user = response.data;
         });
+})
+.controller('RegisterCtrl', function($rootScope, $scope, $http) {
+    $scope.register = function() {
+        $http.post('/api/register', {
+            email: $scope.email,
+            password: $scope.password
+        })
+            .then(function(response) {
+                $rootScope.user = response.data;
+                $scope.$close();
+            })
+    }
 })
 .controller('CategoriesList', function($scope, $http) {
     $http.get('/api/category', {params: {'flat':'true'}})

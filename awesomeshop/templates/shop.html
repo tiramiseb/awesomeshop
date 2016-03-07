@@ -61,7 +61,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             </span>
             <span ng-hide="user.auth">
                 <a class="navbar-link" href="" ng-click="forcelogin()"><i class="fa fa-sign-in"></i> {{ _('Login') }}</a> |
-                <a class="navbar-link" href=""><i class="fa fa-user-plus"></i> {{ _('Register') }}</a> {# XXX link to create account #}
+                <a class="navbar-link" href="" ng-click="register()"><i class="fa fa-user-plus"></i> {{ _('Register') }}</a>
             </span>
             {%- for lang in config.LANGS %}
             {%- if lang != locale %} |
