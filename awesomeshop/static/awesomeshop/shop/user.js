@@ -24,7 +24,10 @@ angular.module('shopUser', [])
             controller: 'ProfileCtrl'
         })
 })
-.controller('ProfileCtrl', function($scope, $uibModal) {
+.controller('ProfileCtrl', function($scope, $state, $uibModal) {
+    if (!$scope.user.auth) {
+        $state.go('index');
+    }
     $scope.change_email = function() {
         var modalInstance = $uibModal.open({
                 templateUrl: 'part/emailaddress',
