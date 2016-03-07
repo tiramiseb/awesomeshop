@@ -51,7 +51,7 @@ class UserSchemaForList(Schema):
 class UserSchema(Schema):
     auth = fields.Constant(True, dump_only=True)
     id = fields.String(allow_none=True)
-    email = fields.Email(required=True)
+    email = fields.Email()
     is_admin = fields.Boolean(default=False)
     password = fields.String(load_only=True)
     addresses = fields.Nested(AddressSchema, many=True)
@@ -63,12 +63,13 @@ class UserSchema(Schema):
             user = User.objects.get_or_404(id=data['id'])
         else:
             user = User()
-        user.email = data['email']
-        if 'password' in data:
-            user.set_password(data['password'])
+        if 'email' in data:
+            user.email = data['email']
         if current_user.is_admin:
             # Only an admin can modify the admin state of a user
             user.is_admin = data.get('is_admin', False)
+        if 'password' in data:
+            user.set_password(data['password'])
         user.save()
         if 'addresses' in data:
             # Get a list of current addresses

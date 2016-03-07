@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('shopUser', [])
+angular.module('shopUser', ['validation.match'])
 .config(function($stateProvider) {
     $stateProvider
         .state('profile', {
@@ -34,6 +34,12 @@ angular.module('shopUser', [])
                 controller: 'ChangeEmailCtrl'
                 })
     };
+    $scope.change_password = function() {
+        var modalInstance = $uibModal.open({
+                templateUrl: 'part/password',
+                controller: 'ChangePasswordCtrl'
+                })
+    };
 })
 .controller('ChangeEmailCtrl', function($rootScope, $scope, $http) {
     $scope.change_email = function() {
@@ -42,6 +48,16 @@ angular.module('shopUser', [])
         })
             .then(function(response) {
                 $rootScope.user = response.data;
+                $scope.$close();
+            })
+    }
+})
+.controller('ChangePasswordCtrl', function($rootScope, $scope, $http) {
+    $scope.change_password = function() {
+        $http.post('/api/userdata', {
+            password: $scope.password
+        })
+            .then(function(response) {
                 $scope.$close();
             })
     }
