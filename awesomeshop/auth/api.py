@@ -100,7 +100,7 @@ class UserSchema(Schema):
 unauthentified_data = {
         'auth': False,
         'email': None,
-        'admin': False
+        'is_admin': False
         }
 
 class UserLogin(Resource):
@@ -116,7 +116,7 @@ class UserLogin(Resource):
             return {
                     'auth': True,
                     'email': user.email,
-                    'admin': user.is_admin
+                    'is_admin': user.is_admin
                     }
         else:
             return unauthentified_data
@@ -128,7 +128,7 @@ class UserData(Resource):
             userdata = {
                     'auth': True,
                     'email': current_user.email,
-                    'admin': current_user.is_admin
+                    'is_admin': current_user.is_admin
                     }
             if current_user.confirm_code:
                 userdata['waiting_for_confirmation'] = True
@@ -145,7 +145,7 @@ class UserData(Resource):
         if errors:
             abort(400, {'type': 'fields', 'errors': errors })
         # XXX re-read current_user to return the new email address
-        # ... or use marshmallox !
+        # ... or use marshmallow !
         return self.get()
 
 rest.add_resource(UserData, '/api/userdata')
