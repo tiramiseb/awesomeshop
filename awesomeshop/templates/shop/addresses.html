@@ -19,7 +19,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {% import "macros/form.html" as f %}
 
 <h1>{{ _('Configure your addresses') }}</h1>
-<form novalidate name="form">
+<form novalidate name="form" ng-submit="send()">
 <div class="row">
     <div class="col-sm-6" ng-class="{'col-sm-offset-3':is_last_odd($index)}" ng-repeat="address in addresses">
         <div class="panel panel-default">
@@ -44,11 +44,11 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </div>
     </div>
     <div class="text-center col-xs-12">
-        <button class="btn btn-primary" ng-click="addresses.push({new:true, title:'{{ _('My address') }}'})">
+        <button type="button" class="btn btn-primary" ng-click="addresses.push({new:true, title:'{{ _('My address') }}'})">
             <i class="fa fa-plus"></i>
             {{ _('Add an address') }}
         </button>
-        <button class="btn btn-success" ng-click='send()'>
+        <button type="submit" class="btn btn-success" ng-disabled="form.$invalid">
             <i class="fa fa-check"></i>
             {{ _('Save all modifications') }}
         </button>
