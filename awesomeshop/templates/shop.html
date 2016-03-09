@@ -38,8 +38,9 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <script src="/static/libs/http-auth-interceptor.js"></script>
 <script src="/static/libs/ui-bootstrap-tpls-1.2.2.min.js"></script>
 <script src="/static/awesomeshop/common.js"></script>
-<script src="/static/awesomeshop/shop.js"></script>
+<script src="/static/awesomeshop/shop/page.js"></script>
 <script src="/static/awesomeshop/shop/user.js"></script>
+<script src="/static/awesomeshop/shop.js"></script>
 <title>{{ config.SHOP_NAME }}</title>
 </head>
 <body>
@@ -123,7 +124,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     {{ _('Documentation') }}
                 </div>
                 <div class="list-group" ng-cloak>
-                    <a href="" class="list-group-item" ng-repeat="page in pages">{# XXX link to the page #}{# XXX add class "active" to the active page #}
+                    <a ui-sref="doc({slug:page.slug})" ui-sref-active="active" class="list-group-item" ng-repeat="page in pages">
                         [[ page.title ]]
                     </a>
                 </div>
@@ -161,7 +162,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     {{ _('Information') }}
                 </div>
                 <div class="list-group" ng-cloak>
-                    <a href="" class="list-group-item" ng-repeat="page in pages">{# XXX link to the page #}{# XXX add class "active" to the active page #}
+                    <a ui-sref="info({slug:page.slug})" ui-sref-active="active" class="list-group-item" ng-repeat="page in pages">
                         [[ page.title ]]
                     </a>
                 </div>

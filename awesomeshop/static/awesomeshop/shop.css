@@ -19,6 +19,9 @@
 .bottom-space {
     margin-bottom: 15px !important;
 }
+.bottom-no-space {
+    margin-bottom: 0 !important;
+}
     
 .navbar-static-bottom {
     border-radius: 0;
@@ -39,6 +42,10 @@
 }
 .category_hierarchy_1::before, .category_hierarchy_2::before {
     content: '» ';
+}
+
+.product-in-grid a:hover, .product-in-grid a:active {
+    text-decoration: none;
 }
 
 /***** FOLLOW ICONS ON THE BOTTOM BAR *****/

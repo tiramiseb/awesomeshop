@@ -17,9 +17,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
+import docutils.core
 from mongoengine.connection import get_db
 
-from .. import db
+from .. import db, get_locale
 from ..mongo import TranslationsField
 from ..photo import Photo
 
@@ -28,7 +29,7 @@ counters = get_db()['mongoengine.counters']
 class Page(db.Document):
     pagetype = db.StringField(db_field='type')
     rank = db.SequenceField()
-    slug = db.StringField()
+    slug = db.StringField(unique_with='pagetype')
     in_menu = db.BooleanField(db_field='menu')
     title = TranslationsField()
     text = TranslationsField()
@@ -70,3 +71,21 @@ class Page(db.Document):
                                      {'$set':{'next': rank}})
         self.rank = rank
         self.save()
+
+    @property
+    def content(self):
+        """Return the formatted content of the page"""
+        parts = docutils.core.publish_parts(
+                    source=self.text.get(get_locale(), u''),
+                    settings_overrides = {
+                        'initial_header_level': 2
+                        },
+                    writer_name='html')
+        return parts['body']
+
+    @property
+    def products(self):
+        """Return a list of products using this documentation"""
+        from ..shop.models import Product
+        return Product.objects(documentation=self)
+

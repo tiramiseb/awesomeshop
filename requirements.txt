@@ -1,4 +1,5 @@
 blinker
+docutils
 flask
 flask-babel
 flask-login

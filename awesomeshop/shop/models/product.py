@@ -1,4 +1,3 @@
-
 # -*- coding: utf8 -*-
 
 # Copyright 2015-2016 Sébastien Maccagnoni-Munch
@@ -19,6 +18,7 @@
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
+from decimal import Decimal
 
 from satchless.item import StockedItem
 
@@ -65,7 +65,14 @@ class Product(db.Document, StockedItem):
         'ordering': ['reference']
     }
 
+    @property
+    def net_price(self):
+        return (self.gross_price * Decimal( 1 + self.tax.rate )).quantize(Decimal('1.00'))
+
     def get_price_per_item(self, data=None):
-        gross = self.gross_price
-        net = gross * ( 1 + self.tax.rate )
-        return prices.Price(net, gross)
+        return prices.Price(self.net_price, self.gross_price)
+
+    @property
+    def main_photo(self):
+        if self.photos:
+            return self.photos[0]

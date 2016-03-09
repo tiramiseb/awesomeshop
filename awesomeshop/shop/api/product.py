@@ -34,7 +34,10 @@ class ProductSchemaForList(Schema):
     name = Loc(dump_only=True)
     on_sale = fields.Boolean(dump_only=True)
     stock = fields.Integer(dump_only=True)
+    on_demand = fields.Boolean(dump_only=True)
     gross_price = fields.Decimal(dump_only=True, as_string=True)
+    net_price = fields.Decimal(dump_only=True, as_string=True)
+    main_photo = fields.Nested(PhotoSchema)
 
 class ProductSchema(Schema):
     id = fields.String(allow_none=True)

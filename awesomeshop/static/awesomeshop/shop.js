@@ -21,7 +21,7 @@ angular.module('awesomeshop', [
         // Common awesomeshop modules
         'authentication', 'config', 'spinner',
         // Shop modules
-        'shopUser'
+        'shopPage', 'shopUser'
 ])
 .config(function($interpolateProvider, $stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider) {
     $interpolateProvider.startSymbol('[[');
@@ -34,6 +34,9 @@ angular.module('awesomeshop', [
             templateUrl: 'shop/index',
             controller: 'IndexCtrl'
         })
+})
+.filter('trusthtml', function($sce) {
+    return $sce.trustAsHtml;
 })
 .run(function($rootScope, $uibModal, $http) {
     $rootScope.$on('$stateChangeSuccess', function() {
@@ -72,6 +75,15 @@ angular.module('awesomeshop', [
         .then(function(response) {
             $rootScope.user = response.data;
         });
+})
+.directive('productsList', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            products: '=products'
+        },
+        templateUrl: 'part/productslist'
+    };
 })
 .controller('RegisterCtrl', function($rootScope, $scope, $http) {
     $scope.register = function() {

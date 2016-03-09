@@ -28,6 +28,7 @@ from mongoengine import OperationError
 from .. import admin_required, rest
 from ..marsh import Loc
 from ..photo import Photo, PhotoSchema
+from ..shop.api import ProductSchemaForList
 from .models import Page
 
 
@@ -62,6 +63,13 @@ class PageSchema(Schema):
         page.text = data.get('text', {})
         page.save()
         return page
+
+class PageContentSchema(Schema):
+    pagetype = fields.String(dump_only=True)
+    slug = fields.String(dump_only=True)
+    title = Loc(dump_only=True)
+    content = fields.String(dump_only=True)
+    products = fields.Nested(ProductSchemaForList, many=True, dump_only=True)
 
 class ApiPages(Resource):
     def get(self, page_type=None):
@@ -111,6 +119,10 @@ class ApiPage(Resource):
             raise
         return { 'status': 'OK' }
 
+class ApiPageContent(Resource):
+    def get(self, page_type, page_slug):
+        page = Page.objects.get_or_404(pagetype=page_type, slug=page_slug)
+        return PageContentSchema().dump(page).data
 
 class PagePhoto(Resource):
     @admin_required
@@ -146,6 +158,7 @@ class MovePage(Resource):
 
 rest.add_resource(ApiPages, '/api/page', '/api/page-<page_type>')
 rest.add_resource(ApiPage, '/api/page/<page_id>')
+rest.add_resource(ApiPageContent, '/api/page-<page_type>/<page_slug>')
 rest.add_resource(PagePhoto, '/api/page/<page_id>/photo')
 rest.add_resource(DeletePagePhoto, '/api/page/<page_id>/photo/<filename>')
 rest.add_resource(MovePage, '/api/page/<page_id>/move/<target_id>')
