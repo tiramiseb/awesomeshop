@@ -31,6 +31,9 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <script src="/static/libs/angular-animate.min.js"></script>
 {#
 <script src="/static/libs/angular-file-upload.min.js"></script>
+#}
+<script src="/static/libs/angular-scroll.min.js"></script>
+{#
 <script src="/static/libs/angular-sortable-view.min.js"></script>
 #}
 <script src="/static/libs/angular-ui-router.min.js"></script>
@@ -135,7 +138,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     {{ _('My account') }}
                 </div>
                 <div class="list-group" ng-if="user.auth" ng-cloak>
-                    <a class="list-group-item" ui-sref="profile">
+                    <a class="list-group-item" ui-sref="profile" ui-sref-active="active">
                         {{ _('My profile') }}
                     </a>
                     <a class="list-group-item" href="">{# XXX link to orders #}

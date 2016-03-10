@@ -17,7 +17,7 @@
  */
 angular.module('awesomeshop', [
         // External modules
-        'ngAnimate', 'ui.bootstrap', 'ui.router',
+        'duScroll', 'ngAnimate', 'ui.bootstrap', 'ui.router',
         // Common awesomeshop modules
         'authentication', 'config', 'spinner',
         // Shop modules
@@ -38,9 +38,9 @@ angular.module('awesomeshop', [
 .filter('trusthtml', function($sce) {
     return $sce.trustAsHtml;
 })
-.run(function($rootScope, $uibModal, $http) {
+.run(function($rootScope, $uibModal, $http, $document) {
     $rootScope.$on('$stateChangeSuccess', function() {
-        window.scroll(0,0);
+        $document.scrollTop(0,300);
     });
     // Stuff related to the user
     $rootScope.$on('event:auth-loginConfirmed', function(event, data){
