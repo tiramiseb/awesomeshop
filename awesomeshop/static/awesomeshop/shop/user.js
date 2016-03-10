@@ -23,7 +23,7 @@ angular.module('shopUser', ['validation.match'])
             templateUrl: 'shop/profile',
             controller: 'ProfileCtrl'
         })
-        .state('addresses', {
+        .state('profile.addresses', {
             url: '/addresses',
             templateUrl: 'shop/addresses',
             controller: 'AddressesCtrl'

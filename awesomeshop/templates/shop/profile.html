@@ -16,9 +16,10 @@ details.
 You should have received a copy of the GNU Affero General Public License
 along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
+<ui-view>
 <h1>{{ _('Welcome on your profile, [[ user.email ]]!') }}</h1>
 <div class="list-group">
-    <a ui-sref="addresses" class="list-group-item">
+    <a ui-sref="profile.addresses" class="list-group-item">
         <h4 class="list-group-item-heading">
             <i class="fa fa-home"></i>
             {{ _('Addresses')}}
@@ -63,3 +64,4 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <p class="list-group-item-text text-danger">{{ _('Delete your account once and for all') }}</p>
     </a>
 </div>
+</ui-view>
