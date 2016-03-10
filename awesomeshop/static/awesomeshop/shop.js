@@ -23,7 +23,8 @@ angular.module('awesomeshop', [
         // Shop modules
         'shopPage', 'shopUser'
 ])
-.config(function($interpolateProvider, $stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider) {
+.config(function($locationProvider, $interpolateProvider, $stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider) {
+    $locationProvider.html5Mode(true);
     $interpolateProvider.startSymbol('[[');
     $interpolateProvider.endSymbol(']]');
     $urlRouterProvider.otherwise('');

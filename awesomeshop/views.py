@@ -29,7 +29,8 @@ def render_template(template, **context):
     return orig_render_template(template, **context)
 
 @app.route('/')
-def root():
+@app.route('/<path:path>')
+def shop(path=None):
     return render_template('shop.html')
 
 @app.route('/login', methods=['GET','POST'])
