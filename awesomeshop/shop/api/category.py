@@ -34,7 +34,6 @@ class CategorySchemaForList(Schema):
     id = fields.String(dump_only=True)
     slug = fields.String(dump_only=True)
     name = Loc(dump_only=True)
-    description = Loc(dump_only=True)
     children = fields.Nested('CategorySchemaForList', many=True)
     products = fields.Integer(dump_only=True)
 
@@ -43,7 +42,6 @@ class CategorySchemaForFlatList(Schema):
     slug = fields.String(dump_only=True)
     name = Loc(dump_only=True)
     full_name = fields.String(dump_only=True)
-    description = Loc(dump_only=True)
     products = fields.Integer(dump_only=True)
     level = fields.Integer(dump_only=True)
 
