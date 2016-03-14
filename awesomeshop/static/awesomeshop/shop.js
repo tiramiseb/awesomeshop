@@ -39,7 +39,7 @@ angular.module('awesomeshop', [
 .filter('trusthtml', function($sce) {
     return $sce.trustAsHtml;
 })
-.run(function($rootScope, $uibModal, $http, $document) {
+.run(function($http, $rootScope, $uibModal, $document) {
     $rootScope.$on('$stateChangeSuccess', function() {
         $document.scrollTop(0,300);
     });
@@ -76,6 +76,18 @@ angular.module('awesomeshop', [
         .then(function(response) {
             $rootScope.user = response.data;
         });
+    $http.get('/api/category', {params: {'flat':'true'}})
+        .then(function(response) {
+            $rootScope.categories = response.data;
+        });
+    $http.get('/api/page-doc')
+        .then(function(response) {
+            $rootScope.docs = response.data;
+        });
+    $http.get('/api/page-info')
+        .then(function(response) {
+            $rootScope.infos = response.data;
+        });
 })
 .directive('productsList', function() {
     return {
@@ -97,24 +109,6 @@ angular.module('awesomeshop', [
                 $scope.$close();
             })
     }
-})
-.controller('CategoriesList', function($scope, $http) {
-    $http.get('/api/category', {params: {'flat':'true'}})
-        .then(function(response) {
-            $scope.categories = response.data;
-        });
-})
-.controller('DocumentationList', function($scope, $http) {
-    $http.get('/api/page-doc')
-        .then(function(response) {
-            $scope.pages = response.data;
-        });
-})
-.controller('InfoList', function($scope, $http) {
-    $http.get('/api/page-info')
-        .then(function(response) {
-            $scope.pages = response.data;
-        });
 })
 .controller('IndexCtrl', function($scope) {
 })
