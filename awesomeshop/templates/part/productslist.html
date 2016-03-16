@@ -18,21 +18,21 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
 <div ng-repeat-start="product in products" class="col-xs-6 col-md-4 col-lg-3">
     <div class="thumbnail product-in-grid">
-        <a href="">{# XXX link to product #}
+        <a href="[[ product.path ]]">
             <img ng-src="[[ product.main_photo.preview_url ]]" ng-show="product.main_photo">
             <div class="caption">
                 <p class="text-center">[[ product.name ]]</p>
                 <p class="text-center">[[ product.net_price ]] {{ config.CURRENCY }}</p>
-                <button class="btn btn-success btn-block" ng-if="product.stock>0">{# XXX deduce stock in cart #}
+                <button class="btn btn-success btn-block" ng-if="product.stock>0">{# XXX Deduce stock in cart #}
                     {{ _('Add to cart') }}
                 </button>
-                <button class="btn btn-danger btn-block disabled" ng-if="product.stock==0&&!product.on_demand">
+                <button class="btn btn-danger btn-block disabled" ng-if="product.stock==0&&!product.on_demand">{# XXX Deduce stock in cart #}
                     {{ _('Out of stock') }}
                 </button>
-                <button class="btn btn-info btn-block" ng-if="product.stock==0&&product.on_demand">
+                <button class="btn btn-info btn-block" ng-if="product.stock==0&&product.on_demand">{# XXX Deduce stock in cart #}
                     {{ _('Add to cart') }}
                 </button>
-                <p class="text-center bottom-no-space" ng-if="product.stock==0&&product.on_demand">
+                <p class="text-center bottom-no-space" ng-if="product.stock==0&&product.on_demand">{# XXX Deduce stock in cart #}
                     {{ _('Available on demand, delay %(min)d-%(max)d days', min=config.ON_DEMAND_DELAY_MIN, max=config.ON_DEMAND_DELAY_MAX) }}
                 </p>
             </div>

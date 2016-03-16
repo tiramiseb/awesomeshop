@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-# Copyright 2015 Sébastien Maccagnoni-Munch
+# Copyright 2015-2016 Sébastien Maccagnoni-Munch
 #
 # This file is part of AwesomeShop.
 #
@@ -27,25 +27,26 @@ from marshmallow import Schema, fields, post_load
 from mongoengine import OperationError
 
 from ... import admin_required, rest
-from ...marsh import Loc, ObjField
+from ...marsh import Count, Loc, ObjField
 from ..models import Category
+from .product import ProductSchemaForList
 
 class CategorySchemaForList(Schema):
     id = fields.String(dump_only=True)
     slug = fields.String(dump_only=True)
     name = Loc(dump_only=True)
     children = fields.Nested('CategorySchemaForList', many=True)
-    products = fields.Integer(dump_only=True)
+    products = Count()
 
 class CategorySchemaForFlatList(Schema):
     id = fields.String(dump_only=True)
-    slug = fields.String(dump_only=True)
+    path = fields.String(dump_only=True)
     name = Loc(dump_only=True)
     full_name = fields.String(dump_only=True)
-    products = fields.Integer(dump_only=True)
-    level = fields.Integer(dump_only=True)
+    products = Count(dump_only=True)
+    level = fields.Integer()
 
-class CategorySchema(Schema):
+class CategorySchemaForEdition(Schema):
     id = fields.String(allow_none=True)
     slug = fields.String(required=True)
     parent = ObjField(f='id', obj=Category)
@@ -65,6 +66,16 @@ class CategorySchema(Schema):
         category.save()
         return category
 
+class CategorySchema(Schema):
+    id = fields.String(dump_only=True)
+    name = Loc(dump_only=True)
+    description = Loc(dump_only=True)
+    products = fields.Nested(
+                    ProductSchemaForList,
+                    attribute='on_sale_products',
+                    many=True,
+                    dump_only=True
+                    )
 
 
 reqparser = reqparse.RequestParser()
@@ -85,24 +96,24 @@ class ApiCategories(Resource):
 
     @admin_required
     def post(self):
-        schema = CategorySchema()
+        schema = CategorySchemaForEdition()
         data = request.get_json()
         result, errors = schema.load(data)
         if errors:
             abort(400, {'type': 'fields', 'errors': errors })
         return schema.dump(result).data
 
-class ApiCategory(Resource):
+class ApiCategoryEdit(Resource):
     
     @admin_required
     def get(self, category_id):
-        return CategorySchema().dump(
+        return CategorySchemaForEdition().dump(
                     Category.objects.get_or_404(id=category_id)
                     ).data
 
     @admin_required
     def post(self, category_id):
-        schema = CategorySchema()
+        schema = CategorySchemaForEdition()
         data = request.get_json()
         data['id'] = category_id
         result, errors = schema.load(data)
@@ -122,7 +133,15 @@ class ApiCategory(Resource):
             raise
         return { 'status': 'OK' }
 
+class ApiCategory(Resource):
+
+    def get(self, category_id):
+        return CategorySchema().dump(
+                    Category.objects.get_or_404(id=category_id)
+                    ).data
+
 rest.add_resource(ApiCategories, '/api/category')
+rest.add_resource(ApiCategoryEdit, '/api/category/<category_id>/edit')
 rest.add_resource(ApiCategory, '/api/category/<category_id>')
 
 # TODO: categories sorting

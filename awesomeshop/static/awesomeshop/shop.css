@@ -59,7 +59,7 @@ ui-view.ng-enter, ui-view.ng-leave {
     position: absolute;
     left: 15px;
     right: 15px;
-    transition:all .3s ease-in-out;
+    transition: all .3s ease-in-out;
 }
 
 ui-view.ng-enter {
@@ -89,3 +89,49 @@ ui-view.ng-leave-active {
   -moz-transform:translate3d(100px, 0, 0);
   transform:translate3d(100px, 0, 0);
 }
+
+/***** PRODUCT PAGE *****/
+p.price {
+    font-size: 1.5em;
+    text-align: center;
+}
+.btn-wrap {
+    white-space: normal;
+}
+/***** Placeholders for photos *****/
+.product-illustration-placeholder {
+    height: 1.5em;
+    line-height: 1.5em;
+    text-align: center;
+    color: #eee;
+}
+/* Sizes from bootstrap */
+@media (min-width: 768px) {
+    .product-illustration-placeholder {
+        width: 100%;
+        font-size: 8em;
+    }
+}
+@media (min-width: 992px) {
+    .product-illustration-placeholder {
+        font-size: 6em;
+    }
+}
+@media (min-width: 1200px) {
+    .product-illustration-placeholder {
+        font-size: 10em;
+    }
+}
+.product-illustration-placeholder .panel-body {
+    padding: 0;
+}
+
+/* Small gutter for images thumbnails */
+.small-gutter > [class*='col-'] {
+    padding-right:1px;
+    padding-left:1px;
+}
+.small-gutter a.thumbnail {
+    padding: 2px;
+}
+

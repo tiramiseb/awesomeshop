@@ -23,6 +23,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <meta name="generator" content="AwesomeShop">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <base href="/">
+<link href="/static/libs/angular-bootstrap-lightbox.min.css" rel="stylesheet">
 <link href="/static/libs/bootstrap.min.css" rel="stylesheet">
 <link href="/static/libs/font-awesome.min.css" rel="stylesheet">
 <link href="/static/awesomeshop/common.css" rel="stylesheet">
@@ -30,6 +31,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <script src="/static/libs/angular.min.js"></script>
 <script src="/static/libs/l10n/angular-locale_{{ get_locale() }}.js"></script>
 <script src="/static/libs/angular-animate.min.js"></script>
+<script src="/static/libs/angular-bootstrap-lightbox.min.js"></script>
 {#
 <script src="/static/libs/angular-file-upload.min.js"></script>
 #}
@@ -43,6 +45,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <script src="/static/libs/ui-bootstrap-tpls-1.2.2.min.js"></script>
 <script src="/static/awesomeshop/common.js"></script>
 <script src="/static/awesomeshop/shop/page.js"></script>
+<script src="/static/awesomeshop/shop/shop.js"></script>
 <script src="/static/awesomeshop/shop/user.js"></script>
 <script src="/static/awesomeshop/shop.js"></script>
 <title>{{ config.SHOP_NAME }}</title>
@@ -114,7 +117,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                             {{ _('New products') }}
                         </span>
                     </a>
-                    <a href="" class="list-group-item" ng-repeat="category in categories">{# XXX link to the category #}{# XXX add class "active" to the active category #}
+                    <a href="" ui-sref="category_or_product({path:category.path})" ui-sref-active="active" class="list-group-item" ng-repeat="category in categories">
                         <span class="badge" ng-show="category.products">[[ category.products ]]</span>
                         <span class="category_hierarchy_[[ category.level ]]">
                             [[ category.name ]]
@@ -147,7 +150,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                         {{ _('My orders') }}
                     </a>
                     <a class="list-group-item" href="">{# XXX link to carts #}
-                        <span class="badge">{# number of saved carts #}</span>
+                        <span class="badge">{# XXX Number of saved carts #}</span>
                         {{ _('My saved carts') }}
                     </a>
                 </div>

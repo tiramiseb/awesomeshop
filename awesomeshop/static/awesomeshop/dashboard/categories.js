@@ -131,7 +131,7 @@ angular.module('dbCategories', ['slugifier'])
     }
     $scope.delete = function() {
         if ($scope.category.id) {
-            $http.delete('/api/category/'+$scope.category.id)
+            $http.delete('/api/category/'+$scope.category.id+'/edit')
                 .then(function(response) {
                     $state.go('categories');
                 });
@@ -143,7 +143,7 @@ angular.module('dbCategories', ['slugifier'])
         $scope.category.slug = Slug.slugify(text);
     };
     if ($stateParams.category_id) {
-        $http.get('/api/category/'+$stateParams.category_id)
+        $http.get('/api/category/'+$stateParams.category_id+'/edit')
             .then(function(response) {
                 $scope.category = response.data;
             });

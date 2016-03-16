@@ -70,7 +70,6 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
             removeAfterUpload: true
         });
         $scope.uploader.onSuccessItem = function(item, response, status, header) {
-            $scope.product.photos.push(response);
             $scope.photos.push(response);
         };
     }
@@ -141,12 +140,11 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
     $scope.delete_photo = function(filename, index) {
         $http.delete('/api/product/'+$scope.product.id+'/photo/'+filename)
             .then(function() {
-                $scope.product.photos.splice(index, 1);
                 $scope.photos.splice(index, 1);
             })
     }
     if ($stateParams.product_id) {
-        $http.get('/api/product/'+$stateParams.product_id)
+        $http.get('/api/product/'+$stateParams.product_id+'/edit')
             .then(function(response) {
                 $scope.product = response.data;
                 // angular-sortable-view doesn't seem to work with embedded lists

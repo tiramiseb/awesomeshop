@@ -18,6 +18,7 @@
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
+import docutils.core
 from decimal import Decimal
 
 from satchless.item import StockedItem
@@ -66,6 +67,14 @@ class Product(db.Document, StockedItem):
     }
 
     @property
+    def related_products_on_sale(self):
+        return [ product for product in self.related_products if product.on_sale ]
+
+    @property
+    def path(self):
+        return '{}/{}'.format(self.category.path, self.slug)
+
+    @property
     def net_price(self):
         return (self.gross_price * Decimal( 1 + self.tax.rate )).quantize(Decimal('1.00'))
 
@@ -76,3 +85,25 @@ class Product(db.Document, StockedItem):
     def main_photo(self):
         if self.photos:
             return self.photos[0]
+
+    @property
+    def description_content(self):
+        """Return the formatted content of the description"""
+        parts = docutils.core.publish_parts(
+                    source=self.description.get(get_locale(), u''),
+                    settings_overrides = {
+                        'initial_header_level': 2
+                        },
+                    writer_name='html')
+        return parts['body']
+
+    @property
+    def documentation_content(self):
+        """Return the formatted content of the documentation"""
+        parts = docutils.core.publish_parts(
+                    source=self.documentation.text.get(get_locale(), u''),
+                    settings_overrides = {
+                        'initial_header_level': 3
+                        },
+                    writer_name='html')
+        return parts['body']

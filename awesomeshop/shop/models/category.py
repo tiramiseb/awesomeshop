@@ -49,9 +49,21 @@ class Category(db.Document):
         return Category.objects(parent=self)
 
     @property
+    def path(self):
+        if self.parent:
+            return '{}/{}'.format(self.parent.path, self.slug)
+        else:
+            return self.slug
+
+    @property
     def products(self):
         from .product import Product
-        return Product.objects(category=self).count()
+        return Product.objects(category=self)
+
+    @property
+    def on_sale_products(self):
+        from .product import Product
+        return Product.objects(category=self, on_sale=True)
 
     @property
     def full_name(self):

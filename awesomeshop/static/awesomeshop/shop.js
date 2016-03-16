@@ -21,17 +21,18 @@ angular.module('awesomeshop', [
         // Common awesomeshop modules
         'authentication', 'config', 'spinner',
         // Shop modules
-        'shopPage', 'shopUser'
+        'shopPage', 'shopUser',
+        'shopShop' // shopShop must be the last one
 ])
 .config(function($locationProvider, $interpolateProvider, $stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider) {
     $locationProvider.html5Mode(true);
     $interpolateProvider.startSymbol('[[');
     $interpolateProvider.endSymbol(']]');
-    $urlRouterProvider.otherwise('');
+    $urlRouterProvider.otherwise('/');
     $urlMatcherFactoryProvider.strictMode(false);
     $stateProvider
         .state('index', {
-            url: '',
+            url: '/',
             templateUrl: 'shop/index',
             controller: 'IndexCtrl'
         })

@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-# Copyright 2015 Sébastien Maccagnoni-Munch
+# Copyright 2015-2016 Sébastien Maccagnoni-Munch
 #
 # This file is part of AwesomeShop.
 #
@@ -18,6 +18,7 @@
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 from flask import abort, request
+from flask_login import current_user
 from flask_restful import Resource
 from marshmallow import Schema, fields, post_load
 
@@ -30,16 +31,19 @@ from ..models import Category, Product, Tax
 class ProductSchemaForList(Schema):
     id = fields.String(dump_only=True)
     slug = fields.String(dump_only=True)
+    path = fields.String(dump_only=True)
     reference = fields.String(dump_only=True)
     name = Loc(dump_only=True)
-    on_sale = fields.Boolean(dump_only=True)
     stock = fields.Integer(dump_only=True)
     on_demand = fields.Boolean(dump_only=True)
-    gross_price = fields.Decimal(dump_only=True, as_string=True)
     net_price = fields.Decimal(dump_only=True, as_string=True)
     main_photo = fields.Nested(PhotoSchema)
 
-class ProductSchema(Schema):
+class ProductSchemaForAdminList(ProductSchemaForList):
+    gross_price = fields.Decimal(dump_only=True, as_string=True)
+    on_sale = fields.Boolean(dump_only=True)
+
+class ProductSchemaForEdition(Schema):
     id = fields.String(allow_none=True)
     slug = fields.String(required=True)
     reference = fields.String(required=True)
@@ -84,27 +88,59 @@ class ProductSchema(Schema):
         product.save()
         return product
 
+class ProductSchema(Schema):
+    id = fields.String(dump_only=True)
+    slug = fields.String(dump_only=True)
+    reference = fields.String(dump_only=True)
+    name = Loc(dump_only=True)
+    description = fields.String(attribute='description_content', dump_only=True)
+    net_price = fields.Decimal(dump_only=True, as_string=True)
+    photos = fields.Nested(PhotoSchema, many=True, dump_only=True)
+    stock = fields.Integer(dump_only=True)
+    on_demand = fields.Boolean(dump_only=True)
+    related_products = fields.Nested(
+                                ProductSchemaForList,
+                                attribute='related_products_on_sale',
+                                many=True,
+                                dump_only=True
+                                )
+    documentation = fields.String(attribute='documentation_content', dump_only=True)
 
 
-class ApiProduct(Resource):
-    
-    @admin_required
-    def get(self, product_id=None):
-        if (product_id):
-            return ProductSchema().dump(
-                    Product.objects.get_or_404(id=product_id)
+
+class ApiProducts(Resource):
+    def get(self):
+        if current_user.is_authenticated and current_user.is_admin:
+            return ProductSchemaForAdminList(many=True).dump(
+                    Product.objects()
                     ).data
         else:
-             return ProductSchemaForList(many=True).dump(
-                     Product.objects()
-                     ).data
+            return ProductSchemaForList(many=True).dump(
+                    Product.objects(on_sale=True)
+                    ).data
 
     @admin_required
-    def post(self, product_id=None):
-        schema = ProductSchema()
+    def post(self):
+        schema = ProductSchemaForEdition()
         data = request.get_json()
-        if product_id:
-            data['id'] = product_id
+        result, errors = schema.load(data)
+        if errors:
+            abort(400, {'type': 'fields', 'errors': errors })
+        return schema.dump(result).data
+    
+class ApiProductEdit(Resource):
+    
+    @admin_required
+    def get(self, product_id):
+        return ProductSchemaForEdition().dump(
+                Product.objects.get_or_404(id=product_id)
+                ).data
+
+    @admin_required
+    def post(self, product_id):
+        schema = ProductSchemaForEdition()
+        data = request.get_json()
+        data['id'] = product_id
         result, errors = schema.load(data)
         if errors:
             abort(400, {'type': 'fields', 'errors': errors })
@@ -114,6 +150,21 @@ class ApiProduct(Resource):
     def delete(self, product_id):
         Product.objects.get_or_404(id=product_id).delete()
         return { 'status': 'OK' }
+
+class ApiProductFromCatAndSlug(Resource):
+    def get(self, category_id, product_slug):
+        return ProductSchema().dump(
+                Product.objects.get_or_404(
+                    category=category_id,
+                    slug=product_slug
+                    )
+                ).data
+
+class ApiProductFromId(Resource):
+    def get(self, product_id):
+        return ProductSchema().dump(
+                Product.objects.get_or_404(id=product_id)
+                ).data
 
 class ProductPhoto(Resource):
     @admin_required
@@ -146,7 +197,10 @@ class MoveProductPhoto(Resource):
         product.save()
         return { 'status': 'OK' }
 
-rest.add_resource(ApiProduct, '/api/product', '/api/product/<product_id>')
+rest.add_resource(ApiProducts, '/api/product')
+rest.add_resource(ApiProductEdit, '/api/product/<product_id>/edit')
+rest.add_resource(ApiProductFromId, '/api/product/<product_id>')
+rest.add_resource(ApiProductFromCatAndSlug, '/api/product/catslug/<category_id>/<product_slug>')
 rest.add_resource(ProductPhoto, '/api/product/<product_id>/photo')
 rest.add_resource(DeleteProductPhoto, '/api/product/<product_id>/photo/<filename>')
 rest.add_resource(MoveProductPhoto, '/api/product/<product_id>/photo/<int:from_rank>/move/<int:to_rank>')
