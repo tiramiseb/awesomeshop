@@ -44,9 +44,12 @@ THUMBNAIL_SIZE = [100, 100]
 PREVIEW_SIZE = [350, 350]
 
 ## Account names (for social networks) and blog URL
-#FACEBOOK_ACCOUNT = ''
-#TWITTER_ACCOUNT = ''
-#BLOG_URL = ''
+FACEBOOK_ACCOUNT = ''
+TWITTER_ACCOUNT = ''
+BLOG_URL = ''
+
+## The max age for new products (in days)
+NEW_PRODUCTS_MAX_AGE = 60
 
 ## Where to store indexes for the search engine
 #SEARCH_INDEX_PATH = '/tmp/awesomeshop_search'
