@@ -30,8 +30,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             </div>
             <div class="col-xs-6 col-sm-4 col-sm-push-5 text-right">
                 <span uib-tooltip="{{ _('Gross price') }}" tooltip-placement="left">
-                    [[ product.gross_price ]]
-                    {{ config.CURRENCY }}
+                    [[ product.gross_price | currency:"{{ config.CURRENCY }}" ]]
                 </span>
                 &ndash;
                 <span uib-tooltip="{{ _('Stock remaining') }}" tooltip-placement="left">

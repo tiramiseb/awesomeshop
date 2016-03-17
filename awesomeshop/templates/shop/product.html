@@ -58,7 +58,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     </div>
     <div class="col-xs-5 col-md-4 col-lg-3">
         <div class="well">
-            <p class="price">[[ product.net_price ]] {{ config.CURRENCY }}</p>
+            <p class="price">[[ product.net_price | currency:"{{ config.CURRENCY }}" ]]</p>
             <hr>
             <div ng-show="product.stock>0 || product.on_demand" class="bottom-no-space">{# XXX Deduce quantity in cart #}
                 <div class="form-group">

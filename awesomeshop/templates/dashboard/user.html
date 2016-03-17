@@ -18,7 +18,6 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
 {% import "macros/dashboard.html" as d %}
 {% import "macros/form.html" as f %}
-{% import "macros/localization.html" as l %}
 <form name="form" novalidate>
 <h1>{{ _('User:') }} [[ form.email.$valid || form.email.$pristine ? user.email : "{{ _('incorrect email address') }}" ]]</h1>
 <div class="row">
@@ -97,10 +96,10 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                             [[ line.quantity ]]
                         </div>
                         <div class="col-xs-4 col-sm-2 text-right">
-                            {{ l.price('line.unit_price') }}
+                            [[ line.unit_price | currency:"{{ config.CURRENCY }}" ]]
                         </div>
                         <div class="col-xs-4 col-sm-2 text-right">
-                            {{ l.price('line.total_price') }}
+                            [[ line.total_price | currency:"{{ config.CURRENCY }}" ]]
                         </div>
                     </div>
                 </div>
@@ -110,7 +109,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                             <b>{{ _('Total') }}</b>
                         </div>
                         <div class="col-xs-4 col-sm-2 text-right">
-                            <b>{{ l.price('cart.total_price') }}</b>
+                            [[ cart.total_price | currency:"{{ config.CURRENCY }}" ]]
                         </div>
                     </div>
                 </div>

@@ -22,7 +22,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             <img ng-src="[[ product.main_photo.preview_url ]]" ng-show="product.main_photo">
             <div class="caption">
                 <p class="text-center">[[ product.name ]]</p>
-                <p class="text-center">[[ product.net_price ]] {{ config.CURRENCY }}</p>
+                <p class="text-center">[[ product.net_price | currency:"{{ config.CURRENCY }}" ]]</p>
                 <button class="btn btn-success btn-block" ng-if="product.stock>0">{# XXX Deduce stock in cart #}
                     {{ _('Add to cart') }}
                 </button>
