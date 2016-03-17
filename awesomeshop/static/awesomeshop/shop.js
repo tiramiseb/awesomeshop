@@ -40,6 +40,15 @@ angular.module('awesomeshop', [
 .filter('trusthtml', function($sce) {
     return $sce.trustAsHtml;
 })
+.filter('translate', function($rootScope) {
+    return function(input) {
+        if ($rootScope.translations) {
+            return $rootScope.translations[input] || input;
+        } else {
+            return input;
+        }
+    }
+})
 .run(function($http, $rootScope, $uibModal, $document) {
     $rootScope.$on('$stateChangeSuccess', function() {
         $document.scrollTop(0,300);
@@ -73,6 +82,10 @@ angular.module('awesomeshop', [
                 window.location.reload();
             })
     };
+    $http.get('/messages')
+        .then(function(response) {
+            $rootScope.translations = response.data;
+        });
     $http.get('/api/userdata')
         .then(function(response) {
             $rootScope.user = response.data;
