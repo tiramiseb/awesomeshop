@@ -17,72 +17,74 @@
  */
 angular.module('shopShop', ['bootstrapLightbox'])
 .config(function($stateProvider, LightboxProvider) {
-    $stateProvider
-        .state('category', {
-            templateUrl: 'shop/category',
-            controller: 'CategoryCtrl',
-            params: {
-                id: ""
-            },
-            title: 'Category'
-        })
-        .state('product', {
-            templateUrl: 'shop/product',
-            controller: 'ProductCtrl',
-            params: {
-                category: "",
-                slug: ""
-            },
-            title: 'Product'
-        })
-        .state('category_or_product', {
-            url: '/{path:any}',
-            template: '',
-            controller: 'CategoryOrProductCtrl',
-        })
+    // This timeout allow these states to be loaded after all other states
+    setTimeout(function() {
+        $stateProvider
+            .state('category', {
+                templateUrl: 'shop/category',
+                controller: 'CategoryCtrl',
+                params: {
+                    id: ""
+                },
+                title: 'Category'
+            })
+            .state('product', {
+                templateUrl: 'shop/product',
+                controller: 'ProductCtrl',
+                params: {
+                    category: "",
+                    slug: ""
+                },
+                title: 'Product'
+            })
+            .state('category_or_product', {
+                url: '/{path:any}',
+                template: '',
+                controller: 'CategoryOrProductCtrl',
+            })
+        }, 0);
     LightboxProvider.templateUrl = 'part/lightbox';
 })
-.controller('CategoryOrProductCtrl', function($rootScope, $stateParams, $state, $timeout) {
+.controller('CategoryOrProductCtrl', function($rootScope, $stateParams, $state) {
     var path = $stateParams.path;
-    if (!path) {
-        $state.go('index');
-    } else {
-        function go_to_state() {
-            if ($rootScope.categories) {
-                var categories = $rootScope.categories,
-                    found = false;
-                for (var i=0; i < categories.length; i++) {
-                    if (path == categories[i].path) {
+    function go_to_state() {
+        if ($rootScope.categories) {
+            var categories = $rootScope.categories,
+                found = false;
+            for (var i=0; i < categories.length; i++) {
+                if (path == categories[i].path) {
+                    // Without this timeout, state is loaded twice
+                    setTimeout(function() {
                         $state.go('category', { id: categories[i].id });
-                        found = true;
+                        }, 0);
+                    found = true;
+                    break;
+                };
+            };
+            if (!found) {
+                var category,
+                    catpath = path.replace(/\/[^\/]*$/, ''),
+                    prodslug = path.replace(/^.*\//g, '');
+                for (var i=0; i < categories.length; i++) {
+                    if (catpath == categories[i].path) {
+                        category = categories[i];
                         break;
                     };
                 };
-                if (!found) {
-                    var category,
-                        catpath = path.replace(/\/[^\/]*$/, ''),
-                        prodslug = path.replace(/^.*\//g, '');
-                    for (var i=0; i < categories.length; i++) {
-                        if (catpath == categories[i].path) {
-                            category = categories[i];
-                            break;
-                        };
-                    };
-                    if (category) {
-                        $state.go('product', {
-                            category: category.id,
-                            slug: prodslug
-                        })
-                    } else {
-                        $state.go('index');
-                    };
-                }
-            } else {
-                $timeout(go_to_state, 200);
-            };
+                if (category) {
+                    $state.go('product', {
+                        category: category.id,
+                        slug: prodslug
+                    })
+                } else {
+                    $state.go('index');
+                };
+            }
+        } else {
+            $timeout(go_to_state, 200);
         };
-        go_to_state();
-    }
+    };
+    go_to_state();
 })
 .controller('CategoryCtrl', function($http, $rootScope, $scope, $stateParams) {
     $http.get('/api/category/'+$stateParams.id)

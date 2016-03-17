@@ -21,8 +21,7 @@ angular.module('awesomeshop', [
         // Common awesomeshop modules
         'authentication', 'config', 'spinner',
         // Shop modules
-        'shopPage', 'shopUser',
-        'shopShop' // shopShop must be the last one
+        'shopPage', 'shopShop', 'shopUser'
 ])
 .config(function($locationProvider, $interpolateProvider, $stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider) {
     $locationProvider.html5Mode(true);
