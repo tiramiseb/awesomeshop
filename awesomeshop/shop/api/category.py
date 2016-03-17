@@ -72,7 +72,7 @@ class CategorySchema(Schema):
     description = Loc(dump_only=True)
     products = fields.Nested(
                     ProductSchemaForList,
-                    attribute='on_sale_products',
+                    attribute='recursive_on_sale_products',
                     many=True,
                     dump_only=True
                     )

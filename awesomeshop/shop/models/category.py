@@ -66,6 +66,13 @@ class Category(db.Document):
         return Product.objects(category=self, on_sale=True)
 
     @property
+    def recursive_on_sale_products(self):
+        products = list(self.on_sale_products)
+        for c in self.children:
+            products.extend(c.recursive_on_sale_products)
+        return products
+
+    @property
     def full_name(self):
         name = self.name.get(get_locale(), '')
         if self.parent:
