@@ -21,8 +21,13 @@ from flask_babel import _
 
 def messages():
     return {
+        # Pages titles
         'Addresses': _('Addresses'),
+        'Category': _('Category'),
+        'Documentation': _('Documentation'),
         'Home': _('Home'),
-        'Profile': _('Profile'),
+        'Information': _('Information'),
+        'Product': _('Product'),
+        'Profile': _('Profile')
     }
 

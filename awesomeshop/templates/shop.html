@@ -48,7 +48,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <script src="/static/awesomeshop/shop/shop.js"></script>
 <script src="/static/awesomeshop/shop/user.js"></script>
 <script src="/static/awesomeshop/shop.js"></script>
-<title>{{ config.SHOP_NAME }}</title>
+<title ng-bind="( ( $title | translate ) || '{{ _('Home') }}' ) + ' - {{ config.SHOP_NAME }}'">{{ config.SHOP_NAME }}</title>
 </head>
 <body>
 <div id="spinner">

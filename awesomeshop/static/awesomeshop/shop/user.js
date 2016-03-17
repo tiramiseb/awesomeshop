@@ -21,12 +21,14 @@ angular.module('shopUser', ['validation.match'])
         .state('profile', {
             url: '/profile',
             templateUrl: 'shop/profile',
-            controller: 'ProfileCtrl'
+            controller: 'ProfileCtrl',
+            title: 'Profile'
         })
         .state('profile.addresses', {
             url: '/addresses',
             templateUrl: 'shop/addresses',
-            controller: 'AddressesCtrl'
+            controller: 'AddressesCtrl',
+            title: 'Addresses'
         })
 })
 .controller('ProfileCtrl', function($scope, $state, $uibModal) {

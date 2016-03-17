@@ -23,7 +23,8 @@ angular.module('shopShop', ['bootstrapLightbox'])
             controller: 'CategoryCtrl',
             params: {
                 id: ""
-            }
+            },
+            title: 'Category'
         })
         .state('product', {
             templateUrl: 'shop/product',
@@ -31,7 +32,8 @@ angular.module('shopShop', ['bootstrapLightbox'])
             params: {
                 category: "",
                 slug: ""
-            }
+            },
+            title: 'Product'
         })
         .state('category_or_product', {
             url: '/{path:any}',
@@ -82,19 +84,21 @@ angular.module('shopShop', ['bootstrapLightbox'])
         go_to_state();
     }
 })
-.controller('CategoryCtrl', function($http, $scope, $stateParams) {
+.controller('CategoryCtrl', function($http, $rootScope, $scope, $stateParams) {
     $http.get('/api/category/'+$stateParams.id)
         .then(function(response) {
             $scope.category = response.data;
+            $rootScope.$title = $scope.category.name;
         });
 })
-.controller('ProductCtrl', function($http, $scope, $state, $stateParams, Lightbox) {
+.controller('ProductCtrl', function($http, $rootScope, $scope, $state, $stateParams, Lightbox) {
     $http.get('/api/product/catslug/'+$stateParams.category+'/'+$stateParams.slug)
         .then(function(response) {
             $scope.product = response.data;
             if ($scope.product.photos.length > 1) {
                 $scope.thumb_width = parseInt(12 / ($scope.product.photos.length - 1));
             };
+            $rootScope.$title = $scope.product.name;
         }, function(response) {
             $state.go('index');
         });

@@ -22,18 +22,21 @@ angular.module('shopPage', [])
             url: '/doc/:slug',
             templateUrl: 'shop/page',
             controller: 'DocCtrl',
-            params: {type:'doc'}
+            params: {type:'doc'},
+            title: 'Documentation'
         })
         .state('info', {
             url: '/info/:slug',
             templateUrl: 'shop/page',
             controller: 'DocCtrl',
-            params: {type:'info'}
+            params: {type:'info'},
+            title: 'Information'
         })
 })
-.controller('DocCtrl', function($scope, $stateParams, $http) {
+.controller('DocCtrl', function($rootScope, $scope, $stateParams, $http) {
     $http.get('/api/page-'+$stateParams.type+'/'+$stateParams.slug)
         .then(function(response) {
             $scope.page = response.data;
+            $rootScope.$title = $scope.page.title;
         });
 });

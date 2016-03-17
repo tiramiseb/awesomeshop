@@ -34,7 +34,8 @@ angular.module('awesomeshop', [
         .state('index', {
             url: '/',
             templateUrl: 'shop/index',
-            controller: 'IndexCtrl'
+            controller: 'IndexCtrl',
+            title: 'Home'
         })
 })
 .filter('trusthtml', function($sce) {
@@ -49,8 +50,13 @@ angular.module('awesomeshop', [
         }
     }
 })
-.run(function($http, $rootScope, $uibModal, $document) {
-    $rootScope.$on('$stateChangeSuccess', function() {
+.run(function($timeout, $http, $rootScope, $uibModal, $document) {
+    $rootScope.$on('$stateChangeSuccess', function(event, toState) {
+        if (toState.title) {
+            $timeout(function() {
+                $rootScope.$title = toState.title;
+            }, 0);
+        };
         $document.scrollTop(0,300);
     });
     // Stuff related to the user
@@ -124,5 +130,5 @@ angular.module('awesomeshop', [
             })
     }
 })
-.controller('IndexCtrl', function($scope) {
+.controller('IndexCtrl', function() {
 })
