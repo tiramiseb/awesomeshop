@@ -146,8 +146,10 @@ angular.module('dbCategories', ['slugifier'])
         $http.get('/api/category/'+$stateParams.category_id+'/edit')
             .then(function(response) {
                 $scope.category = response.data;
+                $scope.displayable_from_id($scope, 'categories', $scope.category.parent);
             });
     } else {
         $scope.category = {};
+        $scope.displayablecategories = '-----';
     }
 });

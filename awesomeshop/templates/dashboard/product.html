@@ -29,10 +29,10 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         {{ f.input_text(_('Reference'), 'reference', 'product.reference', 'required', _('Reference is mandatory')) }}
     </div>
     <div class="col-md-3 col-xs-6">
-        {{ f.select(_('Category'), 'category', 'product.category', 'cat.id as cat.full_name for cat in categories', 'required', _('Category is mandatory')) }}
+        {{ f.typeahead(_('Category'), 'category', 'product.category', 'categories', 'full_name', 'required', _('Category is mandatory')) }}
     </div>
     <div class="col-md-3 col-xs-6">
-        {{ f.select(_('Documentation'), 'documentation', 'product.documentation', 'doc.id as doc.title for doc in documentations', 'required', _('Documentation is mandatory')) }}
+        {{ f.typeahead(_('Documentation'), 'documentation', 'product.documentation', 'documentations', 'title', 'required', _('Documentation is mandatory')) }}
     </div>
 </div>
 <div class="row">

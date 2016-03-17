@@ -36,5 +36,21 @@ angular.module('awesomeshop', [
             controller: 'IndexCtrl'
         })
 })
+.run(function($timeout, $rootScope) {
+    $rootScope.displayable_from_id = function(scope, listname, value) {
+        if (!scope[listname]) {
+            $timeout($rootScope.displayable_from_id, 100, true, scope, listname, value);
+        } else {
+            objlist = scope[listname];
+            for (var i=0; i<objlist.length; i++) {
+                if (value == objlist[i].id) {
+                    scope['displayable'+listname] = objlist[i];
+                    break
+                }
+            }
+        }
+
+    };
+})
 .controller('IndexCtrl', function() {
 })

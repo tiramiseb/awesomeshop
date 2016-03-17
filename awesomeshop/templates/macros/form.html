@@ -62,7 +62,11 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {%- endif %}
 {%- endmacro %}
 
-{%- macro select(label, name, ngmodel, ngoptions, options, errormessage) %}
+{%- macro typeahead(label, name, ngmodel, listname, fieldname, options='', errormessage='') %}
+{{ _input_generic('text', label, name, 'displayable'+listname, 'uib-typeahead="'+name+' as '+name+'.'+fieldname+' for '+name+' in '+listname+' | filter:{'+fieldname+':$viewValue}" typeahead-editable="false" typeahead-min-length="0" typeahead-on-select="'+ngmodel+'=$item.id" '+options, errormessage) }}
+{%- endmacro %}
+
+{%- macro select(label, name, ngmodel, ngoptions, options='', errormessage='') %}
 {{ _generic('<select id="%s" name="%s" class="form-control" ng-model="%s" ng-options="%s" %s></select>'|format(name, name, ngmodel, ngoptions, options), label, name, errormessage) }}
 {%- endmacro %}
 

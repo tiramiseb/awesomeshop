@@ -41,7 +41,7 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
             $scope.products = response.data;
         });
 })
-.controller('ProductCtrl', function($scope, $http, $stateParams, $state, FileUploader, Slug, CONFIG) {
+.controller('ProductCtrl', function($timeout, $scope, $http, $stateParams, $state, FileUploader, Slug, CONFIG) {
     $scope.langs = CONFIG.languages;
     $scope.sortoptions = {containment:'#photos'};
     $scope.sort_photo = function(from_rank, to_rank) {
@@ -149,6 +149,8 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
                 $scope.product = response.data;
                 // angular-sortable-view doesn't seem to work with embedded lists
                 $scope.photos = $scope.product.photos;
+                $scope.displayable_from_id($scope, 'categories', $scope.product.category)
+                $scope.displayable_from_id($scope, 'documentations', $scope.product.documentation)
                 reinit($scope.product.id);
             });
     } else {

@@ -26,7 +26,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         {{ f.input_text(_('Slug'), 'slug', 'category.slug', 'required', _('Slug is mandatory')) }}
     </div>
     <div class="col-sm-6">
-        {{ f.select(_('Parent'), 'parent', 'category.parent', 'cat.id as cat.full_name for cat in categories') }}
+        {{ f.typeahead(_('Parent'), 'parent', 'category.parent', 'categories', 'full_name') }}
     </div>
 </div>
 <div class="row">
