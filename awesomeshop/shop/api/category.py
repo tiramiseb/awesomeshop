@@ -36,14 +36,14 @@ class CategorySchemaForList(Schema):
     slug = fields.String(dump_only=True)
     name = Loc(dump_only=True)
     children = fields.Nested('CategorySchemaForList', many=True)
-    products = Count()
+    products = Count(attribute='on_sale_products')
 
 class CategorySchemaForFlatList(Schema):
     id = fields.String(dump_only=True)
     path = fields.String(dump_only=True)
     name = Loc(dump_only=True)
     full_name = fields.String(dump_only=True)
-    products = Count(dump_only=True)
+    products = Count(attribute='on_sale_products', dump_only=True)
     level = fields.Integer()
 
 class CategorySchemaForEdition(Schema):
