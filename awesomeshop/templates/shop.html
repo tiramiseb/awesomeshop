@@ -112,12 +112,12 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     {{ _('Categories') }}
                 </div>
                 <div class="list-group" ng-cloak>
-                    <a href="" ui-sref="new_products" class="list-group-item">
+                    <a ui-sref="new_products" class="list-group-item">
                         <span class="category_hierarchy_0">
                             {{ _('New products') }}
                         </span>
                     </a>
-                    <a href="" ui-sref="category_or_product({path:category.path})" ui-sref-active="active" class="list-group-item" ng-repeat="category in categories">
+                    <a ui-sref="category_or_product({path:category.path})" ui-sref-active="active" class="list-group-item" ng-repeat="category in categories">
                         <span class="badge" ng-show="category.products">[[ category.products ]]</span>
                         <span class="category_hierarchy_[[ category.level ]]">
                             [[ category.name ]]
