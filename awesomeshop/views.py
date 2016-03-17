@@ -22,7 +22,7 @@ from flask import abort, jsonify, redirect, \
 from flask_login import current_user
 from jinja2.exceptions import TemplateNotFound
 
-from . import app, get_locale, login_required, admin_required
+from . import app, get_locale, login_required, admin_required, messages
 
 def render_template(template, **context):
     context['locale'] = get_locale()
@@ -36,6 +36,10 @@ def shop(path=None):
 @app.route('/login', methods=['GET','POST'])
 def login():
     return render_template('login.html')
+
+@app.route('/messages')
+def messages_route():
+    return jsonify(messages.messages())
 
 @app.route('/confirm/<code>')
 @login_required
