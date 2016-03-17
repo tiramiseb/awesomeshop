@@ -36,7 +36,7 @@ angular.module('dbPages', ['angular-sortable-view', 'angularFileUpload', 'slugif
             }
         })
         .state('newpage', {
-            url: '/:type/new',
+            url: '/page-:type/new',
             templateUrl: 'page',
             controller: 'PageCtrl'
         })
