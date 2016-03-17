@@ -17,12 +17,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
+import datetime
+
 from flask import abort, request
 from flask_login import current_user
 from flask_restful import Resource
 from marshmallow import Schema, fields, post_load
 
-from ... import admin_required, rest
+from ... import admin_required, app, rest
 from ...marsh import Loc, MultiObjField, ObjField
 from ...page.models import Page
 from ...photo import Photo, PhotoSchema
@@ -127,6 +129,15 @@ class ApiProducts(Resource):
         if errors:
             abort(400, {'type': 'fields', 'errors': errors })
         return schema.dump(result).data
+
+class ApiNewProducts(Resource):
+    def get(self):
+        today = datetime.datetime.now()
+        age = datetime.timedelta(days=app.config['NEW_PRODUCTS_MAX_AGE'])
+        date_limit = today - age
+        return ProductSchemaForList(many=True).dump(
+                Product.objects(created_at__gt=date_limit, on_sale=True)
+                ).data
     
 class ApiProductEdit(Resource):
     
@@ -198,6 +209,7 @@ class MoveProductPhoto(Resource):
         return { 'status': 'OK' }
 
 rest.add_resource(ApiProducts, '/api/product')
+rest.add_resource(ApiNewProducts, '/api/newproduct')
 rest.add_resource(ApiProductEdit, '/api/product/<product_id>/edit')
 rest.add_resource(ApiProductFromId, '/api/product/<product_id>')
 rest.add_resource(ApiProductFromCatAndSlug, '/api/product/catslug/<category_id>/<product_slug>')

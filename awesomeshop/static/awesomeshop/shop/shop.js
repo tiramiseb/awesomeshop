@@ -37,6 +37,11 @@ angular.module('shopShop', ['bootstrapLightbox'])
                 },
                 title: 'Product'
             })
+            .state('new_products', {
+                templateUrl: 'shop/category',
+                controller: 'NewProductsCtrl',
+                title: 'New products'
+            })
             .state('category_or_product', {
                 url: '/{path:any}',
                 template: '',
@@ -118,5 +123,14 @@ angular.module('shopShop', ['bootstrapLightbox'])
     $scope.openLightboxModal = function (index) {
         Lightbox.openModal($scope.product.photos, index);
     };
-
 })
+.controller('NewProductsCtrl', function($http, $scope, translateFilter) {
+    $scope.category = {
+        name: translateFilter('New products'),
+        products: []
+    }
+    $http.get('/api/newproduct')
+        .then(function(response) {
+            $scope.category.products = response.data;
+        });
+});
