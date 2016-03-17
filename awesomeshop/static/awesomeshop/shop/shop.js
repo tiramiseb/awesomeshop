@@ -17,40 +17,43 @@
  */
 angular.module('shopShop', ['bootstrapLightbox'])
 .config(function($stateProvider, LightboxProvider) {
-    // This timeout allow these states to be loaded after all other states
-    setTimeout(function() {
-        $stateProvider
-            .state('category', {
-                templateUrl: 'shop/category',
-                controller: 'CategoryCtrl',
-                params: {
-                    id: ""
-                },
-                title: 'Category'
-            })
-            .state('product', {
-                templateUrl: 'shop/product',
-                controller: 'ProductCtrl',
-                params: {
-                    category: "",
-                    slug: ""
-                },
-                title: 'Product'
-            })
-            .state('new_products', {
-                templateUrl: 'shop/category',
-                controller: 'NewProductsCtrl',
-                title: 'New products'
-            })
-            .state('category_or_product', {
-                url: '/{path:any}',
-                template: '',
-                controller: 'CategoryOrProductCtrl',
-            })
-        }, 0);
+    $stateProvider
+        .state('index', {
+            url: '/',
+            templateUrl: 'shop/index',
+            controller: 'IndexCtrl',
+            title: 'Home'
+        })
+        .state('category', {
+            templateUrl: 'shop/category',
+            controller: 'CategoryCtrl',
+            params: {
+                id: ""
+            },
+            title: 'Category'
+        })
+        .state('product', {
+            templateUrl: 'shop/product',
+            controller: 'ProductCtrl',
+            params: {
+                category: "",
+                slug: ""
+            },
+            title: 'Product'
+        })
+        .state('new_products', {
+            templateUrl: 'shop/category',
+            controller: 'NewProductsCtrl',
+            title: 'New products'
+        })
+        .state('category_or_product', {
+            url: '/{path:any}',
+            template: '',
+            controller: 'CategoryOrProductCtrl',
+        })
     LightboxProvider.templateUrl = 'part/lightbox';
 })
-.controller('CategoryOrProductCtrl', function($rootScope, $stateParams, $state) {
+.controller('CategoryOrProductCtrl', function($rootScope, $stateParams, $state, $timeout) {
     var path = $stateParams.path;
     function go_to_state() {
         if ($rootScope.categories) {
@@ -59,7 +62,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
             for (var i=0; i < categories.length; i++) {
                 if (path == categories[i].path) {
                     // Without this timeout, state is loaded twice
-                    setTimeout(function() {
+                    $timeout(function() {
                         $state.go('category', { id: categories[i].id });
                         }, 0);
                     found = true;

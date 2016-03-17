@@ -21,21 +21,15 @@ angular.module('awesomeshop', [
         // Common awesomeshop modules
         'authentication', 'config', 'spinner',
         // Shop modules
-        'shopPage', 'shopShop', 'shopUser'
+        'shopPage', 'shopUser',
+        'shopShop'
 ])
-.config(function($locationProvider, $interpolateProvider, $stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider) {
+.config(function($locationProvider, $interpolateProvider, $urlRouterProvider, $urlMatcherFactoryProvider) {
     $locationProvider.html5Mode(true);
     $interpolateProvider.startSymbol('[[');
     $interpolateProvider.endSymbol(']]');
     $urlRouterProvider.otherwise('/');
     $urlMatcherFactoryProvider.strictMode(false);
-    $stateProvider
-        .state('index', {
-            url: '/',
-            templateUrl: 'shop/index',
-            controller: 'IndexCtrl',
-            title: 'Home'
-        })
 })
 .filter('trusthtml', function($sce) {
     return $sce.trustAsHtml;
