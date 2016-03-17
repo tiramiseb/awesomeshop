@@ -124,6 +124,7 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
                 $scope.product = response.data;
                 $scope.form.$setPristine();
                 if (is_new) {
+                    reinit($scope.product.id);
                     $state.go('product', {product_id:response.data.id}, {notify:false});
                 }
             });

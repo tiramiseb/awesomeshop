@@ -99,7 +99,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                         {{ f.input_text(_('Gross price'), 'gross_price', 'product.gross_price', 'required', _('Gross price is mandatory'), suffix=config.CURRENCY) }}
                     </div>
                     <div class="col-xs-6">
-                        {{ f.select(_('Tax'), 'tax', 'product.tax', 'tax.id as tax.name for tax in taxrates') }}
+                        {{ f.select(_('Tax'), 'tax', 'product.tax', 'tax.id as tax.name for tax in taxrates', 'required', _('Tax rate is mandatory')) }}
                     </div>
                     <div class="col-xs-6">
                         <label for="net_price">{{ _('Net price') }}</label>
