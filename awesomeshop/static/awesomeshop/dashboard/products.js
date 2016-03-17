@@ -84,12 +84,16 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
         return prodid;
     }
     $scope.filtered_products = function() {
-        filtered = [];
+        var filtered = [];
         if ($scope.products && $scope.product) {
-            for (i=0; i<$scope.products.length; i++) {
-                if ($scope.products[i].id != $scope.product.id && $scope.product.related_products.indexOf($scope.products[i].id) == -1) {
-                    filtered.push($scope.products[i])
+            if ($scope.product.id) {
+                for (i=0; i<$scope.products.length; i++) {
+                    if ($scope.products[i].id != $scope.product.id && $scope.product.related_products.indexOf($scope.products[i].id) == -1) {
+                        filtered.push($scope.products[i])
+                    }
                 }
+            } else {
+                filtered = $scope.products;
             }
         }
         return filtered;
@@ -154,6 +158,8 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
                 reinit($scope.product.id);
             });
     } else {
-        $scope.product = {};
+        $scope.product = {
+            related_products: []
+        };
     }
 });
