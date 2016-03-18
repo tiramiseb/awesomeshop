@@ -42,6 +42,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
             title: 'Product'
         })
         .state('new_products', {
+            url: '/new',
             templateUrl: 'shop/category',
             controller: 'NewProductsCtrl',
             title: 'New products'
