@@ -77,7 +77,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                         </span>
                     </div>
                 </div>
-                <button ng-show="product.stock-quantity>=0" class="btn btn-success btn-lg btn-wrap btn-block"> {# XXX Deduce quantity in cart #}
+                <button ng-show="product.stock-quantity>=0" class="btn btn-success btn-lg btn-wrap btn-block" ng-click="cart.add(product, quantity);quantity=1;"> {# XXX Deduce quantity in cart #}
                     {{ _('Add to cart') }}
                 </button>
                 <div ng-show="product.on_demand && product.stock-quantity<0"> {# XXX Deduce quantity in cart #}

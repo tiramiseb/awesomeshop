@@ -21,7 +21,6 @@ angular.module('shopShop', ['bootstrapLightbox'])
         .state('index', {
             url: '/',
             templateUrl: 'shop/index',
-            controller: 'IndexCtrl',
             title: 'Home'
         })
         .state('category', {
@@ -54,17 +53,17 @@ angular.module('shopShop', ['bootstrapLightbox'])
         })
     LightboxProvider.templateUrl = 'part/lightbox';
 })
-.controller('CategoryOrProductCtrl', function($rootScope, $stateParams, $state, $timeout) {
+.controller('CategoryOrProductCtrl', function($stateParams, $state, $timeout, categories) {
     var path = $stateParams.path;
     function go_to_state() {
-        if ($rootScope.categories) {
-            var categories = $rootScope.categories,
-                found = false;
-            for (var i=0; i < categories.length; i++) {
-                if (path == categories[i].path) {
+        var cats = categories.get();
+        if (cats) {
+            var found = false;
+            for (var i=0; i < cats.length; i++) {
+                if (path == cats[i].path) {
                     // Without this timeout, state is loaded twice
                     $timeout(function() {
-                        $state.go('category', { id: categories[i].id });
+                        $state.go('category', { id: cats[i].id });
                         }, 0);
                     found = true;
                     break;
@@ -74,9 +73,9 @@ angular.module('shopShop', ['bootstrapLightbox'])
                 var category,
                     catpath = path.replace(/\/[^\/]*$/, ''),
                     prodslug = path.replace(/^.*\//g, '');
-                for (var i=0; i < categories.length; i++) {
-                    if (catpath == categories[i].path) {
-                        category = categories[i];
+                for (var i=0; i < cats.length; i++) {
+                    if (catpath == cats[i].path) {
+                        category = cats[i];
                         break;
                     };
                 };
@@ -102,7 +101,8 @@ angular.module('shopShop', ['bootstrapLightbox'])
             $rootScope.$title = $scope.category.name;
         });
 })
-.controller('ProductCtrl', function($http, $rootScope, $scope, $state, $stateParams, Lightbox) {
+.controller('ProductCtrl', function($http, $rootScope, $scope, $state, $stateParams, Lightbox, cart) {
+    $scope.cart = cart;
     $http.get('/api/product/catslug/'+$stateParams.category+'/'+$stateParams.slug)
         .then(function(response) {
             $scope.product = response.data;
@@ -137,4 +137,10 @@ angular.module('shopShop', ['bootstrapLightbox'])
         .then(function(response) {
             $scope.category.products = response.data;
         });
+})
+.controller('ProductInListCtrl', function($scope, cart) {
+    $scope.cart = cart;
+})
+.controller('CartButtonCtrl', function($scope, cart) {
+    $scope.cart = cart;
 });

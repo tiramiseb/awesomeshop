@@ -31,8 +31,9 @@ angular.module('shopUser', ['validation.match'])
             title: 'Addresses'
         })
 })
-.controller('ProfileCtrl', function($scope, $state, $uibModal) {
-    if (!$scope.user.auth) {
+.controller('ProfileCtrl', function($scope, $state, $uibModal, user) {
+    $scope.u = user;
+    if (!user.user.auth) {
         $state.go('index');
     }
     $scope.change_email = function() {
@@ -54,13 +55,13 @@ angular.module('shopUser', ['validation.match'])
                 })
     };
 })
-.controller('ChangeEmailCtrl', function($rootScope, $scope, $http) {
+.controller('ChangeEmailCtrl', function($scope, $http, user) {
     $scope.change_email = function() {
         $http.post('/api/userdata', {
             email: $scope.email
         })
             .then(function(response) {
-                $rootScope.user = response.data;
+                user.set_user(response.data);
                 $scope.$close();
             })
     }
@@ -75,21 +76,21 @@ angular.module('shopUser', ['validation.match'])
             })
     }
 })
-.controller('DeleteAccountCtrl', function($rootScope, $scope, $state, $http) {
+.controller('DeleteAccountCtrl', function($scope, $state, $http, user) {
     $scope.delete_account = function() {
         $http.post('/api/userdata/delete')
             .then(function(response) {
-                $rootScope.user = response.data;
+                user.set_user(response.data);
                 $state.go('index');
                 $scope.$close();
             })
     }
 })
-.controller('AddressesCtrl', function($rootScope, $scope, $http) {
+.controller('AddressesCtrl', function($scope, $http, user) {
     // Duplicate the addresses list so that the user object is not modified in
     // place (which would result in an inconsistence if the user leaves the
     // page without saving his/her modifications)
-    $scope.addresses = $rootScope.user.addresses.slice();
+    $scope.addresses = user.user.addresses.slice();
     $scope.prefixed = function(country) {
         return country.code+' - '+country.name;
     }
@@ -99,7 +100,7 @@ angular.module('shopUser', ['validation.match'])
     $scope.send = function() {
         $http.post('/api/userdata', {'addresses': $scope.addresses})
             .then(function(response) {
-                $rootScope.user = response.data;
+                user.set_user(response.data);
             });
     };
     $http.get('/api/country')

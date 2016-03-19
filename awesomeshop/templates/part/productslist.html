@@ -16,27 +16,29 @@ details.
 You should have received a copy of the GNU Affero General Public License
 along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
-<div ng-repeat-start="product in products" class="col-xs-6 col-md-4 col-lg-3">
+<div ng-repeat-start="product in products" class="col-xs-6 col-md-4 col-lg-3" ng-controller="ProductInListCtrl" ng-cloak>
     <div class="thumbnail product-in-grid">
         <a href="[[ product.path ]]">
             <img ng-src="[[ product.main_photo.preview_url ]]" ng-show="product.main_photo">
             <div class="caption">
                 <p class="text-center">[[ product.name ]]</p>
-                <p class="text-center">[[ product.net_price | currency:"{{ config.CURRENCY }}" ]]</p>
-                <button class="btn btn-success btn-block" ng-if="product.stock>0">{# XXX Deduce stock in cart #}
+                <p class="text-center bottom-no-space">[[ product.net_price | currency:"{{ config.CURRENCY }}" ]]</p>
+            </div>
+        </a>
+            <div class="caption">
+                <button class="btn btn-success btn-block" ng-if="product.stock>0" ng-click="cart.add(product, 1)">{# XXX Deduce stock in cart #}
                     {{ _('Add to cart') }}
                 </button>
                 <button class="btn btn-danger btn-block disabled" ng-if="product.stock==0&&!product.on_demand">{# XXX Deduce stock in cart #}
                     {{ _('Out of stock') }}
                 </button>
-                <button class="btn btn-info btn-block" ng-if="product.stock==0&&product.on_demand">{# XXX Deduce stock in cart #}
+                <button class="btn btn-info btn-block" ng-if="product.stock==0&&product.on_demand" ng-click="cart.add(product, 1)">{# XXX Deduce stock in cart #}
                     {{ _('Add to cart') }}
                 </button>
                 <p class="text-center bottom-no-space" ng-if="product.stock==0&&product.on_demand">{# XXX Deduce stock in cart #}
                     {{ _('Available on demand, delay %(min)d-%(max)d days', min=config.ON_DEMAND_DELAY_MIN, max=config.ON_DEMAND_DELAY_MAX) }}
                 </p>
             </div>
-        </a>
     </div>
 </div>
 <div class="clearfix visible-lg-block" ng-if="($index+1)%4==0"></div>
