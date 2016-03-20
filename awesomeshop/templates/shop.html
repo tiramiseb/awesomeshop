@@ -133,7 +133,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     {{ _('Documentation') }}
                 </div>
                 <div class="list-group" ng-cloak>
-                    <a ui-sref="doc({slug:page.slug})" ui-sref-active="active" class="list-group-item" ng-repeat="page in docs" ng-if="page.in_menu">
+                    <a ui-sref="doc({slug:page.slug})" ui-sref-active="active" class="list-group-item" ng-repeat="page in docs.get()" ng-if="page.in_menu">
                         [[ page.title ]]
                     </a>
                 </div>
@@ -171,7 +171,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     {{ _('Information') }}
                 </div>
                 <div class="list-group" ng-cloak>
-                    <a ui-sref="info({slug:page.slug})" ui-sref-active="active" class="list-group-item" ng-repeat="page in infos">
+                    <a ui-sref="info({slug:page.slug})" ui-sref-active="active" class="list-group-item" ng-repeat="page in infos.get()">
                         [[ page.title ]]
                     </a>
                 </div>
