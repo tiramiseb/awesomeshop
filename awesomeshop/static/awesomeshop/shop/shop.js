@@ -94,14 +94,14 @@ angular.module('shopShop', ['bootstrapLightbox'])
     };
     go_to_state();
 })
-.controller('CategoryCtrl', function($http, $rootScope, $scope, $stateParams) {
+.controller('CategoryCtrl', function($http, $scope, $stateParams, title) {
     $http.get('/api/category/'+$stateParams.id)
         .then(function(response) {
             $scope.category = response.data;
-            $rootScope.$title = $scope.category.name;
+            title.set($scope.category.name);
         });
 })
-.controller('ProductCtrl', function($http, $rootScope, $scope, $state, $stateParams, Lightbox, cart) {
+.controller('ProductCtrl', function($http, $scope, $state, $stateParams, Lightbox, cart, title) {
     $scope.cart = cart;
     $http.get('/api/product/catslug/'+$stateParams.category+'/'+$stateParams.slug)
         .then(function(response) {
@@ -109,7 +109,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
             if ($scope.product.photos.length > 1) {
                 $scope.thumb_width = parseInt(12 / ($scope.product.photos.length - 1));
             };
-            $rootScope.$title = $scope.product.name;
+            title.set($scope.product.name);
         }, function(response) {
             $state.go('index');
         });

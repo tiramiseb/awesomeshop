@@ -33,10 +33,10 @@ angular.module('shopPage', [])
             title: 'Information'
         })
 })
-.controller('DocCtrl', function($rootScope, $scope, $stateParams, $http) {
+.controller('DocCtrl', function($scope, $stateParams, $http, title) {
     $http.get('/api/page-'+$stateParams.type+'/'+$stateParams.slug)
         .then(function(response) {
             $scope.page = response.data;
-            $rootScope.$title = $scope.page.title;
+            title.set($scope.page.title);
         });
 });

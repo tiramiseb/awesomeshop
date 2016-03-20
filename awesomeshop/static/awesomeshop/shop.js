@@ -174,11 +174,23 @@ angular.module('awesomeshop', [
         }
     }
 })
-.run(function($timeout, $http, $rootScope, $uibModal, $document, $localStorage) {
+.factory('title', function() {
+    var title = '';
+    return {
+        set: function(newtitle) {
+            title = newtitle;
+        },
+        get: function() {
+            return title;
+        }
+    }
+})
+.run(function($timeout, $rootScope, $document, title) {
     $rootScope.$on('$stateChangeSuccess', function(event, toState) {
         if (toState.title) {
+            // Without this timeout, the history is scrambled
             $timeout(function() {
-                $rootScope.$title = toState.title;
+                title.set(toState.title);
             }, 0);
         };
         $document.scrollTop(0,300);
@@ -192,6 +204,9 @@ angular.module('awesomeshop', [
         },
         templateUrl: 'part/productslist'
     };
+})
+.controller('TitleCtrl', function($scope, title) {
+    $scope.title = title;
 })
 .controller('UserCtrl', function($scope, user) {
     $scope.u = user;
