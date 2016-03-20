@@ -33,7 +33,7 @@ angular.module('shopUser', ['validation.match'])
 })
 .controller('ProfileCtrl', function($scope, $state, $uibModal, user) {
     $scope.u = user;
-    if (!user.user.auth) {
+    if (!user.get_user().auth) {
         $state.go('index');
     }
     $scope.change_email = function() {
@@ -56,6 +56,7 @@ angular.module('shopUser', ['validation.match'])
     };
 })
 .controller('ChangeEmailCtrl', function($scope, $http, user) {
+    $scope.u = user;
     $scope.change_email = function() {
         $http.post('/api/userdata', {
             email: $scope.email
@@ -90,7 +91,7 @@ angular.module('shopUser', ['validation.match'])
     // Duplicate the addresses list so that the user object is not modified in
     // place (which would result in an inconsistence if the user leaves the
     // page without saving his/her modifications)
-    $scope.addresses = user.user.addresses.slice();
+    $scope.addresses = user.get_user().addresses.slice();
     $scope.prefixed = function(country) {
         return country.code+' - '+country.name;
     }
