@@ -60,23 +60,15 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <div class="well">
             <p class="price">[[ product.net_price | currency:"{{ config.CURRENCY }}" ]]</p>
             <hr>
-            <div ng-show="product.stock>0 || product.on_demand" class="bottom-no-space">{# XXX Deduce quantity in cart #}
-                <div class="form-group">
-                    <label for="quantity">{{ _('Quantity') }}</label>
-                    <div class="input-group">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" ng-click="dec_quantity()">
-                                <i class="fa fa-minus"></i>
-                            </button>
-                        </span>
-                        <input type="text" name="quantity" class="form-control text-center" ng-model="quantity">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" ng-click="inc_quantity()">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </span>
+            <div ng-show="product.stock>0 || product.on_demand">{# XXX Deduce quantity in cart #}
+                <form name="form" class="form-horizontal" novalidate>
+                    <div class="form-group">
+                        <label class="col-sm-5 control-label" for="quantity">{{ _('Quantity') }}</label>
+                        <div class="col-sm-7">
+                            <input id="quantity" type="number" min="1" max="[[ product.stock + 1 ]]" class="form-control" ng-model="quantity">
+                        </div>
                     </div>
-                </div>
+                </form>
                 <button ng-show="product.stock-quantity>=0" class="btn btn-success btn-lg btn-wrap btn-block" ng-click="cart.add(product, quantity);quantity=1;"> {# XXX Deduce quantity in cart #}
                     {{ _('Add to cart') }}
                 </button>
