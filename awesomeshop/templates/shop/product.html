@@ -62,10 +62,16 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             <hr>
             <div ng-show="product.stock>0 || product.on_demand">{# XXX Deduce quantity in cart #}
                 <form name="form" class="form-horizontal" novalidate>
-                    <div class="form-group">
-                        <label class="col-sm-5 control-label" for="quantity">{{ _('Quantity') }}</label>
+                    <div class="form-group" ng-hide="product.on_demand">
+                        <label class="col-sm-5 control-label" for="quantity1">{{ _('Quantity') }}</label>
                         <div class="col-sm-7">
-                            <input id="quantity" type="number" min="1" max="[[ product.stock + 1 ]]" class="form-control" ng-model="quantity">
+                            <input id="quantity1" type="number" min="1" max="[[ product.stock + 1 ]]" class="form-control" ng-model="quantity">{# XXX Deduce quantity in cart #}
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="product.on_demand">
+                        <label class="col-sm-5 control-label" for="quantity2">{{ _('Quantity') }}</label>
+                        <div class="col-sm-7">
+                            <input id="quantity2" type="number" min="1" class="form-control" ng-model="quantity">
                         </div>
                     </div>
                 </form>
