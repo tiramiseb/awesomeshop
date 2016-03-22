@@ -26,14 +26,11 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             </div>
         </a>
             <div class="caption">
-                <button class="btn btn-success btn-block" ng-if="product.stock>0" ng-click="cart.add(product, 1)">{# XXX Deduce stock in cart #}
+                <button class="btn btn-success btn-block" ng-if="product.stock || product.on_demand" ng-class="{ 'btn-success': product.stock, 'btn-info': product.on_demand && !product.stock }" ng-click="cart.add(product, 1)">{# XXX Deduce stock in cart #}
                     {{ _('Add to cart') }}
                 </button>
-                <button class="btn btn-danger btn-block disabled" ng-if="product.stock==0&&!product.on_demand">{# XXX Deduce stock in cart #}
+                <button class="btn btn-danger btn-block disabled" ng-if="!(product.stock || product.on_demand)">{# XXX Deduce stock in cart #}
                     {{ _('Out of stock') }}
-                </button>
-                <button class="btn btn-info btn-block" ng-if="product.stock==0&&product.on_demand" ng-click="cart.add(product, 1)">{# XXX Deduce stock in cart #}
-                    {{ _('Add to cart') }}
                 </button>
                 <p class="text-center bottom-no-space" ng-if="product.stock==0&&product.on_demand">{# XXX Deduce stock in cart #}
                     {{ _('Available on demand, delay %(min)d-%(max)d days', min=config.ON_DEMAND_DELAY_MIN, max=config.ON_DEMAND_DELAY_MAX) }}
