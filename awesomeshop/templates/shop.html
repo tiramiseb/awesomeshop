@@ -99,7 +99,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 </div>
                 </div>
             </form>
-            <a href="" class="btn btn-primary btn-lg bottom-space" ng-controller="CartButtonCtrl" ng-class="{ disabled: !cart.count() }" ng-cloak> {# XXX link to cart #}
+            <a ui-sref="cart" class="btn btn-primary btn-lg bottom-space" ng-controller="CartButtonCtrl" ng-class="{ disabled: !cart.count() }" ng-cloak>
                 <i class="fa fa-shopping-cart"></i>&nbsp;
                 <span ng-hide="cart.count()">{{ _('Cart is empty' ) }}</span>
                 <span ng-show="cart.count()">{{ _('[[ cart.count() ]] products') }}, [[ cart.amount() | currency:"{{ config.CURRENCY }}" ]]</span>

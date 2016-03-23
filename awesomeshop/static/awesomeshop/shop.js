@@ -137,30 +137,54 @@ angular.module('awesomeshop', [
         setlang: setlang
     }
 })
-.factory('cart', function($localStorage) {
-    if (!$localStorage.cart) {
+.factory('cart', function($localStorage, $http, $state) {
+    if ($localStorage.cart) {
+        // Ask the server to adjust the cart (availability and price)
+        $http.post('/api/cart/verify', $localStorage.cart)
+            .then(function(response) {
+                $localStorage.cart = response.data;
+            });
+    } else {
         $localStorage.cart = [];
     };
-    // XXX Ask the server to adjust the cart (products availability and price)
     return {
         add: function(product, quantity) {
-            var found = false;
+            $http.get('/api/product/'+product.id)
+                .then(function(response) {
+                    var found = false;
+                    for (var i=0; i<$localStorage.cart.length; i++) {
+                        if ($localStorage.cart[i].product.id == product.id) {
+                            $localStorage.cart[i].product = response.data;
+                            $localStorage.cart[i].quantity += quantity;
+                            found = true;
+                            break;
+                        }
+                    };
+                    if (!found) {
+                        $localStorage.cart.push({
+                            'product': response.data,
+                            'quantity': quantity
+                        })
+                    };
+                });
+        },
+        remove: function(product) {
+            var index = -1;
             for (var i=0; i<$localStorage.cart.length; i++) {
-                if ($localStorage.cart[i][0].id == product.id) {
-                    $localStorage.cart[i][1] += quantity;
-                    found = true;
+                if ($localStorage.cart[i].product.id == product.id) {
+                    index=i;
                     break;
-                }
+                };
             };
-            if (!found) {
-                $localStorage.cart.push([product, quantity])
+            if (index >= 0) {
+                $localStorage.cart.splice(index, 1);
             };
         },
         amount: function() {
             var amount = 0;
             for (var i=0; i<$localStorage.cart.length; i++) {
-                var qt = $localStorage.cart[i][1],
-                    unitprice = $localStorage.cart[i][0].net_price;
+                var qt = $localStorage.cart[i].quantity,
+                    unitprice = $localStorage.cart[i].product.net_price;
                 amount += qt * unitprice;
             }
             return amount;
@@ -168,9 +192,61 @@ angular.module('awesomeshop', [
         count: function() {
             var count = 0;
             for (var i=0; i<$localStorage.cart.length; i++) {
-                count += $localStorage.cart[i][1];
+                if (!$localStorage.cart[i].quantity) {
+                    $localStorage.cart[i].quantity = 1;
+                } else if ($localStorage.cart[i].quantity > $localStorage.cart[i].product.stock && !$localStorage.cart[i].product.on_demand) {
+                    $localStorage.cart[i].quantity = $localStorage.cart[i].product.stock;
+                };
+                count += $localStorage.cart[i].quantity;
             }
             return count;
+        },
+        empty: function() {
+            $localStorage.cart = [];
+            $state.go('index');
+        },
+        list: function() {
+            return $localStorage.cart;
+        },
+        total: function() {
+            var total = 0;
+            for (var i=0; i<$localStorage.cart.length; i++) {
+                total += $localStorage.cart[i].product.net_price * $localStorage.cart[i].quantity;
+            };
+            return total;
+        },
+        in_stock: function() {
+            var in_stock = true;
+            for (var i=0; i<$localStorage.cart.length; i++) {
+                if ($localStorage.cart[i].product.stock < $localStorage.cart[i].quantity) {
+                    // If the stock is not sufficient for a single "not on
+                    // demand" product, the whole cart is marked as "not in
+                    // stock"
+                    in_stock = false;
+                    break;
+                };
+            };
+            return in_stock;
+        },
+        on_demand: function() {
+            var not_on_demand_in_stock = true,
+                on_demand_not_in_stock = false;
+            for (var i=0; i<$localStorage.cart.length; i++) {
+                if ($localStorage.cart[i].product.stock < $localStorage.cart[i].quantity) {
+                    if ($localStorage.cart[i].product.on_demand) {
+                        // If the stock is not sufficient for a single "on
+                        // demand" product, the whole car may be marked as "on
+                        // demand".
+                        on_demand_not_in_stock = true;
+                    } else {
+                        // If the stock is not sufficient for a single "not on
+                        // demand" product, the whole cart is marked as "not on
+                        // demand" because it cannot be shipped.
+                        not_on_demand_in_stock = false;
+                    }
+                };
+            };
+            return (on_demand_not_in_stock && not_on_demand_in_stock);
         }
     }
 })

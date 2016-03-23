@@ -27,6 +27,7 @@ def messages():
         'Documentation': _('Documentation'),
         'Home': _('Home'),
         'Information': _('Information'),
+        'My cart': _('Mon panier'),
         'New products': _('New products'),
         'Product': _('Product'),
         'Profile': _('Profile')

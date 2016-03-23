@@ -46,6 +46,12 @@ angular.module('shopShop', ['bootstrapLightbox'])
             controller: 'NewProductsCtrl',
             title: 'New products'
         })
+        .state('cart', {
+            url:'/cart',
+            templateUrl: 'shop/cart',
+            controller: 'CartCtrl',
+            title: 'My cart'
+        })
         .state('category_or_product', {
             url: '/{path:any}',
             template: '',
@@ -143,4 +149,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
 })
 .controller('CartButtonCtrl', function($scope, cart) {
     $scope.cart = cart;
-});
+})
+.controller('CartCtrl', function($scope, cart) {
+    $scope.cart = cart;
+})

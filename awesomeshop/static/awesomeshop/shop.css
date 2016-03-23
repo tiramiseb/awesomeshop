@@ -44,7 +44,7 @@
     content: '» ';
 }
 
-.product-in-grid a:hover, .product-in-grid a:active {
+.product-in-grid a:hover, .product-in-grid a:active, .cart-list a:hover, .cart-list a:active {
     text-decoration: none;
 }
 
@@ -124,6 +124,19 @@ p.price {
 }
 .product-illustration-placeholder .panel-body {
     padding: 0;
+}
+.cart-illustration-placeholder {
+    display: inline-block;
+    width: 100px;
+    height: 70px;
+    line-height: 1.1em;
+    font-size: 4em;
+    text-align: center;
+    color: #eee;
+    vertical-align: middle;
+}
+.cart-illustration, .cart-illustration-placeholder {
+    margin-right: 16px;
 }
 
 /* Small gutter for images thumbnails */
