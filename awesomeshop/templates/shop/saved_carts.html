@@ -1,0 +1,64 @@
+{#-
+Copyright 2015-2016 Sébastien Maccagnoni-Munch
+
+This file is part of AwesomeShop.
+
+AwesomeShop is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+details.
+
+You should have received a copy of the GNU Affero General Public License
+along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+#}
+<h1>{{ _('My saved carts') }}</h1>
+<div class="panel panel-default" ng-repeat="cart in saved_carts.get()">
+    <div class="panel-heading">[[ cart.name ]] ([[ cart.date | date ]])</div>
+    <div class="list-group">
+        <div class="list-group-item cart-list" ng-repeat="line in cart.lines">
+            <div class="row">
+                <div class="col-xs-7 col-sm-6 col-md-7 col-lg-8">
+                    <a href="[[ line.product.path ]]">
+                        <span class="hidden-xs hidden-sm pull-left">
+                            <img class="cart-illustration" ng-src="[[ line.product.photos[0].thumbnail_url ]]" ng-show="line.product.photos.length">
+                            <span class="cart-illustration-placeholder" ng-hide="line.product.photos.length">
+                                <i class="fa fa-ban"></i>
+                            </span>
+                        </span>
+                        [[ line.product.name ]]
+                    </a>
+                    <br>
+                    {{ _('Unit price:') }} [[ line.product.net_price | currency:"{{ config.CURRENCY }}" ]]
+                </div>
+                <div class="col-xs-5 col-sm-4 col-md-3 col-lg-2">
+                    {{ _('Quantity:') }}
+                    <br class="hidden-xs">
+                    [[ line.quantity ]]
+                </div>
+                <div class="col-sm-2 text-right">
+                    <strong>
+                        {{ _('Total:') }}<br class="hidden-xs">
+                        [[ line.product.net_price*line.quantity | currency:"{{ config.CURRENCY }}" ]]
+                    </strong>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body text-right">
+        <div class="btn-group">
+            <button class="btn btn-primary" ng-click="load_cart(cart.lines)">
+                <i class="fa fa-folder-open"></i>
+                <span class="hidden-xs hidden-sm">{{ _('Load') }}</span>
+            </button>
+            <button class="btn btn-danger" ng-click="saved_carts.remove($index)">
+                <i class="fa fa-trash"></i>
+                <span class="hidden-xs hidden-sm">{{ _('Remove') }}</span>
+            </button>
+        </div>
+    </div>
+</div>

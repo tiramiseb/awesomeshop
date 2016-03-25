@@ -30,6 +30,7 @@ def messages():
         'My cart': _('Mon panier'),
         'New products': _('New products'),
         'Product': _('Product'),
-        'Profile': _('Profile')
+        'Profile': _('Profile'),
+        'Saved carts': _('Saved carts')
     }
 

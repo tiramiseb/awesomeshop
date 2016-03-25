@@ -28,7 +28,7 @@ from .product import Product
 
 
 
-class DbCartLine(db.EmbeddedDocument):
+class DbCartline(db.EmbeddedDocument):
     product = db.ReferenceField(Product, db_field='prod')
     quantity = db.IntField(db_field='qty')
     data = db.DictField()
@@ -49,7 +49,7 @@ class DbCart(db.Document):
     user = db.ReferenceField(User, required=True)
     date = db.DateTimeField(default=datetime.datetime.now)
     name = db.StringField()
-    lines = db.EmbeddedDocumentListField(DbCartLine)
+    lines = db.EmbeddedDocumentListField(DbCartline)
 
     meta = {
         'collection': 'cart',

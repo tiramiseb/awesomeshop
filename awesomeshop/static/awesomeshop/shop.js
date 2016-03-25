@@ -137,6 +137,31 @@ angular.module('awesomeshop', [
         setlang: setlang
     }
 })
+.factory('savedCarts', function($http, cart) {
+    var carts;
+    $http.get('/api/cart')
+        .then(function(response) {
+            carts = response.data;
+        });
+    return {
+        get: function() {
+            return carts;
+        },
+        count: function() {
+            if (carts) {
+                return carts.length;
+            } else {
+                return '';
+            };
+        },
+        remove: function(index) {
+            $http.delete('/api/cart/'+carts[index].id)
+                .then(function() {
+                    carts.splice(index, 1);
+                })
+        }
+    };
+})
 .factory('cart', function($localStorage, $http, $state) {
     if ($localStorage.cart) {
         // Ask the server to adjust the cart (availability and price)
@@ -179,6 +204,12 @@ angular.module('awesomeshop', [
             if (index >= 0) {
                 $localStorage.cart.splice(index, 1);
             };
+        },
+        set: function(targetcart) {
+            $http.post('/api/cart/verify', targetcart)
+                .then(function(response) {
+                    $localStorage.cart = response.data;
+                });
         },
         amount: function() {
             var amount = 0;
@@ -284,8 +315,9 @@ angular.module('awesomeshop', [
 .controller('TitleCtrl', function($scope, title) {
     $scope.title = title;
 })
-.controller('UserCtrl', function($scope, user) {
+.controller('UserCtrl', function($scope, user, savedCarts) {
     $scope.u = user;
+    $scope.saved_carts = savedCarts;
 })
 .controller('RegisterCtrl', function($scope, $http, user) {
     $scope.register = function() {

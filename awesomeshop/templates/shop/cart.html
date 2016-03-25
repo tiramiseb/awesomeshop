@@ -49,7 +49,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     </div>
                 </div>
                 <div class="col-sm-2 text-right">
-                    <strong style="display:inline-block;vertical-align:middle;">
+                    <strong>
                         {{ _('Total:') }}<br class="hidden-xs">
                         [[ line.product.net_price*line.quantity | currency:"{{ config.CURRENCY }}" ]]
                     </strong>
@@ -79,30 +79,34 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-6 col-sm-6 col-md-8 col-lg-6" ng-show="saved_cart">
-            <a href="" class="btn btn-primary">{# XXX Link to saved cart #}
-                <i class="fa fa-check"></i>
-                {{ _('Cart has been saved ([[ saved_cart ]])') }}
-            </a>
-            <button class="btn btn-warning" uib-tooltip="{{ _('Remove all products') }}" ng-click="cart.empty()">
-                <i class="fa fa-trash"></i>
-                {{ _('Empty cart') }}
-            </a>
+        <div class="col-xs-6 col-sm-7 col-md-8 col-lg-6" ng-show="saved_cart">
+            <div class="btn-group">
+                <a ui-sref="saved_carts" class="btn btn-primary">
+                    <i class="fa fa-bookmark"></i>
+                    {{ _('Saved') }}
+                </a>
+                <button class="btn btn-warning" uib-tooltip="{{ _('Remove all products') }}" ng-click="cart.empty()">
+                    <i class="fa fa-trash"></i>
+                    <span class="hidden-xs hidden-sm">{{ _('Empty cart') }}</span>
+                </button>
+            </div>
         </div>
         <div class="col-xs-6 col-sm-7 col-md-8 col-lg-6" ng-hide="saved_cart">
-            <div class="input-group">
-                <input type="text" class="form-control" ng-model="cartname" placeholder="{{ _('Cart name') }}">
-                <span class="input-group-btn">
-                    <button class="btn btn-primary" uib-tooltip="{{ _('Save this cart for a later use') }}">{# XXX ng-click = save cart #}
-                        <i class="fa fa-bookmark"></i>
-                        <span class="hidden-xs">{{ _('Save') }}</span>{# XXX tooltip #}
-                    </button>
-                    <button class="btn btn-danger" uib-tooltip="{{ _('Remove all products') }}" ng-click="cart.empty()">{# XXX empty cart #}
-                        <i class="fa fa-trash"></i>
-                        <span class="hidden-xs hidden-sm">{{ _('Empty cart') }}</span>
-                    </button>
-                </span>
-            </div>
+            <form name="form" novalidate>
+                <div class="input-group">
+                    <input type="text" class="form-control" ng-model="cartname" placeholder="{{ _('Cart name') }}" required>
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" uib-tooltip="{{ _('Save this cart for a later use') }}" ng-click="save()" ng-disabled="form.$invalid">
+                            <i class="fa fa-bookmark"></i>
+                            <span class="hidden-xs">{{ _('Save') }}</span>
+                        </button>
+                        <button class="btn btn-danger" uib-tooltip="{{ _('Remove all products') }}" ng-click="cart.empty()">
+                            <i class="fa fa-trash"></i>
+                            <span class="hidden-xs hidden-sm">{{ _('Empty cart') }}</span>
+                        </button>
+                    </span>
+                </div>
+            </form>
         </div>
         <div class="col-xs-6 col-sm-5 col-md-4 col-lg-6">
             {# XXX Message like "in stock" or "on demand", etc. See "cart.stock_message" in the previous version #}

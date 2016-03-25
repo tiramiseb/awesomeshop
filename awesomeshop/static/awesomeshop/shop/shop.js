@@ -52,6 +52,12 @@ angular.module('shopShop', ['bootstrapLightbox'])
             controller: 'CartCtrl',
             title: 'My cart'
         })
+        .state('saved_carts', {
+            url: '/saved_carts',
+            templateUrl: 'shop/saved_carts',
+            controller: 'SavedCartsCtrl',
+            title: 'Saved carts'
+        })
         .state('category_or_product', {
             url: '/{path:any}',
             template: '',
@@ -150,6 +156,22 @@ angular.module('shopShop', ['bootstrapLightbox'])
 .controller('CartButtonCtrl', function($scope, cart) {
     $scope.cart = cart;
 })
-.controller('CartCtrl', function($scope, cart) {
+.controller('CartCtrl', function($http, $scope, cart) {
     $scope.cart = cart;
+    $scope.save = function() {
+        var data = {
+            name: $scope.cartname,
+            lines: cart.list()
+        };
+        $http.post('/api/cart', data)
+            .then(function(response) {
+                $scope.saved_cart = response.data.name;
+            });
+    }
+})
+.controller('SavedCartsCtrl', function($scope, savedCarts, cart) {
+    $scope.saved_carts = savedCarts;
+    $scope.load_cart = function(targetcart) {
+        cart.set(targetcart);
+    }
 })
