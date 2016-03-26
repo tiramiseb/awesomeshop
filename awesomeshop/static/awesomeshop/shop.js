@@ -211,6 +211,20 @@ angular.module('awesomeshop', [
                     $localStorage.cart = response.data;
                 });
         },
+        stock: function(product) {
+            if (product) {
+                // Check the available stock, deducing quantity in cart
+                var stock = product.stock;
+                for (var i=0; i<$localStorage.cart.length; i++) {
+                    if ($localStorage.cart[i].product.id == product.id) {
+                        stock = stock - $localStorage.cart[i].quantity;
+                    };
+                };
+                return stock;
+            } else {
+                return 0;
+            }
+        },
         amount: function() {
             var amount = 0;
             for (var i=0; i<$localStorage.cart.length; i++) {

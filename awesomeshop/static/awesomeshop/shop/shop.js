@@ -126,16 +126,6 @@ angular.module('shopShop', ['bootstrapLightbox'])
             $state.go('index');
         });
     $scope.quantity = 1;
-    $scope.dec_quantity = function() {
-        if ($scope.quantity > 1) {
-            $scope.quantity -= 1;
-        }
-    }
-    $scope.inc_quantity = function() {
-        if ($scope.product.stock >= $scope.quantity || $scope.product.on_demand) { // XXX Deduce quantity in cart
-            $scope.quantity += 1;
-        }
-    }
     $scope.openLightboxModal = function (index) {
         Lightbox.openModal($scope.product.photos, index);
     };

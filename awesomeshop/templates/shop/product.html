@@ -60,12 +60,12 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <div class="well">
             <p class="price">[[ product.net_price | currency:"{{ config.CURRENCY }}" ]]</p>
             <hr>
-            <div ng-show="product.stock>0 || product.on_demand">{# XXX Deduce quantity in cart #}
+            <div ng-show="cart.stock(product)>0 || product.on_demand">
                 <form name="form" class="form-horizontal" novalidate>
                     <div class="form-group" ng-class="{ 'has-error' : form.quantity1.$invalid }" ng-hide="product.on_demand">
                         <label class="col-sm-5 control-label" for="quantity1">{{ _('Quantity') }}</label>
                         <div class="col-sm-7">
-                            <input name="quantity1" id="quantity1" type="number" min="1" max="[[ product.stock + 1 ]]" class="form-control" ng-model="quantity">{# XXX Deduce quantity in cart #}
+                            <input name="quantity1" id="quantity1" type="number" min="1" max="[[ cart.stock(product) + 1 ]]" class="form-control" ng-model="quantity">
                         </div>
                     </div>
                     <div class="form-group" ng-class="{ 'has-error' : form.quantity2.$invalid }" ng-show="product.on_demand">
@@ -74,11 +74,11 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                             <input name="quantity2" id="quantity2" type="number" min="1" class="form-control" ng-model="quantity">
                         </div>
                     </div>
-                    <button ng-show="(product.on_demand && form.quantity2.$valid) || (!product.on_demand && product.stock-quantity>=0 && form.quantity1.$valid)" class="btn btn-success btn-lg btn-wrap btn-block" ng-class="{ 'btn-success': product.stock-quantity>=0, 'btn-info': product.on_demand && product.stock-quantity<0 }" ng-click="cart.add(product, quantity);quantity=1;"> {# XXX Deduce quantity in cart #}
+                    <button ng-show="(product.on_demand && form.quantity2.$valid) || (!product.on_demand && cart.stock(product)-quantity>=0 && form.quantity1.$valid)" class="btn btn-success btn-lg btn-wrap btn-block" ng-class="{ 'btn-success': cart.stock(product)-quantity>=0, 'btn-info': product.on_demand && cart.stock(product)-quantity<0 }" ng-click="cart.add(product, quantity);quantity=1;">
                         {{ _('Add to cart') }}
                     </button>
-                    <p class="text-center bottom-no-space" ng-show="product.on_demand && product.stock-quantity<0">{{ _('Available on demand, delay %(min)d-%(max)d days', min=config.ON_DEMAND_DELAY_MIN, max=config.ON_DEMAND_DELAY_MAX) }}</p> {# XXX Deduce quantity in cart #}
-                    <div class="alert alert-danger text-center bottom-no-space" ng-show="!product.on_demand && (product.stock-quantity<0 || form.quantity1.$error.max)">{# XXX Deduce quantity in cart #}
+                    <p class="text-center bottom-no-space" ng-show="product.on_demand && cart.stock(product)-quantity<0">{{ _('Available on demand, delay %(min)d-%(max)d days', min=config.ON_DEMAND_DELAY_MIN, max=config.ON_DEMAND_DELAY_MAX) }}</p>
+                    <div class="alert alert-danger text-center bottom-no-space" ng-show="!product.on_demand && (cart.stock(product)-quantity<0 || form.quantity1.$error.max)">
                         {{ _('Insufficient stock') }}
                     </div>
                     <div class="alert alert-danger text-center bottom-no-space" ng-show="form.$invalid && !form.quantity1.$error.max">
@@ -86,7 +86,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     </div>
                 </form>
             </div>
-            <div class="alert alert-danger text-center bottom-no-space" ng-hide="product.stock>0 || product.on_demand">{# XXX Deduce quantity in cart #}
+            <div class="alert alert-danger text-center bottom-no-space" ng-hide="cart.stock(product)>0 || product.on_demand">
                 {{ _('Out of stock') }}
             </div>
         </div>
