@@ -32,8 +32,8 @@ angular.module('shopUser', ['validation.match'])
         })
 })
 .controller('ProfileCtrl', function($scope, $state, $uibModal, user) {
-    $scope.u = user;
-    if (!user.get_user().auth) {
+    $scope.user = user;
+    if (!user.get().auth) {
         $state.go('index');
     }
     $scope.change_email = function() {
@@ -62,7 +62,7 @@ angular.module('shopUser', ['validation.match'])
             email: $scope.email
         })
             .then(function(response) {
-                user.set_user(response.data);
+                user.set(response.data);
                 $scope.$close();
             })
     }
@@ -81,7 +81,7 @@ angular.module('shopUser', ['validation.match'])
     $scope.delete_account = function() {
         $http.post('/api/userdata/delete')
             .then(function(response) {
-                user.set_user(response.data);
+                user.set(response.data);
                 $state.go('index');
                 $scope.$close();
             })
@@ -91,7 +91,7 @@ angular.module('shopUser', ['validation.match'])
     // Duplicate the addresses list so that the user object is not modified in
     // place (which would result in an inconsistence if the user leaves the
     // page without saving his/her modifications)
-    $scope.addresses = user.get_user().addresses.slice();
+    $scope.addresses = user.get().addresses.slice();
     $scope.prefixed = function(country) {
         return country.code+' - '+country.name;
     }
@@ -101,7 +101,7 @@ angular.module('shopUser', ['validation.match'])
     $scope.send = function() {
         $http.post('/api/userdata', {'addresses': $scope.addresses})
             .then(function(response) {
-                user.set_user(response.data);
+                user.set(response.data);
             });
     };
     $http.get('/api/country')

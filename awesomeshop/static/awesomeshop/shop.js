@@ -98,43 +98,37 @@ angular.module('awesomeshop', [
     $rootScope.$on('event:auth-loginConfirmed', function(e, data) {
         user = data;
     });
-    function forcelogin() {
-        $http.get('/api/forcelogin');
-    };
-    function get_user() {
-        return user
-    };
-    function logout() {
-        $http.get('/api/logout')
-            .then(function(response) {
-                user = response.data;
-            });
-    };
-    function register() {
-        $uibModal.open({
+    return {
+        forcelogin: function() {
+            $http.get('/api/forcelogin');
+        },
+        get: function() {
+            return user;
+        },
+        set: function() {
+            user = data;
+        }
+        logout: function() {
+            $http.get('/api/logout')
+                .then(function(response) {
+                    user = response.data;
+                });
+        },
+        register: function() {
+            $uibModal.open({
                 templateUrl: 'part/register',
                 controller: 'RegisterCtrl'
                 })
-    };
-    function resend_confirmation() {
-        $http.get('/api/register/resend');
-    };
-    function setlang(lang) {
-        $http.put('/api/setlang', {'lang': lang})
-            .then(function() {
-                window.location.reload();
-            })
-    };
-    function set_user(data) {
-        user = data;
-    };
-    return {
-        forcelogin: forcelogin,
-        get_user: get_user,
-        logout: logout,
-        register: register,
-        resend_confirmation: resend_confirmation,
-        setlang: setlang
+        },
+        resend_confirmation: function() {
+            $http.get('/api/register/resend');
+        },
+        setlang: function(lang) {
+            $http.put('/api/setlang', {'lang': lang})
+                .then(function() {
+                    window.location.reload();
+                })
+        }
     }
 })
 .factory('savedCarts', function($http, cart) {
@@ -205,11 +199,15 @@ angular.module('awesomeshop', [
                 $localStorage.cart.splice(index, 1);
             };
         },
-        set: function(targetcart) {
-            $http.post('/api/cart/verify', targetcart)
-                .then(function(response) {
-                    $localStorage.cart = response.data;
-                });
+        set: function(targetcart, do_not_verify) {
+            if (do_not_verify) {
+                $localStorage.cart = targetcart;
+            } else {
+                $http.post('/api/cart/verify', targetcart)
+                    .then(function(response) {
+                        $localStorage.cart = response.data;
+                    });
+            };
         },
         stock: function(product) {
             if (product) {
@@ -340,7 +338,7 @@ angular.module('awesomeshop', [
                 password: $scope.password
                 })
             .then(function(response) {
-                user.set_user(response.data);
+                user.set(response.data);
                 $scope.$close();
             })
     }

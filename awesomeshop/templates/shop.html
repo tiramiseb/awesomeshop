@@ -61,14 +61,14 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             <a class="navbar-brand" ui-sref="index">{{ config.SHOP_DESCRIPTION[locale] }}</a>
         </div>
         <p class="navbar-text navbar-right" ng-controller="UserCtrl" ng-cloak>
-            <span ng-if="u.get_user().is_admin">
+            <span ng-if="user.get().is_admin">
                 <a class="navbar-link" href="/dashboard" target="_blank"><i class="fa fa-tachometer"></i> {{ _('Dashboard') }}</a> |
             </span>
-            <span ng-show="u.get_user().auth">
-                <a class="navbar-link" ui-sref="profile"><i class="fa fa-user"></i> [[ u.get_user().email ]]</a> |
+            <span ng-show="user.get().auth">
+                <a class="navbar-link" ui-sref="profile"><i class="fa fa-user"></i> [[ user.get().email ]]</a> |
                 <a class="navbar-link" href="" ng-click="u.logout()"><i class="fa fa-sign-out"></i> {{ _('Logout') }}</a>
             </span>
-            <span ng-hide="u.get_user().auth">
+            <span ng-hide="user.get().auth">
                 <a class="navbar-link" href="" ng-click="u.forcelogin()"><i class="fa fa-sign-in"></i> {{ _('Login') }}</a> |
                 <a class="navbar-link" href="" ng-click="u.register()"><i class="fa fa-user-plus"></i> {{ _('Register') }}</a>
             </span>
@@ -143,7 +143,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     <i class="fa fa-user"></i>
                     {{ _('My account') }}
                 </div>
-                <div class="list-group" ng-if="u.get_user().auth" ng-cloak>
+                <div class="list-group" ng-if="user.get().auth" ng-cloak>
                     <a class="list-group-item" ui-sref="profile" ui-sref-active="active">
                         {{ _('My profile') }}
                     </a>
@@ -156,7 +156,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                         {{ _('My saved carts') }}
                     </a>
                 </div>
-                <div class="list-group" ng-if="!u.get_user().auth" ng-cloak>
+                <div class="list-group" ng-if="!user.get().auth" ng-cloak>
                     <a class="list-group-item" href="" ng-click="u.forcelogin()">
                         {{ _('Login') }}
                     </a>
@@ -178,7 +178,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             </div>
         </div>
         <div class="col-lg-9 col-sm-8 col-print-12">
-            <div class="alert alert-danger hidden-print" ng-controller="UserCtrl" role="alert" ng-show="u.get_user().waiting_for_confirmation" ng-cloak>
+            <div class="alert alert-danger hidden-print" ng-controller="UserCtrl" role="alert" ng-show="user.get().waiting_for_confirmation" ng-cloak>
                 <p>{{ _('Please confirm your email address by clicking on the link in the email you have received.') }}</p>
                 <p><i>
                     {{ _('You have not received the validation email?') }}
