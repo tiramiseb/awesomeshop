@@ -328,7 +328,7 @@ angular.module('awesomeshop', [
     $scope.title = title;
 })
 .controller('UserCtrl', function($scope, user, savedCarts) {
-    $scope.u = user;
+    $scope.user = user;
     $scope.saved_carts = savedCarts;
 })
 .controller('RegisterCtrl', function($scope, $http, user) {
