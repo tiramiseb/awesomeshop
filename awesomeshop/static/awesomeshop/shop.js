@@ -107,7 +107,7 @@ angular.module('awesomeshop', [
         },
         set: function() {
             user = data;
-        }
+        },
         logout: function() {
             $http.get('/api/logout')
                 .then(function(response) {
