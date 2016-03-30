@@ -110,7 +110,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <td class="nowrap text-right">[[ name_from_id(groupid) ]]</td>
                 <td ng-repeat="weight in carrier.costs track by $index">
                     <div class="input-group">
-                        <input type="text" class="form-control" ng-model="weight.costs[groupid]">
+                        <input type="number" step="0.01" class="form-control" ng-model="weight.costs[groupid]">
                         <span class="input-group-addon">{{ config.CURRENCY }}</span>
                     </div>
                 </td>
