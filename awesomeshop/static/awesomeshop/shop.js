@@ -90,7 +90,7 @@ angular.module('awesomeshop', [
     };
 })
 .factory('user', function($rootScope, $http, $uibModal) {
-    var user = {};
+    var user = undefined;
     $http.get('/api/userdata')
         .then(function(response) {
             user = response.data;
@@ -131,12 +131,23 @@ angular.module('awesomeshop', [
         }
     }
 })
-.factory('savedCarts', function($http, cart) {
+.factory('savedCarts', function($rootScope, $timeout, $http, cart, user) {
     var carts;
-    $http.get('/api/cart')
-        .then(function(response) {
-            carts = response.data;
-        });
+    function get_saved_carts() {
+        $http.get('/api/cart')
+            .then(function(response) {
+                carts = response.data;
+            });
+    };
+    if (user.get()) {
+        get_saved_carts();
+    };
+    $rootScope.$on('event:auth-loginConfirmed', function(e, data) {
+        // Timeout, just to be sure it is executed after the user data is loaded
+        $timeout(function() {
+            get_saved_carts();
+        }, 10);
+    });
     return {
         get: function() {
             return carts;
