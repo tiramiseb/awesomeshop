@@ -22,7 +22,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     <h3 class="modal-title">{{ _('Change the email address') }}</h3>
 </div>
 <div class="modal-body">
-        {{ f.input_text(_('Current email address'), 'old_email', 'u.get_user().email', 'disabled') }}
+        {{ f.input_text(_('Current email address'), 'old_email', 'user.get().email', 'disabled') }}
         {{ f.input_email(_('New email address'), 'new_email', 'email', 'required', _('Incorrect email address')) }}
 </div>
 <div class="modal-footer">

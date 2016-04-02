@@ -56,7 +56,7 @@ angular.module('shopUser', ['validation.match'])
     };
 })
 .controller('ChangeEmailCtrl', function($scope, $http, user) {
-    $scope.u = user;
+    $scope.user = user;
     $scope.change_email = function() {
         $http.post('/api/userdata', {
             email: $scope.email
@@ -108,4 +108,4 @@ angular.module('shopUser', ['validation.match'])
         .then(function(response) {
             $scope.countries = response.data;
         });
-});
+})

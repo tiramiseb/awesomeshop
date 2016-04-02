@@ -66,15 +66,15 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             </span>
             <span ng-show="user.get().auth">
                 <a class="navbar-link" ui-sref="profile"><i class="fa fa-user"></i> [[ user.get().email ]]</a> |
-                <a class="navbar-link" href="" ng-click="u.logout()"><i class="fa fa-sign-out"></i> {{ _('Logout') }}</a>
+                <a class="navbar-link" href="#" ng-click="user.logout()"><i class="fa fa-sign-out"></i> {{ _('Logout') }}</a>
             </span>
             <span ng-hide="user.get().auth">
-                <a class="navbar-link" href="" ng-click="u.forcelogin()"><i class="fa fa-sign-in"></i> {{ _('Login') }}</a> |
-                <a class="navbar-link" href="" ng-click="u.register()"><i class="fa fa-user-plus"></i> {{ _('Register') }}</a>
+                <a class="navbar-link" href="#" ng-click="user.forcelogin()"><i class="fa fa-sign-in"></i> {{ _('Login') }}</a> |
+                <a class="navbar-link" href="#" ng-click="user.register()"><i class="fa fa-user-plus"></i> {{ _('Register') }}</a>
             </span>
             {%- for lang in config.LANGS %}
             {%- if lang != locale %} |
-            <a class="navbar-link" href="" ng-click="u.setlang('{{ lang }}')">{{ lang }}</a>
+            <a class="navbar-link" href="#" ng-click="user.setlang('{{ lang }}')">{{ lang }}</a>
             {%- endif %}
             {%- endfor %}
         </p>
@@ -157,10 +157,10 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     </a>
                 </div>
                 <div class="list-group" ng-if="!user.get().auth" ng-cloak>
-                    <a class="list-group-item" href="" ng-click="u.forcelogin()">
+                    <a class="list-group-item" href="" ng-click="user.forcelogin()">
                         {{ _('Login') }}
                     </a>
-                    <a class="list-group-item" href="" ng-click="u.register()">
+                    <a class="list-group-item" href="" ng-click="user.register()">
                         {{ _('Register') }}
                     </a>
                 </div>
@@ -182,7 +182,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <p>{{ _('Please confirm your email address by clicking on the link in the email you have received.') }}</p>
                 <p><i>
                     {{ _('You have not received the validation email?') }}
-                    <a href="" ng-click="u.resend_confirmation()">{{ _('Send it again') }}</a>
+                    <a href="" ng-click="user.resend_confirmation()">{{ _('Send it again') }}</a>
                 </i></p>
             </div>
             <ui-view>
