@@ -29,7 +29,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <button class="btn btn-success btn-block" ng-if="cart.stock(product) || product.on_demand" ng-class="{ 'btn-success': cart.stock(product), 'btn-info': product.on_demand && !cart.stock(product) }" ng-click="cart.add(product, 1)">
                     {{ _('Add to cart') }}
                 </button>
-                <button class="btn btn-danger btn-block disabled" ng-if="!(cart.stock('product') || product.on_demand)">
+                <button class="btn btn-danger btn-block disabled" ng-if="!(cart.stock(product) || product.on_demand)">
                     {{ _('Out of stock') }}
                 </button>
                 <p class="text-center bottom-no-space" ng-if="cart.stock(product)==0&&product.on_demand">
