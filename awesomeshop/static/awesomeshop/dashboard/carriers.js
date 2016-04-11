@@ -47,7 +47,6 @@ angular.module('dbCarriers', [])
         $http.post('/api/carrier', $scope.carrier)
             .then(function(response) {
                 var is_new = !$scope.carrier.id;
-                console.log(response)
                 $scope.carrier = response.data;
                 $scope.form.$setPristine();
                 if (is_new) {

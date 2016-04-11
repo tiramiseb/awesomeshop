@@ -44,7 +44,7 @@ def send_mail(recipient, template, **kwargs):
     part_html = MIMEText(html.encode('utf8'), 'html')
     msg.attach(part_text)
     msg.attach(part_html)
-    # XXX Delay the message when the SMTP server is not available
+    # TODO Delay the message when the SMTP server is not available
     s = smtplib.SMTP(app.config['SMTP_SERVER'])
     s.sendmail(sender, recipient, msg.as_string())
     s.quit()
