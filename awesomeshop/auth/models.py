@@ -92,3 +92,11 @@ class Address(db.Document):
     meta = {
         'ordering': ['title']
     }
+
+    @property
+    def human_readable(self):
+        return u'{} {}\n{}\n{}'.format(
+                self.firstname,
+                self.lastname,
+                self.address,
+                self.country.prefixed_name)
