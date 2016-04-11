@@ -148,3 +148,28 @@ p.price {
     padding: 2px;
 }
 
+/* Checkout and order stuff */
+#checkout-form label {
+    font-weight: normal;
+}
+.total-cost {
+    font-size: 21px;
+}
+#checkout-form label.list-group-item {
+    cursor: pointer;
+    font-weight: normal;
+}
+#checkout-form label.list-group-item:hover {
+    background: #f5f5f5;
+}
+#checkout-form textarea {
+    min-height: 3em;
+    margin-bottom: 20px;
+}
+#checkout-form input[type="radio"] {
+    margin-right: 1em;
+}
+
+td {
+    padding: 3px 6px;
+}

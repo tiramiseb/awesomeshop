@@ -147,8 +147,8 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     <a class="list-group-item" ui-sref="profile" ui-sref-active="active">
                         {{ _('My profile') }}
                     </a>
-                    <a class="list-group-item" href="">{# XXX link to orders #}
-                        <span class="badge">{# number of orders #}</span>
+                    <a class="list-group-item" ui-sref="orders">
+                        <span class="badge">[[ orders.count() ]]</span>
                         {{ _('My orders') }}
                     </a>
                     <a class="list-group-item" ui-sref="saved_carts" ui-sref-active="active">

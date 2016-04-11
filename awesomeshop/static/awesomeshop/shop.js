@@ -34,6 +34,13 @@ angular.module('awesomeshop', [
 .filter('trusthtml', function($sce) {
     return $sce.trustAsHtml;
 })
+.filter('htmlbr', function($sce) {
+    return function(input) {
+        if (input) {
+            return $sce.trustAsHtml(input.replace(/\n/g, '<br>'));
+        };
+    };
+})
 .factory('translation', function($http) {
     var translations;
     $http.get('/messages')
@@ -89,11 +96,14 @@ angular.module('awesomeshop', [
         }
     };
 })
-.factory('user', function($rootScope, $http, $uibModal) {
+.factory('user', function($rootScope, $state, $http, $uibModal) {
     var user = undefined;
     $http.get('/api/userdata')
         .then(function(response) {
             user = response.data;
+            if (response.data.auth) {
+                $rootScope.$broadcast('event:auth-loginConfirmed', response.data);
+            };
         });
     $rootScope.$on('event:auth-loginConfirmed', function(e, data) {
         user = data;
@@ -112,6 +122,7 @@ angular.module('awesomeshop', [
             $http.get('/api/logout')
                 .then(function(response) {
                     user = response.data;
+                    $state.go('index');
                 });
         },
         register: function() {
@@ -151,6 +162,9 @@ angular.module('awesomeshop', [
     return {
         get: function() {
             return carts;
+        },
+        add: function(cart) {
+            carts.push(cart);
         },
         count: function() {
             if (carts) {
@@ -255,9 +269,12 @@ angular.module('awesomeshop', [
             }
             return count;
         },
-        empty: function() {
+        reset: function() {
             $localStorage.cart = [];
             $state.go('index');
+        },
+        empty: function() {
+            $localStorage.cart = [];
         },
         list: function() {
             return $localStorage.cart;
@@ -304,6 +321,40 @@ angular.module('awesomeshop', [
         }
     }
 })
+.factory('orders', function($rootScope, $http, $timeout, user) {
+    var orders;
+    function get_orders() {
+        $http.get('/api/order')
+            .then(function(response) {
+                orders = response.data;
+            });
+    };
+    if (user.get()) {
+        get_orders();
+    };
+    $rootScope.$on('event:auth-loginConfirmed', function(e, data) {
+        // Timeout, just to be sure it is executed after the user data is loaded
+        $timeout(function() {
+            get_orders();
+        }, 10);
+    });
+    return {
+        count: function() {
+            if (orders) {
+                return orders.length;
+            } else {
+                return '';
+            };
+        },
+        get: function() {
+            return orders;
+        },
+        add: function(order) {
+            orders.push(order);
+        }
+    }
+
+})
 .factory('title', function() {
     var title = '';
     return {
@@ -338,9 +389,10 @@ angular.module('awesomeshop', [
 .controller('TitleCtrl', function($scope, title) {
     $scope.title = title;
 })
-.controller('UserCtrl', function($scope, user, savedCarts) {
+.controller('UserCtrl', function($scope, user, savedCarts, orders) {
     $scope.user = user;
     $scope.saved_carts = savedCarts;
+    $scope.orders = orders;
 })
 .controller('RegisterCtrl', function($scope, $http, user) {
     $scope.register = function() {

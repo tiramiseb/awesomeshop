@@ -21,8 +21,8 @@ angular.module('awesomeshop', [
         // Common awesomeshop modules
         'authentication', 'config', 'spinner', 
         // Dashboard modules
-        'dbCarriers', 'dbCategories', 'dbCountries', 'dbPages', 'dbProducts',
-        'dbTaxrates', 'dbUsers'
+        'dbCarriers', 'dbCategories', 'dbCountries', 'dbOrders', 'dbPages',
+        'dbProducts', 'dbTaxrates', 'dbUsers'
 ])
 .config(function($interpolateProvider, $stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider) {
     $interpolateProvider.startSymbol('[[');
@@ -35,6 +35,13 @@ angular.module('awesomeshop', [
             templateUrl: 'index',
             controller: 'IndexCtrl'
         })
+})
+.filter('htmlbr', function($sce) {
+    return function(input) {
+        if (input) {
+            return $sce.trustAsHtml(input.replace(/\n/g, '<br>'));
+        };
+    };
 })
 .run(function($timeout, $rootScope) {
     $rootScope.displayable_from_id = function(scope, listname, value) {

@@ -22,6 +22,7 @@ import docutils.core
 from decimal import Decimal
 
 from satchless.item import StockedItem
+import prices
 
 from ... import db, get_locale
 from ...mongo import TranslationsField
@@ -80,6 +81,22 @@ class Product(db.Document, StockedItem):
 
     def get_price_per_item(self, data=None):
         return prices.Price(self.net_price, self.gross_price)
+
+    def remove_quantity(self, quantity):
+        """Remove the given quantity or less if the stock is not enough"""
+        if self.on_demand:
+            from_stock = min(quantity, self.stock)
+            on_demand = True
+        else:
+            quantity = min(quantity, self.stock)
+            from_stock = quantity
+            on_demand = False
+        self.stock = self.stock - from_stock
+        self.save()
+        return (quantity, from_stock, on_demand)
+
+    def add_to_stock(self, quantity, data=None):
+        self.stock += min(quantity, self.stock)
 
     @property
     def main_photo(self):

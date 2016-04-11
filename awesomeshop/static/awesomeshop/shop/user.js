@@ -91,7 +91,7 @@ angular.module('shopUser', ['validation.match'])
     // Duplicate the addresses list so that the user object is not modified in
     // place (which would result in an inconsistence if the user leaves the
     // page without saving his/her modifications)
-    $scope.addresses = user.get().addresses.slice();
+    $scope.addresses = angular.copy(user.get().addresses);
     $scope.prefixed = function(country) {
         return country.code+' - '+country.name;
     }
@@ -108,4 +108,50 @@ angular.module('shopUser', ['validation.match'])
         .then(function(response) {
             $scope.countries = response.data;
         });
+})
+.controller('AddressCtrl', function($scope, $http, user, address_id) {
+    if (address_id) {
+        if (user.get().addresses) {
+            addresses = user.get().addresses;
+        };
+        for (var i=0; i<addresses.length; i++) {
+            if (addresses[i].id == address_id) {
+                $scope.address = addresses[i];
+                break;
+            };
+        };
+        $scope.modify = true;
+    } else {
+        $scope.address = {};
+        $scope.modify = false;
+    }
+    $scope.prefixed = function(country) {
+        return country.code+' - '+country.name;
+    };
+    $http.get('/api/country')
+        .then(function(response) {
+            $scope.countries = response.data;
+        });
+    $scope.save = function() {
+        var addresses = angular.copy(user.get().addresses);
+        if ($scope.address.id) {
+            for (var i=0; i<addresses.length; i++) {
+                if (addresses[i].id == $scope.address.id) {
+                    addresses[i] = $scope.address;
+                    found = true;
+                    break;
+                };
+            };
+            if (!found) {
+                addresses.push($scope.address);
+            }
+        } else {
+            addresses.push($scope.address);
+        }
+        $http.post('/api/userdata', {'addresses': addresses})
+            .then(function(response) {
+                user.set(response.data);
+                $scope.$close();
+            });
+    };
 })

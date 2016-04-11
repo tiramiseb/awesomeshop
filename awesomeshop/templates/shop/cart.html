@@ -85,7 +85,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     <i class="fa fa-bookmark"></i>
                     {{ _('Saved') }}
                 </a>
-                <button class="btn btn-warning" uib-tooltip="{{ _('Remove all products') }}" ng-click="cart.empty()">
+                <button class="btn btn-warning" uib-tooltip="{{ _('Remove all products') }}" ng-click="cart.reset()">
                     <i class="fa fa-trash"></i>
                     <span class="hidden-xs hidden-sm">{{ _('Empty cart') }}</span>
                 </button>
@@ -100,7 +100,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                             <i class="fa fa-bookmark"></i>
                             <span class="hidden-xs">{{ _('Save') }}</span>
                         </button>
-                        <button class="btn btn-danger" uib-tooltip="{{ _('Remove all products') }}" ng-click="cart.empty()">
+                        <button class="btn btn-danger" uib-tooltip="{{ _('Remove all products') }}" ng-click="cart.reset()">
                             <i class="fa fa-trash"></i>
                             <span class="hidden-xs hidden-sm">{{ _('Empty cart') }}</span>
                         </button>
@@ -109,7 +109,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             </form>
         </div>
         <div class="col-xs-6 col-sm-5 col-md-4 col-lg-6">
-            <a href="" class="btn btn-lg btn-success pull-right">{# XXX Link to checkout #}
+            <a ui-sref="checkout" class="btn btn-lg btn-success pull-right">
                 {{ _('Proceed to checkout') }}
                 <i class="fa fa-chevron-right"></i>
             </a>
