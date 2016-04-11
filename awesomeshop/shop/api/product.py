@@ -100,6 +100,7 @@ class ProductSchema(Schema):
     net_price = fields.Decimal(dump_only=True, as_string=True)
     photos = fields.Nested(PhotoSchema, many=True, dump_only=True)
     stock = fields.Integer(dump_only=True)
+    weight = fields.Integer(dump_only=True)
     on_demand = fields.Boolean(dump_only=True)
     related_products = fields.Nested(
                                 ProductSchemaForList,

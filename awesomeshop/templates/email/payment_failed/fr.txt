@@ -1,0 +1,30 @@
+{#
+Copyright 2015 Sébastien Maccagnoni-Munch
+
+This file is part of AwesomeShop.
+
+AwesomeShop is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+details.
+
+You should have received a copy of the GNU Affero General Public License
+along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+#}
+Bonjour,
+
+Votre paiement pour la commande {{ order.full_number }} (facture {{ order.full_invoice_number }}) a échoué !
+
+La raison de cet échec est :
+{{ error }}
+
+Pour obtenir plus de détails sur cette commande, consultez le lien suivant :
+{{ url_for('order', order_number=order.number, _external=True) }}
+
+Cordialement,
+L'équipe {{ config.SHOP_NAME }}

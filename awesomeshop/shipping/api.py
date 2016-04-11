@@ -25,7 +25,8 @@ from mongoengine import OperationError
 
 from .. import admin_required, login_required, rest
 from ..marsh import Count, Loc, MultiObjField
-from .models import Country, CountriesGroup, Carrier
+from .models import Country, CountriesGroup, Carrier, \
+                    carriers_by_country_and_weight
 
 class CountrySchemaForList(Schema):
     id = fields.String(dump_only=True)
@@ -104,6 +105,9 @@ class CarrierSchema(Schema):
             # Workaround a possible bug in mongoengine when ordering is set and
             # nothing has changed
             #
+            # TODO BUG /!\ when weights or prices are not modified, the order
+            # modifications are ignored
+            #
             #   File "[...]/mongoengine/base/document.py", line 582, in <lambda>
             #     if any(map(lambda d: field._ordering in d._changed_fields, data)):
             # AttributeError: 'dict' object has no attribute '_changed_fields'
@@ -114,10 +118,12 @@ class CarrierSchema(Schema):
                 raise
         return carrier
 
+class CarriersByCountryAndWeight(Schema):
+    carrier = fields.Nested(CarrierSchemaForList)
+    cost = fields.Decimal(as_string=True)
 
 
 class ApiCountry(Resource):
-    @login_required
     def get(self, country_id=None):
         if country_id:
             return CountrySchema().dump(Country.objects.get_or_404(
@@ -196,9 +202,14 @@ class ApiCarrier(Resource):
         Carrier.objects.get_or_404(id=carrier_id).delete()
         return { 'status': 'OK' }
 
+class ApiCarrierByWeight(Resource):
+    def get(self, country, weight):
+        result = carriers_by_country_and_weight(country, weight)
+        return CarriersByCountryAndWeight(many=True).dump(result).data
 
 
 rest.add_resource(ApiCountry, '/api/country', '/api/country/<country_id>')
 rest.add_resource(ApiCountriesGroup, '/api/countriesgroup',
                                      '/api/countriesgroup/<group_id>')
 rest.add_resource(ApiCarrier, '/api/carrier', '/api/carrier/<carrier_id>')
+rest.add_resource(ApiCarrierByWeight, '/api/carrier/<country>/<int:weight>')
