@@ -235,27 +235,20 @@ class ApiOrder(Resource):
                         )
                     ).data
 
+    @admin_required
     def put(self, number):
+        schema = OrderSchemaForAdmin()
         data = request.get_json()
-        if current_user.is_admin:
-            schema = OrderSchemaForAdmin()
-            order = Order.objects.get_or_404(
-                    number=number
-                    )
-            if 'status' in data:
-                try:
-                    order.set_status(data['status'])
-                except InvalidNextStatus:
-                    pass
-            if 'tracking_number' in data and order.status == 'shipped':
-                    order.set_tracking_number(data['tracking_number'])
-        else:
-            # TODO see if the user may modify an order
-            schema = OrderSchema()
-            order = Order.objects.get_or_404(
-                    customer=current_user.to_dbref(),
-                    number=number
-                    )
+        order = Order.objects.get_or_404(
+                number=number
+                )
+        if 'status' in data:
+            try:
+                order.set_status(data['status'])
+            except InvalidNextStatus:
+                pass
+        if 'tracking_number' in data and order.status == 'shipped':
+                order.set_tracking_number(data['tracking_number'])
         order.save()
         return schema.dump(order).data
 
