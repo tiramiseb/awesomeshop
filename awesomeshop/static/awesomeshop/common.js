@@ -49,7 +49,11 @@ angular.module('spinner', ['ui.bootstrap'])
             },
             'responseError': function(rejection) {
                 show_or_hide_spinner(-1);
-                $rootScope.$emit('apierror', rejection.data.message)
+                if (rejection.data) {
+                    $rootScope.$emit('apierror', rejection.data.message)
+                } else {
+                    $rootScope.$emit('apierror', {'type': 'unknown'})
+                }
                 return $q.reject(rejection);
             }
         };
@@ -70,12 +74,12 @@ angular.module('spinner', ['ui.bootstrap'])
                     } else if (data.type == 'fields') {
                         scope.errors = data.errors;
                         template_url = '/part/fieldserror'
+                    } else {
+                        template_url = '/part/unknownerror'
                     };
-                    if (template_url) {
-                        $uibModal.open({
-                                templateUrl: template_url
-                        });
-                    };
+                    $uibModal.open({
+                            templateUrl: template_url
+                    });
                 });
         }
     };
