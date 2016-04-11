@@ -57,6 +57,12 @@ class UserSchema(Schema):
     password = fields.String(load_only=True)
     addresses = fields.Nested(AddressSchema, many=True)
     carts = fields.Nested(CartSchema, many=True)
+    latest_delivery_address = fields.String()
+    latest_billing_address = fields.String()
+    latest_delivery_as_billing = fields.Boolean()
+    latest_carrier = fields.String()
+    latest_payment = fields.String()
+    latest_reused_package = fields.Boolean()
 
     @post_dump
     def remove_unneeded_confirmation(self, data):
