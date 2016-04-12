@@ -48,6 +48,7 @@ class ProductSchemaForList(Schema):
 class ProductSchemaForAdminList(ProductSchemaForList):
     gross_price = fields.Decimal(dump_only=True, as_string=True)
     on_sale = fields.Boolean(dump_only=True)
+    stock_alert = fields.Integer()
 
 
 class ProductSchemaForEdition(Schema):
