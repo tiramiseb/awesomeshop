@@ -81,7 +81,6 @@ class CategorySchema(Schema):
                     dump_only=True
                     )
 
-
 reqparser = reqparse.RequestParser()
 reqparser.add_argument('flat', type=inputs.boolean)
 
