@@ -49,10 +49,12 @@ angular.module('spinner', ['ui.bootstrap'])
             },
             'responseError': function(rejection) {
                 show_or_hide_spinner(-1);
-                if (rejection.data) {
-                    $rootScope.$emit('apierror', rejection.data.message)
-                } else {
-                    $rootScope.$emit('apierror', {'type': 'unknown'})
+                if (rejection.status != 401) {
+                    if (rejection.data) {
+                        $rootScope.$emit('apierror', rejection.data.message)
+                    } else {
+                        $rootScope.$emit('apierror', {'type': 'unknown'})
+                    }
                 }
                 return $q.reject(rejection);
             }
