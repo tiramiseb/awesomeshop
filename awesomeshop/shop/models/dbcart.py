@@ -20,8 +20,6 @@
 import datetime
 import prices
 
-from flask_babel import format_datetime
-
 from ... import db
 from ...auth.models import User
 from .product import Product
