@@ -60,6 +60,18 @@ angular.module('awesomeshop', [
         return translation(input);
     }
 })
+.factory('countries', function($http) {
+    var countries;
+    $http.get('/api/country')
+        .then(function(response) {
+            countries = response.data;
+        });
+    return {
+        get: function() {
+            return countries;
+        }
+    };
+})
 .factory('categories', function($http) {
     var categories;
     $http.get('/api/category', {params: {'flat':'true'}})

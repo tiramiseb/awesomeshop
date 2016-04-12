@@ -32,7 +32,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </div>
     </div>
     {{ f.textarea(_('Address'), 'address_address', 'address.address', 'required', _('Address is mandatory'), small=True) }}
-    {{ f.select(_('Country'), 'address_country', 'address.country', 'country.code as prefixed(country) for country in countries', 'required', _('Country is mandatory')) }}
+    {{ f.select(_('Country'), 'address_country', 'address.country', 'country.code as prefixed(country) for country in countries.get()', 'required', _('Country is mandatory')) }}
     {{ f.input_text(_('Phone'), 'address_phone', 'address.phone') }}
 </div>
 <div class="modal-footer">

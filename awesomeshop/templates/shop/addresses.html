@@ -34,7 +34,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     </div>
                 </div>
                 {{ f.textarea(_('Address'), 'address_a_[[ $index ]]', 'address.address', 'required', _('Address is mandatory'), small=True) }}
-                {{ f.select(_('Country'), 'address_c_[[ $index ]]', 'address.country', 'country.code as prefixed(country) for country in countries', 'required', _('Country is mandatory')) }}
+                {{ f.select(_('Country'), 'address_c_[[ $index ]]', 'address.country', 'country.code as prefixed(country) for country in countries.get()', 'required', _('Country is mandatory')) }}
                 {{ f.input_text(_('Phone'), 'address_p_[[ $index ]]', 'address.phone') }}
                 <button class="btn btn-danger pull-right" ng-click="addresses.splice($index, 1)">
                     <i class="fa fa-trash"></i>

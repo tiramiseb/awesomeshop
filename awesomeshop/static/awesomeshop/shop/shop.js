@@ -177,9 +177,8 @@ angular.module('shopShop', ['bootstrapLightbox'])
             });
     }
 })
-.controller('CheckoutCtrl', function($timeout, $scope, $state, $http, $uibModal, cart, user, orders) {
-    var countries = {},
-        totalweight = 0,
+.controller('CheckoutCtrl', function($timeout, $scope, $state, $http, $uibModal, cart, user, orders, countries) {
+    var totalweight = 0,
         cartlines = cart.list(),
         available_carriers = {};
     user.forcelogin();
@@ -258,14 +257,11 @@ angular.module('shopShop', ['bootstrapLightbox'])
             }
         })
     };
-    $http.get('/api/country')
-        .then(function(response) {
-            countries = response.data;
-        });
     function code_to_country(code) {
-        for (i=0; i<countries.length; i++) {
-            if (countries[i].code == code) {
-                return code + ' - ' + countries[i].name;
+        var countrieslist = countries.get();
+        for (i=0; i<countrieslist.length; i++) {
+            if (countrieslist[i].code == code) {
+                return code + ' - ' + countrieslist.name;
             };
         };
         return code;

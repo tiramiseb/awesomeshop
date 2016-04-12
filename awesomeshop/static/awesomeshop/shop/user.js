@@ -105,11 +105,12 @@ angular.module('shopUser', ['validation.match'])
             })
     }
 })
-.controller('AddressesCtrl', function($scope, $http, user) {
+.controller('AddressesCtrl', function($scope, $http, user, countries) {
     // Duplicate the addresses list so that the user object is not modified in
     // place (which would result in an inconsistence if the user leaves the
     // page without saving his/her modifications)
     $scope.addresses = angular.copy(user.get().addresses);
+    $scope.countries = countries;
     $scope.prefixed = function(country) {
         return country.code+' - '+country.name;
     }
@@ -122,12 +123,9 @@ angular.module('shopUser', ['validation.match'])
                 user.set(response.data);
             });
     };
-    $http.get('/api/country')
-        .then(function(response) {
-            $scope.countries = response.data;
-        });
 })
-.controller('AddressCtrl', function($scope, $http, user, address_id) {
+.controller('AddressCtrl', function($scope, $http, user, address_id, countries) {
+    $scope.countries = countries;
     if (address_id) {
         if (user.get().addresses) {
             addresses = user.get().addresses;
@@ -146,10 +144,6 @@ angular.module('shopUser', ['validation.match'])
     $scope.prefixed = function(country) {
         return country.code+' - '+country.name;
     };
-    $http.get('/api/country')
-        .then(function(response) {
-            $scope.countries = response.data;
-        });
     $scope.save = function() {
         var addresses = angular.copy(user.get().addresses);
         if ($scope.address.id) {
