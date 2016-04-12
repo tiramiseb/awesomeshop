@@ -28,7 +28,7 @@ from mongoengine import OperationError
 from .. import admin_required, rest
 from ..marsh import Loc
 from ..photo import Photo, PhotoSchema
-from ..shop.api import ProductSchemaForList
+from ..shop.api.product import ProductSchemaForList
 from .models import Page
 
 

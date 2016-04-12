@@ -28,7 +28,7 @@ from mongoengine import OperationError
 
 from ... import admin_required, rest
 from ...marsh import Count, Loc, ObjField
-from ..models import Category
+from ..models.category import Category
 from .product import ProductSchemaForList
 
 

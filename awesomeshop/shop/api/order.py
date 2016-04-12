@@ -31,7 +31,8 @@ from ... import app, get_locale, admin_required, login_required, rest
 from ...marsh import Count, Loc, ObjField
 from ...auth.models import Address
 from ...shipping.models import Carrier
-from ..models import Order, OrderProduct, Product, InvalidNextStatus
+from ..models.order import Order, OrderProduct, InvalidNextStatus
+from ..models.product import Product
 from .product import ProductSchemaForList
 
 

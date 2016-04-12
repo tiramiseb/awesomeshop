@@ -25,7 +25,7 @@ from marshmallow import Schema, fields, post_dump, post_load
 from .. import admin_required, login_required, rest
 from ..marsh import Count, ObjField
 from ..shipping.models import Country
-from ..shop.api import CartSchema
+from ..shop.api.dbcart import CartSchema
 from .models import Address, User
 
 

@@ -23,7 +23,7 @@ from flask_restful import Resource
 from marshmallow import Schema, fields, post_load
 
 from ... import admin_required, rest
-from ..models import Tax
+from ..models.tax import Tax
 
 
 class TaxSchema(Schema):

@@ -28,7 +28,9 @@ from ... import admin_required, app, rest
 from ...marsh import Loc, MultiObjField, ObjField
 from ...page.models import Page
 from ...photo import Photo, PhotoSchema
-from ..models import Category, Product, Tax
+from ..models.category import Category
+from ..models.product import Product
+from ..models.tax import Tax
 
 
 class ProductSchemaForList(Schema):

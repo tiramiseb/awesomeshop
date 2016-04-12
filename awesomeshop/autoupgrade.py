@@ -21,8 +21,8 @@ import datetime
 
 from .helpers import Setting
 from .shipping.models import Carrier
-from .shop.models import Product
-from .shop.models import Url
+from .shop.models.product import Product
+from .shop.models.url import Url
 
 ###############################################################################
 # Functions used to upgrade the database content

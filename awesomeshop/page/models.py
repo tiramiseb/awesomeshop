@@ -87,5 +87,5 @@ class Page(db.Document):
     @property
     def products(self):
         """Return a list of products using this documentation"""
-        from ..shop.models import Product
+        from ..shop.models.product import Product
         return Product.objects(documentation=self)

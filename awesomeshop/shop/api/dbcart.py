@@ -24,7 +24,8 @@ from marshmallow import Schema, fields, pre_load, post_load, post_dump
 
 from ... import login_required, rest
 from ...marsh import ObjField, NetPrice
-from ..models import DbCart, DbCartline, Product
+from ..models.dbcart import DbCart, DbCartline
+from ..models.product import Product
 from .product import ProductSchema
 
 

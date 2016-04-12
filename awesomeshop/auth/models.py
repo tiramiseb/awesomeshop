@@ -57,7 +57,7 @@ class User(db.Document, UserMixin):
 
     @property
     def carts(self):
-        from ..shop.models import DbCart
+        from ..shop.models.dbcart import DbCart
         return DbCart.objects(user=self)
 
     def set_password(self, password):
