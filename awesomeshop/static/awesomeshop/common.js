@@ -109,7 +109,6 @@ angular.module('authentication', ['http-auth-interceptor', 'ui.bootstrap'])
         link: function(scope, elem, attrs) {
                 scope.$on('event:auth-loginRequired', function() {
                     var modalInstance = $uibModal.open({
-                        backdrop: 'static',
                         templateUrl: '/part/login',
                         controller: 'AuthenticationCtrl'
                     });
