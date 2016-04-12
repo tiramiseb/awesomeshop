@@ -90,26 +90,16 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <div class="list-group-item" ng-repeat="line in cart.lines">
                     <div class="row">
                         <div class="col-sm-6">
-                            [[ line.product ]]
+                            [[ line.product.name ]]
                         </div>
                         <div class="col-xs-4 col-sm-2 text-right">
                             [[ line.quantity ]]
                         </div>
                         <div class="col-xs-4 col-sm-2 text-right">
-                            [[ line.unit_price | currency:"{{ config.CURRENCY }}" ]]
+                            [[ line.product.net_price | currency:"{{ config.CURRENCY }}" ]]
                         </div>
                         <div class="col-xs-4 col-sm-2 text-right">
-                            [[ line.total_price | currency:"{{ config.CURRENCY }}" ]]
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row">
-                        <div class="col-xs-8 col-sm-10">
-                            <b>{{ _('Total') }}</b>
-                        </div>
-                        <div class="col-xs-4 col-sm-2 text-right">
-                            [[ cart.total_price | currency:"{{ config.CURRENCY }}" ]]
+                            [[ line.product.net_price * line.quantity | currency:"{{ config.CURRENCY }}" ]]
                         </div>
                     </div>
                 </div>
