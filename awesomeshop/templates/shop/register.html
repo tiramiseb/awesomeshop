@@ -18,23 +18,21 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
 {% import "macros/form.html" as f %}
 <form name="form" ng-submit="register()">
-<div class="modal-header">
-    <h3 class="modal-title">{{ _('Create an account') }}</h3>
-</div>
-<div class="modal-body">
-    {{ f.input_email(_('Email address'), 'email', 'email', 'required', _('Incorrect email address')) }}
-    <div class="row">
-        <div class="col-sm-6">
-            {{ f.input_password(_('Password'), 'password', 'password', 'required', _('Password is mandatory')) }}
+<h1>{{ _('Create an account') }}</h3>
+<div class="panel panel-default">
+    <div class="panel-body">
+        {{ f.input_email(_('Email address'), 'email', 'email', 'required', _('Incorrect email address')) }}
+        <div class="row">
+            <div class="col-sm-6">
+                {{ f.input_password(_('Password'), 'password', 'password', 'required', _('Password is mandatory')) }}
+            </div>
+            <div class="col-sm-6">
+                {{ f.input_password(_('Password (again)'), 'password_again', 'password_confirm', 'match="password"', _('Passwords must match')) }}
+            </div>
         </div>
-        <div class="col-sm-6">
-            {{ f.input_password(_('Password (again)'), 'password_again', 'password_confirm', 'match="password"', _('Passwords must match')) }}
-        </div>
+        <button type="submit" class="btn btn-success" ng-disabled="form.$invalid">
+            <i class="fa fa-plus"></i> {{ _('Sign up') }}
+        </button>
     </div>
-</div>
-<div class="modal-footer">
-    <button type="submit" class="btn btn-success" ng-disabled="form.$invalid">
-        <i class="fa fa-plus"></i> {{ _('Sign up') }}
-    </button>
 </div>
 </form>

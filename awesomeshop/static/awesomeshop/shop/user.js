@@ -30,6 +30,24 @@ angular.module('shopUser', ['validation.match'])
             controller: 'AddressesCtrl',
             title: 'Addresses'
         })
+        .state('register', {
+            url: '/register',
+            templateUrl: 'shop/register',
+            controller: 'RegisterCtrl',
+            title: 'Create an account'
+        })
+})
+.controller('RegisterCtrl', function($state, $scope, $http, user) {
+    $scope.register = function() {
+        $http.post('/api/register', {
+                email: $scope.email,
+                password: $scope.password
+                })
+            .then(function(response) {
+                user.set(response.data);
+                $state.go('profile');
+            })
+    }
 })
 .controller('ProfileCtrl', function($scope, $state, $uibModal, user) {
     $scope.user = user;

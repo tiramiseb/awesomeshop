@@ -125,12 +125,6 @@ angular.module('awesomeshop', [
                     $state.go('index');
                 });
         },
-        register: function() {
-            $uibModal.open({
-                templateUrl: 'part/register',
-                controller: 'RegisterCtrl'
-                })
-        },
         resend_confirmation: function() {
             $http.get('/api/register/resend');
         },
@@ -393,18 +387,6 @@ angular.module('awesomeshop', [
     $scope.user = user;
     $scope.saved_carts = savedCarts;
     $scope.orders = orders;
-})
-.controller('RegisterCtrl', function($scope, $http, user) {
-    $scope.register = function() {
-        $http.post('/api/register', {
-                email: $scope.email,
-                password: $scope.password
-                })
-            .then(function(response) {
-                user.set(response.data);
-                $scope.$close();
-            })
-    }
 })
 .controller('DocsListCtrl', function($scope, docs) {
     $scope.docs = docs;

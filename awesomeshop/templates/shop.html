@@ -70,7 +70,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             </span>
             <span ng-hide="user.get().auth">
                 <a class="navbar-link" href="#" ng-click="user.forcelogin()"><i class="fa fa-sign-in"></i> {{ _('Login') }}</a> |
-                <a class="navbar-link" href="#" ng-click="user.register()"><i class="fa fa-user-plus"></i> {{ _('Register') }}</a>
+                <a class="navbar-link" ui-sref="register"><i class="fa fa-user-plus"></i> {{ _('Register') }}</a>
             </span>
             {%- for lang in config.LANGS %}
             {%- if lang != locale %} |
@@ -160,7 +160,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     <a class="list-group-item" href="" ng-click="user.forcelogin()">
                         {{ _('Login') }}
                     </a>
-                    <a class="list-group-item" href="" ng-click="user.register()">
+                    <a class="list-group-item" ui-sref="register">
                         {{ _('Register') }}
                     </a>
                 </div>

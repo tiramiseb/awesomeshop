@@ -25,6 +25,7 @@ def messages():
         'Addresses': _('Addresses'),
         'Category': _('Category'),
         'Checkout': _('Checkout'),
+        'Create an account': _('Create an account'),
         'Documentation': _('Documentation'),
         'Home': _('Home'),
         'Information': _('Information'),
