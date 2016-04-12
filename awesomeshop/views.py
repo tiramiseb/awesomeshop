@@ -49,7 +49,7 @@ def confirm_email(code):
     if code == current_user.confirm_code:
         current_user.confirm_code = None
         current_user.save()
-    # XXX Redirect the user to a specific message
+    # TODO Redirect the user to a specific message
     return redirect('/')
 
 @app.route('/part/<partname>')
