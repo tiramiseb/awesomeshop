@@ -1,5 +1,5 @@
 {#-
-Copyright 2015 Sébastien Maccagnoni-Munch
+Copyright 2015-2016 Sébastien Maccagnoni-Munch
 
 This file is part of AwesomeShop.
 
@@ -17,3 +17,76 @@ You should have received a copy of the GNU Affero General Public License
 along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
 <h1>{{ config.SHOP_NAME }} - {{ _('Dashboard') }}</h1>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="panel panel-primary" ng-show="prep_orders.length">
+            <div class="panel-heading">
+                {{ _('Orders in preparation') }}
+            </div>
+            <div class="list-group">
+                <a class="list-group-item" ui-sref="order({number:order.number})" ng-repeat="order in prep_orders">
+                    [[ order.full_number ]],
+                    [[ order.customer ]],
+                    <i class="fa fa-credit-card"></i>
+                    [[ order.payment_date | date ]],
+                    <i class="fa fa-cubes"></i>
+                    [[ order.products ]]
+                </a>
+            </div>
+        </div>
+        <div class="panel panel-primary" ng-show="paid_orders.length">
+            <div class="panel-heading">
+                {{ _('Paid orders, to be prepared') }}
+            </div>
+            <div class="list-group">
+                <a class="list-group-item" ui-sref="order({number:order.number})" ng-repeat="order in paid_orders">
+                    [[ order.full_number ]],
+                    [[ order.customer ]],
+                    <i class="fa fa-credit-card"></i>
+                    [[ order.payment_date | date ]],
+                    <i class="fa fa-cubes"></i>
+                    [[ order.products ]]
+                </a>
+            </div>
+        </div>
+        <div class="panel panel-warning" ng-show="awaiting_payment_orders.length">
+            <div class="panel-heading">
+                {{ _('Awaiting payment') }}
+            </div>
+            <div class="list-group">
+                <a class="list-group-item" ui-sref="order({number: order.number})" ng-repeat="order in awaiting_payment_orders">
+                    [[ order.full_number ]],
+                    [[ order.customer ]],
+                    [[ order.date | date ]],
+                    <i class="fa fa-cubes"></i>
+                    [[ order.products ]]
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-sm-6">
+        <div class="panel panel-danger" ng-show="out_of_stock_products.length">
+            <div class="panel-heading">
+                {{ _('Out of stock') }}
+            </div>
+            <div class="list-group">
+                <a class="list-group-item" ui-sref="product({product_id: product.id})" ng-repeat="product in out_of_stock_products">
+                    [[ product.reference ]],
+                    [[ product.name || product.slug ]]
+                </a>
+            </div>
+        </div>        
+        <div class="panel panel-warning" ng-show="stock_alert_products.length">
+            <div class="panel-heading">
+                {{ _('Out of stock soon')}}
+            </div>
+            <div class="list-group">
+                <a class="list-group-item" ui-sref="product({product_id: product.id})" ng-repeat="product in stock_alert_products">
+                    [[ product.reference ]],
+                    [[ product.name || product.slug ]]
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

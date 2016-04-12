@@ -59,5 +59,25 @@ angular.module('awesomeshop', [
 
     };
 })
-.controller('IndexCtrl', function() {
+.controller('IndexCtrl', function($http, $scope) {
+    $http.get('/api/order', {params: {'status': 'preparation'}})
+        .then(function(response) {
+            $scope.prep_orders = response.data;
+        })
+    $http.get('/api/order', {params: {'status': 'payment_received'}})
+        .then(function(response) {
+            $scope.paid_orders = response.data;
+        })
+    $http.get('/api/order', {params: {'status': 'awaiting_payment'}})
+        .then(function(response) {
+            $scope.awaiting_payment_orders = response.data;
+        })
+    $http.get('/api/product', {params: {'out_of_stock': 'true'}})
+        .then(function(response) {
+            $scope.out_of_stock_products = response.data;
+        })
+    $http.get('/api/product', {params: {'stock_lower_than_alert': 'true'}})
+        .then(function(response) {
+            $scope.stock_alert_products = response.data;
+        })
 })

@@ -23,7 +23,7 @@ import re
 
 from flask import abort, request
 from flask_login import current_user
-from flask_restful import Resource
+from flask_restful import Resource, reqparse, inputs
 from marshmallow import Schema, fields, post_load
 from prices import Price
 
@@ -71,6 +71,7 @@ class OrderSchemaForList(Schema):
 
 class OrderSchemaForAdminList(OrderSchemaForList):
     customer = fields.String(attribute='customer.email', dump_only=True)
+    payment_date = fields.Date(dump_only=True)
 
 
 class OrderSchema(Schema):
@@ -216,12 +217,23 @@ class ApiAllOrders(Resource):
     def get(self):
         return OrderSchemaForAdminList(many=True).dump(Order.objects).data
 
+orders_reqparser = reqparse.RequestParser()
+orders_reqparser.add_argument('status')
+
 
 class ApiOrders(Resource):
 
     def get(self):
-        return OrderSchemaForList(many=True).dump(
-                    Order.objects(customer=current_user.to_dbref())
+        if current_user.is_admin:
+            schema = OrderSchemaForAdminList
+        else:
+            schema = OrderSchemaForList
+        options = orders_reqparser.parse_args()
+        return schema(many=True).dump(
+                    Order.objects(
+                        customer=current_user.to_dbref(),
+                        **options
+                        )
                     ).data
 
     @login_required

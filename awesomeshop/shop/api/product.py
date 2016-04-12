@@ -21,7 +21,7 @@ import datetime
 
 from flask import abort, request
 from flask_login import current_user
-from flask_restful import Resource
+from flask_restful import Resource, reqparse, inputs
 from marshmallow import Schema, fields, post_load
 
 from ... import admin_required, app, rest
@@ -120,12 +120,32 @@ class ProductSchema(Schema):
                                   dump_only=True)
 
 
+products_adminreqparser = reqparse.RequestParser()
+products_adminreqparser.add_argument('out_of_stock', type=inputs.boolean)
+products_adminreqparser.add_argument('stock_lower_than_alert', type=inputs.boolean)
+
+
 class ApiProducts(Resource):
     def get(self):
         if current_user.is_authenticated and current_user.is_admin:
-            return ProductSchemaForAdminList(many=True).dump(
-                    Product.objects()
-                    ).data
+            options = products_adminreqparser.parse_args()
+            options = dict((k, v) for k, v in
+                           options.iteritems() if v is not None)
+            query = {}
+            if 'out_of_stock' in options:
+                if options.pop('out_of_stock'):
+                    obj = Product.objects(stock=0)
+                else:
+                    obj = Product.objects(stock__gt=0)
+            elif 'stock_lower_than_alert' in options:
+                if options.pop('stock_lower_than_alert'):
+                    obj = Product.objects.where('this.stock <= this.alert && this.stock != 0')
+                else:
+                    obj = Product.objects.where('this.stock > this.alert')
+            else:
+                obj = Product.objects
+            print query
+            return ProductSchemaForAdminList(many=True).dump(obj).data
         else:
             return ProductSchemaForList(many=True).dump(
                     Product.objects(on_sale=True)
