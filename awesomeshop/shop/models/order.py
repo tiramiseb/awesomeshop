@@ -23,6 +23,7 @@ from flask import abort
 from flask_babel import format_currency, lazy_gettext
 
 from ... import app, db
+from ...mail import send_mail
 from ...auth.models import User
 from ...payment.modes import get_mode
 from ...shipping.models import Carrier
