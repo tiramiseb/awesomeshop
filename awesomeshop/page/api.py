@@ -71,7 +71,12 @@ class PageContentSchema(Schema):
     slug = fields.String(dump_only=True)
     title = Loc(dump_only=True)
     content = fields.String(dump_only=True)
-    products = fields.Nested(ProductSchemaForList, many=True, dump_only=True)
+    products = fields.Nested(
+                    ProductSchemaForList,
+                    attribute='on_sale_products',
+                    many=True,
+                    dump_only=True
+                    )
 
 
 class ApiPages(Resource):
