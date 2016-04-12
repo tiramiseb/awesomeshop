@@ -220,7 +220,7 @@ class Order(db.Document):
                 self.invoice_date = datetime.datetime.now()
             elif status == 'payment_received':
                 self.payment_date = datetime.datetime.now()
-                send_maile(self.customer.email, 'payment_received',
+                send_mail(self.customer.email, 'payment_received',
                            order=self, locale=self.customer.locale)
             elif status == 'payment_failed':
                 self.payment_date = datetime.datetime.now()
