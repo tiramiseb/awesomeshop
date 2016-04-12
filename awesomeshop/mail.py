@@ -27,25 +27,26 @@ from . import app, get_locale
 
 
 def send_mail(recipient, template, **kwargs):
-    locale = kwargs.get('locale', get_locale())
-    # Get the message content
-    sender = app.config['MAIL_FROM']
-    subject = render_template('email/{}/{}.subject'.format(template, locale),
-                              **kwargs)
-    text = render_template('email/{}/{}.txt'.format(template, locale),
-                           **kwargs)
-    html = render_template('email/{}/{}.html'.format(template, locale),
-                           subject=subject, **kwargs)
-    # Create the message
-    msg = MIMEMultipart('alternative')
-    msg['Subject'] = subject
-    msg['From'] = sender
-    msg['To'] = recipient
-    part_text = MIMEText(text.encode('utf8'), 'plain')
-    part_html = MIMEText(html.encode('utf8'), 'html')
-    msg.attach(part_text)
-    msg.attach(part_html)
-    # TODO Delay the message when the SMTP server is not available
-    s = smtplib.SMTP(app.config['SMTP_SERVER'])
-    s.sendmail(sender, recipient, msg.as_string())
-    s.quit()
+    if app.config['SEND_MAILS']:
+        locale = kwargs.get('locale', get_locale())
+        # Get the message content
+        sender = app.config['MAIL_FROM']
+        subject = render_template('email/{}/{}.subject'.format(template, locale),
+                                  **kwargs)
+        text = render_template('email/{}/{}.txt'.format(template, locale),
+                               **kwargs)
+        html = render_template('email/{}/{}.html'.format(template, locale),
+                               subject=subject, **kwargs)
+        # Create the message
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = subject
+        msg['From'] = sender
+        msg['To'] = recipient
+        part_text = MIMEText(text.encode('utf8'), 'plain')
+        part_html = MIMEText(html.encode('utf8'), 'html')
+        msg.attach(part_text)
+        msg.attach(part_html)
+        # TODO Delay the message when the SMTP server is not available
+        s = smtplib.SMTP(app.config['SMTP_SERVER'])
+        s.sendmail(sender, recipient, msg.as_string())
+        s.quit()

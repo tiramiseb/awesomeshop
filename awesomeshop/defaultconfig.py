@@ -96,5 +96,9 @@ SEPA_TRANSFER_IBAN = 'XX11 1111 1111 1111 1111 1111 1111 1111 11'
 # PAYPLUG_API_KEY='sk_test_11111111111111111111111111111111'
 
 # Parameters for sending emails
+# Really send mails ?
+SEND_MAILS = True
+# Sender address
 MAIL_FROM = "nobody@nowhere.com"
+# Mail server
 SMTP_SERVER = "localhost"
