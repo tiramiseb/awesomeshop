@@ -162,7 +162,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
      {{ _('Confirm and proceed to payment') }}
     <i class="fa fa-chevron-right"></i>
 </button>
-<a href="" class="btn btn-lg btn-primary pull-right" ng-hide="order.status == 'unconfirmed'" target="_blank">{# XXX link to invoice (PDF) #}
+<a ng-href="/pdf/invoice/[[ order.invoice_number ]]" class="btn btn-lg btn-primary pull-right" ng-hide="order.status == 'unconfirmed'" target="_blank">
     <i class="fa fa-file-text-o"></i>
     {{ _('Invoice [[ order.invoice_full_number ]], on [[ order.invoice_date | date ]]') }}
 </a>

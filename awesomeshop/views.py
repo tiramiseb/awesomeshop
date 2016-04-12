@@ -17,12 +17,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with eAwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
-from flask import abort, jsonify, redirect, \
+from flask import abort, jsonify, make_response, redirect, \
                   render_template as orig_render_template, request
 from flask_login import current_user
 from jinja2.exceptions import TemplateNotFound
 
-from . import app, get_locale, login_required, admin_required, messages
+from . import app, get_locale, login_required, admin_required, messages, pdf
+
+from .shop.models.order import Order
 
 def render_template(template, **context):
     context['locale'] = get_locale()
@@ -82,6 +84,20 @@ def api_config():
     return jsonify(
             languages=app.config['LANGS']
             )
+
+@app.route('/pdf/invoice/<number>')
+def pdf_invoice(number):
+    if current_user.is_admin:
+        order = Order.objects.get_or_404(invoice_number=number)
+    else:
+        order = Order.objects.get_or_404(
+                    customer=current_user.to_dbref(),
+                    invoice_number=number
+                    )
+    response = make_response(pdf.invoice(order))
+    response.mimetype = 'application/pdf'
+    return response
+
 
 @app.errorhandler(401)
 def unauthorized(e):

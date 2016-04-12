@@ -10,6 +10,7 @@ marshmallow
 mongoengine
 pillow
 prices
+reportlab
 satchless
 scrypt
 wtforms

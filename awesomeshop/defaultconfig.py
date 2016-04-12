@@ -84,6 +84,9 @@ ON_DEMAND_DELAY_MAX = 15
 CONFIRM_DELAY = 5
 PAYMENT_DELAY = 14
 
+# Footer for the order
+ORDER_FOOTER = 'Your company information here - multiline accepted'
+
 ## Parameters for SEPA bank transfers
 SEPA_TRANSFER_RECIPIENT = 'Some name'
 SEPA_TRANSFER_RECIPIENT_ADDRESS = """Some address-12345 Some City"""

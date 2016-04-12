@@ -32,7 +32,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <div class="row" ng-show="order.invoice_number">
                     <div class="col-xs-5 text-right">{{ _('Invoice date') }}</div>
                     <div class="col-xs-7">
-                        <a href="" target="_blank">{# XXX link to invoice (PDF) #}
+                        <a ng-href="/pdf/invoice/[[ order.invoice_number ]]" target="_blank">
                             [[ order.invoice_date | date ]]
                         </a>
                     </div>
