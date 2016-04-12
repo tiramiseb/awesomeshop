@@ -18,7 +18,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
 {% import "macros/form.html" as f %}
 
-<h1>[[ page.title ]]</h1>
+<h1>[[ page.title || page.slug ]]</h1>
 <div class="panel panel-default">
 <div class="panel-body page-content" ng-bind-html="page.content | trusthtml">
 </div>

@@ -16,6 +16,6 @@ details.
 You should have received a copy of the GNU Affero General Public License
 along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
-<h1>[[ category.name ]]</h1>
+<h1>[[ category.name || category.slug ]]</h1>
 <div class="well" ng-show="category.description" ng-bind="category.description"></div>
 <products-list products="category.products"></products-list>
