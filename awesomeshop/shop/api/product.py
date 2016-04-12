@@ -30,6 +30,7 @@ from ...page.models import Page
 from ...photo import Photo, PhotoSchema
 from ..models import Category, Product, Tax
 
+
 class ProductSchemaForList(Schema):
     id = fields.String(dump_only=True)
     slug = fields.String(dump_only=True)
@@ -41,9 +42,11 @@ class ProductSchemaForList(Schema):
     net_price = fields.Decimal(dump_only=True, as_string=True)
     main_photo = fields.Nested(PhotoSchema)
 
+
 class ProductSchemaForAdminList(ProductSchemaForList):
     gross_price = fields.Decimal(dump_only=True, as_string=True)
     on_sale = fields.Boolean(dump_only=True)
+
 
 class ProductSchemaForEdition(Schema):
     id = fields.String(allow_none=True)
@@ -90,13 +93,15 @@ class ProductSchemaForEdition(Schema):
         product.save()
         return product
 
+
 class ProductSchema(Schema):
     id = fields.String(dump_only=True)
     slug = fields.String(dump_only=True)
     path = fields.String(dump_only=True)
     reference = fields.String(dump_only=True)
     name = Loc(dump_only=True)
-    description = fields.String(attribute='description_content', dump_only=True)
+    description = fields.String(attribute='description_content',
+                                dump_only=True)
     net_price = fields.Decimal(dump_only=True, as_string=True)
     photos = fields.Nested(PhotoSchema, many=True, dump_only=True)
     stock = fields.Integer(dump_only=True)
@@ -108,8 +113,8 @@ class ProductSchema(Schema):
                                 many=True,
                                 dump_only=True
                                 )
-    documentation = fields.String(attribute='documentation_content', dump_only=True)
-
+    documentation = fields.String(attribute='documentation_content',
+                                  dump_only=True)
 
 
 class ApiProducts(Resource):
@@ -129,8 +134,9 @@ class ApiProducts(Resource):
         data = request.get_json()
         result, errors = schema.load(data)
         if errors:
-            abort(400, {'type': 'fields', 'errors': errors })
+            abort(400, {'type': 'fields', 'errors': errors})
         return schema.dump(result).data
+
 
 class ApiNewProducts(Resource):
     def get(self):
@@ -140,9 +146,10 @@ class ApiNewProducts(Resource):
         return ProductSchemaForList(many=True).dump(
                 Product.objects(created_at__gt=date_limit, on_sale=True)
                 ).data
-    
+
+
 class ApiProductEdit(Resource):
-    
+
     @admin_required
     def get(self, product_id):
         return ProductSchemaForEdition().dump(
@@ -156,13 +163,14 @@ class ApiProductEdit(Resource):
         data['id'] = product_id
         result, errors = schema.load(data)
         if errors:
-            abort(400, {'type': 'fields', 'errors': errors })
+            abort(400, {'type': 'fields', 'errors': errors})
         return schema.dump(result).data
 
     @admin_required
     def delete(self, product_id):
         Product.objects.get_or_404(id=product_id).delete()
-        return { 'status': 'OK' }
+        return {'status': 'OK'}
+
 
 class ApiProductFromCatAndSlug(Resource):
     def get(self, category_id, product_slug):
@@ -173,11 +181,13 @@ class ApiProductFromCatAndSlug(Resource):
                     )
                 ).data
 
+
 class ApiProductFromId(Resource):
     def get(self, product_id):
         return ProductSchema().dump(
                 Product.objects.get_or_404(id=product_id)
                 ).data
+
 
 class ProductPhoto(Resource):
     @admin_required
@@ -187,6 +197,7 @@ class ProductPhoto(Resource):
         product.photos.append(photo)
         product.save()
         return PhotoSchema().dump(photo).data
+
 
 class DeleteProductPhoto(Resource):
     @admin_required
@@ -198,7 +209,8 @@ class DeleteProductPhoto(Resource):
                 product.photos.remove(p)
                 break
         product.save()
-        return { 'status': 'OK' }
+        return {'status': 'OK'}
+
 
 class MoveProductPhoto(Resource):
     @admin_required
@@ -208,13 +220,18 @@ class MoveProductPhoto(Resource):
         item = product.photos.pop(from_rank)
         product.photos.insert(to_rank, item)
         product.save()
-        return { 'status': 'OK' }
+        return {'status': 'OK'}
 
 rest.add_resource(ApiProducts, '/api/product')
 rest.add_resource(ApiNewProducts, '/api/newproduct')
 rest.add_resource(ApiProductEdit, '/api/product/<product_id>/edit')
 rest.add_resource(ApiProductFromId, '/api/product/<product_id>')
-rest.add_resource(ApiProductFromCatAndSlug, '/api/product/catslug/<category_id>/<product_slug>')
+rest.add_resource(ApiProductFromCatAndSlug,
+                  '/api/product/catslug/<category_id>/<product_slug>')
 rest.add_resource(ProductPhoto, '/api/product/<product_id>/photo')
-rest.add_resource(DeleteProductPhoto, '/api/product/<product_id>/photo/<filename>')
-rest.add_resource(MoveProductPhoto, '/api/product/<product_id>/photo/<int:from_rank>/move/<int:to_rank>')
+rest.add_resource(DeleteProductPhoto,
+                  '/api/product/<product_id>/photo/<filename>')
+rest.add_resource(
+        MoveProductPhoto,
+        '/api/product/<product_id>/photo/<int:from_rank>/move/<int:to_rank>'
+        )

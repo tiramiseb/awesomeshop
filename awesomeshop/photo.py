@@ -78,10 +78,12 @@ class Photo(db.EmbeddedDocument):
         n = os.path.join(app.static_folder, 'photos', self.filename)
         p = os.path.join(app.static_folder, 'photos', 'preview.'+self.filename)
         t = os.path.join(app.static_folder, 'photos', 'thumb.'+self.filename)
-        if os.path.exists(n): os.remove(n)
-        if os.path.exists(p): os.remove(p)
-        if os.path.exists(t): os.remove(t)
-
+        if os.path.exists(n):
+            os.remove(n)
+        if os.path.exists(p):
+            os.remove(p)
+        if os.path.exists(t):
+            os.remove(t)
 
 
 class PhotoSchema(Schema):
@@ -89,4 +91,3 @@ class PhotoSchema(Schema):
     url = fields.String(dump_only=True)
     preview_url = fields.String(dump_only=True)
     thumbnail_url = fields.String(dump_only=True)
-

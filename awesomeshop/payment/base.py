@@ -19,6 +19,7 @@
 
 from flask import abort
 
+
 class PaymentMode:
     # Payment mode unique identifier (dev-understandable text)
     id = ''

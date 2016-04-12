@@ -20,7 +20,6 @@
 from ... import db
 
 
-
 class Url(db.Document):
     url = db.StringField(required=True, max_length=100)
     document = db.GenericReferenceField(db_field='doc')

@@ -37,6 +37,7 @@ class PageSchemaForList(Schema):
     slug = fields.String(dump_only=True)
     title = Loc(dump_only=True)
 
+
 class PageSchemaForAdminList(PageSchemaForList):
     in_menu = fields.Boolean(dump_only=True)
 
@@ -64,12 +65,14 @@ class PageSchema(Schema):
         page.save()
         return page
 
+
 class PageContentSchema(Schema):
     pagetype = fields.String(dump_only=True)
     slug = fields.String(dump_only=True)
     title = Loc(dump_only=True)
     content = fields.String(dump_only=True)
     products = fields.Nested(ProductSchemaForList, many=True, dump_only=True)
+
 
 class ApiPages(Resource):
     def get(self, page_type=None):
@@ -90,7 +93,7 @@ class ApiPages(Resource):
         data = request.get_json()
         result, errors = schema.load(data)
         if errors:
-            abort(400, {'type': 'fields', 'errors': errors })
+            abort(400, {'type': 'fields', 'errors': errors})
         return schema.dump(result).data
 
 
@@ -106,7 +109,7 @@ class ApiPage(Resource):
         data['id'] = page_id
         result, errors = schema.load(data)
         if errors:
-            abort(400, {'type': 'fields', 'errors': errors })
+            abort(400, {'type': 'fields', 'errors': errors})
         return schema.dump(result).data
 
     @admin_required
@@ -114,15 +117,22 @@ class ApiPage(Resource):
         try:
             Page.objects.get_or_404(id=page_id).delete()
         except OperationError as e:
-            if re.match('Could not delete document (.*Product.documentation refers to it)', e.message):
-                abort(400, { 'type': 'message', 'message': _('Could not delete : this documentation is used in a product.')})
+            if re.match('Could not delete document '
+                        '(.*Product.documentation refers to it)', e.message):
+                abort(400, {
+                    'type': 'message',
+                    'message': _('Could not delete: '
+                                 'this documentation is used in a product.')
+                    })
             raise
-        return { 'status': 'OK' }
+        return {'status': 'OK'}
+
 
 class ApiPageContent(Resource):
     def get(self, page_type, page_slug):
         page = Page.objects.get_or_404(pagetype=page_type, slug=page_slug)
         return PageContentSchema().dump(page).data
+
 
 class PagePhoto(Resource):
     @admin_required
@@ -132,6 +142,7 @@ class PagePhoto(Resource):
         page.photos.append(photo)
         page.save()
         return PhotoSchema().dump(photo).data
+
 
 class DeletePagePhoto(Resource):
     @admin_required
@@ -143,7 +154,8 @@ class DeletePagePhoto(Resource):
                 page.photos.remove(p)
                 break
         page.save()
-        return { 'status': 'OK' }
+        return {'status': 'OK'}
+
 
 class MovePage(Resource):
     @admin_required
@@ -154,7 +166,7 @@ class MovePage(Resource):
         else:
             target = Page.objects.get(id=target_id)
             page.move_before(target)
-        return { 'status': 'OK' }
+        return {'status': 'OK'}
 
 rest.add_resource(ApiPages, '/api/page', '/api/page-<page_type>')
 rest.add_resource(ApiPage, '/api/page/<page_id>')

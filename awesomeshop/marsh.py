@@ -21,6 +21,7 @@ from marshmallow import fields
 
 from . import get_locale
 
+
 class Count(fields.Field):
     """
     Dump only: count the number of objects in a queryset
@@ -31,12 +32,14 @@ class Count(fields.Field):
         else:
             return value.count()
 
+
 class Loc(fields.Field):
     """
     Dump only: localize a TranslationField
     """
     def _serialize(self, value, attr, obj):
         return value.get(get_locale(), '')
+
 
 class LocObjField(fields.Field):
     """
@@ -47,12 +50,14 @@ class LocObjField(fields.Field):
     def _serialize(self, value, attr, obj):
         return getattr(value, self.metadata['f']).get(get_locale(), '')
 
+
 class NetPrice(fields.Field):
     """
     Dump only: net price for a Price object
     """
     def _serialize(self, value, attr, obj):
         return str(value.quantize('0.01').net)
+
 
 class ObjField(fields.Field):
     """
@@ -76,6 +81,7 @@ class ObjField(fields.Field):
         else:
             return None
 
+
 class MultiObjField(fields.Field):
     """
     Dump: get a list of fields from a list of objects (mongoengine's ListField)
@@ -87,10 +93,10 @@ class MultiObjField(fields.Field):
     """
     def _serialize(self, value, attr, obj):
         if self.metadata['f'] == 'id':
-            return [ str(v['id']) for v in value ]
+            return [str(v['id']) for v in value]
         else:
-            return [ getattr(v, self.metadata['f']) for v in value ]
+            return [getattr(v, self.metadata['f']) for v in value]
 
     def _deserialize(self, value, attr, data):
-        return [ self.metadata['obj'].objects.get(**{self.metadata['f']: v}) \
-                 for v in value ]
+        return [self.metadata['obj'].objects.get(**{self.metadata['f']: v})
+                for v in value]

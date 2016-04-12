@@ -25,6 +25,7 @@ from marshmallow import Schema, fields, post_load
 from ... import admin_required, rest
 from ..models import Tax
 
+
 class TaxSchema(Schema):
     id = fields.String()
     name = fields.String(required=True)
@@ -41,6 +42,7 @@ class TaxSchema(Schema):
         tax.save()
         return tax
 
+
 class ApiTax(Resource):
     @admin_required
     def get(self):
@@ -51,12 +53,12 @@ class ApiTax(Resource):
         schema = TaxSchema()
         result, errors = schema.load(request.get_json())
         if errors:
-            abort(400, {'type': 'fields', 'errors': errors })
+            abort(400, {'type': 'fields', 'errors': errors})
         return schema.dump(result).data
 
     @admin_required
     def delete(self, tax_id):
         Tax.objects.get_or_404(id=tax_id).delete()
-        return { 'status': 'OK' }
+        return {'status': 'OK'}
 
 rest.add_resource(ApiTax, '/api/taxrate', '/api/taxrate/<tax_id>')

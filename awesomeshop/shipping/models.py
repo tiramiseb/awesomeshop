@@ -26,8 +26,10 @@ from prices import Price
 from .. import app, db, get_locale
 from ..mongo import TranslationsField
 
+
 class UnavailableCarrier(Exception):
     pass
+
 
 class Country(db.Document):
     code = db.StringField()
@@ -54,6 +56,7 @@ class Country(db.Document):
                 return result_carrier_cost(w['cost'])
         raise UnavailableCarrier
 
+
 class CountriesGroup(db.Document):
     name = db.StringField()
     countries = db.ListField(db.ReferenceField(
@@ -64,7 +67,6 @@ class CountriesGroup(db.Document):
     meta = {
         'ordering': ['name']
     }
-
 
 
 class Carrier(db.Document):
@@ -104,6 +106,7 @@ class Carrier(db.Document):
         description = self.description.get(get_locale(), u'')
         return '{} ({})'.format(description, self.name)
 
+
 def remove_null_costs(sender, document, **kwargs):
     costs = document.costs
     for entry in costs:
@@ -112,6 +115,7 @@ def remove_null_costs(sender, document, **kwargs):
                 if cost is None:
                     entry['costs'].pop(objectid)
     document.costs = costs
+
 
 def update_mapping(sender, document, **kwargs):
     # First, map countries IDs to carriers
@@ -125,14 +129,15 @@ def update_mapping(sender, document, **kwargs):
             else:
                 countries = []
                 try:
-                    countries = [ Country.objects.get(id=country) ]
+                    countries = [Country.objects.get(id=country)]
                 except Country.DoesNotExist:
                     try:
-                        countries = CountriesGroup.objects.get(id=country
-                                                                    ).countries
+                        countries = CountriesGroup.objects.get(
+                                                            id=country
+                                                            ).countries
                     except:
                         pass
-            result = { 'weight': weight, 'cost': cost }
+            result = {'weight': weight, 'cost': cost}
             if countries == 'rest':
                 rest.append(result)
             else:
@@ -144,6 +149,7 @@ def update_mapping(sender, document, **kwargs):
         costs = countries_carriers_mapping.get(country, rest)
         country.carriers[docid] = costs
         country.save()
+
 
 def delete_mapping(sender, document, **kwargs):
     for country in Country.objects:
@@ -158,6 +164,8 @@ rounding = Decimal(str(app.config['SHIPPING_ROUNDING']))
 multiplier = Decimal(str(app.config['SHIPPING_MULTIPLIER']))
 preparation = Decimal(str(app.config['PACKAGE_PREPARATION_PRICE']))
 tax = 1 + Decimal(str(app.config['SHIPPING_TAX']))/100
+
+
 def result_carrier_cost(cost):
     """
     Add variable data to shipping costs
@@ -177,6 +185,7 @@ def result_carrier_cost(cost):
     how_many_roundings = cost // rounding + 1
     cost = rounding * how_many_roundings
     return Price(cost*tax, cost)
+
 
 def carriers_by_country_and_weight(country, weight):
     """

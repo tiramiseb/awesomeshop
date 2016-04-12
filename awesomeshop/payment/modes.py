@@ -23,6 +23,7 @@ modes = [
         SepaTransfer()
         ]
 
+
 def get_mode(mode_id):
     for mode in modes:
         if mode.id == mode_id:

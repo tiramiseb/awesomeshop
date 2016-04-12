@@ -31,12 +31,14 @@ from ...marsh import Count, Loc, ObjField
 from ..models import Category
 from .product import ProductSchemaForList
 
+
 class CategorySchemaForList(Schema):
     id = fields.String(dump_only=True)
     slug = fields.String(dump_only=True)
     name = Loc(dump_only=True)
     children = fields.Nested('CategorySchemaForList', many=True)
     products = Count(attribute='on_sale_products')
+
 
 class CategorySchemaForFlatList(Schema):
     id = fields.String(dump_only=True)
@@ -45,6 +47,7 @@ class CategorySchemaForFlatList(Schema):
     full_name = fields.String(dump_only=True)
     products = Count(attribute='on_sale_products', dump_only=True)
     level = fields.Integer()
+
 
 class CategorySchemaForEdition(Schema):
     id = fields.String(allow_none=True)
@@ -66,6 +69,7 @@ class CategorySchemaForEdition(Schema):
         category.save()
         return category
 
+
 class CategorySchema(Schema):
     id = fields.String(dump_only=True)
     name = Loc(dump_only=True)
@@ -80,6 +84,7 @@ class CategorySchema(Schema):
 
 reqparser = reqparse.RequestParser()
 reqparser.add_argument('flat', type=inputs.boolean)
+
 
 class ApiCategories(Resource):
 
@@ -100,11 +105,12 @@ class ApiCategories(Resource):
         data = request.get_json()
         result, errors = schema.load(data)
         if errors:
-            abort(400, {'type': 'fields', 'errors': errors })
+            abort(400, {'type': 'fields', 'errors': errors})
         return schema.dump(result).data
 
+
 class ApiCategoryEdit(Resource):
-    
+
     @admin_required
     def get(self, category_id):
         return CategorySchemaForEdition().dump(
@@ -118,7 +124,7 @@ class ApiCategoryEdit(Resource):
         data['id'] = category_id
         result, errors = schema.load(data)
         if errors:
-            abort(400, {'type': 'fields', 'errors': errors })
+            abort(400, {'type': 'fields', 'errors': errors})
         return schema.dump(result).data
 
     @admin_required
@@ -126,12 +132,23 @@ class ApiCategoryEdit(Resource):
         try:
             Category.objects.get_or_404(id=category_id).delete()
         except OperationError as e:
-            if re.match('Could not delete document (.*Product.category refers to it)', e.message):
-                abort(400, { 'type': 'message', 'message': _('Could not delete : this category has products.')})
-            elif e.message == 'Could not delete document (Category.parent refers to it)':
-                abort(400, { 'type': 'message', 'message': _('Could not delete : this category has children.')})
+            if re.match(
+                 'Could not delete document (.*Product.category refers to it)',
+                 e.message
+                 ):
+                abort(400, {
+                  'type': 'message',
+                  'message': _('Could not delete: this category has products.')
+                  })
+            elif e.message == \
+                    'Could not delete document (Category.parent refers to it)':
+                abort(400, {
+                  'type': 'message',
+                  'message': _('Could not delete: this category has children.')
+                  })
             raise
-        return { 'status': 'OK' }
+        return {'status': 'OK'}
+
 
 class ApiCategory(Resource):
 

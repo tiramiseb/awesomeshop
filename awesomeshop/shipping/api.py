@@ -28,11 +28,12 @@ from ..marsh import Count, Loc, MultiObjField
 from .models import Country, CountriesGroup, Carrier, \
                     carriers_by_country_and_weight
 
+
 class CountrySchemaForList(Schema):
     id = fields.String(dump_only=True)
     code = fields.String(dump_only=True)
     name = Loc(dump_only=True)
-    #name = fields.String(attribute='prefixed_name', dump_only=True)
+
 
 class CountrySchema(Schema):
     id = fields.String()
@@ -52,10 +53,12 @@ class CountrySchema(Schema):
         country.save()
         return country
 
+
 class CountriesGroupSchemaForList(Schema):
     id = fields.String(dump_only=True)
     name = fields.String(dump_only=True)
     countries = Count()
+
 
 class CountriesGroupSchema(Schema):
     id = fields.String()
@@ -73,10 +76,12 @@ class CountriesGroupSchema(Schema):
         group.save()
         return group
 
+
 class CarrierSchemaForList(Schema):
     id = fields.String(dump_only=True)
     name = fields.String(dump_only=True)
     description = Loc()
+
 
 class CarrierSchema(Schema):
     id = fields.String(allow_none=True)
@@ -108,8 +113,8 @@ class CarrierSchema(Schema):
             # TODO BUG /!\ when weights or prices are not modified, the order
             # modifications are ignored
             #
-            #   File "[...]/mongoengine/base/document.py", line 582, in <lambda>
-            #     if any(map(lambda d: field._ordering in d._changed_fields, data)):
+            # File "[..]/mongoengine/base/document.py", line 582, in <lambda>
+            # if any(map(lambda d: field._ordering in d._changed_fields, data))
             # AttributeError: 'dict' object has no attribute '_changed_fields'
             if e.message not in (
                     "'dict' object has no attribute '_changed_fields'",
@@ -117,6 +122,7 @@ class CarrierSchema(Schema):
                     ):
                 raise
         return carrier
+
 
 class CarriersByCountryAndWeight(Schema):
     carrier = fields.Nested(CarrierSchemaForList)
@@ -139,7 +145,7 @@ class ApiCountry(Resource):
             data['id'] = country_id
         result, errors = schema.load(data)
         if errors:
-            abort(400, {'type': 'fields', 'errors': errors })
+            abort(400, {'type': 'fields', 'errors': errors})
         return schema.dump(result).data
 
     @admin_required
@@ -147,10 +153,16 @@ class ApiCountry(Resource):
         try:
             Country.objects.get_or_404(id=country_id).delete()
         except OperationError as e:
-            if e.message == 'Could not delete document (CountriesGroup.countries refers to it)':
-                abort(400, { 'type': 'message', 'message': _('Could not delete : this country is part of a countries group.')})
+            if e.message == ('Could not delete document '
+                             '(CountriesGroup.countries refers to it)'):
+                abort(400, {
+                    'type': 'message',
+                    'message': _('Could not delete : this country '
+                                 'is part of a countries group.')
+                    })
             raise
-        return { 'status': 'OK' }
+        return {'status': 'OK'}
+
 
 class ApiCountriesGroup(Resource):
     @admin_required
@@ -161,6 +173,7 @@ class ApiCountriesGroup(Resource):
         else:
             return CountriesGroupSchemaForList(many=True).dump(
                                                    CountriesGroup.objects).data
+
     @admin_required
     def post(self, group_id=None):
         schema = CountriesGroupSchema()
@@ -169,13 +182,14 @@ class ApiCountriesGroup(Resource):
             data['id'] = group_id
         result, errors = schema.load(data)
         if errors:
-            abort(400, {'type': 'fields', 'errors': errors })
+            abort(400, {'type': 'fields', 'errors': errors})
         return schema.dump(result).data
 
     @admin_required
     def delete(self, group_id):
         CountriesGroup.objects.get_or_404(id=group_id).delete()
-        return { 'status': 'OK' }
+        return {'status': 'OK'}
+
 
 class ApiCarrier(Resource):
     @admin_required
@@ -194,13 +208,14 @@ class ApiCarrier(Resource):
             data['id'] = carrier_id
         result, errors = schema.load(data)
         if errors:
-            abort(400, {'type': 'fields', 'errors': errors })
+            abort(400, {'type': 'fields', 'errors': errors})
         return schema.dump(result).data
 
     @admin_required
     def delete(self, carrier_id):
         Carrier.objects.get_or_404(id=carrier_id).delete()
-        return { 'status': 'OK' }
+        return {'status': 'OK'}
+
 
 class ApiCarrierByWeight(Resource):
     def get(self, country, weight):

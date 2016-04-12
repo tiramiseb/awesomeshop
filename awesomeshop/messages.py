@@ -19,9 +19,9 @@
 
 from flask_babel import _
 
+
 def messages():
     return {
-        # Pages titles
         'Addresses': _('Addresses'),
         'Category': _('Category'),
         'Checkout': _('Checkout'),
@@ -31,9 +31,9 @@ def messages():
         'My cart': _('Mon panier'),
         'My orders': _('My orders'),
         'New products': _('New products'),
-        'Order [[ order.full_number ]], on [[ order.date | date ]]': _('Order [[ order.full_number ]], on [[ order.date | date ]]'),
+        'Order [[ order.full_number ]], on [[ order.date | date ]]':
+        _('Order [[ order.full_number ]], on [[ order.date | date ]]'),
         'Product': _('Product'),
         'Profile': _('Profile'),
         'Saved carts': _('Saved carts')
     }
-

@@ -31,6 +31,7 @@ from ...page.models import Page
 from .category import Category
 from .tax import Tax
 
+
 class Product(db.Document, StockedItem):
     created_at = db.DateTimeField(db_field='create',
                                   default=datetime.datetime.now)
@@ -69,7 +70,7 @@ class Product(db.Document, StockedItem):
 
     @property
     def related_products_on_sale(self):
-        return [ product for product in self.related_products if product.on_sale ]
+        return [p for p in self.related_products if p.on_sale]
 
     @property
     def path(self):
@@ -77,7 +78,9 @@ class Product(db.Document, StockedItem):
 
     @property
     def net_price(self):
-        return (self.gross_price * Decimal( 1 + self.tax.rate )).quantize(Decimal('1.00'))
+        return (self.gross_price * Decimal(1 + self.tax.rate)).quantize(
+                                                                Decimal('1.00')
+                                                                )
 
     def get_price_per_item(self, data=None):
         return prices.Price(self.net_price, self.gross_price)
@@ -108,7 +111,7 @@ class Product(db.Document, StockedItem):
         """Return the formatted content of the description"""
         parts = docutils.core.publish_parts(
                     source=self.description.get(get_locale(), u''),
-                    settings_overrides = {
+                    settings_overrides={
                         'initial_header_level': 2
                         },
                     writer_name='html')
@@ -119,7 +122,7 @@ class Product(db.Document, StockedItem):
         """Return the formatted content of the documentation"""
         parts = docutils.core.publish_parts(
                     source=self.documentation.text.get(get_locale(), u''),
-                    settings_overrides = {
+                    settings_overrides={
                         'initial_header_level': 3
                         },
                     writer_name='html')

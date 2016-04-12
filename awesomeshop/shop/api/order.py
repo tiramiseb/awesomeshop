@@ -29,19 +29,21 @@ from prices import Price
 
 from ... import app, get_locale, admin_required, login_required, rest
 from ...marsh import Count, Loc, ObjField
-#from ...auth.api import UserSchema
 from ...auth.models import Address
 from ...shipping.models import Carrier
 from ..models import Order, OrderProduct, Product, InvalidNextStatus
 from .product import ProductSchemaForList
 
+
 class OrderProductCartSubSchema(Schema):
     id = fields.String(required=True)
     reference = fields.String(required=True)
 
+
 class OrderProductCartSchema(Schema):
     product = fields.Nested(OrderProductCartSubSchema, required=True)
     quantity = fields.Integer(required=True)
+
 
 class OrderProductSchema(Schema):
     reference = fields.String()
@@ -55,6 +57,7 @@ class OrderProductSchema(Schema):
     on_demand = fields.Boolean()
     data = fields.Raw()
 
+
 class OrderSchemaForList(Schema):
     full_number = fields.String(dump_only=True)
     number = fields.String(dump_only=True)
@@ -64,13 +67,15 @@ class OrderSchemaForList(Schema):
     products = fields.Integer(dump_only=True, attribute='count_products')
     net_total = fields.String(dump_only=True)
 
+
 class OrderSchemaForAdminList(OrderSchemaForList):
     customer = fields.String(attribute='customer.email', dump_only=True)
+
 
 class OrderSchema(Schema):
     """
     Can only be created, never modified except for the following fields:
-        
+
     * status
     * tracking_number
 
@@ -121,7 +126,7 @@ class OrderSchema(Schema):
     on_demand = fields.Boolean(dump_only=True)
     on_demand_delay_min = fields.Integer(dump_only=True)
     on_demand_delay_max = fields.Integer(dump_only=True)
-    
+
     @post_load
     def make_order(self, data):
         """
@@ -129,7 +134,8 @@ class OrderSchema(Schema):
 
         An order must never be modified as a whole.
         """
-        # TODO Error management would be needed here (missing objects especially)
+        # TODO Error management would be needed here
+        # (missing objects especially)
         order = Order()
         order.customer = current_user.to_dbref()
         delivery_address = Address.objects.get(id=data['delivery_address'])
@@ -148,10 +154,10 @@ class OrderSchema(Schema):
         for productdata in data.get('cart', []):
             productobj = Product.objects.get(id=productdata['product']['id'])
             product = OrderProduct(
-                reference = productdata['product']['reference'],
-                product = productobj,
-                name = productobj.name.get(get_locale(), u''),
-                data = None
+                reference=productdata['product']['reference'],
+                product=productobj,
+                name=productobj.name.get(get_locale(), u''),
+                data=None
                 )
             product.set_quantity(productdata['quantity'])
             global_on_demand = global_on_demand or product.on_demand
@@ -191,20 +197,24 @@ class OrderSchema(Schema):
         current_user.save()
         return order
 
+
 class OrderSchemaForAdmin(OrderSchema):
     customer = fields.Nested('UserSchemaForList')
     next_states = fields.List(fields.String())
+
 
 class PaymentInfoSchema(Schema):
     type = fields.String()
     message = fields.String()
     order = fields.Nested(OrderSchema)
 
+
 class ApiAllOrders(Resource):
 
     @admin_required
     def get(self):
         return OrderSchemaForAdminList(many=True).dump(Order.objects).data
+
 
 class ApiOrders(Resource):
 
@@ -219,8 +229,9 @@ class ApiOrders(Resource):
         data = request.get_json()
         result, errors = schema.load(data)
         if errors:
-            abort(400, {'type': 'fields', 'errors': errors })
+            abort(400, {'type': 'fields', 'errors': errors})
         return schema.dump(result).data
+
 
 class ApiOrder(Resource):
     def get(self, number):

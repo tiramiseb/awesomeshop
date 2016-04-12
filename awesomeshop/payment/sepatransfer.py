@@ -22,6 +22,7 @@ from flask_babel import _, lazy_gettext
 from .. import app
 from .base import PaymentMode
 
+
 class SepaTransfer(PaymentMode):
     id = 'sepa_transfer'
     icon = 'exchange'
@@ -42,11 +43,12 @@ class SepaTransfer(PaymentMode):
             order.net_total,
             order.invoice_full_number
             ]
-        lent = max([ len(i) for i in titles ])
-        lenv = max([ len(i) for i in values ])
+        lent = max([len(i) for i in titles])
+        lenv = max([len(i) for i in values])
         line = '+-' + '-'*lent + '-+-' + '-'*lenv + '-+'
         message = [
-            _('Please execute a SEPA bank transfer within %(num)d days with the following criteria:', num=app.config['PAYMENT_DELAY']),
+            _('Please execute a SEPA bank transfer within %(num)d days '
+              'with the following criteria:', num=app.config['PAYMENT_DELAY']),
             '',
             line,
             ]

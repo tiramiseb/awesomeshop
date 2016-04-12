@@ -32,15 +32,22 @@ import sys
 from whoosh.fields import Schema, KEYWORD, ID, TEXT
 from whoosh.index import create_in
 
+from awesomeshop.page.models import Page
+from awesomeshop.shop.models import Category, Product
+
 try:
     import config
 except:
     pass
 
-try: path = config.SEARCH_INDEX_PATH
-except: path = None
-try: langs = config.LANGS
-except: langs = None
+try:
+    path = config.SEARCH_INDEX_PATH
+except:
+    path = None
+try:
+    langs = config.LANGS
+except:
+    langs = None
 
 if not path or not langs:
     # Cannot import defaultconfig because it would import everything from the
@@ -58,30 +65,26 @@ if not path or not langs:
             if searchok and langsok:
                 break
 
-
-
-
-sure = raw_input('WARNING ! {} WILL BE FLUSHED ! ARE YOU SURE [yn]? '.format(
+sure = raw_input('WARNING! {} WILL BE FLUSHED! ARE YOU SURE [yn]? '.format(
             path))
-    
+
 if sure not in ('y', 'Y', 'yes'):
     sys.exit(1)
 
-try: shutil.rmtree(path)
-except OSError: pass
+try:
+    shutil.rmtree(path)
+except OSError:
+    pass
 os.makedirs(path)
 
 doc_schema = Schema(doc=ID(stored=True), title=TEXT, text=TEXT)
 category_schema = Schema(doc=ID(stored=True), name=TEXT)
 product_schema = Schema(doc=ID(stored=True), name=TEXT, description=TEXT,
                         reference=TEXT, keywords=KEYWORD)
-    
+
 doc_index = create_in(path, doc_schema, indexname='doc')
 category_index = create_in(path, category_schema, indexname='category')
 product_index = create_in(path, product_schema, indexname='product')
-
-from awesomeshop.page.models import Page
-from awesomeshop.shop.models import Category, Product
 
 doc_writer = doc_index.writer()
 for p in Page.objects(pagetype='doc'):

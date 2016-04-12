@@ -20,7 +20,6 @@
 from ... import db
 
 
-
 class Tax(db.Document):
     name = db.StringField()
     rate = db.DecimalField()

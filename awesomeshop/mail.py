@@ -32,7 +32,8 @@ def send_mail(recipient, template, **kwargs):
     sender = app.config['MAIL_FROM']
     subject = render_template('email/{}/{}.subject'.format(template, locale),
                               **kwargs)
-    text = render_template('email/{}/{}.txt'.format(template, locale), **kwargs)
+    text = render_template('email/{}/{}.txt'.format(template, locale),
+                           **kwargs)
     html = render_template('email/{}/{}.html'.format(template, locale),
                            subject=subject, **kwargs)
     # Create the message
@@ -48,4 +49,3 @@ def send_mail(recipient, template, **kwargs):
     s = smtplib.SMTP(app.config['SMTP_SERVER'])
     s.sendmail(sender, recipient, msg.as_string())
     s.quit()
-

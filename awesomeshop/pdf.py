@@ -33,13 +33,12 @@ space_12 = 15
 space_14 = 17
 space_20 = 24
 
+
 def invoice(order):
     content = cStringIO.StringIO()
     c = canvas.Canvas(content, pagesize=A4)
     c.setLineWidth(.3)
 
-
-    #### Top left column, order details
     x = 1*cm
     y = 28*cm
     # Title
@@ -132,7 +131,7 @@ def invoice(order):
     # Shipping
     y -= space_10
     c.drawString(colprod, y, _('Shipping: %(description)s',
-                            description=order.carrier_description))
+                               description=order.carrier_description))
     c.drawRightString(coltotal, y, order.net_shipping)
     y -= subspace
     c.line(1*cm, y, 20*cm, y)
@@ -147,7 +146,11 @@ def invoice(order):
     c.line(20*cm, tablestart, 20*cm, y)
     y -= space_10
     c.setFont('Helvetica', 10)
-    c.drawString(colref, y, _(u'TVA non applicable, article 293 B du Code général des impôts'))
+    c.drawString(
+            colref,
+            y,
+            _(u'TVA non applicable, article 293 B du Code général des impôts')
+            )
 
     # Footer
     c.setFont('Helvetica', 10)

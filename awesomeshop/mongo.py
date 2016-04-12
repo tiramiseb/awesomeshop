@@ -26,6 +26,7 @@ from wtforms.utils import unset_value
 
 from . import app
 
+
 class TranslationsList(f.Field):
     """Inspired by FieldList"""
 
@@ -50,7 +51,7 @@ class TranslationsList(f.Field):
                 self._add_entry(formdata, obj_data)
         # Finally, if a translation does not exist, add it in the form
         for lang in app.config['LANGS']:
-            if not lang in self.entries:
+            if lang not in self.entries:
                 self._add_entry(formdata, (lang, None))
 
     def validate(self, form, extra_validators=tuple()):
@@ -88,9 +89,9 @@ class TranslationsList(f.Field):
 
 class TranslationsField(DictField):
     """Inspired by MapField
-    
+
     Use it to define translations for a string in AwesomeShop
-    
+
     (database field)"""
     def __init__(self, max_length=None, **kwargs):
         super(TranslationsField, self).__init__(

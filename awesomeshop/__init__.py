@@ -40,6 +40,8 @@ db = MongoEngine(app)
 
 # Initialize flask-babel
 babel = Babel(app)
+
+
 @babel.localeselector
 def get_locale(from_user=True):
     locale = None
@@ -69,9 +71,12 @@ def get_locale(from_user=True):
         # Fallback locale, defined app-wide
         locale = app.config['LANGS'][0]
     return locale
+
 app.jinja_env.globals.update(get_locale=get_locale)
 
 login_manager = LoginManager(app)
+
+
 @login_manager.user_loader
 def load_user(uid):
     from .auth.models import User
@@ -79,6 +84,8 @@ def load_user(uid):
         return User.objects.get(id=uid)
     except User.DoesNotExist:
         return None
+
+
 def admin_required(func):
     """Decorator when a request can only be made by admins
 
@@ -99,6 +106,8 @@ autoupgrade.upgrade()
 
 ###############################################################################
 
+# PEP 8 not respected here: the views and api entrypoints must be imported
+# after the above tools
 import views
 from auth import api
 from page import api

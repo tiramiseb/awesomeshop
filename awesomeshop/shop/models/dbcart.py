@@ -25,7 +25,6 @@ from ...auth.models import User
 from .product import Product
 
 
-
 class DbCartline(db.EmbeddedDocument):
     product = db.ReferenceField(Product, db_field='prod')
     quantity = db.IntField(db_field='qty')

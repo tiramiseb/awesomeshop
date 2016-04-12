@@ -31,26 +31,30 @@ from .shop.models import Url
 # doesn't break if someone runs the upgrade functions on an already-upgraded
 # database)
 
+
 def add_product_cls():
     pass
     # Deprecated because it has been reverted
-    #products = BaseProduct._get_collection()
-    #products.update_many({'_cls': None},
-    #                     {'$set': {'_cls': 'BaseProduct.Product'}})
-    #urls = Url._get_collection()
-    #urls.update_many(
-    #        {'doc._cls': 'Product'},
-    #        {'$set':{'doc._cls': 'BaseProduct.Product'}}
-    #        )
+    # products = BaseProduct._get_collection()
+    # products.update_many({'_cls': None},
+    #                      {'$set': {'_cls': 'BaseProduct.Product'}})
+    # urls = Url._get_collection()
+    # urls.update_many(
+    #         {'doc._cls': 'Product'},
+    #         {'$set':{'doc._cls': 'BaseProduct.Product'}}
+    #         )
+
 
 def add_ondemand():
     products = Product._get_collection()
     products.update_many({'dem': None}, {'$set': {'dem': False}})
 
+
 def add_creationdate():
     old_date = datetime.datetime(1970, 1, 1)
     products = Product._get_collection()
     products.update_many({'create': None}, {'$set': {'create': old_date}})
+
 
 def merge_weights_and_costs():
     # Old format:
@@ -78,12 +82,12 @@ def merge_weights_and_costs():
             for country, costs in carrier['costs'].iteritems():
                 for weight, cost in costs.iteritems():
                     if weight in new_weights:
-                        # Lose data if the weight is not defined for this carrier
+                        # Lose data if the weight is not defined
                         new_weights[weight][country] = cost
             new_costs_as_list = []
             for weight in old_weights:
                 new_costs_as_list.append({
-                            'weight':weight,
+                            'weight': weight,
                             'costs': new_weights[str(weight)]
                             })
             carriers.update_one(
@@ -94,6 +98,7 @@ def merge_weights_and_costs():
                         }
                     )
 
+
 def reunite_products():
     products = Product._get_collection()
     products.update_many({},
@@ -101,7 +106,7 @@ def reunite_products():
     urls = Url._get_collection()
     urls.update_many(
             {'doc._cls': 'BaseProduct.Product'},
-            {'$set':{'doc._cls': 'Product'}}
+            {'$set': {'doc._cls': 'Product'}}
             )
 
 ###############################################################################
@@ -110,9 +115,13 @@ upgrades = [
     (add_product_cls, '2015: allow subproducts (deprecated)'),
     (add_ondemand, '2015: allow "on demand" products'),
     (add_creationdate, '2015: add creation date to products'),
-    (merge_weights_and_costs, '18/01/2016: change how weights and costs are stored'),
+    (
+        merge_weights_and_costs,
+        '18/01/2016: change how weights and costs are stored'
+        ),
     (reunite_products, '09/02/2016: cancel the subproducts feature')
     ]
+
 
 def upgrade():
     latest = len(upgrades)

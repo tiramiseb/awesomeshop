@@ -26,6 +26,7 @@ from ..photo import Photo
 
 counters = get_db()['mongoengine.counters']
 
+
 class Page(db.Document):
     pagetype = db.StringField(db_field='type')
     rank = db.SequenceField()
@@ -50,7 +51,7 @@ class Page(db.Document):
             last_count = counters.find_one({'_id': 'page.rank'})['next']
             if rank > last_count:
                 counters.find_one_and_update({'_id': 'page.rank'},
-                                             {'$set':{'next': rank}})
+                                             {'$set': {'next': rank}})
             # * or because there is a hole in the list (perfect,
             #                                           no change elsewere)
         else:
@@ -68,7 +69,7 @@ class Page(db.Document):
     def move_to_end(self):
         rank = counters.find_one({'_id': 'page.rank'})['next'] + 1
         counters.find_one_and_update({'_id': 'page.rank'},
-                                     {'$set':{'next': rank}})
+                                     {'$set': {'next': rank}})
         self.rank = rank
         self.save()
 
@@ -77,7 +78,7 @@ class Page(db.Document):
         """Return the formatted content of the page"""
         parts = docutils.core.publish_parts(
                     source=self.text.get(get_locale(), u''),
-                    settings_overrides = {
+                    settings_overrides={
                         'initial_header_level': 2
                         },
                     writer_name='html')
@@ -88,4 +89,3 @@ class Page(db.Document):
         """Return a list of products using this documentation"""
         from ..shop.models import Product
         return Product.objects(documentation=self)
-

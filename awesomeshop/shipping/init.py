@@ -22,9 +22,10 @@ import urllib
 
 from .models import Country, CountriesGroup
 
+
 def create_countries_from_restcountries():
     """Create all countries based on the "REST Countries" service.
-    
+
     Please donate to its author if you find it useful:
     https://restcountries.eu/"""
 
@@ -37,7 +38,7 @@ def create_countries_from_restcountries():
         code = country['alpha2Code']
         # Create the country itself
         c = Country(code=code,
-                default_name=country['nativeName'])
+                    default_name=country['nativeName'])
         for lang, name in country['translations'].items():
             if name:
                 c.name[lang] = name
@@ -74,6 +75,8 @@ european_union = [
     # Special territories
     'AX'
     ]
+
+
 def create_legal_groups():
     eu = CountriesGroup(name='European Union')
     for code in european_union:

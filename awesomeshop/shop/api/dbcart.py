@@ -27,6 +27,7 @@ from ...marsh import ObjField, NetPrice
 from ..models import DbCart, DbCartline, Product
 from .product import ProductSchema
 
+
 class LiveCartlineSchema(Schema):
     product = fields.Dict()
     quantity = fields.Integer()
@@ -61,6 +62,7 @@ class LiveCartlineSchema(Schema):
             else:
                 newdata = None
         return newdata
+
 
 class CartlineSchema(Schema):
     product = ObjField(f='id', obj=Product)
@@ -102,7 +104,7 @@ class CartlineSchema(Schema):
         cartline.product = data['product']
         cartline.quantity = data['quantity']
         return cartline
-        
+
     @post_dump(pass_many=True)
     def dump_cartline(self, data, many):
         pschema = ProductSchema()
@@ -129,6 +131,7 @@ class CartlineSchema(Schema):
                 newdata = None
         return newdata
 
+
 class CartSchema(Schema):
     id = fields.String()
     name = fields.String(required=True)
@@ -142,11 +145,10 @@ class CartSchema(Schema):
         cart.name = data['name']
         lines, errors = CartlineSchema().load(data['lines'], many=True)
         if errors:
-            abort(400, {'type': 'fields', 'errors': errors })
+            abort(400, {'type': 'fields', 'errors': errors})
         cart.lines = lines
         cart.save()
         return cart
-
 
 
 class VerifyLiveCart(Resource):
@@ -155,8 +157,9 @@ class VerifyLiveCart(Resource):
         data = request.get_json()
         result, errors = schema.load(data, many=True)
         if errors:
-            abort(400, {'type': 'fields', 'errors': errors })
+            abort(400, {'type': 'fields', 'errors': errors})
         return result
+
 
 class ApiCarts(Resource):
     @login_required
@@ -171,14 +174,15 @@ class ApiCarts(Resource):
         data = request.get_json()
         result, errors = schema.load(data)
         if errors:
-            abort(400, {'type': 'fields', 'errors': errors })
+            abort(400, {'type': 'fields', 'errors': errors})
         return schema.dump(result).data
+
 
 class ApiCart(Resource):
     @login_required
     def delete(self, cart_id):
         DbCart.objects.get_or_404(id=cart_id).delete()
-        return { 'status': 'OK' }
+        return {'status': 'OK'}
 
 rest.add_resource(VerifyLiveCart, '/api/cart/verify')
 rest.add_resource(ApiCarts, '/api/cart')

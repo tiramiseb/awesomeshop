@@ -21,7 +21,6 @@ from ... import db, get_locale
 from ...mongo import TranslationsField
 
 
-
 class Category(db.Document):
     rank = db.IntField()
     slug = db.StringField()
@@ -36,6 +35,7 @@ class Category(db.Document):
     @classmethod
     def ordered_all(self):
         catlist = []
+
         def add_cats(categories, level=0):
             for cat in categories:
                 cat.level = level
@@ -79,4 +79,3 @@ class Category(db.Document):
             return u'{} » {}'.format(self.parent.full_name, name)
         else:
             return name
-

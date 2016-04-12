@@ -23,10 +23,12 @@ from marshmallow import Schema, fields
 from .. import rest
 from .modes import modes
 
+
 class PaymentSchema(Schema):
     id = fields.String()
     icon = fields.String()
     description = fields.String()
+
 
 class Payments(Resource):
     def get(self):

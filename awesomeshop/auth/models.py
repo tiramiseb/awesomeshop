@@ -28,6 +28,7 @@ from .. import db
 from ..mail import send_mail
 from ..shipping.models import Country
 
+
 class User(db.Document, UserMixin):
     created_at = db.DateTimeField(db_field='create',
                                   default=datetime.datetime.now, required=True)
@@ -77,7 +78,6 @@ class User(db.Document, UserMixin):
     def send_confirmation_email(self):
         self.confirm_code = str(uuid.uuid4())
         send_mail(self.email, 'email_confirmation', code=self.confirm_code)
-
 
 
 class Address(db.Document):

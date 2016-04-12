@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
-# Copyright 2015 Sébastien Maccagnoni-Munch
+# Copyright 2015-2016 Sébastien Maccagnoni-Munch
 #
 # This file is part of AwesomeShop.
 #
@@ -31,11 +31,11 @@ from awesomeshop.shipping import init as shipping_init
 from awesomeshop.shipping.models import Country, CountriesGroup, Carrier
 from awesomeshop.shop.models import Tax, Category, Product, Url, Order
 
-sure = raw_input('WARNING ! THE DATABASE WILL BE EMPTIED ! ARE YOU SURE [yn]? ')
-    
+sure = raw_input('WARNING! THE DATABASE WILL BE EMPTIED! ARE YOU SURE [yn]? ')
+
 if sure not in ('y', 'Y', 'yes'):
     sys.exit(1)
-    
+
 print '* Deleting previous data'
 Address.drop_collection()
 User.drop_collection()
@@ -55,7 +55,7 @@ admin = User(email='admin@example.com')
 admin.set_password('admin')
 admin.is_admin = True
 admin.save()
-    
+
 print '* Creating countries'
 shipping_init.create_countries_from_restcountries()
 shipping_init.create_legal_groups()

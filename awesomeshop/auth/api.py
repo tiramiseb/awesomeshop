@@ -28,9 +28,6 @@ from ..shipping.models import Country
 from ..shop.api import CartSchema
 from .models import Address, User
 
-# Not using marshmallow_mongoengine here because it isn't made for modifying
-# multiple documents at once. Here, addresses are presented like
-# embeddedocuments to the users but they are in fact independent documents.
 
 class AddressSchema(Schema):
     id = fields.String()
@@ -41,6 +38,7 @@ class AddressSchema(Schema):
     country = ObjField(f='code', obj=Country, required=True)
     phone = fields.String(default='')
 
+
 class UserSchemaForList(Schema):
     id = fields.String(dump_only=True)
     email = fields.Email(dump_only=True)
@@ -48,9 +46,11 @@ class UserSchemaForList(Schema):
     addresses = Count()
     carts = Count()
 
+
 class UserSchema(Schema):
     auth = fields.Constant(True, dump_only=True)
-    waiting_for_confirmation = fields.Boolean(attribute='confirm_code', dump_only=True)
+    waiting_for_confirmation = fields.Boolean(attribute='confirm_code',
+                                              dump_only=True)
     id = fields.String(allow_none=True)
     email = fields.Email()
     is_admin = fields.Boolean(default=False)
@@ -66,7 +66,7 @@ class UserSchema(Schema):
 
     @post_dump
     def remove_unneeded_confirmation(self, data):
-        if data['waiting_for_confirmation'] == None:
+        if data['waiting_for_confirmation'] is None:
             data.pop('waiting_for_confirmation')
         return data
 
@@ -89,8 +89,8 @@ class UserSchema(Schema):
         user.save()
         if 'addresses' in data:
             # Get a list of current addresses
-            user_s_addresses = [ str(i.id) for i in \
-                                      Address.objects(user=user).only('id') ]
+            user_s_addresses = [str(i.id) for i in
+                                Address.objects(user=user).only('id')]
             # Save all addresses in the request
             for a in data['addresses']:
                 address_id = a.get('id')
@@ -113,11 +113,13 @@ class UserSchema(Schema):
         # Ignore carts
         return user
 
+
 unauthentified_data = {
         'auth': False,
         'email': None,
         'is_admin': False
         }
+
 
 class UserLogin(Resource):
     def post(self):
@@ -132,7 +134,7 @@ class UserLogin(Resource):
             return UserSchema().dump(user).data
         else:
             return unauthentified_data
-rest.add_resource(UserLogin, '/api/login')
+
 
 class UserData(Resource):
     def get(self):
@@ -149,9 +151,9 @@ class UserData(Resource):
         data['id'] = str(current_user.id)
         result, errors = schema.load(data)
         if errors:
-            abort(400, {'type': 'fields', 'errors': errors })
+            abort(400, {'type': 'fields', 'errors': errors})
         return schema.dump(result).data
-rest.add_resource(UserData, '/api/userdata')
+
 
 class UserDelete(Resource):
     @login_required
@@ -159,14 +161,14 @@ class UserDelete(Resource):
         current_user.delete()
         logout_user()
         return unauthentified_data
-rest.add_resource(UserDelete, '/api/userdata/delete')
+
 
 class UserLogout(Resource):
     @login_required
     def get(self):
         logout_user()
         return unauthentified_data
-rest.add_resource(UserLogout, '/api/logout')
+
 
 class SetLang(Resource):
     def put(self):
@@ -176,12 +178,12 @@ class SetLang(Resource):
                 # Save language in the user's preferences
                 current_user.locale = language
                 current_user.save()
-                return { 'status': 'ok' }
+                return {'status': 'ok'}
             else:
                 # Store language in a cookie
                 session['locale'] = language
-                return { 'status': 'ok' }
-rest.add_resource(SetLang, '/api/setlang')
+                return {'status': 'ok'}
+
 
 class Register(Resource):
     def post(self):
@@ -190,23 +192,23 @@ class Register(Resource):
             return schema.dump(current_user).data
         result, errors = schema.load(request.get_json())
         if errors:
-            abort(400, {'type': 'fields', 'errors': errors })
+            abort(400, {'type': 'fields', 'errors': errors})
         login_user(result)
         return schema.dump(result).data
-rest.add_resource(Register, '/api/register')
+
 
 class ResendConfirmationEmail(Resource):
     @login_required
     def get(self):
         current_user.send_confirmation_email()
-        return { 'status': 'ok' }
-rest.add_resource(ResendConfirmationEmail, '/api/register/resend')
+        return {'status': 'ok'}
+
 
 class ForceLogin(Resource):
     @login_required
     def get(self):
-        return { 'status': 'ok' }
-rest.add_resource(ForceLogin, '/api/forcelogin')
+        return {'status': 'ok'}
+
 
 class ApiUser(Resource):
     @admin_required
@@ -224,11 +226,20 @@ class ApiUser(Resource):
             data['id'] = user_id
         result, errors = schema.load(data)
         if errors:
-            abort(400, {'type': 'fields', 'errors': errors })
+            abort(400, {'type': 'fields', 'errors': errors})
         return schema.dump(result).data
 
     @admin_required
     def delete(self, user_id):
         User.objects.get_or_404(id=user_id).delete()
-        return { 'status': 'OK' }
+        return {'status': 'OK'}
+
+rest.add_resource(UserLogin, '/api/login')
+rest.add_resource(UserData, '/api/userdata')
+rest.add_resource(UserDelete, '/api/userdata/delete')
+rest.add_resource(UserLogout, '/api/logout')
+rest.add_resource(SetLang, '/api/setlang')
+rest.add_resource(Register, '/api/register')
+rest.add_resource(ResendConfirmationEmail, '/api/register/resend')
+rest.add_resource(ForceLogin, '/api/forcelogin')
 rest.add_resource(ApiUser, '/api/user', '/api/user/<user_id>')

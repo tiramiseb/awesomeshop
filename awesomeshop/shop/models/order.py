@@ -29,7 +29,6 @@ from ...shipping.models import Carrier
 from .product import Product
 
 
-
 class OrderProduct(db.EmbeddedDocument):
     reference = db.StringField(db_field='ref')
     gross_price = db.StringField(db_field='gprice')
@@ -45,9 +44,9 @@ class OrderProduct(db.EmbeddedDocument):
 
     def set_quantity(self, quantity):
         """Returns True if the product is bought "on_demand"."""
-        quantity, from_stock, on_demand = self.product.remove_quantity(quantity)
+        quantity, stock, on_demand = self.product.remove_quantity(quantity)
         self.quantity = quantity
-        self.quantity_from_stock = from_stock
+        self.quantity_from_stock = stock
         self.on_demand = on_demand
 
     def set_gross_price(self, price):
@@ -84,7 +83,8 @@ order_states = {
             'next': ('payment_received', 'payment_failed', 'cancelled')
             },
         'awaiting_provider': {
-            'human': lazy_gettext('awaiting a response from the payment provider'),
+            'human':
+            lazy_gettext('awaiting a response from the payment provider'),
             'color': 'info',
             'next': ('payment_received', 'payment_failed', 'cancelled')
             },
@@ -124,12 +124,21 @@ order_states = {
             'next': ()
             }
 }
+
+
 class InvalidNextStatus(Exception):
     pass
+
+
 def next_invoice_number():
-    last = Order.objects.only('invoice_number').order_by('-invoice_number').first()
-    if not last or not last.invoice_number: return 1
-    else: return last.invoice_number + 1
+    last = Order.objects.only('invoice_number')\
+                .order_by('-invoice_number').first()
+    if last and last.invoice_number:
+        return last.invoice_number + 1
+    else:
+        return 1
+
+
 class Order(db.Document):
     customer = db.ReferenceField(User, db_field='cust')
     status = db.StringField(db_field='stat', default='unconfirmed')
@@ -189,7 +198,6 @@ class Order(db.Document):
                                   self.invoice_number)
         else:
             return ''
-
 
     @property
     def count_products(self):
@@ -276,7 +284,8 @@ class Order(db.Document):
         if not mode:
             abort(403)
         if self.status == 'unconfirmed':
-        # Triggering the payment for the first time causes an invoice to be emitted
+            # Triggering the payment for the first time
+            # causes an invoice to be emitted
             self.set_status('awaiting_payment')
         payment_response = mode.trigger(self)
         self.save()
@@ -287,9 +296,8 @@ class Order(db.Document):
         url = self.carrier.tracking_url
         if url:
             self.tracking_url = url.replace('@', number)
-            self.tracking_number = number        
+            self.tracking_number = number
 
     def _put_products_back_in_stock(self):
         for prod in self.products:
             prod._put_back_in_stock()
-

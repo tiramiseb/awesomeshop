@@ -19,6 +19,7 @@
 
 from . import db
 
+
 class Setting(db.Document):
     name = db.StringField()
     value = db.DynamicField()
