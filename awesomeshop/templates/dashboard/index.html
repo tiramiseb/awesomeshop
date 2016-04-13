@@ -85,6 +85,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <a class="list-group-item" ui-sref="product({product_id: product.id})" ng-repeat="product in stock_alert_products">
                     [[ product.reference ]],
                     [[ product.name || product.slug ]]
+                    ([[ product.stock ]])
                 </a>
             </div>
         </div>
