@@ -1,5 +1,5 @@
 {#
-Copyright 2015 Sébastien Maccagnoni-Munch
+Copyright 2015-2016 Sébastien Maccagnoni-Munch
 
 This file is part of AwesomeShop.
 
@@ -20,13 +20,13 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {% block content %}
 <p>Bonjour,</p>
 <p>Votre commande {{ order.full_number }} a été expédiée&nbsp;!</p>
-{%- if order.tracking_number -%}
+{%- if order.tracking_number %}
 <p>Vous pouvez suivre votre livraison à l'adresse suivante&nbsp;:<br>
 <a href="{{ order.tracking_url }}">{{ order.tracking_url }}</a>
 </p>
-{%- endif -%}
+{%- endif %}
 <p>Retrouvez votre commande sur notre site web&nbsp;:<br>
-<a href="{{ url_for('order', order_number=order.number, _external=True) }}">{{ url_for('order', order_number=order.number, _external=True) }}</a>
+<a href="{{ root }}/orders/{{ order.number }}">{{ root }}/orders/{{ order.number }}</a>
 </p>
 <p>Cordialement,<br>
 L'équipe <i>{{ config.SHOP_NAME }}</i></p>

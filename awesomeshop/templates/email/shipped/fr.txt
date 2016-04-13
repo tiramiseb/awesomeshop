@@ -1,5 +1,5 @@
 {#
-Copyright 2015 Sébastien Maccagnoni-Munch
+Copyright 2015-2016 Sébastien Maccagnoni-Munch
 
 This file is part of AwesomeShop.
 
@@ -20,10 +20,10 @@ Bonjour,
 
 Votre commande {{ order.full_number }} a été expédié !
 
-{%- if order.tracking_number -%}
+{%- if order.tracking_number %}
 Vous pouvez suivre votre livraison à l'adresse suivante:
 {{ order.tracking_url }}
-{%- endif -%}
+{%- endif %}
 
 Cordialement,
 L'équipe {{ config.SHOP_NAME }}

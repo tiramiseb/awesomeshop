@@ -1,5 +1,5 @@
 {#
-Copyright 2015 Sébastien Maccagnoni-Munch
+Copyright 2015-2016 Sébastien Maccagnoni-Munch
 
 This file is part of AwesomeShop.
 
@@ -18,12 +18,12 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
 Hello,
 
-Your payment for order {{ order.full_number }} (invoice {{ order.full_invoice_number }}) has been received!
+Your payment for order {{ order.full_number }} (invoice {{ order.invoice_full_number }}) has been received!
 
 This order will be prepared and shipped soon.
 
 Get more details on this order on the following link:
-{{ url_for('order', order_number=order.number, _external=True) }}
+{{ root }}/orders/{{ order.number }}
 
 Regards,
 The {{ config.SHOP_NAME }} team

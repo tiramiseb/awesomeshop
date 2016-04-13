@@ -21,7 +21,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
 
-from flask import render_template
+from flask import render_template, request
 
 from . import app, get_locale
 
@@ -32,11 +32,11 @@ def send_mail(recipient, template, **kwargs):
         # Get the message content
         sender = app.config['MAIL_FROM']
         subject = render_template('email/{}/{}.subject'.format(template, locale),
-                                  **kwargs)
+                                  root=request.url_root, **kwargs)
         text = render_template('email/{}/{}.txt'.format(template, locale),
-                               **kwargs)
+                               root=request.url_root, **kwargs)
         html = render_template('email/{}/{}.html'.format(template, locale),
-                               subject=subject, **kwargs)
+                               subject=subject, root=request.url_root, **kwargs)
         # Create the message
         msg = MIMEMultipart('alternative')
         msg['Subject'] = subject

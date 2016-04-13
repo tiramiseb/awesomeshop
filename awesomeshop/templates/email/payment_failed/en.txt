@@ -24,7 +24,7 @@ The failure justification is:
 {{ error }}
 
 Get more details on this order on the following link:
-{{ url_for('order', order_number=order.number, _external=True) }}
+{{ url_for('order', number=order.number, _external=True) }}
 
 Regards,
 The {{ config.SHOP_NAME }} team

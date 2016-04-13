@@ -1,5 +1,5 @@
 {#
-Copyright 2015 Sébastien Maccagnoni-Munch
+Copyright 2015-2016 Sébastien Maccagnoni-Munch
 
 This file is part of AwesomeShop.
 
@@ -19,10 +19,10 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {% extends 'email/skeleton.html' %}
 {% block content %}
 <p>Bonjour,</p>
-<p>Votre paiement pour la commande {{ order.full_number }} (facture {{ order.full_invoice_number }}) a été reçu&nbsp;!</p>
+<p>Votre paiement pour la commande {{ order.full_number }} (facture {{ order.invoice_full_number }}) a été reçu&nbsp;!</p>
 <p>Cette commande sera très bientôt préparée et expédiée.</p>
 <p>Pour obtenir plus de détails sur cette commande, cliquez sur le lien suivant&nbsp;:<br>
-<a href="{{ url_for('order', order_number=order.number, _external=True) }}">{{ url_for('order', order_number=order.number, _external=True) }}</a>
+<a href="{{ root }}/orders/{{ order.number }}">{{ root }}/orders/{{ order.number }}</a>
 </p>
 <p>Cordialement,<br>
 L'équipe <i>{{ config.SHOP_NAME }}</i></p>
