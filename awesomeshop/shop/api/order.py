@@ -229,6 +229,8 @@ class ApiOrders(Resource):
         else:
             schema = OrderSchemaForList
         options = orders_reqparser.parse_args()
+        options = dict((k, v) for k, v in
+                       options.iteritems() if v is not None)
         return schema(many=True).dump(
                     Order.objects(
                         customer=current_user.to_dbref(),
