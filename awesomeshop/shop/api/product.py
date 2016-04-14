@@ -122,7 +122,8 @@ class ProductSchema(Schema):
 
 products_adminreqparser = reqparse.RequestParser()
 products_adminreqparser.add_argument('out_of_stock', type=inputs.boolean)
-products_adminreqparser.add_argument('stock_lower_than_alert', type=inputs.boolean)
+products_adminreqparser.add_argument('stock_lower_than_alert',
+                                     type=inputs.boolean)
 
 
 class ApiProducts(Resource):
@@ -139,7 +140,9 @@ class ApiProducts(Resource):
                     obj = Product.objects(stock__gt=0)
             elif 'stock_lower_than_alert' in options:
                 if options.pop('stock_lower_than_alert'):
-                    obj = Product.objects.where('this.stock <= this.alert && this.stock != 0')
+                    obj = Product.objects.where(
+                                'this.stock <= this.alert && this.stock != 0'
+                                )
                 else:
                     obj = Product.objects.where('this.stock > this.alert')
             else:
