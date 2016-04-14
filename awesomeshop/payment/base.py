@@ -44,5 +44,12 @@ class PaymentMode:
             'type': 'message',
             'message': '<the message to be displayed to the user, in reST>'
         }
+
+        * if the user must be redirect to another address
+
+        {
+            'type': 'redirect',
+            'target': '<the url where the user must be redirected'
+        }
         """
         abort(500)

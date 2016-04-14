@@ -8,6 +8,7 @@ flask-restful
 jinja2
 marshmallow
 mongoengine
+payplug
 pillow
 prices
 reportlab

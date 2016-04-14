@@ -208,6 +208,7 @@ class OrderSchemaForAdmin(OrderSchema):
 class PaymentInfoSchema(Schema):
     type = fields.String()
     message = fields.String()
+    target = fields.String()
     order = fields.Nested(OrderSchema)
 
 

@@ -81,7 +81,7 @@ order_states = {
         'awaiting_payment': {
             'human': lazy_gettext('awaiting payment'),
             'color': 'warning',
-            'next': ('payment_received', 'payment_failed', 'cancelled')
+            'next': ('awaiting_provider', 'payment_received', 'payment_failed', 'cancelled')
             },
         'awaiting_provider': {
             'human':
@@ -222,7 +222,7 @@ class Order(db.Document):
             elif status == 'payment_received':
                 self.payment_date = datetime.datetime.now()
                 send_mail(self.customer.email, 'payment_received',
-                           order=self, locale=self.customer.locale)
+                          order=self, locale=self.customer.locale)
             elif status == 'payment_failed':
                 self.payment_date = datetime.datetime.now()
                 send_mail(self.customer.email, 'payment_failed',

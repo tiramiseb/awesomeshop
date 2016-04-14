@@ -388,6 +388,8 @@ angular.module('shopShop', ['bootstrapLightbox'])
                                 }
                             }
                         })
+                    } else if (data.type == 'redirect') {
+                        window.location.replace(data.target);
                     };
                 };
             })
