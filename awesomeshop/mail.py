@@ -31,12 +31,14 @@ def send_mail(recipient, template, **kwargs):
         locale = kwargs.get('locale', get_locale())
         # Get the message content
         sender = app.config['MAIL_FROM']
-        subject = render_template('email/{}/{}.subject'.format(template, locale),
+        subject = render_template('email/{}/{}.subject'.format(template,
+                                                               locale),
                                   root=request.url_root, **kwargs)
         text = render_template('email/{}/{}.txt'.format(template, locale),
                                root=request.url_root, **kwargs)
         html = render_template('email/{}/{}.html'.format(template, locale),
-                               subject=subject, root=request.url_root, **kwargs)
+                               subject=subject, root=request.url_root,
+                               **kwargs)
         # Create the message
         msg = MIMEMultipart('alternative')
         msg['Subject'] = subject
