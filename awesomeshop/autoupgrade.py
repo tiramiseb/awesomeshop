@@ -114,7 +114,7 @@ def reunite_products():
 def remove_insuff_stock_from_orders():
     orders = Order._get_collection()
     orders.update_many({},
-                       {'$unset': {'_cls': ''}})
+                       {'$unset': {'insuff_stock': ''}})
 
 ###############################################################################
 # Ordered list of all upgrade functions
