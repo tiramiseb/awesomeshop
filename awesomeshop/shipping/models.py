@@ -53,7 +53,7 @@ class Country(db.Document):
         weights = self.carriers[str(carrier.id)]
         for w in weights:
             if w['weight'] > weight:
-                return result_carrier_cost(w['cost'])
+                return result_carrier_cost(Decimal(w['cost']))
         raise UnavailableCarrier
 
 
@@ -69,6 +69,20 @@ class CountriesGroup(db.Document):
     }
 
 
+class CarrierCosts(db.EmbeddedDocument):
+    weight = db.IntField()
+    # costs maps countries or groups ids to costs
+    #
+    # {
+    #   '<country_or_group_id>': <price>,
+    #   '<country_or_group_id>': <price>,
+    #   'rest': <price>
+    # }
+    #
+    # 'rest' is a special placeholder meaning "the rest of the world"
+    costs = db.MapField(db.DecimalField())
+
+
 class Carrier(db.Document):
     name = db.StringField()
     description = TranslationsField(db_field='desc')
@@ -81,25 +95,8 @@ class Carrier(db.Document):
                                 reverse_delete_rule=db.DENY,
                                 ), db_field='cgroups')
     tracking_url = db.StringField(db_field='tr_url')
-    # costs must be a list of dicts
-    #
-    # [
-    #   { 'weight': <weight_in_grams>,
-    #      'costs': {
-    #        '<country_or_group_id>': <price>,
-    #        '<country_or_group_id>': <price>,
-    #        'rest': <price>
-    #      }
-    #   },
-    #   { 'weight': <weight_in_grams>,
-    #      'costs': {
-    #        '<country_or_group_id>': <price>,
-    #        '<country_or_group_id>': <price>,
-    #        'rest': <price>
-    #      }
-    #   }
-    # ]
-    costs = db.SortedListField(db.DictField(), ordering='weight')
+    costs = db.SortedListField(db.EmbeddedDocumentField(CarrierCosts),
+                               ordering='weight')
 
     @property
     def full_description(self):
@@ -137,7 +134,7 @@ def update_mapping(sender, document, **kwargs):
                                                             ).countries
                     except:
                         pass
-            result = {'weight': weight, 'cost': cost}
+            result = {'weight': weight, 'cost': str(cost)}
             if countries == 'rest':
                 rest.append(result)
             else:

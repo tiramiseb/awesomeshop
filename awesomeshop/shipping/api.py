@@ -20,12 +20,12 @@
 from flask import abort, request
 from flask_babel import _
 from flask_restful import Resource
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields, post_load, post_dump
 from mongoengine import OperationError
 
 from .. import admin_required, login_required, rest
 from ..marsh import Count, Loc, MultiObjField
-from .models import Country, CountriesGroup, Carrier, \
+from .models import Country, CountriesGroup, Carrier, CarrierCosts, \
                     carriers_by_country_and_weight
 
 
@@ -77,6 +77,16 @@ class CountriesGroupSchema(Schema):
         return group
 
 
+class CarrierCostsSchema(Schema):
+    weight = fields.Integer()
+    costs = fields.Dict()
+
+    @post_dump
+    def costs_as_string(self, data):
+        for cid, cost in data['costs'].iteritems():
+            data['costs'][cid] = float(cost)
+
+
 class CarrierSchemaForList(Schema):
     id = fields.String(dump_only=True)
     name = fields.String(dump_only=True)
@@ -90,7 +100,7 @@ class CarrierSchema(Schema):
     tracking_url = fields.String()
     countries = MultiObjField(f='code', obj=Country)
     countries_groups = MultiObjField(f='id', obj=CountriesGroup)
-    costs = fields.List(fields.Dict())
+    costs = fields.Nested(CarrierCostsSchema, many=True)
 
     @post_load
     def make_carrier(self, data):
@@ -103,24 +113,10 @@ class CarrierSchema(Schema):
         carrier.tracking_url = data.get('tracking_url', '')
         carrier.countries = data.get('countries', [])
         carrier.countries_groups = data.get('countries_groups', [])
-        carrier.costs = data.get('costs', [])
-        try:
-            carrier.save()
-        except AttributeError as e:
-            # Workaround a possible bug in mongoengine when ordering is set and
-            # nothing has changed
-            #
-            # TODO BUG /!\ when weights or prices are not modified, the order
-            # modifications are ignored
-            #
-            # File "[..]/mongoengine/base/document.py", line 582, in <lambda>
-            # if any(map(lambda d: field._ordering in d._changed_fields, data))
-            # AttributeError: 'dict' object has no attribute '_changed_fields'
-            if e.message not in (
-                    "'dict' object has no attribute '_changed_fields'",
-                    "'BaseDict' object has no attribute '_changed_fields'"
-                    ):
-                raise
+        carrier.costs = [CarrierCosts(weight=cost['weight'],
+                                      costs=cost['costs'])
+                         for cost in data['costs']]
+        carrier.save()
         return carrier
 
 
