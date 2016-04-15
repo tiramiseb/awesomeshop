@@ -21,6 +21,7 @@ import datetime
 
 from .helpers import Setting
 from .shipping.models import Carrier
+from .shop.models.order import Order
 from .shop.models.product import Product
 from .shop.models.url import Url
 
@@ -109,6 +110,12 @@ def reunite_products():
             {'$set': {'doc._cls': 'Product'}}
             )
 
+
+def remove_insuff_stock_from_orders():
+    orders = Order._get_collection()
+    orders.update_many({},
+                       {'$unset': {'_cls': ''}})
+
 ###############################################################################
 # Ordered list of all upgrade functions
 upgrades = [
@@ -119,7 +126,11 @@ upgrades = [
         merge_weights_and_costs,
         '18/01/2016: change how weights and costs are stored'
         ),
-    (reunite_products, '09/02/2016: cancel the subproducts feature')
+    (reunite_products, '09/02/2016: cancel the subproducts feature'),
+    (
+        remove_insuff_stock_from_orders,
+        '15/04/2016: remove the "insufficient stock" info from orders'
+        )
     ]
 
 
