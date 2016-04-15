@@ -81,7 +81,8 @@ order_states = {
         'awaiting_payment': {
             'human': lazy_gettext('awaiting payment'),
             'color': 'warning',
-            'next': ('awaiting_provider', 'payment_received', 'payment_failed', 'cancelled')
+            'next': ('awaiting_provider', 'payment_received', 'payment_failed',
+                     'cancelled')
             },
         'awaiting_provider': {
             'human':
