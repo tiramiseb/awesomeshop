@@ -118,7 +118,10 @@ def remove_insuff_stock_from_orders():
         for p in newproducts:
             if 'insuff_stock' in p:
                 p.pop('insuff_stock')
-        o['products'] = newproducts
+        orders.find_one_and_update(
+                    {'_id': o['_id']},
+                    {'$set': {'products': newproducts}}
+                    )
 
 ###############################################################################
 # Ordered list of all upgrade functions
