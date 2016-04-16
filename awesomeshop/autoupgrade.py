@@ -18,6 +18,7 @@
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
+import re
 
 from .helpers import Setting
 from .shipping.models import Carrier
@@ -123,6 +124,17 @@ def remove_insuff_stock_from_orders():
                     {'$set': {'products': newproducts}}
                     )
 
+
+def change_payment_description():
+    orders = Order._get_collection()
+    for o in orders.find({'p_desc': {'$regex': '^<i class'}}):
+        print o
+        m = re.match('<i class="fa fa-(.*)"></i> (.*)', o['p_desc'])
+        orders.find_one_and_update(
+                {'_id': o['_id']},
+                {'$set': {'p_ico': m.group(1), 'p_desc': m.group(2)}}
+                )
+
 ###############################################################################
 # Ordered list of all upgrade functions
 upgrades = [
@@ -137,6 +149,10 @@ upgrades = [
     (
         remove_insuff_stock_from_orders,
         '16/04/2016: remove the "insufficient stock" info from orders'
+        ),
+    (
+        change_payment_description,
+        '16/04/2016: split the payment description and its icon'
         )
     ]
 
