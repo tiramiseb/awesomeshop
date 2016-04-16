@@ -252,15 +252,18 @@ class ApiOrders(Resource):
 class ApiOrder(Resource):
     def get(self, number):
         if current_user.is_admin:
-            schema = OrderSchemaForAdmin()
+            return OrderSchemaForAdmin().dump(
+                        Order.objects.get_or_404(
+                            number=number
+                            )
+                        ).data
         else:
-            schema = OrderSchema()
-        return schema.dump(
-                    Order.objects.get_or_404(
-                        customer=current_user.to_dbref(),
-                        number=number
-                        )
-                    ).data
+            return OrderSchema().dump(
+                        Order.objects.get_or_404(
+                            customer=current_user.to_dbref(),
+                            number=number
+                            )
+                        ).data
 
     @admin_required
     def put(self, number):
