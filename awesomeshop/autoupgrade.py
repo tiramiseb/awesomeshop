@@ -113,8 +113,12 @@ def reunite_products():
 
 def remove_insuff_stock_from_orders():
     orders = Order._get_collection()
-    orders.update_many({},
-                       {'$unset': {'insuff_stock': ''}})
+    for o in orders.find():
+        newproducts = o['products'][:]
+        for p in newproducts:
+            if 'insuff_stock' in p:
+                p.pop('insuff_stock')
+        o['products'] = newproducts
 
 ###############################################################################
 # Ordered list of all upgrade functions
@@ -129,7 +133,7 @@ upgrades = [
     (reunite_products, '09/02/2016: cancel the subproducts feature'),
     (
         remove_insuff_stock_from_orders,
-        '15/04/2016: remove the "insufficient stock" info from orders'
+        '16/04/2016: remove the "insufficient stock" info from orders'
         )
     ]
 
