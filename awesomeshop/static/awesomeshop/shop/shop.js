@@ -23,6 +23,11 @@ angular.module('shopShop', ['bootstrapLightbox'])
             templateUrl: 'shop/index',
             title: 'Home'
         })
+        .state('search', {
+            url: '/search?q',
+            templateUrl: 'shop/search',
+            controller: 'SearchCtrl'
+        })
         .state('category', {
             templateUrl: 'shop/category',
             controller: 'CategoryCtrl',
@@ -397,4 +402,12 @@ angular.module('shopShop', ['bootstrapLightbox'])
 })
 .controller('PaymentMessageCtrl', function($scope, message) {
     $scope.message = message;
-});
+})
+.controller('SearchCtrl', function($stateParams, $scope, $http) {
+    $scope.terms = $stateParams.q || '';
+    $http.get('/api/search', {params: {'terms': $scope.terms}})
+        .then(function(response) {
+            $scope.result = response.data;
+            console.log(response.data);
+        })
+})

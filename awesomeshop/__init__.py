@@ -114,3 +114,4 @@ from page import api
 from payment import api
 from shipping import api
 from shop.api import category, dbcart, order, product, tax
+import searchview

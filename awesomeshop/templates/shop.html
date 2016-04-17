@@ -81,21 +81,19 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             {% include ['local/logo.html', 'placeholder/logo.html'] ignore missing %}
         </div>
         <div class="col-sm-6 text-right hidden-print">
-            {# XXX form to search 
-            <form method="GET" action="" class="form-inline">
+            <form name="searchform" class="form-inline" ng-submit="search()" ng-controller="SearchFormCtrl">
                 <div class="form-group bottom-space">
-                <div class="input-group">
-                    <input type="text" name="q" class="form-control" placeholder="{{ _('Search for...') }}">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="submit">
-                            <i class="fa fa-search"></i>
-                            {{ _('Search') }}
-                        </button>
-                    </span>
-                </div>
+                    <div class="input-group">
+                        <input type="text" ng-model="terms" class="form-control" placeholder="{{ _('Search for...') }}">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <i class="fa fa-search"></i>
+                                {{ _('Search') }}
+                            </button>
+                        </span>
+                    </div>
                 </div>
             </form>
-            #}
             <a ui-sref="cart" class="btn btn-primary btn-lg bottom-space" ng-controller="CartButtonCtrl" ng-class="{ disabled: !cart.count() }" ng-cloak>
                 <i class="fa fa-shopping-cart"></i>&nbsp;
                 <span ng-hide="cart.count()">{{ _('Cart is empty' ) }}</span>

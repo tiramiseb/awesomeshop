@@ -409,3 +409,8 @@ angular.module('awesomeshop', [
 .controller('InfosListCtrl', function($scope, infos) {
     $scope.infos = infos;
 })
+.controller('SearchFormCtrl', function($scope, $state) {
+    $scope.search = function() {
+        $state.go('search', {'q': $scope.terms});
+    }
+})
