@@ -18,6 +18,7 @@
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 import docutils.core
+from mongoengine import signals
 from mongoengine.connection import get_db
 
 from .. import db, get_locale
@@ -94,3 +95,14 @@ class Page(db.Document):
     def on_sale_products(self):
         from ..shop.models.product import Product
         return Product.objects(documentation=self, on_sale=True)
+
+def update_search(sender, document, **kwargs):
+    from ..search import index_doc
+    index_doc(document)
+
+def delete_search(sender, document, **kwargs):
+    from ..search import delete_doc
+    delete_doc(document)
+
+signals.post_save.connect(update_search, sender=Page)
+signals.pre_delete.connect(delete_search, sender=Page)

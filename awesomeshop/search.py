@@ -130,6 +130,16 @@ def index_docs(objs):
     writer.commit()
 
 
+def index_doc(obj):
+    index_docs((obj,))
+
+
+def delete_doc(obj):
+    writer = indexes['doc'].writer()
+    writer.delete_by_term('id', unicode(obj.id))
+    writer.commit()
+
+
 def index_categories(objs):
     writer = indexes['category'].writer()
     langs = app.config['LANGS']
@@ -141,6 +151,16 @@ def index_categories(objs):
             obj['name_'+lg] = i.name.get(lg, u'')
             obj['description_'+lg] = i.description.get(lg, u'')
         writer.update_document(**obj)
+    writer.commit()
+
+
+def index_category(obj):
+    index_categories((obj,))
+
+
+def delete_category(obj):
+    writer = indexes['category'].writer()
+    writer.delete_by_term('id', unicode(obj.id))
     writer.commit()
 
 
@@ -159,56 +179,66 @@ def index_products(objs):
         writer.update_document(**obj)
     writer.commit()
 
+
+def index_product(obj):
+    index_products((obj,))
+
+
+def delete_product(obj):
+    writer = indexes['product'].writer()
+    writer.delete_by_term('id', unicode(obj.id))
+    writer.commit()
+
 init_indexes_and_parsers()
 
 
 def do_search(terms):
-    print parsers['doc'].parse(terms)
-    with indexes['doc'].searcher() as searcher:
-        docs = []
-        for hit in searcher.search(
-                                parsers['doc'].parse(terms),
-                                collapse='id',
-                                limit=None
-                                ):
-            try:
-                docs.append(
-                        PageSchemaForList().dump(
-                            Page.objects.get(id=hit['id'], pagetype='doc')
-                            ).data
-                        )
-            except Page.DoesNotExist:
-                pass
-    with indexes['category'].searcher() as searcher:
-        categories = []
-        for hit in searcher.search(
-                                parsers['category'].parse(terms),
-                                collapse='id',
-                                limit=None
-                                ):
-            try:
-                categories.append(
-                        CategorySchemaForFlatList().dump(
-                            Category.objects.get(id=hit['id'])
-                            ).data
-                        )
-            except Category.DoesNotExist:
-                pass
-    with indexes['product'].searcher() as searcher:
-        products = []
-        for hit in searcher.search(
-                                parsers['product'].parse(terms),
-                                collapse='id',
-                                limit=None
-                                ):
-            try:
-                products.append(
-                        ProductSchemaForList().dump(
-                            Product.objects.get(id=hit['id'], on_sale=True)
-                            ).data
-                        )
-            except Product.DoesNotExist:
-                pass
+    docs = []
+    categories = []
+    products = []
+    if terms:
+        with indexes['doc'].searcher() as searcher:
+            for hit in searcher.search(
+                                    parsers['doc'].parse(terms),
+                                    collapse='id',
+                                    limit=None
+                                    ):
+                try:
+                    docs.append(
+                            PageSchemaForList().dump(
+                                Page.objects.get(id=hit['id'], pagetype='doc')
+                                ).data
+                            )
+                except Page.DoesNotExist:
+                    pass
+        with indexes['category'].searcher() as searcher:
+            for hit in searcher.search(
+                                    parsers['category'].parse(terms),
+                                    collapse='id',
+                                    limit=None
+                                    ):
+                try:
+                    categories.append(
+                            CategorySchemaForFlatList().dump(
+                                Category.objects.get(id=hit['id'])
+                                ).data
+                            )
+                except Category.DoesNotExist:
+                    pass
+        with indexes['product'].searcher() as searcher:
+            for hit in searcher.search(
+                                    parsers['product'].parse(terms),
+                                    collapse='id',
+                                    limit=None
+                                    ):
+                try:
+                    products.append(
+                            ProductSchemaForList().dump(
+                                Product.objects.get(id=hit['id'], on_sale=True)
+                                ).data
+                            )
+                except Product.DoesNotExist:
+                    pass
     return {
         'docs': docs,
         'categories': categories,

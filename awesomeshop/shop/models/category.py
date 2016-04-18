@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
+from mongoengine import signals
+
 from ... import db, get_locale
 from ...mongo import TranslationsField
 
@@ -79,3 +81,16 @@ class Category(db.Document):
             return u'{} » {}'.format(self.parent.full_name, name)
         else:
             return name
+
+
+def update_search(sender, document, **kwargs):
+    from ...search import index_category
+    index_category(document)
+
+
+def delete_search(sender, document, **kwargs):
+    from ...search import delete_category
+    delete_category(document)
+
+signals.post_save.connect(update_search, sender=Category)
+signals.pre_delete.connect(delete_search, sender=Category)

@@ -21,6 +21,7 @@ import datetime
 import docutils.core
 from decimal import Decimal
 
+from mongoengine import signals
 from satchless.item import StockedItem
 import prices
 
@@ -127,3 +128,16 @@ class Product(db.Document, StockedItem):
                         },
                     writer_name='html')
         return parts['body']
+
+
+def update_search(sender, document, **kwargs):
+    from ...search import index_product
+    index_product(document)
+
+
+def delete_search(sender, document, **kwargs):
+    from ...search import delete_product
+    delete_product(document)
+
+signals.post_save.connect(update_search, sender=Product)
+signals.pre_delete.connect(delete_search, sender=Product)
