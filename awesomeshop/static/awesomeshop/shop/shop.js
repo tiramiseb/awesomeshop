@@ -408,6 +408,5 @@ angular.module('shopShop', ['bootstrapLightbox'])
     $http.get('/api/search', {params: {'terms': $scope.terms}})
         .then(function(response) {
             $scope.result = response.data;
-            console.log(response.data);
         })
 })

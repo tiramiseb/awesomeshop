@@ -128,7 +128,6 @@ def remove_insuff_stock_from_orders():
 def change_payment_description():
     orders = Order._get_collection()
     for o in orders.find({'p_desc': {'$regex': '^<i class'}}):
-        print o
         m = re.match('<i class="fa fa-(.*)"></i> (.*)', o['p_desc'])
         orders.find_one_and_update(
                 {'_id': o['_id']},

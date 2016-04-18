@@ -147,7 +147,6 @@ class ApiProducts(Resource):
                     obj = Product.objects.where('this.stock > this.alert')
             else:
                 obj = Product.objects
-            print query
             return ProductSchemaForAdminList(many=True).dump(obj).data
         else:
             return ProductSchemaForList(many=True).dump(
