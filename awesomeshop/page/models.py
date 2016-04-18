@@ -96,9 +96,11 @@ class Page(db.Document):
         from ..shop.models.product import Product
         return Product.objects(documentation=self, on_sale=True)
 
+
 def update_search(sender, document, **kwargs):
     from ..search import index_doc
     index_doc(document)
+
 
 def delete_search(sender, document, **kwargs):
     from ..search import delete_doc

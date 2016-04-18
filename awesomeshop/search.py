@@ -39,9 +39,12 @@ indexes = {}
 parsers = {}
 domotego_analyzer = SimpleAnalyzer() | CharsetFilter(accent_map)
 
+
 class FuzzierTerm(FuzzyTerm):
-    def __init__(self, fieldname, text, boost=1.0, maxdist=3, prefixlength=1, constantscore=True):
-        super(FuzzierTerm, self).__init__(fieldname, text, boost, maxdist, prefixlength, constantscore)
+    def __init__(self, fieldname, text, boost=1.0, maxdist=3,
+                 prefixlength=1, constantscore=True):
+        super(FuzzierTerm, self).__init__(fieldname, text, boost, maxdist,
+                                          prefixlength, constantscore)
 
 
 def init_indexes_and_parsers():
@@ -58,7 +61,11 @@ def init_indexes_and_parsers():
         schema = Schema(
                         id=ID(stored=True, unique=True),
                         )
-        schema.add('title_*', TEXT(field_boost=2.0, analyzer=domotego_analyzer), glob=True)
+        schema.add(
+                'title_*',
+                TEXT(field_boost=2.0, analyzer=domotego_analyzer),
+                glob=True
+                )
         schema.add('text_*', TEXT(analyzer=domotego_analyzer), glob=True)
         indexes['doc'] = create_in(path, schema, indexname=name)
         index_docs(Page.objects(pagetype='doc'))
@@ -74,8 +81,16 @@ def init_indexes_and_parsers():
         schema = Schema(
                         id=ID(stored=True, unique=True),
                         )
-        schema.add('name_*', TEXT(field_boost=2.0, analyzer=domotego_analyzer), glob=True)
-        schema.add('description_*', TEXT(analyzer=domotego_analyzer), glob=True)
+        schema.add(
+                'name_*',
+                TEXT(field_boost=2.0, analyzer=domotego_analyzer),
+                glob=True
+                )
+        schema.add(
+                'description_*',
+                TEXT(analyzer=domotego_analyzer),
+                glob=True
+                )
         indexes['category'] = create_in(path, schema, indexname=name)
         index_categories(Category.objects)
     # Initialize the products index
@@ -92,8 +107,16 @@ def init_indexes_and_parsers():
                         reference=KEYWORD,
                         keywords=KEYWORD(lowercase=True, field_boost=1.5)
                         )
-        schema.add('name_*', TEXT(field_boost=2.0, analyzer=domotego_analyzer), glob=True)
-        schema.add('description_*', TEXT(analyzer=domotego_analyzer), glob=True)
+        schema.add(
+                'name_*',
+                TEXT(field_boost=2.0, analyzer=domotego_analyzer),
+                glob=True
+                )
+        schema.add(
+                'description_*',
+                TEXT(analyzer=domotego_analyzer),
+                glob=True
+                )
         indexes['product'] = create_in(path, schema, indexname=name)
         index_products(Product.objects)
 
@@ -108,12 +131,21 @@ def init_indexes_and_parsers():
         categoryparserfields.append('description_'+lg)
         productparserfields.append('name_'+lg)
         productparserfields.append('description_'+lg)
-    parsers['doc'] = qparser.MultifieldParser(docparserfields,
-                                      schema=indexes['doc'].schema, termclass=FuzzierTerm)
-    parsers['category'] = qparser.MultifieldParser(categoryparserfields,
-                                      schema=indexes['category'].schema, termclass=FuzzierTerm)
-    parsers['product'] = qparser.MultifieldParser(productparserfields,
-                                              schema=indexes['product'].schema, termclass=FuzzierTerm)
+    parsers['doc'] = qparser.MultifieldParser(
+                                    docparserfields,
+                                    schema=indexes['doc'].schema,
+                                    termclass=FuzzierTerm
+                                    )
+    parsers['category'] = qparser.MultifieldParser(
+                                    categoryparserfields,
+                                    schema=indexes['category'].schema,
+                                    termclass=FuzzierTerm
+                                    )
+    parsers['product'] = qparser.MultifieldParser(
+                                    productparserfields,
+                                    schema=indexes['product'].schema,
+                                    termclass=FuzzierTerm
+                                    )
 
 
 def index_docs(objs):
