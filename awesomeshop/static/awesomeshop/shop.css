@@ -29,6 +29,16 @@
     margin-bottom: 0;
 }
 
+/***** HIDE OR SHOW THE MENU ON XS SCREENS *****/
+@media (max-width: 767px) {
+    #leftmenu {
+        display: none;
+    }
+    #leftmenu.toggled {
+        display: block;
+    }
+}
+
 /***** CATEGORIES HIERARCHY *****/
 .category_hierarchy_0 {
     padding-left: 0;

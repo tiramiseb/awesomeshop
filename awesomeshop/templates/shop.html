@@ -57,11 +57,19 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </div>
         <p class="navbar-text navbar-right" ng-controller="UserCtrl" ng-cloak>
             <span ng-if="user.get().is_admin">
-                <a class="navbar-link" href="/dashboard" target="_blank"><i class="fa fa-tachometer"></i> {{ _('Dashboard') }}</a> |
+                <a class="navbar-link" href="/dashboard" target="_blank">
+                    <i class="fa fa-tachometer"></i>
+                    <span class="hidden-xs">{{ _('Dashboard') }}</span>
+                </a> |
             </span>
             <span ng-show="user.get().auth">
-                <a class="navbar-link" ui-sref="profile"><i class="fa fa-user"></i> [[ user.get().email ]]</a> |
-                <a class="navbar-link" href="#" ng-click="user.logout()"><i class="fa fa-sign-out"></i> {{ _('Logout') }}</a>
+                <a class="navbar-link" ui-sref="profile">
+                    <i class="fa fa-user"></i> [[ user.get().email ]]
+                </a> |
+                <a class="navbar-link" href="#" ng-click="user.logout()">
+                    <i class="fa fa-sign-out"></i>
+                    <span class="hidden-xs">{{ _('Logout') }}</span>
+                </a>
             </span>
             <span ng-hide="user.get().auth">
                 <a class="navbar-link" href="#" ng-click="user.forcelogin()"><i class="fa fa-sign-in"></i> {{ _('Login') }}</a> |
@@ -102,7 +110,14 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-3 col-sm-4 leftmenu hidden-print">
+        <div class="col-xs-12 visible-xs-block bottom-space">
+            <button type="button" class="btn btn-default btn-block" id="menu-toggle" ng-model="toggleLeftMenu" uib-btn-checkbox>
+                <i class="fa fa-bars"></i>
+                {{ _('Show the menu') }}
+            </button>
+        </div>
+        <div class="clearfix visible-xs-block"></div>
+        <div id="leftmenu" ng-class="{toggled: toggleLeftMenu}" class="col-lg-3 col-sm-4 hidden-print" ng-click="toggleLeftMenu=false;">
             <div class="panel panel-default" ng-controller="CategoriesListCtrl">
                 <div class="panel-heading">
                     <i class="fa fa-list"></i>
