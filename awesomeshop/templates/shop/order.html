@@ -154,6 +154,10 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <i class="fa fa-recycle"></i>
                 {{_('I accept that my order is shipped in a reused package') }}
             </li>
+            <li ng-if="order.paper_invoice">
+                <i class="fa fa-file-text-o"></i>
+                {{_('I want a paper invoice') }}
+            </li>
         </ul>
     </div>
 </div>
