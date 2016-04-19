@@ -405,8 +405,10 @@ angular.module('shopShop', ['bootstrapLightbox'])
 })
 .controller('SearchCtrl', function($stateParams, $scope, $http) {
     $scope.terms = $stateParams.q || '';
+    $scope.waiting = true;
     $http.get('/api/search', {params: {'terms': $scope.terms}})
         .then(function(response) {
+            $scope.waiting = false;
             $scope.result = response.data;
         })
 })

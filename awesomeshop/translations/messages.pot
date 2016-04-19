@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-04-19 06:50+0200\n"
+"POT-Creation-Date: 2016-04-19 07:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1429,5 +1429,9 @@ msgstr ""
 
 #: awesomeshop/templates/shop/search.html:43
 msgid "Sorry, there are no results for this search..."
+msgstr ""
+
+#: awesomeshop/templates/shop/search.html:46
+msgid "Please wait, search is in progress..."
 msgstr ""
 

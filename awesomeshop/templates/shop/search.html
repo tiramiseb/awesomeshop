@@ -39,6 +39,9 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     <h2>{{ _('Products') }}</h2>
     <products-list products="result.products"></products-list>
 </div>
-<p ng-hide="result.products.length || result.categories.length || result.docs.length">
+<p ng-hide="waiting || result.products.length || result.categories.length || result.docs.length">
 {{ _('Sorry, there are no results for this search...') }}
+</p>
+<p ng-show="waiting">
+{{ _('Please wait, search is in progress...') }}
 </p>
