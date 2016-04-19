@@ -51,7 +51,7 @@ angular.module('shopUser', ['validation.match'])
 })
 .controller('ProfileCtrl', function($scope, $state, $uibModal, user) {
     $scope.user = user;
-    if (!user.get().auth) {
+    if (user.get() && !user.get().auth) {
         $state.go('index');
     }
     $scope.change_email = function() {
