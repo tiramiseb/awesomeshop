@@ -29,7 +29,7 @@ def messages():
         'Documentation': _('Documentation'),
         'Home': _('Home'),
         'Information': _('Information'),
-        'My cart': _('Mon panier'),
+        'My cart': _('My cart'),
         'My orders': _('My orders'),
         'New products': _('New products'),
         'Order [[ order.full_number ]], on [[ order.date | date ]]':

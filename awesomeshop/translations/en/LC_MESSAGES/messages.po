@@ -1,1411 +1,1259 @@
-# Copyright 2015 Sébastien Maccagnoni-Munch
-#
-# This file is part of AwesomeShop.
-# AwesomeShop is free software: you can redistribute it and/or modify it
-# under
-# the terms of the GNU Affero General Public License as published by the
-# Free Software Foundation, either version 3 of the License, or (at your
-# option) any later version.
-# AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS
-# FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for
-# more
-# details.
-# You should have received a copy of the GNU Affero General Public License
-# along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 # English translations for AwesomeShop.
+# Copyright (C) 2015-2016 Sébastien Maccagnoni
+# This file is distributed under the same license as the  project.
+# Sébastien Maccagnoni <sebastien@maccagnoni.eu>, 2015-2016.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version:  N/A\n"
-"Report-Msgid-Bugs-To: sebastien@domotego.com\n"
-"POT-Creation-Date: 2015-11-10 09:09+0100\n"
-"PO-Revision-Date: 2015-11-10 09:10+0100\n"
-"Last-Translator: Sebastien Maccagnoni-Munch <sebastien@domotego.com>\n"
+"Report-Msgid-Bugs-To: sebastien@maccagnoni.eu\n"
+"POT-Creation-Date: 2016-04-19 06:50+0200\n"
+"PO-Revision-Date: 2016-04-19 06:50+0200\n"
+"Last-Translator: Sebastien Maccagnoni <sebastien@maccagnoni.eu>\n"
 "Language: en\n"
-"Language-Team: Sébastien Maccagnoni-Munch <sebastien@domotego.com>\n"
+"Language-Team: Sébastien Maccagnoni <sebastien@maccagnoni.eu>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.1.1\n"
-
-#: awesomeshop/helpers.py:27 awesomeshop/shipping/models.py:46
-#: awesomeshop/shipping/models.py:67 awesomeshop/shop/models/product.py:50
-#: awesomeshop/shop/models/tax.py:28
-#: awesomeshop/templates/dashboard/products.html:32
-#: awesomeshop/templates/dashboard/taxes.html:27
-msgid "Name"
-msgstr "Name"
-
-#: awesomeshop/photo.py:32
-msgid "Filename"
-msgstr "Filename"
-
-#: awesomeshop/auth/forms.py:29 awesomeshop/auth/forms.py:38
-#: awesomeshop/auth/forms.py:53 awesomeshop/auth/models.py:39
-#: awesomeshop/dashboard/forms.py:33
-msgid "Email address"
-msgstr "Email address"
-
-#: awesomeshop/auth/forms.py:32 awesomeshop/auth/forms.py:41
-#: awesomeshop/dashboard/forms.py:36
-msgid "Password"
-msgstr "Password"
-
-#: awesomeshop/auth/forms.py:44 awesomeshop/dashboard/forms.py:41
-msgid "Password (again)"
-msgstr "Password (again)"
-
-#: awesomeshop/auth/forms.py:49 awesomeshop/auth/forms.py:59
-#: awesomeshop/dashboard/forms.py:39
-msgid "Passwords must be identical."
-msgstr "Passwords must be identical."
-
-#: awesomeshop/auth/forms.py:54
-msgid "New password"
-msgstr "New password"
-
-#: awesomeshop/auth/forms.py:56
-msgid "New password (again)"
-msgstr "New password (again)"
-
-#: awesomeshop/auth/models.py:45 awesomeshop/dashboard/forms.py:35
-#: awesomeshop/templates/dashboard/user.html:44
-msgid "Is an administrator"
-msgstr "Is an administrator"
-
-#: awesomeshop/auth/models.py:129
-msgid "My address"
-msgstr "My address"
-
-#: awesomeshop/auth/models.py:130
-msgid "Address title"
-msgstr "Address title"
-
-#: awesomeshop/auth/models.py:135
-msgid "First name"
-msgstr "First name"
-
-#: awesomeshop/auth/models.py:140
-msgid "Last name"
-msgstr "Last name"
-
-#: awesomeshop/auth/models.py:143
-msgid "Address"
-msgstr "Address"
-
-#: awesomeshop/auth/models.py:144
-#: awesomeshop/templates/dashboard/country.html:21
-msgid "Country"
-msgstr "Country"
-
-#: awesomeshop/auth/models.py:147
-msgid "Phone"
-msgstr "Phone"
-
-#: awesomeshop/auth/views.py:45
-msgid "Email address or Password is invalid."
-msgstr "Email address or Password is invalid."
-
-#: awesomeshop/auth/views.py:87
-msgid "You already have an account with this email address!"
-msgstr "You already have an account with this email address!"
-
-#: awesomeshop/page/models.py:32
-msgid "Rank"
-msgstr "Rank"
-
-#: awesomeshop/page/models.py:34 awesomeshop/shop/models/category.py:39
-#: awesomeshop/shop/models/product.py:46
-msgid "Slug"
-msgstr "Slug"
-
-#: awesomeshop/page/models.py:36
-msgid "Display in menu"
-msgstr "Display in menu"
-
-#: awesomeshop/payment/__init__.py:28
-msgid "See SEPA bank transfer information again"
-msgstr "See SEPA bank transfer information again"
-
-#: awesomeshop/payment/__init__.py:35
-#: awesomeshop/templates/payment/sepa_bank_transfer.html:21
-#: awesomeshop/templates/payment/sepa_bank_transfer.html:23
-msgid "SEPA bank transfer"
-msgstr "SEPA bank transfer"
-
-#: awesomeshop/payment/payplug_awesomeshop/__init__.py:30
-msgid "Return to the payment page"
-msgstr "Return to the payment page"
-
-#: awesomeshop/payment/payplug_awesomeshop/__init__.py:38
-msgid "Credit card (secured by PayPlug)"
-msgstr "Credit card (secured by PayPlug)"
-
-#: awesomeshop/payment/payplug_awesomeshop/views.py:60
-msgid "Error while processing the card"
-msgstr "Error while processing the card"
-
-#: awesomeshop/payment/payplug_awesomeshop/views.py:62
-msgid "Your bank declined the payment"
-msgstr "Your bank declined the payment"
-
-#: awesomeshop/payment/payplug_awesomeshop/views.py:64
-msgid "Insufficient funds on your bank account"
-msgstr "Insufficient funds on your bank account"
-
-#: awesomeshop/payment/payplug_awesomeshop/views.py:66
-msgid "3-D secure protection has failed"
-msgstr "3-D secure protection has failed"
-
-#: awesomeshop/payment/payplug_awesomeshop/views.py:68
-msgid "The card number is incorrect"
-msgstr "The card number is incorrect"
-
-#: awesomeshop/payment/payplug_awesomeshop/views.py:70
-msgid "A potential fraud has been detected"
-msgstr "A potential fraud has been detected"
-
-#: awesomeshop/payment/payplug_awesomeshop/views.py:72
-msgid "Payment has been aborted"
-msgstr "Payment has been aborted"
-
-#: awesomeshop/payment/payplug_awesomeshop/views.py:74
-msgid "Unknown problem"
-msgstr "Unknown problem"
-
-#: awesomeshop/shipping/models.py:31
-msgid "Code"
-msgstr "Code"
-
-#: awesomeshop/shipping/models.py:33
-msgid "Default name"
-msgstr "Default name"
-
-#: awesomeshop/shipping/models.py:50 awesomeshop/shipping/models.py:73
-#: awesomeshop/templates/dashboard/carrier.html:46
-#: awesomeshop/templates/dashboard/countries.html:22
-#: awesomeshop/templates/dashboard/countries.html:24
-#: awesomeshop/templates/dashboard/skeleton.html:63
-msgid "Countries"
-msgstr "Countries"
-
-#: awesomeshop/shipping/models.py:69 awesomeshop/shop/models/product.py:52
-msgid "Description"
-msgstr "Description"
-
-#: awesomeshop/shipping/models.py:78
-#: awesomeshop/templates/dashboard/countries_groups.html:22
-#: awesomeshop/templates/dashboard/countries_groups.html:24
-#: awesomeshop/templates/dashboard/skeleton.html:67
-msgid "Countries groups"
-msgstr "Countries groups"
-
-#: awesomeshop/shipping/models.py:81
-#: awesomeshop/templates/dashboard/carrier.html:60
-msgid "Weights"
-msgstr "Weights"
-
-#: awesomeshop/shipping/models.py:85
-msgid "Tracking URL (if any) - use \"@\" in place of the number"
-msgstr "Tracking URL (if any) - use \"@\" in place of the number"
-
-#: awesomeshop/shop/cart.py:28
-msgid "In stock"
-msgstr "In stock"
-
-#: awesomeshop/shop/cart.py:30 awesomeshop/templates/skeleton.html:46
-#: awesomeshop/templates/dashboard/home.html:99
-#: awesomeshop/templates/shop/product/simple.html:52
-msgid "Out of stock"
-msgstr "Out of stock"
-
-#: awesomeshop/shop/cart.py:33
-#: awesomeshop/templates/shop/insufficient_stock.html:21
-#: awesomeshop/templates/shop/insufficient_stock.html:23
-#: awesomeshop/templates/shop/out_of_stock_before_confirmation.html:21
-#: awesomeshop/templates/shop/out_of_stock_before_confirmation.html:23
-msgid "Insufficient stock"
-msgstr "Insufficient stock."
-
-#: awesomeshop/shop/cart.py:35
-#, python-format
-msgid "Delay %(min)d-%(max)d days"
-msgstr "Delay %(min)d-%(max)d days"
-
-#: awesomeshop/shop/models/category.py:40
-msgid "Parent"
-msgstr "Parent"
-
-#: awesomeshop/shop/models/dbcart.py:74
-msgid "Unnamed cart"
-msgstr "Unnamed cart"
-
-#: awesomeshop/shop/models/order.py:88
-msgid "unconfirmed"
-msgstr "unconfirmed"
-
-#: awesomeshop/shop/models/order.py:93
-msgid "awaiting payment"
-msgstr "awaiting payment"
-
-#: awesomeshop/shop/models/order.py:98
-msgid "awaiting a response from the payment provider"
-msgstr "awaiting a response from the payment provider"
-
-#: awesomeshop/shop/models/order.py:103
-msgid "payment received"
-msgstr "payment received"
-
-#: awesomeshop/shop/models/order.py:108
-msgid "payment failed ({})"
-msgstr "payment failed ({})"
-
-#: awesomeshop/shop/models/order.py:113
-msgid "in preparation"
-msgstr "in preparation"
-
-#: awesomeshop/shop/models/order.py:118
-msgid "shipped on {}"
-msgstr "shipped on {}"
-
-#: awesomeshop/shop/models/order.py:123
-msgid "awaiting return"
-msgstr "awaiting return"
-
-#: awesomeshop/shop/models/order.py:128
-msgid "refund"
-msgstr "refund"
-
-#: awesomeshop/shop/models/order.py:133
-msgid "cancelled"
-msgstr "cancelled"
-
-#: awesomeshop/shop/models/product.py:49
-#: awesomeshop/templates/dashboard/products.html:31
-msgid "Reference"
-msgstr "Reference"
-
-#: awesomeshop/shop/models/product.py:57
-#: awesomeshop/templates/skeleton.html:144
-#: awesomeshop/templates/dashboard/skeleton.html:54
-#: awesomeshop/templates/shop/search.html:39
-#: awesomeshop/templates/shop/product/skeleton.html:99
-msgid "Documentation"
-msgstr "Documentation"
-
-#: awesomeshop/shop/models/product.py:61
-#: awesomeshop/templates/dashboard/category.html:21
-msgid "Category"
-msgstr "Category"
-
-#: awesomeshop/shop/models/product.py:63
-msgid "Keywords"
-msgstr "Keywords"
-
-#: awesomeshop/shop/models/product.py:67
-msgid "Tax"
-msgstr "Tax"
-
-#: awesomeshop/shop/models/product.py:69
-#: awesomeshop/templates/dashboard/product/skeleton.html:64
-msgid "Is on sale"
-msgstr "Is on sale"
-
-#: awesomeshop/shop/models/product.py:73
-#: awesomeshop/templates/page/page.html:31
-#: awesomeshop/templates/shop/product/skeleton.html:87
-msgid "Related products"
-msgstr "Related products"
-
-#: awesomeshop/shop/models/product.py:78
-#: awesomeshop/templates/dashboard/products.html:35
-msgid "On demand"
-msgstr "On demand"
-
-#: awesomeshop/shop/models/product.py:177
-msgid "Simple"
-msgstr "Simple"
-
-#: awesomeshop/shop/models/product.py:180
-msgid "Purchasing price"
-msgstr "Purchasing price"
-
-#: awesomeshop/shop/models/product.py:185
-msgid "Gross price"
-msgstr "Gross price"
-
-#: awesomeshop/shop/models/product.py:187
-msgid "Weight"
-msgstr "Weight"
-
-#: awesomeshop/shop/models/product.py:188
-#: awesomeshop/templates/dashboard/products.html:34
-msgid "Stock"
-msgstr "Stock"
-
-#: awesomeshop/shop/models/product.py:192
-msgid "Stock alert"
-msgstr "Stock alert"
-
-#: awesomeshop/shop/models/tax.py:29
-#: awesomeshop/templates/dashboard/taxes.html:30
-msgid "Rate"
-msgstr "Rate"
-
-#: awesomeshop/templates/400.html:21
-msgid "Error 400"
-msgstr "Error 400"
-
-#: awesomeshop/templates/400.html:23
-msgid "Error 400: Bad Request"
-msgstr "Error 400: Bad Request"
-
-#: awesomeshop/templates/400.html:26 awesomeshop/templates/500.html:26
-msgid "Something bad happened, sorry!"
-msgstr "Something bad happened, sorry!"
-
-#: awesomeshop/templates/400.html:28 awesomeshop/templates/403.html:28
-#: awesomeshop/templates/404.html:28 awesomeshop/templates/500.html:28
-#: awesomeshop/templates/auth/email_verification_failed.html:32
-#: awesomeshop/templates/auth/email_verified.html:28
-msgid "Return to the home page"
-msgstr "Return to the home page"
-
-#: awesomeshop/templates/403.html:21
-msgid "Error 403"
-msgstr "Error 403"
-
-#: awesomeshop/templates/403.html:23
-msgid "Error 403: Forbidden"
-msgstr "Error 403: Forbidden"
-
-#: awesomeshop/templates/403.html:26
-msgid "You are not authorized to be here, sorry!"
-msgstr "You are not authorized to be here, sorry!"
-
-#: awesomeshop/templates/404.html:21
-msgid "Error 404"
-msgstr "Error 404"
-
-#: awesomeshop/templates/404.html:23
-msgid "Error 404: Page not found"
-msgstr "Error 404: Page not found"
-
-#: awesomeshop/templates/404.html:26
-msgid "It seems what you were looking for is not here."
-msgstr "It seems what you were looking for is not here."
-
-#: awesomeshop/templates/500.html:21
-msgid "Error 500"
-msgstr "Error 500"
-
-#: awesomeshop/templates/500.html:23
-msgid "Error 500: Internal server error"
-msgstr "Error 500: Internal server error"
-
-#: awesomeshop/templates/home.html:21
-msgid "Home"
-msgstr "Home"
-
-#: awesomeshop/templates/skeleton.html:36
-#: awesomeshop/templates/skeleton.html:42
-#: awesomeshop/templates/shop/product/simple.html:41
-#: awesomeshop/templates/shop/product/simple.html:45
-msgid "Add to cart"
-msgstr "Add to cart"
-
-#: awesomeshop/templates/skeleton.html:43
-#: awesomeshop/templates/shop/product/simple.html:47
-#, python-format
-msgid "Available on demand, delay %(min)d-%(max)d days"
-msgstr "Available on demand, delay %(min)d-%(max)d days"
-
-#: awesomeshop/templates/skeleton.html:85
-#: awesomeshop/templates/dashboard/carrier.html:21
-#: awesomeshop/templates/dashboard/carriers.html:22
-#: awesomeshop/templates/dashboard/categories.html:44
-#: awesomeshop/templates/dashboard/category.html:21
-#: awesomeshop/templates/dashboard/countries.html:22
-#: awesomeshop/templates/dashboard/countries_group.html:21
-#: awesomeshop/templates/dashboard/countries_groups.html:22
-#: awesomeshop/templates/dashboard/country.html:21
-#: awesomeshop/templates/dashboard/orders.html:21
-#: awesomeshop/templates/dashboard/page.html:21
-#: awesomeshop/templates/dashboard/pages.html:22
-#: awesomeshop/templates/dashboard/products.html:21
-#: awesomeshop/templates/dashboard/skeleton.html:26
-#: awesomeshop/templates/dashboard/skeleton.html:33
-#: awesomeshop/templates/dashboard/taxes.html:22
-#: awesomeshop/templates/dashboard/user.html:21
-#: awesomeshop/templates/dashboard/users.html:22
-#: awesomeshop/templates/dashboard/product/skeleton.html:20
-msgid "Dashboard"
-msgstr "Dashboard"
-
-#: awesomeshop/templates/skeleton.html:89
-msgid "Logout"
-msgstr "Logout"
-
-#: awesomeshop/templates/skeleton.html:91
-#: awesomeshop/templates/skeleton.html:174
-#: awesomeshop/templates/auth/login.html:21
-msgid "Login"
-msgstr "Login"
-
-#: awesomeshop/templates/skeleton.html:92
-#: awesomeshop/templates/skeleton.html:177
-#: awesomeshop/templates/auth/register.html:21
-msgid "Register"
-msgstr "Register"
-
-#: awesomeshop/templates/skeleton.html:111
-msgid "Search for..."
-msgstr "Search for..."
-
-#: awesomeshop/templates/skeleton.html:115
-msgid "Search"
-msgstr "Search"
-
-#: awesomeshop/templates/skeleton.html:123
-#, python-format
-msgid "%(num)s product, %(sum)s %(currency)s"
-msgid_plural "%(num)s products, %(sum)s %(currency)s"
-msgstr[0] "%(num)s product, %(sum)s %(currency)s"
-msgstr[1] "%(num)s products, %(sum)s %(currency)s"
-
-#: awesomeshop/templates/skeleton.html:123
-msgid "Cart is empty"
-msgstr "Cart is empty"
-
-#: awesomeshop/templates/skeleton.html:132
-#: awesomeshop/templates/dashboard/categories.html:44
-#: awesomeshop/templates/dashboard/categories.html:46
-#: awesomeshop/templates/dashboard/skeleton.html:46
-#: awesomeshop/templates/shop/search.html:31
-msgid "Categories"
-msgstr "Categories"
-
-#: awesomeshop/templates/skeleton.html:136
-#: awesomeshop/templates/shop/new_products.html:23
-msgid "New products"
-msgstr "New products"
-
-#: awesomeshop/templates/skeleton.html:157
-msgid "My account"
-msgstr "My account"
-
-#: awesomeshop/templates/skeleton.html:162
-msgid "My profile"
-msgstr "My profile"
-
-#: awesomeshop/templates/skeleton.html:166
-msgid "My orders"
-msgstr "My orders"
-
-#: awesomeshop/templates/skeleton.html:170
-msgid "My saved carts"
-msgstr "My saved carts"
-
-#: awesomeshop/templates/skeleton.html:185
-#: awesomeshop/templates/dashboard/skeleton.html:75
-msgid "Information"
-msgstr "Information"
-
-#: awesomeshop/templates/skeleton.html:199
-msgid ""
-"Please confirm your email address by clicking on the link you should have"
-" received."
-msgstr ""
-"Please confirm your email address by clicking on the link you should have"
-" received."
-
-#: awesomeshop/templates/skeleton.html:201
-msgid "You have not received the validation email?"
-msgstr "You have not received the validation email?"
-
-#: awesomeshop/templates/skeleton.html:202
-msgid "Send it again"
-msgstr "Send it again"
-
-#: awesomeshop/templates/skeleton.html:213
-msgid "Follow us..."
-msgstr "Follow us..."
-
-#: awesomeshop/templates/auth/address_from_checkout.html:21
-#: awesomeshop/templates/auth/address_from_checkout.html:23
-#: awesomeshop/templates/shop/checkout.html:169
-msgid "Create an address"
-msgstr "Create an address"
-
-#: awesomeshop/templates/auth/address_from_checkout.html:21
-#: awesomeshop/templates/auth/address_from_checkout.html:23
-msgid "Modify an address"
-msgstr "Modify an address"
-
-#: awesomeshop/templates/auth/address_from_checkout.html:43
-#: awesomeshop/templates/shop/checkout.html:101
-#: awesomeshop/templates/shop/checkout.html:140
-msgid "Modify"
-msgstr "Modify"
-
-#: awesomeshop/templates/auth/address_from_checkout.html:45
-#: awesomeshop/templates/auth/addresses.html:83
-#: awesomeshop/templates/dashboard/user.html:161
-msgid "Create"
-msgstr "Create"
-
-#: awesomeshop/templates/auth/addresses.html:21
-#: awesomeshop/templates/auth/profile.html:36
-#: awesomeshop/templates/dashboard/user.html:107
+"Generated-By: Babel 2.2.0\n"
+
+#: awesomeshop/messages.py:25 awesomeshop/templates/dashboard/user.html:37
+#: awesomeshop/templates/dashboard/users.html:39
+#: awesomeshop/templates/shop/profile.html:25
 msgid "Addresses"
 msgstr "Addresses"
 
-#: awesomeshop/templates/auth/addresses.html:23
-#: awesomeshop/templates/auth/profile.html:38
-msgid "Configure your addresses"
-msgstr "Configure your addresses"
+#: awesomeshop/messages.py:26 awesomeshop/templates/dashboard/product.html:32
+msgid "Category"
+msgstr "Category"
 
-#: awesomeshop/templates/auth/addresses.html:47
-#: awesomeshop/templates/dashboard/user.html:128
-msgid "Change"
-msgstr "Change"
+#: awesomeshop/messages.py:27 awesomeshop/templates/shop/checkout.html:19
+msgid "Checkout"
+msgstr "Checkout"
 
-#: awesomeshop/templates/auth/addresses.html:52
-#: awesomeshop/templates/dashboard/carrier.html:72
-#: awesomeshop/templates/dashboard/carrier.html:269
-#: awesomeshop/templates/dashboard/page.html:84
-#: awesomeshop/templates/dashboard/user.html:133
-#: awesomeshop/templates/dashboard/product/skeleton.html:122
-msgid "Remove"
-msgstr "Remove"
-
-#: awesomeshop/templates/auth/addresses.html:66
-#: awesomeshop/templates/dashboard/user.html:142
-#: awesomeshop/templates/shop/checkout.html:105
-#: awesomeshop/templates/shop/checkout.html:144
-msgid "New address"
-msgstr "New address"
-
-#: awesomeshop/templates/auth/carts.html:22
-#: awesomeshop/templates/auth/orders.html:22
-#: awesomeshop/templates/auth/profile.html:50
-#: awesomeshop/templates/dashboard/orders.html:21
-#: awesomeshop/templates/dashboard/orders.html:23
-#: awesomeshop/templates/dashboard/skeleton.html:50
-msgid "Orders"
-msgstr "Orders"
-
-#: awesomeshop/templates/auth/carts.html:24
-msgid "Your saved carts"
-msgstr "Your saved carts"
-
-#: awesomeshop/templates/auth/carts.html:30
-#: awesomeshop/templates/auth/orders.html:35
-#: awesomeshop/templates/dashboard/home.html:28
-#: awesomeshop/templates/dashboard/home.html:87
-#, python-format
-msgid "%(num)d product"
-msgid_plural "%(num)d products"
-msgstr[0] "%(num)d product"
-msgstr[1] "%(num)d products"
-
-#: awesomeshop/templates/auth/carts.html:35
-msgid "You have not saved any cart yet!"
-msgstr "You have not saved any cart yet!"
-
-#: awesomeshop/templates/auth/confirm_delete_account.html:21
-#: awesomeshop/templates/auth/confirm_delete_account.html:23
-msgid "Confirm account deletion"
-msgstr "Confirm account deletion"
-
-#: awesomeshop/templates/auth/confirm_delete_account.html:26
-msgid ""
-"Are you sure you want to delete your account? You will not be able to "
-"access your orders or your invoices anymore."
-msgstr ""
-"Are you sure you want to delete your account? You will not be able to "
-"access your orders or your invoices anymore."
-
-#: awesomeshop/templates/auth/confirm_delete_account.html:28
-#, python-format
-msgid "Yes, delete my account on %(shopname)s once and for all!"
-msgstr "Yes, delete my account on %(shopname)s once and for all!"
-
-#: awesomeshop/templates/auth/email_password.html:22
-#: awesomeshop/templates/auth/email_password.html:24
-msgid "Change your email or password"
-msgstr "Change your email or password"
-
-#: awesomeshop/templates/auth/email_password.html:34
-msgid "Change my profile"
-msgstr "Change my profile"
-
-#: awesomeshop/templates/auth/email_verification_failed.html:21
-#: awesomeshop/templates/auth/email_verification_failed.html:23
-msgid "Email address verification failed"
-msgstr "Email address verification failed"
-
-#: awesomeshop/templates/auth/email_verification_failed.html:26
-msgid ""
-"Sorry, your email address has not been verified, the code you have "
-"provided is wrong."
-msgstr ""
-"Sorry, your email address has not been verified, the code you have "
-"provided is wrong."
-
-#: awesomeshop/templates/auth/email_verification_failed.html:29
-msgid "Send a new confirmation email"
-msgstr "Send a new confirmation email"
-
-#: awesomeshop/templates/auth/email_verified.html:21
-#: awesomeshop/templates/auth/email_verified.html:23
-msgid "Email address verified"
-msgstr "Email address verified"
-
-#: awesomeshop/templates/auth/email_verified.html:26
-msgid "Congratulations! Your email address has been verified!"
-msgstr "Congratulations! Your email address has been verified!"
-
-#: awesomeshop/templates/auth/login.html:25
-#, python-format
-msgid "%(shopname)s Login"
-msgstr "%(shopname)s Login"
-
-#: awesomeshop/templates/auth/login.html:28
-msgid "Don't have an account yet? Register now!"
-msgstr "Don't have an account yet? Register now!"
-
-#: awesomeshop/templates/auth/login.html:33
-msgid "Sign in"
-msgstr "Sign in"
-
-#: awesomeshop/templates/auth/orders.html:24
-msgid "Your orders"
-msgstr "Your orders"
-
-#: awesomeshop/templates/auth/orders.html:39
-msgid "tracking available"
-msgstr "tracking available"
-
-#: awesomeshop/templates/auth/orders.html:44
-msgid "You have not made any order yet!"
-msgstr "You have not made any order yet!"
-
-#: awesomeshop/templates/auth/profile.html:22
-msgid "Profile"
-msgstr "Profile"
-
-#: awesomeshop/templates/auth/profile.html:24
-#, python-format
-msgid "Welcome on your profile, %(username)s!"
-msgstr "Welcome on your profile, %(username)s!"
-
-#: awesomeshop/templates/auth/profile.html:29
-msgid "Email and password"
-msgstr "Email and password"
-
-#: awesomeshop/templates/auth/profile.html:31
-msgid "Modify your email address and password"
-msgstr "Modify your email address and password"
-
-#: awesomeshop/templates/auth/profile.html:43
-#: awesomeshop/templates/dashboard/home.html:80
-#: awesomeshop/templates/dashboard/user.html:65
-msgid "Saved carts"
-msgstr "Saved carts"
-
-#: awesomeshop/templates/auth/profile.html:45
-msgid "View your saved carts"
-msgstr "View your saved carts"
-
-#: awesomeshop/templates/auth/profile.html:52
-msgid "View your orders"
-msgstr "View your orders"
-
-#: awesomeshop/templates/auth/profile.html:58
-msgid "Delete the account"
-msgstr "Delete the account"
-
-#: awesomeshop/templates/auth/profile.html:61
-msgid "Delete your account once and for all"
-msgstr "Delete your account once and for all"
-
-#: awesomeshop/templates/auth/register.html:25
+#: awesomeshop/messages.py:28 awesomeshop/templates/shop/register.html:21
 msgid "Create an account"
 msgstr "Create an account"
 
-#: awesomeshop/templates/auth/register.html:39
-msgid "Sign up"
-msgstr "Sign up"
+#: awesomeshop/messages.py:29 awesomeshop/templates/dashboard.html:81
+#: awesomeshop/templates/shop.html:128
+#: awesomeshop/templates/dashboard/product.html:35
+#: awesomeshop/templates/shop/product.html:110
+#: awesomeshop/templates/shop/search.html:31
+msgid "Documentation"
+msgstr "Documentation"
 
-#: awesomeshop/templates/dashboard/carrier.html:21
-msgid "Carrier"
-msgstr "Carrier"
+#: awesomeshop/messages.py:30 awesomeshop/templates/shop.html:47
+msgid "Home"
+msgstr "Home"
 
-#: awesomeshop/templates/dashboard/carrier.html:23
-msgid "New carrier"
-msgstr "New carrier"
+#: awesomeshop/messages.py:31 awesomeshop/templates/dashboard.html:102
+#: awesomeshop/templates/shop.html:166
+msgid "Information"
+msgstr "Information"
 
-#: awesomeshop/templates/dashboard/carrier.html:48
-msgid "This carrier has special rates for the following countries or groups."
-msgstr "This carrier has special rates for the following countries or groups."
+#: awesomeshop/messages.py:32 awesomeshop/templates/shop/cart.html:19
+msgid "My cart"
+msgstr "My cart"
 
-#: awesomeshop/templates/dashboard/carrier.html:48
-msgid "Please note there is always a \"rest of the world\" option."
-msgstr "Please note there is always a \"rest of the world\" option."
+#: awesomeshop/messages.py:33 awesomeshop/templates/shop.html:147
+#: awesomeshop/templates/shop/orders.html:19
+msgid "My orders"
+msgstr "My orders"
 
-#: awesomeshop/templates/dashboard/carrier.html:65
-#: awesomeshop/templates/dashboard/carrier.html:251
-msgid "up to..."
-msgstr "up to..."
+#: awesomeshop/messages.py:34 awesomeshop/templates/shop.html:114
+msgid "New products"
+msgstr "New products"
 
-#: awesomeshop/templates/dashboard/carrier.html:70
-#: awesomeshop/templates/dashboard/carrier.html:263
-msgid "grams"
-msgstr "grams"
+#: awesomeshop/messages.py:36 awesomeshop/templates/shop/order.html:19
+msgid "Order [[ order.full_number ]], on [[ order.date | date ]]"
+msgstr "Order [[ order.full_number ]], on [[ order.date | date ]]"
 
-#: awesomeshop/templates/dashboard/carrier.html:83
-msgid "Add a weight range"
-msgstr "Add a weight range"
+#: awesomeshop/messages.py:37 awesomeshop/pdf.py:108
+#: awesomeshop/templates/dashboard/order.html:129
+#: awesomeshop/templates/dashboard/user.html:76
+#: awesomeshop/templates/shop/checkout.html:27
+#: awesomeshop/templates/shop/order.html:78
+msgid "Product"
+msgstr "Product"
 
-#: awesomeshop/templates/dashboard/carrier.html:93
-#: awesomeshop/templates/dashboard/carrier.html:164
-#: awesomeshop/templates/dashboard/category.html:64
-#: awesomeshop/templates/dashboard/countries_group.html:35
-#: awesomeshop/templates/dashboard/country.html:53
-#: awesomeshop/templates/dashboard/page.html:65
-#: awesomeshop/templates/dashboard/user.html:52
-#: awesomeshop/templates/dashboard/product/skeleton.html:99
-msgid "Save"
-msgstr "Save"
+#: awesomeshop/messages.py:38
+msgid "Profile"
+msgstr "Profile"
 
-#: awesomeshop/templates/dashboard/carrier.html:97
-#: awesomeshop/templates/dashboard/carrier.html:168
-#: awesomeshop/templates/dashboard/category.html:68
-#: awesomeshop/templates/dashboard/countries_group.html:39
-#: awesomeshop/templates/dashboard/country.html:57
-#: awesomeshop/templates/dashboard/order.html:130
-#: awesomeshop/templates/dashboard/page.html:69
-#: awesomeshop/templates/dashboard/user.html:56
-#: awesomeshop/templates/dashboard/product/skeleton.html:103
-msgid "Cancel"
-msgstr "Cancel"
+#: awesomeshop/messages.py:39 awesomeshop/templates/dashboard/user.html:68
+#: awesomeshop/templates/dashboard/users.html:43
+#: awesomeshop/templates/shop/profile.html:32
+msgid "Saved carts"
+msgstr "Saved carts"
 
-#: awesomeshop/templates/dashboard/carrier.html:105
-msgid "Price we pay"
-msgstr "Price we pay"
-
-#: awesomeshop/templates/dashboard/carrier.html:113
-#: awesomeshop/templates/dashboard/carrier.html:183
+#: awesomeshop/pdf.py:58
 #, python-format
-msgid "... %(weight)s g"
-msgstr "... %(weight)s g"
+msgid "Order %(number)s, on %(date)s"
+msgstr "Order %(number)s, on %(date)s"
 
-#: awesomeshop/templates/dashboard/carrier.html:115
-#: awesomeshop/templates/dashboard/carrier.html:185
+#: awesomeshop/pdf.py:63
 #, python-format
-msgid "... %(weight)s kg"
-msgstr "... %(weight)s kg"
+msgid "Invoice %(number)s, on %(date)s"
+msgstr "Invoice %(number)s, on %(date)s"
 
-#: awesomeshop/templates/dashboard/carrier.html:148
-#: awesomeshop/templates/dashboard/carrier.html:218
-msgid "Rest of the world"
-msgstr "Rest of the world"
+#: awesomeshop/pdf.py:69
+#, python-format
+msgid "Payment received on %(date)s"
+msgstr "Payment received on %(date)s"
 
-#: awesomeshop/templates/dashboard/carrier.html:176
-msgid "Net price for the customers"
-msgstr "Net price for the customers"
+#: awesomeshop/pdf.py:71
+#, python-format
+msgid "Paid by %(description)s"
+msgstr "Paid by %(description)s"
 
-#: awesomeshop/templates/dashboard/carriers.html:22
-#: awesomeshop/templates/dashboard/carriers.html:24
-#: awesomeshop/templates/dashboard/skeleton.html:59
+#: awesomeshop/pdf.py:77
+#, python-format
+msgid "Shipped on %(date)s"
+msgstr "Shipped on %(date)s"
+
+#: awesomeshop/pdf.py:82
+msgid "Delivery address:"
+msgstr "Delivery address:"
+
+#: awesomeshop/pdf.py:107 awesomeshop/templates/dashboard/product.html:29
+msgid "Reference"
+msgstr "Reference"
+
+#: awesomeshop/pdf.py:109 awesomeshop/templates/dashboard/order.html:132
+#: awesomeshop/templates/dashboard/user.html:79
+#: awesomeshop/templates/shop/checkout.html:30
+#: awesomeshop/templates/shop/order.html:81
+msgid "Qty"
+msgstr "Qty"
+
+#: awesomeshop/pdf.py:110 awesomeshop/templates/dashboard/user.html:82
+#: awesomeshop/templates/shop/checkout.html:33
+#: awesomeshop/templates/shop/order.html:84
+msgid "Unit"
+msgstr "Unit"
+
+#: awesomeshop/pdf.py:111 awesomeshop/pdf.py:141
+#: awesomeshop/templates/dashboard/order.html:196
+#: awesomeshop/templates/dashboard/user.html:85
+#: awesomeshop/templates/shop/checkout.html:36
+#: awesomeshop/templates/shop/checkout.html:182
+#: awesomeshop/templates/shop/order.html:87
+#: awesomeshop/templates/shop/order.html:137
+msgid "Total"
+msgstr "Total"
+
+#: awesomeshop/pdf.py:127 awesomeshop/templates/dashboard/order.html:176
+#: awesomeshop/templates/shop/checkout.html:166
+#: awesomeshop/templates/shop/order.html:114
+msgid "Subtotal"
+msgstr "Subtotal"
+
+#: awesomeshop/pdf.py:133
+#, python-format
+msgid "Shipping: %(description)s"
+msgstr "Shipping: %(description)s"
+
+#: awesomeshop/pdf.py:152 awesomeshop/templates/shop/cart.html:75
+#: awesomeshop/templates/shop/checkout.html:236
+#: awesomeshop/templates/shop/order.html:160
+msgid "TVA non applicable, article 293 B du Code général des impôts"
+msgstr "European VAT not applicable, net prices (art. 293B, french CGI)"
+
+#: awesomeshop/page/api.py:129
+msgid "Could not delete: this documentation is used in a product."
+msgstr "Could not delete: this documentation is used in a product."
+
+#: awesomeshop/payment/pay_plug.py:34
+msgid "Credit Card (secured by PayPlug)"
+msgstr "Credit Card (secured by PayPlug)"
+
+#: awesomeshop/payment/pay_plug.py:113
+msgid "Error while processing the card"
+msgstr "Error while processing the card"
+
+#: awesomeshop/payment/pay_plug.py:115
+msgid "Your bank declined the payment"
+msgstr "Your bank declined the payment"
+
+#: awesomeshop/payment/pay_plug.py:117
+msgid "Insufficient funds on your bank account"
+msgstr "Insufficient funds on your bank account"
+
+#: awesomeshop/payment/pay_plug.py:119
+msgid "3-D secure protection has failed"
+msgstr "3-D secure protection has failed"
+
+#: awesomeshop/payment/pay_plug.py:121
+msgid "The card number is incorrect"
+msgstr "The card number is incorrect"
+
+#: awesomeshop/payment/pay_plug.py:123
+msgid "A potential fraud has been detected"
+msgstr "A potential fraud has been detected"
+
+#: awesomeshop/payment/pay_plug.py:125
+msgid "Payment has been aborted"
+msgstr "Payment has been aborted"
+
+#: awesomeshop/payment/pay_plug.py:127
+msgid "Unknown problem"
+msgstr "Unknown problem"
+
+#: awesomeshop/payment/sepatransfer.py:29
+msgid "SEPA bank transfer"
+msgstr "SEPA bank transfer"
+
+#: awesomeshop/payment/sepatransfer.py:33
+msgid "Recipient account owner"
+msgstr "Recipient account owner"
+
+#: awesomeshop/payment/sepatransfer.py:34
+msgid "Recipient account BIC"
+msgstr "Recipient account BIC"
+
+#: awesomeshop/payment/sepatransfer.py:35
+msgid "Recipient account IBAN"
+msgstr "Recipient account IBAN"
+
+#: awesomeshop/payment/sepatransfer.py:36
+msgid "Transfer amount"
+msgstr "Transfer amount"
+
+#: awesomeshop/payment/sepatransfer.py:37
+msgid "Transfer information"
+msgstr "Transfer information"
+
+#: awesomeshop/payment/sepatransfer.py:50
+#, python-format
+msgid ""
+"Please execute a SEPA bank transfer within %(num)d days with the "
+"following criteria:"
+msgstr ""
+"Please execute a SEPA bank transfer within %(num)d days with the "
+"following criteria:"
+
+#: awesomeshop/shipping/api.py:156
+msgid "Could not delete : this country is part of a countries group."
+msgstr "Could not delete : this country is part of a countries group."
+
+#: awesomeshop/shop/api/category.py:140
+msgid "Could not delete: this category has products."
+msgstr "Could not delete: this category has products."
+
+#: awesomeshop/shop/api/category.py:146
+msgid "Could not delete: this category has children."
+msgstr "Could not delete: this category has children."
+
+#: awesomeshop/shop/models/order.py:77
+msgid "unconfirmed"
+msgstr "unconfirmed"
+
+#: awesomeshop/shop/models/order.py:82
+msgid "awaiting payment"
+msgstr "awaiting payment"
+
+#: awesomeshop/shop/models/order.py:89
+msgid "awaiting a response from the payment provider"
+msgstr "awaiting a response from the payment provider"
+
+#: awesomeshop/shop/models/order.py:94
+msgid "payment received"
+msgstr "payment received"
+
+#: awesomeshop/shop/models/order.py:99
+msgid "payment failed"
+msgstr "payment failed"
+
+#: awesomeshop/shop/models/order.py:104
+msgid "in preparation"
+msgstr "in preparation"
+
+#: awesomeshop/shop/models/order.py:109
+msgid "shipped"
+msgstr "shipped"
+
+#: awesomeshop/shop/models/order.py:114
+msgid "awaiting return"
+msgstr "awaiting return"
+
+#: awesomeshop/shop/models/order.py:119
+msgid "refund"
+msgstr "refund"
+
+#: awesomeshop/shop/models/order.py:124
+msgid "cancelled"
+msgstr "cancelled"
+
+#: awesomeshop/templates/dashboard.html:50
+#: awesomeshop/templates/dashboard.html:60 awesomeshop/templates/shop.html:60
+#: awesomeshop/templates/dashboard/index.html:19
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: awesomeshop/templates/dashboard.html:64
+msgid "See the shop"
+msgstr "See the shop"
+
+#: awesomeshop/templates/dashboard.html:66
+msgid "Day-to-day"
+msgstr "Day-to-day"
+
+#: awesomeshop/templates/dashboard.html:69
+#: awesomeshop/templates/dashboard/orders.html:19
+#: awesomeshop/templates/shop/profile.html:39
+msgid "Orders"
+msgstr "Orders"
+
+#: awesomeshop/templates/dashboard.html:73
+#: awesomeshop/templates/dashboard/products.html:19
+#: awesomeshop/templates/shop/search.html:39
+msgid "Products"
+msgstr "Products"
+
+#: awesomeshop/templates/dashboard.html:77 awesomeshop/templates/shop.html:109
+#: awesomeshop/templates/dashboard/categories.html:19
+#: awesomeshop/templates/shop/search.html:21
+msgid "Categories"
+msgstr "Categories"
+
+#: awesomeshop/templates/dashboard.html:83
+msgid "Configuration"
+msgstr "Configuration"
+
+#: awesomeshop/templates/dashboard.html:86
+#: awesomeshop/templates/dashboard/carriers.html:19
 msgid "Carriers"
 msgstr "Carriers"
 
-#: awesomeshop/templates/dashboard/carriers.html:27
-msgid "Add a carrier"
-msgstr "Add a carrier"
+#: awesomeshop/templates/dashboard.html:90
+#: awesomeshop/templates/dashboard/carrier.html:38
+#: awesomeshop/templates/dashboard/countries.html:19
+msgid "Countries"
+msgstr "Countries"
 
-#: awesomeshop/templates/dashboard/categories.html:49
-msgid "Add a category"
-msgstr "Add a category"
+#: awesomeshop/templates/dashboard.html:94
+#: awesomeshop/templates/dashboard/countriesgroups.html:19
+msgid "Countries groups"
+msgstr "Countries groups"
 
-#: awesomeshop/templates/dashboard/category.html:28
-#: awesomeshop/templates/dashboard/page.html:28
-#: awesomeshop/templates/dashboard/product/skeleton.html:28
-msgid "see in the shop"
-msgstr "see in the shop"
+#: awesomeshop/templates/dashboard.html:98
+msgid "Taxes"
+msgstr "Taxes"
 
-#: awesomeshop/templates/dashboard/category.html:31
-msgid "New category"
-msgstr "New category"
+#: awesomeshop/templates/dashboard.html:106
+#: awesomeshop/templates/dashboard/users.html:19
+msgid "Users"
+msgstr "Users"
 
-#: awesomeshop/templates/dashboard/category.html:49
-#: awesomeshop/templates/dashboard/country.html:39
-#: awesomeshop/templates/dashboard/page.html:49
-#: awesomeshop/templates/dashboard/product/skeleton.html:83
-msgid "Translations"
-msgstr "Translations"
+#: awesomeshop/templates/shop.html:64
+msgid "Logout"
+msgstr "Logout"
 
-#: awesomeshop/templates/dashboard/countries.html:27
-msgid "Add a country"
-msgstr "Add a country"
+#: awesomeshop/templates/shop.html:67 awesomeshop/templates/shop.html:156
+msgid "Login"
+msgstr "Login"
 
-#: awesomeshop/templates/dashboard/countries_group.html:21
-msgid "Countries group"
-msgstr "Countries group"
+#: awesomeshop/templates/shop.html:68 awesomeshop/templates/shop.html:159
+msgid "Register"
+msgstr "Register"
 
-#: awesomeshop/templates/dashboard/countries_group.html:23
-msgid "New countries group"
-msgstr "New countries group"
+#: awesomeshop/templates/shop.html:87
+msgid "Search for..."
+msgstr "Search for..."
 
-#: awesomeshop/templates/dashboard/countries_groups.html:27
-msgid "Add a countries group"
-msgstr "Add a countries group"
+#: awesomeshop/templates/shop.html:91
+msgid "Search"
+msgstr "Search"
 
-#: awesomeshop/templates/dashboard/countries_groups.html:29
-msgid "A country can be placed in multiple groups"
-msgstr "A country can be placed in multiple groups"
+#: awesomeshop/templates/shop.html:99
+msgid "Cart is empty"
+msgstr "Cart is empty"
 
-#: awesomeshop/templates/dashboard/country.html:23
-msgid "New country"
-msgstr "New country"
+#: awesomeshop/templates/shop.html:100
+msgid "[[ cart.count() ]] products"
+msgstr "[[ cart.count() ]] products"
 
-#: awesomeshop/templates/dashboard/home.html:37
-#, python-format
-msgid "%(qty)d left"
-msgstr "%(qty)d left"
+#: awesomeshop/templates/shop.html:139
+msgid "My account"
+msgstr "My account"
 
-#: awesomeshop/templates/dashboard/home.html:39
-msgid "available on demand"
-msgstr "available on demand"
+#: awesomeshop/templates/shop.html:143
+msgid "My profile"
+msgstr "My profile"
 
-#: awesomeshop/templates/dashboard/home.html:50
-msgid "Orders in preparation"
-msgstr "Orders in preparation"
+#: awesomeshop/templates/shop.html:151
+#: awesomeshop/templates/shop/saved_carts.html:19
+msgid "My saved carts"
+msgstr "My saved carts"
 
-#: awesomeshop/templates/dashboard/home.html:60
-msgid "Orders to prepare"
-msgstr "Orders to prepare"
+#: awesomeshop/templates/shop.html:177
+msgid ""
+"Please confirm your email address by clicking on the link in the email "
+"you have received."
+msgstr ""
+"Please confirm your email address by clicking on the link in the email "
+"you have received."
 
-#: awesomeshop/templates/dashboard/home.html:70
-msgid "Awaiting payment"
-msgstr "Awaiting payment"
+#: awesomeshop/templates/shop.html:179
+msgid "You have not received the validation email?"
+msgstr "You have not received the validation email?"
 
-#: awesomeshop/templates/dashboard/home.html:109
-msgid "Out of stock soon"
-msgstr "Out of stock soon"
+#: awesomeshop/templates/shop.html:180
+msgid "Send it again"
+msgstr "Send it again"
 
-#: awesomeshop/templates/dashboard/order.html:21
-#: awesomeshop/templates/shop/order.html:21
-msgid "Order"
-msgstr "Order"
+#: awesomeshop/templates/shop.html:191
+msgid "Follow us..."
+msgstr "Follow us..."
 
-#: awesomeshop/templates/dashboard/order.html:23
-#, python-format
-msgid "Invoice #%(num)s"
-msgstr "Invoice #%(num)s"
-
-#: awesomeshop/templates/dashboard/order.html:23
-#, python-format
-msgid "Order #%(num)s"
-msgstr "Order #%(num)s"
-
-#: awesomeshop/templates/dashboard/order.html:30
-msgid "View the customer's (printable) version"
-msgstr "View the customer's (printable) version"
-
-#: awesomeshop/templates/dashboard/order.html:35
-#: awesomeshop/templates/dashboard/orders.html:28
-msgid "Customer"
-msgstr "Customer"
-
-#: awesomeshop/templates/dashboard/order.html:36
-#: awesomeshop/templates/dashboard/orders.html:50
-msgid "Deleted user"
-msgstr "Deleted user"
-
-#: awesomeshop/templates/dashboard/order.html:40
-msgid "Invoice date:"
-msgstr "Invoice date:"
-
-#: awesomeshop/templates/dashboard/order.html:45
-msgid "Order date:"
-msgstr "Order date:"
-
-#: awesomeshop/templates/dashboard/order.html:49
-msgid "Payment mode:"
-msgstr "Payment mode:"
-
-#: awesomeshop/templates/dashboard/order.html:54
-msgid "Payment date:"
-msgstr "Payment date:"
-
-#: awesomeshop/templates/dashboard/order.html:59
+#: awesomeshop/templates/dashboard/carrier.html:23
 msgid "Carrier:"
 msgstr "Carrier:"
 
-#: awesomeshop/templates/dashboard/order.html:63
-msgid "Reused packaging:"
-msgstr "Reused packaging:"
+#: awesomeshop/templates/dashboard/carrier.html:26
+#: awesomeshop/templates/dashboard/category.html:37
+#: awesomeshop/templates/dashboard/countriesgroup.html:24
+#: awesomeshop/templates/dashboard/country.html:33
+#: awesomeshop/templates/dashboard/product.html:51
+#: awesomeshop/templates/dashboard/taxrates.html:26
+#: awesomeshop/templates/dashboard/taxrates.html:55
+msgid "Name"
+msgstr "Name"
 
-#: awesomeshop/templates/dashboard/order.html:64
+#: awesomeshop/templates/dashboard/carrier.html:26
+#: awesomeshop/templates/dashboard/countriesgroup.html:24
+msgid "Name is mandatory"
+msgstr "Name is mandatory"
+
+#: awesomeshop/templates/dashboard/carrier.html:29
+msgid "Tracking URL"
+msgstr "Tracking URL"
+
+#: awesomeshop/templates/dashboard/carrier.html:29
+msgid "Character @ will be replaced by the tracking number"
+msgstr "Character @ will be replaced by the tracking number"
+
+#: awesomeshop/templates/dashboard/carrier.html:34
+#: awesomeshop/templates/dashboard/category.html:38
+#: awesomeshop/templates/dashboard/product.html:52
+msgid "Description"
+msgstr "Description"
+
+#: awesomeshop/templates/dashboard/carrier.html:39
+msgid "This carrier has special rates for the following countries or groups."
+msgstr "This carrier has special rates for the following countries or groups."
+
+#: awesomeshop/templates/dashboard/carrier.html:39
+msgid "Please note there is always a \"rest of the world\" option."
+msgstr "Please note there is always a \"rest of the world\" option."
+
+#: awesomeshop/templates/dashboard/carrier.html:43
+#: awesomeshop/templates/dashboard/countriesgroup.html:28
+#: awesomeshop/templates/dashboard/product.html:62
+msgid "Selected"
+msgstr "Selected"
+
+#: awesomeshop/templates/dashboard/carrier.html:62
+#: awesomeshop/templates/dashboard/countriesgroup.html:41
+#: awesomeshop/templates/dashboard/product.html:75
+msgid "Available"
+msgstr "Available"
+
+#: awesomeshop/templates/dashboard/carrier.html:64
+#: awesomeshop/templates/dashboard/carriers.html:25
+#: awesomeshop/templates/dashboard/categories.html:25
+#: awesomeshop/templates/dashboard/countries.html:25
+#: awesomeshop/templates/dashboard/countriesgroup.html:43
+#: awesomeshop/templates/dashboard/countriesgroups.html:25
+#: awesomeshop/templates/dashboard/orders.html:21
+#: awesomeshop/templates/dashboard/pages.html:25
+#: awesomeshop/templates/dashboard/product.html:77
+#: awesomeshop/templates/dashboard/products.html:25
+#: awesomeshop/templates/dashboard/taxrates.html:22
+#: awesomeshop/templates/dashboard/users.html:26
+msgid "Filter"
+msgstr "Filter"
+
+#: awesomeshop/templates/dashboard/carrier.html:82
+msgid "Buying price"
+msgstr "Buying price"
+
+#: awesomeshop/templates/dashboard/carrier.html:87
+#: awesomeshop/templates/dashboard/carrier.html:95
+msgid "Add a new weight"
+msgstr "Add a new weight"
+
+#: awesomeshop/templates/dashboard/carrier.html:92
+msgid "Delete this weight"
+msgstr "Delete this weight"
+
+#: awesomeshop/templates/dashboard/carrier.html:101
+msgid "grams"
+msgstr "grams"
+
+#: awesomeshop/templates/dashboard/carrier.html:129
+msgid "Rest of the world"
+msgstr "Rest of the world"
+
+#: awesomeshop/templates/dashboard/carriers.html:22
+msgid "Add a carrier"
+msgstr "Add a carrier"
+
+#: awesomeshop/templates/dashboard/categories.html:22
+msgid "Add a category"
+msgstr "Add a category"
+
+#: awesomeshop/templates/dashboard/category.html:23
+msgid "Category:"
+msgstr "Category:"
+
+#: awesomeshop/templates/dashboard/category.html:26
+#: awesomeshop/templates/dashboard/page.html:25
+#: awesomeshop/templates/dashboard/product.html:26
+msgid "Slug"
+msgstr "Slug"
+
+#: awesomeshop/templates/dashboard/category.html:26
+#: awesomeshop/templates/dashboard/page.html:25
+#: awesomeshop/templates/dashboard/product.html:26
+msgid "Slug is mandatory"
+msgstr "Slug is mandatory"
+
+#: awesomeshop/templates/dashboard/category.html:29
+msgid "Parent"
+msgstr "Parent"
+
+#: awesomeshop/templates/dashboard/category.html:37
+#: awesomeshop/templates/dashboard/page.html:36
+#: awesomeshop/templates/dashboard/product.html:51
+msgid "&rarr; slug"
+msgstr "&rarr; slug"
+
+#: awesomeshop/templates/dashboard/countries.html:22
+msgid "Add a country"
+msgstr "Add a country"
+
+#: awesomeshop/templates/dashboard/countriesgroup.html:23
+msgid "Countries group:"
+msgstr "Countries group:"
+
+#: awesomeshop/templates/dashboard/countriesgroup.html:23
+msgid "(unnamed)"
+msgstr "(unnamed)"
+
+#: awesomeshop/templates/dashboard/countriesgroups.html:22
+msgid "Add a countries group"
+msgstr "Add a countries group"
+
+#: awesomeshop/templates/dashboard/countriesgroups.html:32
+msgid "Countries in group"
+msgstr "Countries in group"
+
+#: awesomeshop/templates/dashboard/country.html:23
+msgid "Country:"
+msgstr "Country:"
+
+#: awesomeshop/templates/dashboard/country.html:26
+msgid "Code"
+msgstr "Code"
+
+#: awesomeshop/templates/dashboard/country.html:26
+msgid "Country code is mandatory"
+msgstr "Country code is mandatory"
+
+#: awesomeshop/templates/dashboard/country.html:29
+msgid "Default name"
+msgstr "Default name"
+
+#: awesomeshop/templates/dashboard/country.html:29
+msgid "Default name is mandatory"
+msgstr "Default name is mandatory"
+
+#: awesomeshop/templates/dashboard/country.html:33
+msgid "&rarr; default"
+msgstr "&rarr; default"
+
+#: awesomeshop/templates/dashboard/index.html:24
+msgid "Orders in preparation"
+msgstr "Orders in preparation"
+
+#: awesomeshop/templates/dashboard/index.html:39
+msgid "Paid orders, to be prepared"
+msgstr "Paid orders, to be prepared"
+
+#: awesomeshop/templates/dashboard/index.html:54
+msgid "Awaiting payment"
+msgstr "Awaiting payment"
+
+#: awesomeshop/templates/dashboard/index.html:71
+#: awesomeshop/templates/part/productslist.html:33
+#: awesomeshop/templates/shop/product.html:90
+msgid "Out of stock"
+msgstr "Out of stock"
+
+#: awesomeshop/templates/dashboard/index.html:82
+msgid "Out of stock soon"
+msgstr "Out of stock soon"
+
+#: awesomeshop/templates/dashboard/order.html:19
+msgid "Order:"
+msgstr "Order:"
+
+#: awesomeshop/templates/dashboard/order.html:25
+msgid "Customer"
+msgstr "Customer"
+
+#: awesomeshop/templates/dashboard/order.html:29
+msgid "Order date"
+msgstr "Order date"
+
+#: awesomeshop/templates/dashboard/order.html:33
+msgid "Invoice date"
+msgstr "Invoice date"
+
+#: awesomeshop/templates/dashboard/order.html:41
+msgid "Status"
+msgstr "Status"
+
+#: awesomeshop/templates/dashboard/order.html:45
+msgid "Payment mode"
+msgstr "Payment mode"
+
+#: awesomeshop/templates/dashboard/order.html:52
+msgid "Payment date"
+msgstr "Payment date"
+
+#: awesomeshop/templates/dashboard/order.html:56
+msgid "Carrier"
+msgstr "Carrier"
+
+#: awesomeshop/templates/dashboard/order.html:60
+msgid "Reused packaging"
+msgstr "Reused packaging"
+
+#: awesomeshop/templates/dashboard/order.html:62
 msgid "yes"
 msgstr "yes"
 
-#: awesomeshop/templates/dashboard/order.html:64
+#: awesomeshop/templates/dashboard/order.html:63
 msgid "no"
 msgstr "no"
 
-#: awesomeshop/templates/dashboard/order.html:68
-#: awesomeshop/templates/shop/order.html:33
+#: awesomeshop/templates/dashboard/order.html:67
+#: awesomeshop/templates/dashboard/order.html:85
+msgid "Tracking number"
+msgstr "Tracking number"
+
+#: awesomeshop/templates/dashboard/order.html:75
 #, python-format
 msgid "Cancelled if not paid within %(num)d days."
 msgstr "Cancelled if not paid within %(num)d days."
 
-#: awesomeshop/templates/dashboard/order.html:72
-#: awesomeshop/templates/shop/order.html:35
+#: awesomeshop/templates/dashboard/order.html:78
+#: awesomeshop/templates/shop/order.html:27
 #, python-format
 msgid "Cancelled if payment not received within %(num)d days."
 msgstr "Cancelled if payment not received within %(num)d days."
 
-#: awesomeshop/templates/dashboard/order.html:76
-msgid "Status:"
-msgstr "Status:"
-
-#: awesomeshop/templates/dashboard/order.html:81
-#: awesomeshop/templates/shop/order.html:43
-msgid "Tracking number:"
-msgstr "Tracking number:"
-
-#: awesomeshop/templates/dashboard/order.html:92
-msgid "Tracking number"
-msgstr "Tracking number"
-
-#: awesomeshop/templates/dashboard/order.html:96
-#: awesomeshop/templates/dashboard/order.html:121
+#: awesomeshop/templates/dashboard/order.html:88
+#: awesomeshop/templates/dashboard/order.html:112
 msgid "Parcel shipped"
 msgstr "Parcel shipped"
 
-#: awesomeshop/templates/dashboard/order.html:99
+#: awesomeshop/templates/dashboard/order.html:92
 msgid "Change tracking number"
 msgstr "Change tracking number"
 
-#: awesomeshop/templates/dashboard/order.html:109
+#: awesomeshop/templates/dashboard/order.html:100
 msgid "Confirm (wait for payment)"
 msgstr "Confirm (wait for payment)"
 
-#: awesomeshop/templates/dashboard/order.html:112
+#: awesomeshop/templates/dashboard/order.html:103
 msgid "Payment received"
 msgstr "Payment received"
 
-#: awesomeshop/templates/dashboard/order.html:115
+#: awesomeshop/templates/dashboard/order.html:106
 msgid "Payment failed"
 msgstr "Payment failed"
 
-#: awesomeshop/templates/dashboard/order.html:118
+#: awesomeshop/templates/dashboard/order.html:109
 msgid "Begin preparation"
 msgstr "Begin preparation"
 
-#: awesomeshop/templates/dashboard/order.html:124
+#: awesomeshop/templates/dashboard/order.html:115
 msgid "Accept a return"
 msgstr "Accept a return"
 
-#: awesomeshop/templates/dashboard/order.html:127
+#: awesomeshop/templates/dashboard/order.html:118
 msgid "Emit a refund"
 msgstr "Emit a refund"
 
-#: awesomeshop/templates/dashboard/order.html:138
-#: awesomeshop/templates/dashboard/product/skeleton.html:20
-#: awesomeshop/templates/shop/checkout.html:31
-#: awesomeshop/templates/shop/confirm.html:52
-#: awesomeshop/templates/shop/order.html:96
-msgid "Product"
-msgstr "Product"
+#: awesomeshop/templates/dashboard/order.html:121
+msgid "Cancel"
+msgstr "Cancel"
 
-#: awesomeshop/templates/dashboard/order.html:141
-#: awesomeshop/templates/shop/checkout.html:34
-#: awesomeshop/templates/shop/confirm.html:55
-#: awesomeshop/templates/shop/order.html:99
-msgid "Qty"
-msgstr "Qty"
-
-#: awesomeshop/templates/dashboard/order.html:168
-#: awesomeshop/templates/shop/checkout.html:84
-#: awesomeshop/templates/shop/confirm.html:32
-#: awesomeshop/templates/shop/order.html:76
+#: awesomeshop/templates/dashboard/order.html:157
+#: awesomeshop/templates/shop/checkout.html:75
+#: awesomeshop/templates/shop/order.html:58
 msgid "Delivery address"
 msgstr "Delivery address"
 
-#: awesomeshop/templates/dashboard/order.html:179
-#: awesomeshop/templates/shop/checkout.html:117
-#: awesomeshop/templates/shop/confirm.html:41
-#: awesomeshop/templates/shop/order.html:85
+#: awesomeshop/templates/dashboard/order.html:166
+#: awesomeshop/templates/shop/checkout.html:106
+#: awesomeshop/templates/shop/order.html:67
 msgid "Billing address"
 msgstr "Billing address"
 
-#: awesomeshop/templates/dashboard/order.html:190
-#: awesomeshop/templates/shop/checkout.html:177
-#: awesomeshop/templates/shop/confirm.html:96
-#: awesomeshop/templates/shop/order.html:134
-msgid "Subtotal"
-msgstr "Subtotal"
-
-#: awesomeshop/templates/dashboard/order.html:200
-#: awesomeshop/templates/shop/checkout.html:186
-#: awesomeshop/templates/shop/confirm.html:106
-#: awesomeshop/templates/shop/order.html:144
+#: awesomeshop/templates/dashboard/order.html:186
+#: awesomeshop/templates/shop/checkout.html:174
+#: awesomeshop/templates/shop/order.html:124
 msgid "Shipping fee"
 msgstr "Shipping fee"
 
-#: awesomeshop/templates/dashboard/order.html:210
-#: awesomeshop/templates/shop/checkout.html:40
-#: awesomeshop/templates/shop/checkout.html:193
-#: awesomeshop/templates/shop/confirm.html:61
-#: awesomeshop/templates/shop/confirm.html:119
-#: awesomeshop/templates/shop/order.html:105
-#: awesomeshop/templates/shop/order.html:157
-msgid "Total"
-msgstr "Total"
+#: awesomeshop/templates/dashboard/page.html:22
+msgid "Page:"
+msgstr "Page:"
 
-#: awesomeshop/templates/dashboard/orders.html:26
-msgid "Number"
-msgstr "Number"
+#: awesomeshop/templates/dashboard/page.html:22
+msgid "(please set a slug)"
+msgstr "(please set a slug)"
 
-#: awesomeshop/templates/dashboard/orders.html:27
-msgid "Status"
-msgstr "Status"
+#: awesomeshop/templates/dashboard/page.html:28
+#: awesomeshop/templates/dashboard/pages.html:33
+msgid "Display in menu"
+msgstr "Display in menu"
 
-#: awesomeshop/templates/dashboard/orders.html:29
-msgid "Date"
-msgstr "Date"
+#: awesomeshop/templates/dashboard/page.html:28
+msgid "Do not display"
+msgstr "Do not display"
 
-#: awesomeshop/templates/dashboard/orders.html:30
-msgid "Gross"
-msgstr "Gross"
+#: awesomeshop/templates/dashboard/page.html:36
+msgid "Title"
+msgstr "Title"
 
-#: awesomeshop/templates/dashboard/orders.html:31
-msgid "Net"
-msgstr "Net"
+#: awesomeshop/templates/dashboard/page.html:37
+msgid "Text"
+msgstr "Text"
 
-#: awesomeshop/templates/dashboard/page.html:21
-msgid "Page"
-msgstr "Page"
-
-#: awesomeshop/templates/dashboard/page.html:31
-msgid "New page"
-msgstr "New page"
-
-#: awesomeshop/templates/dashboard/page.html:76
-#: awesomeshop/templates/dashboard/product/skeleton.html:110
+#: awesomeshop/templates/dashboard/page.html:43
+#: awesomeshop/templates/dashboard/product.html:138
 msgid "Pictures"
 msgstr "Pictures"
 
-#: awesomeshop/templates/dashboard/page.html:95
-#: awesomeshop/templates/dashboard/product/skeleton.html:136
-msgid "Upload"
-msgstr "Upload"
+#: awesomeshop/templates/dashboard/page.html:56
+#: awesomeshop/templates/dashboard/product.html:147
+#: awesomeshop/templates/dashboard/user.html:58
+#: awesomeshop/templates/macros/dashboard.html:25
+#: awesomeshop/templates/shop/addresses.html:41
+#: awesomeshop/templates/shop/cart.html:45
+#: awesomeshop/templates/shop/saved_carts.html:60
+msgid "Remove"
+msgstr "Remove"
 
-#: awesomeshop/templates/dashboard/pages.html:22
-#: awesomeshop/templates/dashboard/pages.html:24
+#: awesomeshop/templates/dashboard/page.html:63
+msgid "Please save the document before adding images"
+msgstr "Please save the document before adding images"
+
+#: awesomeshop/templates/dashboard/pages.html:19
 msgid "Pages"
 msgstr "Pages"
 
-#: awesomeshop/templates/dashboard/pages.html:27
+#: awesomeshop/templates/dashboard/pages.html:22
 msgid "Add a page"
 msgstr "Add a page"
 
-#: awesomeshop/templates/dashboard/products.html:21
-#: awesomeshop/templates/dashboard/products.html:23
-#: awesomeshop/templates/dashboard/skeleton.html:42
-#: awesomeshop/templates/shop/search.html:25
-msgid "Products"
-msgstr "Products"
+#: awesomeshop/templates/dashboard/product.html:23
+msgid "Product:"
+msgstr "Product:"
 
-#: awesomeshop/templates/dashboard/products.html:26
-msgid "Add a product"
-msgstr "Add a product"
+#: awesomeshop/templates/dashboard/product.html:29
+msgid "Reference is mandatory"
+msgstr "Reference is mandatory"
 
-#: awesomeshop/templates/dashboard/products.html:33
-msgid "Type"
-msgstr "Type"
+#: awesomeshop/templates/dashboard/product.html:32
+msgid "Category is mandatory"
+msgstr "Category is mandatory"
 
-#: awesomeshop/templates/dashboard/products.html:36
+#: awesomeshop/templates/dashboard/product.html:35
+msgid "Documentation is mandatory"
+msgstr "Documentation is mandatory"
+
+#: awesomeshop/templates/dashboard/product.html:40
+msgid "Keywords"
+msgstr "Keywords"
+
+#: awesomeshop/templates/dashboard/product.html:43
+#: awesomeshop/templates/dashboard/products.html:41
+msgid "Is on sale"
+msgstr "Is on sale"
+
+#: awesomeshop/templates/dashboard/product.html:43
+msgid "Not on sale"
+msgstr "Not on sale"
+
+#: awesomeshop/templates/dashboard/product.html:58
+#: awesomeshop/templates/shop/page.html:27
+#: awesomeshop/templates/shop/product.html:99
+msgid "Related products"
+msgstr "Related products"
+
+#: awesomeshop/templates/dashboard/product.html:92
+msgid "Pricing"
+msgstr "Pricing"
+
+#: awesomeshop/templates/dashboard/product.html:96
+msgid "Purchasing price"
+msgstr "Purchasing price"
+
+#: awesomeshop/templates/dashboard/product.html:99
+#: awesomeshop/templates/dashboard/products.html:32
+msgid "Gross price"
+msgstr "Gross price"
+
+#: awesomeshop/templates/dashboard/product.html:99
+msgid "Gross price is mandatory"
+msgstr "Gross price is mandatory"
+
+#: awesomeshop/templates/dashboard/product.html:102
+msgid "Tax"
+msgstr "Tax"
+
+#: awesomeshop/templates/dashboard/product.html:102
+msgid "Tax rate is mandatory"
+msgstr "Tax rate is mandatory"
+
+#: awesomeshop/templates/dashboard/product.html:105
 msgid "Net price"
 msgstr "Net price"
 
-#: awesomeshop/templates/dashboard/products.html:60
-msgid "Yes"
-msgstr "Yes"
+#: awesomeshop/templates/dashboard/product.html:117
+msgid "Stock and shipping"
+msgstr "Stock and shipping"
 
-#: awesomeshop/templates/dashboard/products.html:62
-msgid "No"
-msgstr "No"
+#: awesomeshop/templates/dashboard/product.html:121
+msgid "Stock"
+msgstr "Stock"
 
-#: awesomeshop/templates/dashboard/skeleton.html:37
-msgid "See the shop"
-msgstr "See the shop"
+#: awesomeshop/templates/dashboard/product.html:124
+msgid "Stock alert"
+msgstr "Stock alert"
 
-#: awesomeshop/templates/dashboard/skeleton.html:39
-msgid "Day-to-day"
-msgstr "Day-to-day"
+#: awesomeshop/templates/dashboard/product.html:127
+msgid "Available on demand"
+msgstr "Available on demand"
 
-#: awesomeshop/templates/dashboard/skeleton.html:56
-msgid "Configuration"
-msgstr "Configuration"
+#: awesomeshop/templates/dashboard/product.html:127
+msgid "Not on demand"
+msgstr "Not on demand"
 
-#: awesomeshop/templates/dashboard/skeleton.html:71
-#: awesomeshop/templates/dashboard/taxes.html:22
-#: awesomeshop/templates/dashboard/taxes.html:24
-msgid "Taxes"
-msgstr "Taxes"
+#: awesomeshop/templates/dashboard/product.html:130
+msgid "Weight"
+msgstr "Weight"
 
-#: awesomeshop/templates/dashboard/skeleton.html:79
-#: awesomeshop/templates/dashboard/users.html:22
-#: awesomeshop/templates/dashboard/users.html:24
-msgid "Users"
-msgstr "Users"
+#: awesomeshop/templates/dashboard/product.html:157
+msgid "Please save the product before adding images"
+msgstr "Please save the product before adding images"
 
-#: awesomeshop/templates/dashboard/user.html:21
-msgid "User"
-msgstr "User"
+#: awesomeshop/templates/dashboard/products.html:22
+msgid "Add a product"
+msgstr "Add a product"
 
-#: awesomeshop/templates/dashboard/user.html:23
-msgid "New user"
-msgstr "New user"
+#: awesomeshop/templates/dashboard/products.html:36
+msgid "Stock remaining"
+msgstr "Stock remaining"
 
-#: awesomeshop/templates/dashboard/user.html:92
+#: awesomeshop/templates/dashboard/products.html:44
+msgid "Is not on sale"
+msgstr "Is not on sale"
+
+#: awesomeshop/templates/dashboard/taxrates.html:20
+msgid "Tax rates"
+msgstr "Tax rates"
+
+#: awesomeshop/templates/dashboard/taxrates.html:30
+#: awesomeshop/templates/dashboard/taxrates.html:59
+msgid "Rate"
+msgstr "Rate"
+
+#: awesomeshop/templates/dashboard/taxrates.html:39
+#: awesomeshop/templates/macros/dashboard.html:22
+#: awesomeshop/templates/shop/cart.html:101
+msgid "Save"
+msgstr "Save"
+
+#: awesomeshop/templates/dashboard/taxrates.html:45
 msgid "Delete"
 msgstr "Delete"
 
-#: awesomeshop/templates/dashboard/user.html:97
-#: awesomeshop/templates/shop/cart.html:68
-#: awesomeshop/templates/shop/cart.html:96
-#: awesomeshop/templates/shop/saved_cart.html:46
-#: awesomeshop/templates/shop/saved_cart.html:61
-msgid "Total:"
-msgstr "Total:"
+#: awesomeshop/templates/dashboard/taxrates.html:67
+msgid "Add"
+msgstr "Add"
 
-#: awesomeshop/templates/dashboard/users.html:27
+#: awesomeshop/templates/dashboard/user.html:22
+msgid "User:"
+msgstr "User:"
+
+#: awesomeshop/templates/dashboard/user.html:22
+msgid "incorrect email address"
+msgstr "incorrect email address"
+
+#: awesomeshop/templates/dashboard/user.html:25
+#: awesomeshop/templates/part/login.html:25
+#: awesomeshop/templates/shop/profile.html:46
+#: awesomeshop/templates/shop/register.html:24
+msgid "Email address"
+msgstr "Email address"
+
+#: awesomeshop/templates/dashboard/user.html:25
+#: awesomeshop/templates/part/emailaddress.html:26
+#: awesomeshop/templates/shop/register.html:24
+msgid "Incorrect email address"
+msgstr "Incorrect email address"
+
+#: awesomeshop/templates/dashboard/user.html:28
+msgid "Admin"
+msgstr "Admin"
+
+#: awesomeshop/templates/dashboard/user.html:28
+msgid "Not admin"
+msgstr "Not admin"
+
+#: awesomeshop/templates/dashboard/user.html:31
+#: awesomeshop/templates/part/login.html:26
+#: awesomeshop/templates/part/password.html:25
+#: awesomeshop/templates/shop/profile.html:53
+#: awesomeshop/templates/shop/register.html:27
+msgid "Password"
+msgstr "Password"
+
+#: awesomeshop/templates/dashboard/user.html:31
+msgid "Password is mandatory for new users"
+msgstr "Password is mandatory for new users"
+
+#: awesomeshop/templates/dashboard/user.html:34
+#: awesomeshop/templates/part/password.html:26
+#: awesomeshop/templates/shop/register.html:30
+msgid "Password (again)"
+msgstr "Password (again)"
+
+#: awesomeshop/templates/dashboard/user.html:34
+#: awesomeshop/templates/part/password.html:26
+#: awesomeshop/templates/shop/register.html:30
+msgid "Passwords must match"
+msgstr "Passwords must match"
+
+#: awesomeshop/templates/dashboard/user.html:39
+msgid "Untitled address"
+msgstr "Untitled address"
+
+#: awesomeshop/templates/dashboard/user.html:42
+#: awesomeshop/templates/part/address.html:25
+#: awesomeshop/templates/shop/addresses.html:27
+msgid "Address title"
+msgstr "Address title"
+
+#: awesomeshop/templates/dashboard/user.html:42
+#: awesomeshop/templates/part/address.html:25
+#: awesomeshop/templates/shop/addresses.html:27
+msgid "Title is mandatory"
+msgstr "Title is mandatory"
+
+#: awesomeshop/templates/dashboard/user.html:45
+#: awesomeshop/templates/part/address.html:28
+#: awesomeshop/templates/shop/addresses.html:30
+msgid "First name"
+msgstr "First name"
+
+#: awesomeshop/templates/dashboard/user.html:48
+#: awesomeshop/templates/part/address.html:31
+#: awesomeshop/templates/shop/addresses.html:33
+msgid "Last name"
+msgstr "Last name"
+
+#: awesomeshop/templates/dashboard/user.html:48
+#: awesomeshop/templates/part/address.html:31
+#: awesomeshop/templates/shop/addresses.html:33
+msgid "Last name is mandatory"
+msgstr "Last name is mandatory"
+
+#: awesomeshop/templates/dashboard/user.html:51
+#: awesomeshop/templates/part/address.html:36
+#: awesomeshop/templates/shop/addresses.html:38
+msgid "Phone"
+msgstr "Phone"
+
+#: awesomeshop/templates/dashboard/user.html:54
+#: awesomeshop/templates/part/address.html:22
+#: awesomeshop/templates/part/address.html:34
+#: awesomeshop/templates/shop/addresses.html:36
+msgid "Address"
+msgstr "Address"
+
+#: awesomeshop/templates/dashboard/user.html:54
+#: awesomeshop/templates/part/address.html:34
+#: awesomeshop/templates/shop/addresses.html:36
+msgid "Address is mandatory"
+msgstr "Address is mandatory"
+
+#: awesomeshop/templates/dashboard/user.html:55
+#: awesomeshop/templates/part/address.html:35
+#: awesomeshop/templates/shop/addresses.html:37
+msgid "Country"
+msgstr "Country"
+
+#: awesomeshop/templates/dashboard/user.html:55
+#: awesomeshop/templates/part/address.html:35
+#: awesomeshop/templates/shop/addresses.html:37
+msgid "Country is mandatory"
+msgstr "Country is mandatory"
+
+#: awesomeshop/templates/dashboard/user.html:66
+#: awesomeshop/templates/shop/addresses.html:49
+msgid "Add an address"
+msgstr "Add an address"
+
+#: awesomeshop/templates/dashboard/users.html:22
 msgid "Add an user"
 msgstr "Add an user"
 
 #: awesomeshop/templates/dashboard/users.html:34
-msgid "admin"
-msgstr "admin"
+msgid "Is an admin"
+msgstr "Is an admin"
 
-#: awesomeshop/templates/dashboard/users.html:39
-#, python-format
-msgid "%(num)d address"
-msgid_plural "%(num)d addresses"
-msgstr[0] "%(num)d address"
-msgstr[1] "%(num)d addresses"
+#: awesomeshop/templates/macros/dashboard.html:28
+msgid "Back"
+msgstr "Back"
 
-#: awesomeshop/templates/dashboard/users.html:42
-#, python-format
-msgid "%(num)d cart"
-msgid_plural "%(num)d carts"
-msgstr[0] "%(num)d cart"
-msgstr[1] "%(num)d carts"
+#: awesomeshop/templates/part/address.html:41
+msgid "Modify this address"
+msgstr "Modify this address"
 
-#: awesomeshop/templates/dashboard/product/simple.html:25
-msgid "Price"
-msgstr "Price"
+#: awesomeshop/templates/part/address.html:42
+msgid "Add this address"
+msgstr "Add this address"
 
-#: awesomeshop/templates/dashboard/product/simple.html:35
-msgid "Net:"
-msgstr "Net:"
+#: awesomeshop/templates/part/deleteaccount.html:21
+msgid "Confirm account deletion"
+msgstr "Confirm account deletion"
 
-#: awesomeshop/templates/dashboard/product/simple.html:48
-msgid "Stock and shipping"
-msgstr "Stock and shipping"
-
-#: awesomeshop/templates/dashboard/product/skeleton.html:31
-msgid "New product"
-msgstr "New product"
-
-#: awesomeshop/templates/dashboard/product/skeleton.html:70
-msgid "On demand if out of stock"
-msgstr "On demand if out of stock"
-
-#: awesomeshop/templates/payment/payplug_cancel.html:21
-#: awesomeshop/templates/payment/payplug_cancel.html:23
-msgid "Payment cancelled"
-msgstr "Payment cancelled"
-
-#: awesomeshop/templates/payment/payplug_cancel.html:26
-msgid "You have cancelled the payment!"
-msgstr "You have cancelled the payment!"
-
-#: awesomeshop/templates/payment/payplug_cancel.html:29
-msgid "Cancel the order"
-msgstr "Cancel the order"
-
-#: awesomeshop/templates/payment/payplug_cancel.html:32
-msgid "Return to the order page"
-msgstr "Return to the order page"
-
-#: awesomeshop/templates/payment/payplug_cancel.html:35
-msgid "Proceed to payment again"
-msgstr "Proceed to payment again"
-
-#: awesomeshop/templates/payment/sepa_bank_transfer.html:26
-#, python-format
+#: awesomeshop/templates/part/deleteaccount.html:24
 msgid ""
-"Please execute a SEPA bank transfer within %(num)d days with the "
-"following criteria:"
+"Are you sure you want to delete your account? You will not be able to "
+"access your orders or your invoices anymore."
 msgstr ""
-"Please execute a SEPA bank transfer within %(num)d days with the "
-"following criteria:"
+"Are you sure you want to delete your account? You will not be able to "
+"access your orders or your invoices anymore."
 
-#: awesomeshop/templates/payment/sepa_bank_transfer.html:28
-msgid "Recipient account owner"
-msgstr "Recipient account owner"
+#: awesomeshop/templates/part/deleteaccount.html:29
+#, python-format
+msgid "Yes, delete my account on %(shopname)s once and for all!"
+msgstr "Yes, delete my account on %(shopname)s once and for all!"
 
-#: awesomeshop/templates/payment/sepa_bank_transfer.html:29
-msgid "Recipient account BIC"
-msgstr "Recipient account BIC"
+#: awesomeshop/templates/part/emailaddress.html:22
+#: awesomeshop/templates/part/emailaddress.html:31
+msgid "Change the email address"
+msgstr "Change the email address"
 
-#: awesomeshop/templates/payment/sepa_bank_transfer.html:30
-msgid "Recipient account IBAN"
-msgstr "Recipient account IBAN"
+#: awesomeshop/templates/part/emailaddress.html:25
+msgid "Current email address"
+msgstr "Current email address"
 
-#: awesomeshop/templates/payment/sepa_bank_transfer.html:31
-msgid "Transfer amount"
-msgstr "Transfer amount"
+#: awesomeshop/templates/part/emailaddress.html:26
+msgid "New email address"
+msgstr "New email address"
 
-#: awesomeshop/templates/payment/sepa_bank_transfer.html:32
-msgid "Transfer information"
-msgstr "Transfer information"
+#: awesomeshop/templates/part/fieldserror.html:21
+#: awesomeshop/templates/part/stringerror.html:21
+#: awesomeshop/templates/part/unknownerror.html:20
+msgid "Error"
+msgstr "Error"
 
-#: awesomeshop/templates/payment/sepa_bank_transfer.html:33
-msgid "Recipient address"
-msgstr "Recipient address"
+#: awesomeshop/templates/part/fieldserror.html:39
+#: awesomeshop/templates/part/paymentmessage.html:27
+#: awesomeshop/templates/part/stringerror.html:28
+#: awesomeshop/templates/part/unknownerror.html:27
+msgid "OK"
+msgstr "OK"
 
-#: awesomeshop/templates/payment/sepa_bank_transfer.html:39
-msgid "Back to order"
-msgstr "Back to order"
+#: awesomeshop/templates/part/lightbox.html:27
+msgid "Previous"
+msgstr "Previous"
+
+#: awesomeshop/templates/part/lightbox.html:30
+msgid "Next"
+msgstr "Next"
+
+#: awesomeshop/templates/part/login.html:22
+#, python-format
+msgid "%(shopname)s Login"
+msgstr "%(shopname)s Login"
+
+#: awesomeshop/templates/part/login.html:28
+msgid "Email address or Password is invalid."
+msgstr "Email address or Password is invalid."
+
+#: awesomeshop/templates/part/login.html:33
+msgid "Sign in"
+msgstr "Sign in"
+
+#: awesomeshop/templates/part/page_in_modal.html:27
+msgid "Close"
+msgstr "Close"
+
+#: awesomeshop/templates/part/password.html:22
+#: awesomeshop/templates/part/password.html:31
+msgid "Change the password"
+msgstr "Change the password"
+
+#: awesomeshop/templates/part/password.html:25
+msgid "Password is required"
+msgstr "Password is required"
+
+#: awesomeshop/templates/part/paymentmessage.html:20
+msgid "Message for the payment"
+msgstr "Message for the payment"
+
+#: awesomeshop/templates/part/productslist.html:30
+#: awesomeshop/templates/shop/product.html:78
+msgid "Add to cart"
+msgstr "Add to cart"
+
+#: awesomeshop/templates/part/productslist.html:36
+#: awesomeshop/templates/shop/product.html:80
+#, python-format
+msgid "Available on demand, delay %(min)d-%(max)d days"
+msgstr "Available on demand, delay %(min)d-%(max)d days"
+
+#: awesomeshop/templates/part/unknownerror.html:23
+msgid "Sorry, an unknown error occured. Please try again later."
+msgstr "Sorry, an unknown error occured. Please try again later."
 
 #: awesomeshop/templates/placeholder/home.html:19
 #, python-format
 msgid "Welcome on %(shop)s!"
 msgstr "Welcome on %(shop)s!"
 
-#: awesomeshop/templates/placeholder/home.html:22
+#: awesomeshop/templates/placeholder/home.html:21
 msgid "This is a default homepage from AwesomeShop."
 msgstr "This is a default homepage from AwesomeShop."
 
-#: awesomeshop/templates/placeholder/home.html:23
+#: awesomeshop/templates/placeholder/home.html:22
 msgid ""
-"Shop owner, you should create your own templates. Minimum templates are "
-"the following:"
+"Shop owner, you should create your own templates. The following files are"
+" used:"
 msgstr ""
-"Shop owner, you should create your own templates. Minimum templates are "
-"the following:"
+"Shop owner, you should create your own templates. The following files are"
+" used:"
 
-#: awesomeshop/templates/placeholder/home.html:26
-msgid "Content for the homepage"
-msgstr "Content for the homepage"
+#: awesomeshop/templates/placeholder/home.html:25
+msgid "The logo displayed in the top left of the page"
+msgstr "The logo displayed in the top left of the page"
 
-#: awesomeshop/templates/placeholder/home.html:28
-msgid "The shop's logo (upper left corner)"
-msgstr "The shop's logo (upper left corner)"
+#: awesomeshop/templates/placeholder/home.html:27
+msgid "The home page (which will replace the current page)"
+msgstr "The home page (which will replace the current page)"
 
-#: awesomeshop/templates/placeholder/home.html:30
-msgid "Stylesheet specific to the shop"
-msgstr "Stylesheet specific to the shop"
+#: awesomeshop/templates/shop/addresses.html:21
+#: awesomeshop/templates/shop/profile.html:27
+msgid "Configure your addresses"
+msgstr "Configure your addresses"
 
-#: awesomeshop/templates/shop/cart.html:21
-#: awesomeshop/templates/shop/cart.html:23
-msgid "My Cart"
-msgstr "My Cart"
+#: awesomeshop/templates/shop/addresses.html:47
+msgid "My address"
+msgstr "My address"
 
-#: awesomeshop/templates/shop/cart.html:45
+#: awesomeshop/templates/shop/addresses.html:53
+msgid "Save all modifications"
+msgstr "Save all modifications"
+
+#: awesomeshop/templates/shop/cart.html:35
+#: awesomeshop/templates/shop/saved_carts.html:36
+msgid "Unit price:"
+msgstr "Unit price:"
+
+#: awesomeshop/templates/shop/cart.html:37
+#: awesomeshop/templates/shop/cart.html:62
+msgid "In stock"
+msgstr "In stock"
+
+#: awesomeshop/templates/shop/cart.html:38
+msgid "For an immediate shipping, order less than [[ line.product.stock ]]"
+msgstr "For an immediate shipping, order less than [[ line.product.stock ]]"
+
+#: awesomeshop/templates/shop/cart.html:38
+#: awesomeshop/templates/shop/cart.html:63
 #, python-format
-msgid "for an immediate shipping, buy %(num)d or less"
-msgstr "for an immediate shipping, buy %(num)d or less"
+msgid "Delay %(min)d-%(max)d days"
+msgstr "Delay %(min)d-%(max)d days"
 
-#: awesomeshop/templates/shop/cart.html:65
-#: awesomeshop/templates/shop/saved_cart.html:41
-msgid "Unit:"
-msgstr "Unit:"
+#: awesomeshop/templates/shop/cart.html:41
+#: awesomeshop/templates/shop/product.html:66
+#: awesomeshop/templates/shop/product.html:72
+msgid "Quantity"
+msgstr "Quantity"
 
-#: awesomeshop/templates/shop/cart.html:80
-#: awesomeshop/templates/shop/cart.html:89
-#: awesomeshop/templates/shop/saved_cart.html:56
-msgid "Recalculate"
-msgstr "Recalculate"
+#: awesomeshop/templates/shop/cart.html:53
+#: awesomeshop/templates/shop/cart.html:66
+#: awesomeshop/templates/shop/saved_carts.html:45
+msgid "Total:"
+msgstr "Total:"
 
-#: awesomeshop/templates/shop/cart.html:99
-#: awesomeshop/templates/shop/saved_cart.html:64
+#: awesomeshop/templates/shop/cart.html:69
 msgid "+ shipping fee"
 msgstr "+ shipping fee"
 
-#: awesomeshop/templates/shop/cart.html:102
-#: awesomeshop/templates/shop/checkout.html:241
-#: awesomeshop/templates/shop/confirm.html:154
-#: awesomeshop/templates/shop/order.html:184
-#: awesomeshop/templates/shop/saved_cart.html:67
-msgid "TVA non applicable, article 293 B du Code général des impôts"
-msgstr "European VAT not applicable, net prices (art. 293B, french CGI)"
+#: awesomeshop/templates/shop/cart.html:73
+msgid ""
+"The price and availability of these products may change. The cart is a "
+"temporary and local list, products are not reserved until you place an "
+"order."
+msgstr ""
+"The price and availability of these products may change. The cart is a "
+"temporary and local list, products are not reserved until you place an "
+"order."
 
-#: awesomeshop/templates/shop/cart.html:111
-#, python-format
-msgid "Cart has been saved (%(name)s)"
-msgstr "Cart has been saved (%(name)s)"
+#: awesomeshop/templates/shop/cart.html:86
+msgid "Saved"
+msgstr "Saved"
 
-#: awesomeshop/templates/shop/cart.html:115
-#: awesomeshop/templates/shop/cart.html:127
+#: awesomeshop/templates/shop/cart.html:88
+#: awesomeshop/templates/shop/cart.html:103
+msgid "Remove all products"
+msgstr "Remove all products"
+
+#: awesomeshop/templates/shop/cart.html:90
+#: awesomeshop/templates/shop/cart.html:105
 msgid "Empty cart"
 msgstr "Empty cart"
 
-#: awesomeshop/templates/shop/cart.html:119
+#: awesomeshop/templates/shop/cart.html:97
 msgid "Cart name"
 msgstr "Cart name"
 
-#: awesomeshop/templates/shop/cart.html:123
-msgid "Save cart"
-msgstr "Save cart"
+#: awesomeshop/templates/shop/cart.html:99
+msgid "Save this cart for a later use"
+msgstr "Save this cart for a later use"
 
-#: awesomeshop/templates/shop/cart.html:135
+#: awesomeshop/templates/shop/cart.html:113
 msgid "Proceed to checkout"
 msgstr "Proceed to checkout"
 
-#: awesomeshop/templates/shop/cart.html:150
-#: awesomeshop/templates/shop/insufficient_stock.html:26
-#: awesomeshop/templates/shop/product/simple.html:38
-#: awesomeshop/templates/shop/product/simple.html:64
-msgid "Sorry, insufficient stock."
-msgstr "Sorry, insufficient stock."
-
-#: awesomeshop/templates/shop/cart.html:197
-#: awesomeshop/templates/shop/checkout.html:402
+#: awesomeshop/templates/shop/cart.html:119
+#: awesomeshop/templates/shop/checkout.html:239
 msgid "Your cart is empty!"
 msgstr "Your cart is empty!"
 
-#: awesomeshop/templates/shop/checkout.html:21
-#: awesomeshop/templates/shop/checkout.html:25
-#: awesomeshop/templates/shop/confirm.html:21
-msgid "Checkout"
-msgstr "Checkout"
-
-#: awesomeshop/templates/shop/checkout.html:37
-#: awesomeshop/templates/shop/confirm.html:58
-#: awesomeshop/templates/shop/order.html:102
-msgid "Unit"
-msgstr "Unit"
-
-#: awesomeshop/templates/shop/checkout.html:67
+#: awesomeshop/templates/shop/checkout.html:60
 msgid ""
-"Your cart has been modified because stock is insufficient for one or more"
-" products."
+"Your cart has been modified because stock has changed for one or more "
+"products."
 msgstr ""
-"Your cart has been modified because stock is insufficient for one or more"
-" products."
+"Your cart has been modified because stock has changed for one or more "
+"products."
 
-#: awesomeshop/templates/shop/checkout.html:72
+#: awesomeshop/templates/shop/checkout.html:63
 #, python-format
 msgid ""
 "Your cart contains products to be ordered on demand. Shipping will be "
@@ -1414,48 +1262,51 @@ msgstr ""
 "Your cart contains products to be ordered on demand. Shipping will be "
 "delayed for %(min)d-%(max)d days."
 
-#: awesomeshop/templates/shop/checkout.html:95
+#: awesomeshop/templates/shop/checkout.html:82
 msgid "The package will be shipped to:"
 msgstr "The package will be shipped to:"
 
-#: awesomeshop/templates/shop/checkout.html:124
+#: awesomeshop/templates/shop/checkout.html:88
+#: awesomeshop/templates/shop/checkout.html:126
+msgid "Modify"
+msgstr "Modify"
+
+#: awesomeshop/templates/shop/checkout.html:94
+#: awesomeshop/templates/shop/checkout.html:132
+msgid "New address"
+msgstr "New address"
+
+#: awesomeshop/templates/shop/checkout.html:114
 msgid "Use the delivery address"
 msgstr "Use the delivery address"
 
-#: awesomeshop/templates/shop/checkout.html:157
+#: awesomeshop/templates/shop/checkout.html:145
 msgid "Shipping"
 msgstr "Shipping"
 
-#: awesomeshop/templates/shop/checkout.html:166
-msgid "You must define at least one address for delivery"
-msgstr "You must define at least one address for delivery"
-
-#: awesomeshop/templates/shop/checkout.html:206
+#: awesomeshop/templates/shop/checkout.html:193
 msgid "Payment"
 msgstr "Payment"
 
-#: awesomeshop/templates/shop/checkout.html:218
+#: awesomeshop/templates/shop/checkout.html:204
 msgid "If you have any message for us about this order, write it here!"
 msgstr "If you have any message for us about this order, write it here!"
 
-#: awesomeshop/templates/shop/checkout.html:223
-#: awesomeshop/templates/shop/confirm.html:144
-#: awesomeshop/templates/shop/order.html:178
+#: awesomeshop/templates/shop/checkout.html:209
+#: awesomeshop/templates/shop/order.html:155
 msgid "I accept that my order is shipped in a reused package"
 msgstr "I accept that my order is shipped in a reused package"
 
-#: awesomeshop/templates/shop/checkout.html:228
-#: awesomeshop/templates/shop/confirm.html:149
+#: awesomeshop/templates/shop/checkout.html:214
 #, python-format
 msgid "I agree to the %(terms)s and adhere to them unconditionally"
 msgstr "I agree to the %(terms)s and adhere to them unconditionally"
 
-#: awesomeshop/templates/shop/checkout.html:228
-#: awesomeshop/templates/shop/confirm.html:149
+#: awesomeshop/templates/shop/checkout.html:214
 msgid "terms of purchase"
 msgstr "terms of purchase"
 
-#: awesomeshop/templates/shop/checkout.html:233
+#: awesomeshop/templates/shop/checkout.html:218
 #, python-format
 msgid ""
 "I understand that the cart contains products to be ordered on demand and "
@@ -1464,160 +1315,140 @@ msgstr ""
 "I understand that the cart contains products to be ordered on demand and "
 "that shipping will be delayed for %(min)d-%(max)d days."
 
-#: awesomeshop/templates/shop/checkout.html:238
+#: awesomeshop/templates/shop/checkout.html:225
+msgid "You must define at least one address for delivery"
+msgstr "You must define at least one address for delivery"
+
+#: awesomeshop/templates/shop/checkout.html:228
+msgid "Create an address"
+msgstr "Create an address"
+
+#: awesomeshop/templates/shop/checkout.html:233
 msgid "Verify and confirm the order"
 msgstr "Verify and confirm the order"
 
-#: awesomeshop/templates/shop/confirm.html:23
-msgid "Confirm your order"
-msgstr "Confirm your order"
-
-#: awesomeshop/templates/shop/confirm.html:25
-#: awesomeshop/templates/shop/order.html:25
-#: awesomeshop/templates/shop/order.html:27
-#, python-format
-msgid "Order #%(num)s, on %(date)s"
-msgstr "Order #%(num)s, on %(date)s"
-
-#: awesomeshop/templates/shop/confirm.html:84
-msgid ""
-"The quantity for this product has been reduced due to a last minute "
-"change in our stock. The current quantity is reserved for you."
-msgstr ""
-"The quantity for this product has been reduced due to a last minute "
-"change in our stock. The current quantity is reserved for you."
-
-#: awesomeshop/templates/shop/confirm.html:88
-msgid ""
-"This is an on-demand product, it will be ordered or manufactured as soon "
-"as the payment is received."
-msgstr ""
-"This is an on-demand product, it will be ordered or manufactured as soon "
-"as the payment is received."
-
-#: awesomeshop/templates/shop/confirm.html:131
-msgid "Details"
-msgstr "Details"
-
-#: awesomeshop/templates/shop/confirm.html:137
-#: awesomeshop/templates/shop/order.html:171
-#, python-format
-msgid ""
-"This order includes on demand products, shipping is delayed for "
-"%(min)d-%(max)d days"
-msgstr ""
-"This order includes on demand products, shipping is delayed for "
-"%(min)d-%(max)d days"
-
-#: awesomeshop/templates/shop/confirm.html:140
-#: awesomeshop/templates/shop/order.html:174
-msgid "Payment:"
-msgstr "Payment:"
-
-#: awesomeshop/templates/shop/confirm.html:156
-#: awesomeshop/templates/shop/order.html:50
-#: awesomeshop/templates/shop/order.html:187
-msgid "Proceed to payment"
-msgstr "Proceed to payment"
-
-#: awesomeshop/templates/shop/insufficient_stock.html:29
-msgid "Go back"
-msgstr "Go back"
-
-#: awesomeshop/templates/shop/insufficient_stock.html:32
-msgid "Back to the homepage"
-msgstr "Back to the homepage"
-
-#: awesomeshop/templates/shop/new_products.html:26
-msgid "Here are the latest products added in the shop"
-msgstr "Here are the latest products added in the shop"
-
-#: awesomeshop/templates/shop/order.html:21
-msgid "Invoice"
-msgstr "Invoice"
-
-#: awesomeshop/templates/shop/order.html:24
-#, python-format
-msgid "Invoice #%(num)s, on %(date)s"
-msgstr "Invoice #%(num)s, on %(date)s"
-
-#: awesomeshop/templates/shop/order.html:31
+#: awesomeshop/templates/shop/order.html:22
 msgid "Order status:"
 msgstr "Order status:"
 
-#: awesomeshop/templates/shop/order.html:38
+#: awesomeshop/templates/shop/order.html:24
 #, python-format
-msgid "Payment received on %(date)s"
-msgstr "Payment received on %(date)s"
+msgid "Cancelled if not confirmed within %(num)d days."
+msgstr "Cancelled if not confirmed within %(num)d days."
 
-#: awesomeshop/templates/shop/order.html:64
+#: awesomeshop/templates/shop/order.html:30
+msgid "Payment received on [[ order.payment_date | date ]]"
+msgstr "Payment received on [[ order.payment_date | date ]]"
+
+#: awesomeshop/templates/shop/order.html:33
+msgid "Message about the payment:"
+msgstr "Message about the payment:"
+
+#: awesomeshop/templates/shop/order.html:36
+msgid "Shipped on [[ order.shipping_date | date ]]"
+msgstr "Shipped on [[ order.shipping_date | date ]]"
+
+#: awesomeshop/templates/shop/order.html:40
+msgid "Tracking number:"
+msgstr "Tracking number:"
+
+#: awesomeshop/templates/shop/order.html:46
+#: awesomeshop/templates/shop/order.html:162
+msgid "Confirm and proceed to payment"
+msgstr "Confirm and proceed to payment"
+
+#: awesomeshop/templates/shop/order.html:47
 msgid "Retry payment"
 msgstr "Retry payment"
 
-#: awesomeshop/templates/shop/order.html:193
-msgid "Print"
-msgstr "Print"
+#: awesomeshop/templates/shop/order.html:150
+msgid ""
+"This order includes on demand products, shipping is delayed for [[ "
+"order.on_demand_delay_min ]]-[[ order.on_demand_delay_max ]] days"
+msgstr ""
+"This order includes on demand products, shipping is delayed for [[ "
+"order.on_demand_delay_min ]]-[[ order.on_demand_delay_max ]] days"
 
-#: awesomeshop/templates/shop/out_of_stock_before_confirmation.html:26
-msgid "Sorry, we do not have enough stock for the following products:"
-msgstr "Sorry, we do not have enough stock for the following products:"
+#: awesomeshop/templates/shop/order.html:152
+msgid "Payment:"
+msgstr "Payment:"
 
-#: awesomeshop/templates/shop/out_of_stock_before_confirmation.html:34
-msgid "Maybe another customer has confirmed his/her order before yours."
-msgstr "Maybe another customer has confirmed his/her order before yours."
+#: awesomeshop/templates/shop/order.html:167
+msgid ""
+"Invoice [[ order.invoice_full_number ]], on [[ order.invoice_date | date "
+"]]"
+msgstr ""
+"Invoice [[ order.invoice_full_number ]], on [[ order.invoice_date | date "
+"]]"
 
-#: awesomeshop/templates/shop/out_of_stock_before_confirmation.html:35
-msgid "Quantities in your cart have been reduced."
-msgstr "Quantities in your cart have been reduced."
+#: awesomeshop/templates/shop/orders.html:24
+msgid "products"
+msgstr "products"
 
-#: awesomeshop/templates/shop/out_of_stock_before_confirmation.html:38
-msgid "Go back to the checkout page"
-msgstr "Go back to the checkout page"
-
-#: awesomeshop/templates/shop/saved_cart.html:21
-#: awesomeshop/templates/shop/saved_cart.html:23
-#, python-format
-msgid "Saved cart: %(cart_name)s"
-msgstr "Saved cart: %(cart_name)s"
-
-#: awesomeshop/templates/shop/saved_cart.html:43
-msgid "Quantity:"
-msgstr "Quantity:"
-
-#: awesomeshop/templates/shop/saved_cart.html:73
-msgid "Delete this cart"
-msgstr "Delete this cart"
-
-#: awesomeshop/templates/shop/saved_cart.html:76
-msgid "Load this cart"
-msgstr "Load this cart"
-
-#: awesomeshop/templates/shop/search.html:21
-msgid "Search results"
-msgstr "Search results"
-
-#: awesomeshop/templates/shop/search.html:23
-#, python-format
-msgid "Search results for \"%(terms)s\""
-msgstr "Search results for \"%(terms)s\""
-
-#: awesomeshop/templates/shop/search.html:47
-msgid "Sorry, there are no results for this search..."
-msgstr "Sorry, there are no results for this search..."
-
-#: awesomeshop/templates/shop/product/simple.html:27
-msgid "Quantity"
-msgstr "Quantity"
-
-#: awesomeshop/templates/shop/product/simple.html:63
-msgid "Warning:"
-msgstr "Warning:"
-
-#: awesomeshop/templates/shop/product/skeleton.html:59
+#: awesomeshop/templates/shop/product.html:47
 msgid "Summary"
 msgstr "Summary"
 
-#: awesomeshop/templates/shop/product/skeleton.html:65
+#: awesomeshop/templates/shop/product.html:53
 msgid "Reference:"
 msgstr "Reference:"
 
+#: awesomeshop/templates/shop/product.html:82
+msgid "Insufficient stock"
+msgstr "Insufficient stock."
+
+#: awesomeshop/templates/shop/product.html:85
+msgid "Incorrect quantity"
+msgstr "Incorrect quantity"
+
+#: awesomeshop/templates/shop/profile.html:20
+msgid "Welcome on your profile, [[ user.get().email ]]!"
+msgstr "Welcome on your profile, [[ user.get().email ]]!"
+
+#: awesomeshop/templates/shop/profile.html:34
+msgid "View your saved carts"
+msgstr "View your saved carts"
+
+#: awesomeshop/templates/shop/profile.html:41
+msgid "View your orders"
+msgstr "View your orders"
+
+#: awesomeshop/templates/shop/profile.html:48
+msgid "Modify your email address"
+msgstr "Modify your email address"
+
+#: awesomeshop/templates/shop/profile.html:55
+msgid "Modify your password"
+msgstr "Modify your password"
+
+#: awesomeshop/templates/shop/profile.html:61
+msgid "Delete the account"
+msgstr "Delete the account"
+
+#: awesomeshop/templates/shop/profile.html:64
+msgid "Delete your account once and for all"
+msgstr "Delete your account once and for all"
+
+#: awesomeshop/templates/shop/register.html:27
+msgid "Password is mandatory"
+msgstr "Password is mandatory"
+
+#: awesomeshop/templates/shop/register.html:34
+msgid "Sign up"
+msgstr "Sign up"
+
+#: awesomeshop/templates/shop/saved_carts.html:39
+msgid "Quantity:"
+msgstr "Quantity:"
+
+#: awesomeshop/templates/shop/saved_carts.html:56
+msgid "Load"
+msgstr "Load"
+
+#: awesomeshop/templates/shop/search.html:19
+msgid "Search results for \"[[ terms ]]\""
+msgstr "Search results for \"[[ terms ]]\""
+
+#: awesomeshop/templates/shop/search.html:43
+msgid "Sorry, there are no results for this search..."
+msgstr "Sorry, there are no results for this search..."
