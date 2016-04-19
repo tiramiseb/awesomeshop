@@ -63,6 +63,13 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                         <span class="text-danger" ng-hide="order.accept_reused_package">{{ _('no') }}</span>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-xs-5 text-right">{{ _('Paper invoice') }}</div>
+                    <div class="col-xs-7">
+                        <span class="text-success" ng-show="order.paper_invoice">{{ _('yes') }}</span>
+                        <span class="text-danger" ng-hide="order.paper_invoice">{{ _('no') }}</span>
+                    </div>
+                </div>
                 <div class="row" ng-show="order.tracking_number">
                     <div class="col-xs-5 text-right">{{ _('Tracking number') }}</div>
                     <div class="col-xs-7">

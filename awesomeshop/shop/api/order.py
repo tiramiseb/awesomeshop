@@ -92,6 +92,7 @@ class OrderSchema(Schema):
     carrier = fields.String(load_only=True, required=True)
     payment = fields.String(load_only=True)
     accept_reused_package = fields.Boolean()
+    paper_invoice = fields.Boolean()
 
     # Fields that may be modified later (not by loading an order in the schema)
     status = fields.String(dump_only=True)
@@ -186,6 +187,7 @@ class OrderSchema(Schema):
         order.set_total(subtotal+shipping_price)
         order.set_payment_mode(data.get('payment'))
         order.accept_reused_package = data.get('accept_reused_package', False)
+        order.paper_invoice = data.get('paper_invoice', False)
         order.on_demand = global_on_demand
         order.on_demand_delay_min = app.config['ON_DEMAND_DELAY_MIN']
         order.on_demand_delay_max = app.config['ON_DEMAND_DELAY_MAX']

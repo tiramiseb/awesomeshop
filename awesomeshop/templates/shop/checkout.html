@@ -208,7 +208,12 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                         <i class="fa fa-recycle"></i>
                         {{ _('I accept that my order is shipped in a reused package') }}
                         <input type="checkbox" ng-model="choice.accept_reused_package">
-                    </label>
+                    </label><br>
+                    <label>
+                        <i class="fa fa-file-text-o"></i>
+                        {{ _('I want to receive a paper invoice') }}
+                        <input type="checkbox" ng-model="choice.paper_invoice">
+                    </label><br>
                     <label>
                         <i class="fa fa-check"></i>
                         <b>{{ _('I agree to the %(terms)s and adhere to them unconditionally', terms='<a href="#" ng-click="open_terms()">'|safe+_('terms of purchase')+'</a>'|safe) }}</b>

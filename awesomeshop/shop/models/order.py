@@ -168,6 +168,7 @@ class Order(db.Document):
     gross_total = db.StringField(db_field='gtot')
     net_total = db.StringField(db_field='ntot')
     numeric_total = db.DecimalField(db_field='tot')
+    paper_invoice = db.BooleanField(db_field='paper')
     payment_id = db.StringField(db_field='p_id')
     payment_icon = db.StringField(db_field='p_ico')
     payment_description = db.StringField(db_field='p_desc')
@@ -275,7 +276,7 @@ class Order(db.Document):
         self.payment_id = mode_id
         mode = get_mode(mode_id)
         self.payment_icon = mode.icon
-        self.payment_description = str(mode.description)
+        self.payment_description = unicode(mode.description)
 
     def trigger_payment(self):
         if self.status not in ('unconfirmed', 'awaiting_payment'):
