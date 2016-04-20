@@ -192,10 +192,10 @@ class OrderSchema(Schema):
         order.on_demand_delay_min = app.config['ON_DEMAND_DELAY_MIN']
         order.on_demand_delay_max = app.config['ON_DEMAND_DELAY_MAX']
         order.save()
-        current_user.latest_delivery_address = str(delivery_address.id)
-        current_user.latest_billing_address = str(billing_address.id)
+        current_user.latest_delivery_address = unicode(delivery_address.id)
+        current_user.latest_billing_address = unicode(billing_address.id)
         current_user.latest_delivery_as_billing = delivery_as_billing
-        current_user.latest_carrier = str(carrierobj.id)
+        current_user.latest_carrier = unicode(carrierobj.id)
         current_user.latest_payment = order.payment_id
         current_user.latest_reused_package = order.accept_reused_package
         current_user.save()

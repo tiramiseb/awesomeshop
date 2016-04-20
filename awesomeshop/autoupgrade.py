@@ -80,7 +80,7 @@ def merge_weights_and_costs():
             old_weights.sort()
             new_weights = {}
             for weight in old_weights:
-                new_weights[str(weight)] = {}
+                new_weights[unicode(weight)] = {}
             for country, costs in carrier['costs'].iteritems():
                 for weight, cost in costs.iteritems():
                     if weight in new_weights:
@@ -90,7 +90,7 @@ def merge_weights_and_costs():
             for weight in old_weights:
                 new_costs_as_list.append({
                             'weight': weight,
-                            'costs': new_weights[str(weight)]
+                            'costs': new_weights[unicode(weight)]
                             })
             carriers.update_one(
                     {'_id': carrier['_id']},

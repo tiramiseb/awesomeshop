@@ -56,7 +56,7 @@ class NetPrice(fields.Field):
     Dump only: net price for a Price object
     """
     def _serialize(self, value, attr, obj):
-        return str(value.quantize('0.01').net)
+        return unicode(value.quantize('0.01').net)
 
 
 class ObjField(fields.Field):
@@ -70,7 +70,7 @@ class ObjField(fields.Field):
     """
     def _serialize(self, value, attr, obj):
         if self.metadata['f'] == 'id':
-            return str(getattr(value, self.metadata['f'], ''))
+            return unicode(getattr(value, self.metadata['f'], ''))
         else:
             return getattr(value, self.metadata['f'], '')
 
@@ -93,7 +93,7 @@ class MultiObjField(fields.Field):
     """
     def _serialize(self, value, attr, obj):
         if self.metadata['f'] == 'id':
-            return [str(v['id']) for v in value]
+            return [unicode(v['id']) for v in value]
         else:
             return [getattr(v, self.metadata['f']) for v in value]
 

@@ -89,7 +89,7 @@ class UserSchema(Schema):
         user.save()
         if 'addresses' in data:
             # Get a list of current addresses
-            user_s_addresses = [str(i.id) for i in
+            user_s_addresses = [unicode(i.id) for i in
                                 Address.objects(user=user).only('id')]
             # Save all addresses in the request
             for a in data['addresses']:
@@ -148,7 +148,7 @@ class UserData(Resource):
     def post(self):
         schema = UserSchema()
         data = request.get_json()
-        data['id'] = str(current_user.id)
+        data['id'] = unicode(current_user.id)
         result, errors = schema.load(data)
         if errors:
             abort(400, {'type': 'fields', 'errors': errors})

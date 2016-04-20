@@ -76,7 +76,7 @@ class User(db.Document, UserMixin):
         return self.passhash.encode('utf-8') == candidate_hash
 
     def send_confirmation_email(self):
-        self.confirm_code = str(uuid.uuid4())
+        self.confirm_code = unicode(uuid.uuid4())
         send_mail(self.email, 'email_confirmation', code=self.confirm_code)
 
 

@@ -83,7 +83,7 @@ def payplug_return(order_number):
         order.set_status('awaiting_provider')
         order.save()
     return redirect(os.path.join(request.url_root, 'orders',
-                                 str(order_number)))
+                                 unicode(order_number)))
 
 
 @app.route('/payplug/cancel/<order_number>')

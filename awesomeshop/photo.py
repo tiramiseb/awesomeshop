@@ -56,7 +56,7 @@ class Photo(db.EmbeddedDocument):
         if not os.path.exists(os.path.join(app.static_folder, 'photos')):
             os.mkdir(os.path.join(app.static_folder, 'photos'))
         # Store the image
-        photo_filename = str(uuid.uuid4()) + file_extension
+        photo_filename = unicode(uuid.uuid4()) + file_extension
         filepath = os.path.join(app.static_folder, 'photos', photo_filename)
         photo.save(filepath)
         # Create the thumbnail

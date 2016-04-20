@@ -117,7 +117,7 @@ def invoice(order):
         y -= space_10
         c.drawString(colref, y, p.reference)
         c.drawString(colprod, y, p.name)
-        c.drawRightString(colqty, y, str(p.quantity))
+        c.drawRightString(colqty, y, unicode(p.quantity))
         c.drawRightString(colunit, y, p.net_price)
         c.drawRightString(coltotal, y, p.line_net_price)
         y -= subspace

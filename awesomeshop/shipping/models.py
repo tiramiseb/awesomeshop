@@ -50,7 +50,7 @@ class Country(db.Document):
                             )
 
     def get_shipping_price(self, carrier, weight):
-        weights = self.carriers[str(carrier.id)]
+        weights = self.carriers[unicode(carrier.id)]
         for w in weights:
             if w['weight'] > weight:
                 return result_carrier_cost(Decimal(w['cost']))
@@ -134,14 +134,14 @@ def update_mapping(sender, document, **kwargs):
                                                             ).countries
                     except:
                         pass
-            result = {'weight': weight, 'cost': str(cost)}
+            result = {'weight': weight, 'cost': unicode(cost)}
             if countries == 'rest':
                 rest.append(result)
             else:
                 for c in countries:
                     countries_carriers_mapping.setdefault(c, []).append(result)
 
-    docid = str(document.id)
+    docid = unicode(document.id)
     for country in Country.objects:
         costs = countries_carriers_mapping.get(country, rest)
         country.carriers[docid] = costs
@@ -150,17 +150,17 @@ def update_mapping(sender, document, **kwargs):
 
 def delete_mapping(sender, document, **kwargs):
     for country in Country.objects:
-        country.carriers.pop(str(document.id), None)
+        country.carriers.pop(unicode(document.id), None)
         country.save()
 
 signals.pre_save.connect(remove_null_costs, sender=Carrier)
 signals.post_save.connect(update_mapping, sender=Carrier)
 signals.pre_delete.connect(delete_mapping, sender=Carrier)
 
-rounding = Decimal(str(app.config['SHIPPING_ROUNDING']))
-multiplier = Decimal(str(app.config['SHIPPING_MULTIPLIER']))
-preparation = Decimal(str(app.config['PACKAGE_PREPARATION_PRICE']))
-tax = 1 + Decimal(str(app.config['SHIPPING_TAX']))/100
+rounding = Decimal(unicode(app.config['SHIPPING_ROUNDING']))
+multiplier = Decimal(unicode(app.config['SHIPPING_MULTIPLIER']))
+preparation = Decimal(unicode(app.config['PACKAGE_PREPARATION_PRICE']))
+tax = 1 + Decimal(unicode(app.config['SHIPPING_TAX']))/100
 
 
 def result_carrier_cost(cost):
