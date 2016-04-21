@@ -80,6 +80,7 @@ class PageContentSchema(Schema):
 
 
 class ApiPages(Resource):
+
     def get(self, page_type=None):
         if current_user.is_authenticated and current_user.is_admin:
             schema = PageSchemaForAdminList
@@ -96,6 +97,7 @@ class ApiPages(Resource):
     def post(self):
         schema = PageSchema()
         data = request.get_json()
+        data.pop('id', None)
         result, errors = schema.load(data)
         if errors:
             abort(400, {'type': 'fields', 'errors': errors})
@@ -103,12 +105,13 @@ class ApiPages(Resource):
 
 
 class ApiPage(Resource):
+
     @admin_required
-    def get(self, page_id=None):
+    def get(self, page_id):
         return PageSchema().dump(Page.objects.get_or_404(id=page_id)).data
 
     @admin_required
-    def post(self, page_id):
+    def put(self, page_id):
         schema = PageSchema()
         data = request.get_json()
         data['id'] = page_id
@@ -134,12 +137,14 @@ class ApiPage(Resource):
 
 
 class ApiPageContent(Resource):
+
     def get(self, page_type, page_slug):
         page = Page.objects.get_or_404(pagetype=page_type, slug=page_slug)
         return PageContentSchema().dump(page).data
 
 
 class PagePhoto(Resource):
+
     @admin_required
     def post(self, page_id):
         page = Page.objects.get_or_404(id=page_id)
@@ -150,6 +155,7 @@ class PagePhoto(Resource):
 
 
 class DeletePagePhoto(Resource):
+
     @admin_required
     def delete(self, page_id, filename):
         page = Page.objects.get_or_404(id=page_id)
@@ -163,6 +169,7 @@ class DeletePagePhoto(Resource):
 
 
 class MovePage(Resource):
+
     @admin_required
     def get(self, page_id, target_id):
         page = Page.objects.get_or_404(id=page_id)

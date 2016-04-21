@@ -119,15 +119,20 @@ angular.module('dbCategories', ['slugifier'])
             })
         });
     $scope.submit = function() {
-        $http.post('/api/category', $scope.category)
-            .then(function(response) {
-                var is_new = !$scope.category.id;
-                $scope.category = response.data;
-                $scope.form.$setPristine();
-                if (is_new) {
+        if ($scope.category.id) {
+            $http.put('/api/category/'+$scope.category.id+'/edit', $scope.category)
+                .then(function(response) {
+                    $scope.category = response.data;
+                    $scope.form.$setPristine();
+                });
+        } else {
+            $http.post('/api/category', $scope.category)
+                .then(function(response) {
+                    $scope.category = response.data;
+                    $scope.form.$setPristine();
                     $state.go('category', {category_id:response.data.id}, {notify:false});
-                }
-            });
+                });
+        };
     }
     $scope.delete = function() {
         if ($scope.category.id) {

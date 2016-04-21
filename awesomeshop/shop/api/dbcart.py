@@ -163,6 +163,7 @@ class VerifyLiveCart(Resource):
 
 
 class ApiCarts(Resource):
+
     @login_required
     def get(self):
         return CartSchema(many=True).dump(DbCart.objects(
@@ -180,9 +181,20 @@ class ApiCarts(Resource):
 
 
 class ApiCart(Resource):
+
+    @login_required
+    def get(self, cart_id):
+        return CartSchema().dump(DbCart.objects.get_or_404(
+                                                user=current_user.to_dbref(),
+                                                id=cart_id
+                                                )).data
+
     @login_required
     def delete(self, cart_id):
-        DbCart.objects.get_or_404(id=cart_id).delete()
+        DbCart.objects.get_or_404(
+                            user=current_user.to_dbref(),
+                            id=cart_id
+                            ).delete()
         return {'status': 'OK'}
 
 rest.add_resource(VerifyLiveCart, '/api/cart/verify')

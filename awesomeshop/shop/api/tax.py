@@ -43,7 +43,8 @@ class TaxSchema(Schema):
         return tax
 
 
-class ApiTax(Resource):
+class ApiTaxes(Resource):
+
     @admin_required
     def get(self):
         return TaxSchema(many=True).dump(Tax.objects).data
@@ -51,6 +52,25 @@ class ApiTax(Resource):
     @admin_required
     def post(self):
         schema = TaxSchema()
+        data = request.get_json()
+        data.pop('id', None)
+        result, errors = schema.load(data)
+        if errors:
+            abort(400, {'type': 'fields', 'errors': errors})
+        return schema.dump(result).data
+
+
+class ApiTax(Resource):
+
+    @admin_required
+    def get(self, tax_id):
+        return TaxSchema().dump(Tax.objects.get_or_404(id=tax_id)).data
+
+    @admin_required
+    def put(self, tax_id):
+        schema = TaxSchema()
+        data = request.get_json()
+        data['id'] = tax_id
         result, errors = schema.load(request.get_json())
         if errors:
             abort(400, {'type': 'fields', 'errors': errors})

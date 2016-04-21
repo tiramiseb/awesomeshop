@@ -76,7 +76,7 @@ angular.module('shopUser', ['validation.match'])
 .controller('ChangeEmailCtrl', function($scope, $http, user) {
     $scope.user = user;
     $scope.change_email = function() {
-        $http.post('/api/userdata', {
+        $http.put('/api/userdata', {
             email: $scope.email
         })
             .then(function(response) {
@@ -87,7 +87,7 @@ angular.module('shopUser', ['validation.match'])
 })
 .controller('ChangePasswordCtrl', function($scope, $http) {
     $scope.change_password = function() {
-        $http.post('/api/userdata', {
+        $http.put('/api/userdata', {
             password: $scope.password
         })
             .then(function(response) {
@@ -97,7 +97,7 @@ angular.module('shopUser', ['validation.match'])
 })
 .controller('DeleteAccountCtrl', function($scope, $state, $http, user) {
     $scope.delete_account = function() {
-        $http.post('/api/userdata/delete')
+        $http.delete('/api/userdata')
             .then(function(response) {
                 user.set(response.data);
                 $state.go('index');
@@ -118,7 +118,7 @@ angular.module('shopUser', ['validation.match'])
         return ((index == $scope.addresses.length - 1) && (index % 2 == 0));
     };
     $scope.send = function() {
-        $http.post('/api/userdata', {'addresses': $scope.addresses})
+        $http.put('/api/userdata', {'addresses': $scope.addresses})
             .then(function(response) {
                 user.set(response.data);
             });
@@ -160,7 +160,7 @@ angular.module('shopUser', ['validation.match'])
         } else {
             addresses.push($scope.address);
         }
-        $http.post('/api/userdata', {'addresses': addresses})
+        $http.put('/api/userdata', {'addresses': addresses})
             .then(function(response) {
                 user.set(response.data);
                 $scope.$close();

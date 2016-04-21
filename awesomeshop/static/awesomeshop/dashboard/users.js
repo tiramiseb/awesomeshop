@@ -42,19 +42,24 @@ angular.module('dbUsers', [])
 })
 .controller('UserCtrl', function($scope, $http, $stateParams, $state) {
     $scope.submit = function() {
-        $http.post('/api/user', $scope.user)
-            .then(function(response) {
-                var is_new = !$scope.user.id;
-                $scope.user = response.data;
-                $scope.form.$setPristine();
-                if (is_new) {
+        if ($scope.user.id) {
+            $http.put('/api/user/'+$scope.user.id, $scope.user)
+                .then(function(response) {
+                    $scope.user = response.data;
+                    $scope.form.$setPristine();
+                });
+        } else {
+            $http.post('/api/user', $scope.user)
+                .then(function(response) {
+                    $scope.user = response.data;
+                    $scope.form.$setPristine();
                     $state.go('user', {user_id:response.data.id}, {notify:false});
-                }
-            });
+                });
+        };
     }
     $scope.delete = function() {
-        if ($scope.page.id) {
-            $http.delete('/api/user/'+$scope.page.id)
+        if ($scope.user.id) {
+            $http.delete('/api/user/'+$scope.user.id)
                 .then(function(response) {
                     $state.go('users');
                 });

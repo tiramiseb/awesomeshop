@@ -157,6 +157,7 @@ class ApiProducts(Resource):
     def post(self):
         schema = ProductSchemaForEdition()
         data = request.get_json()
+        data.pop('id', None)
         result, errors = schema.load(data)
         if errors:
             abort(400, {'type': 'fields', 'errors': errors})
@@ -182,7 +183,7 @@ class ApiProductEdit(Resource):
                 ).data
 
     @admin_required
-    def post(self, product_id):
+    def put(self, product_id):
         schema = ProductSchemaForEdition()
         data = request.get_json()
         data['id'] = product_id
@@ -198,6 +199,7 @@ class ApiProductEdit(Resource):
 
 
 class ApiProductFromCatAndSlug(Resource):
+
     def get(self, category_id, product_slug):
         return ProductSchema().dump(
                 Product.objects.get_or_404(
@@ -208,6 +210,7 @@ class ApiProductFromCatAndSlug(Resource):
 
 
 class ApiProductFromId(Resource):
+
     def get(self, product_id):
         return ProductSchema().dump(
                 Product.objects.get_or_404(id=product_id)
@@ -215,6 +218,7 @@ class ApiProductFromId(Resource):
 
 
 class ProductPhoto(Resource):
+
     @admin_required
     def post(self, product_id):
         product = Product.objects.get_or_404(id=product_id)
@@ -225,6 +229,7 @@ class ProductPhoto(Resource):
 
 
 class DeleteProductPhoto(Resource):
+
     @admin_required
     def delete(self, product_id, filename):
         product = Product.objects.get_or_404(id=product_id)
@@ -238,6 +243,7 @@ class DeleteProductPhoto(Resource):
 
 
 class MoveProductPhoto(Resource):
+
     @admin_required
     def get(self, product_id, from_rank, to_rank):
         # TODO Test if from_rank and to_rank < len(product.photos)

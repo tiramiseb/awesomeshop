@@ -122,6 +122,7 @@ unauthentified_data = {
 
 
 class UserLogin(Resource):
+
     def post(self):
         data = request.get_json()
         try:
@@ -137,6 +138,7 @@ class UserLogin(Resource):
 
 
 class UserData(Resource):
+
     def get(self):
         if current_user.is_authenticated:
             userdata = UserSchema().dump(current_user).data
@@ -145,7 +147,7 @@ class UserData(Resource):
             return unauthentified_data
 
     @login_required
-    def post(self):
+    def put(self):
         schema = UserSchema()
         data = request.get_json()
         data['id'] = unicode(current_user.id)
@@ -154,16 +156,15 @@ class UserData(Resource):
             abort(400, {'type': 'fields', 'errors': errors})
         return schema.dump(result).data
 
-
-class UserDelete(Resource):
     @login_required
-    def post(self):
+    def delete(self):
         current_user.delete()
         logout_user()
         return unauthentified_data
 
 
 class UserLogout(Resource):
+
     @login_required
     def get(self):
         logout_user()
@@ -171,6 +172,7 @@ class UserLogout(Resource):
 
 
 class SetLang(Resource):
+
     def put(self):
         language = request.get_json().get('lang')
         if language:
@@ -186,6 +188,7 @@ class SetLang(Resource):
 
 
 class Register(Resource):
+
     def post(self):
         schema = UserSchema()
         if current_user.is_authenticated:
@@ -198,6 +201,7 @@ class Register(Resource):
 
 
 class ResendConfirmationEmail(Resource):
+
     @login_required
     def get(self):
         current_user.send_confirmation_email()
@@ -205,25 +209,39 @@ class ResendConfirmationEmail(Resource):
 
 
 class ForceLogin(Resource):
+
     @login_required
     def get(self):
         return {'status': 'ok'}
 
 
-class ApiUser(Resource):
-    @admin_required
-    def get(self, user_id=None):
-        if (user_id):
-            return UserSchema().dump(User.objects.get_or_404(id=user_id)).data
-        else:
-            return UserSchemaForList(many=True).dump(User.objects).data
+class ApiUsers(Resource):
 
     @admin_required
-    def post(self, user_id=None):
+    def get(self):
+        return UserSchemaForList(many=True).dump(User.objects).data
+
+    def post(self):
         schema = UserSchema()
         data = request.get_json()
-        if user_id:
-            data['id'] = user_id
+        data.pop('id', None)
+        result, errors = schema.load(data)
+        if errors:
+            abort(400, {'type': 'fields', 'errors': errors})
+        return schema.dump(result).data
+
+
+class ApiUser(Resource):
+
+    @admin_required
+    def get(self, user_id):
+        return UserSchema().dump(User.objects.get_or_404(id=user_id)).data
+
+    @admin_required
+    def post(self, user_id):
+        schema = UserSchema()
+        data = request.get_json()
+        data['id'] = user_id
         result, errors = schema.load(data)
         if errors:
             abort(400, {'type': 'fields', 'errors': errors})
@@ -236,10 +254,10 @@ class ApiUser(Resource):
 
 rest.add_resource(UserLogin, '/api/login')
 rest.add_resource(UserData, '/api/userdata')
-rest.add_resource(UserDelete, '/api/userdata/delete')
 rest.add_resource(UserLogout, '/api/logout')
 rest.add_resource(SetLang, '/api/setlang')
 rest.add_resource(Register, '/api/register')
 rest.add_resource(ResendConfirmationEmail, '/api/register/resend')
 rest.add_resource(ForceLogin, '/api/forcelogin')
-rest.add_resource(ApiUser, '/api/user', '/api/user/<user_id>')
+rest.add_resource(ApiUsers, '/api/user')
+rest.add_resource(ApiUser, '/api/user/<user_id>')

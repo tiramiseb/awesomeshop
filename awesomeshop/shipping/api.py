@@ -125,20 +125,34 @@ class CarriersByCountryAndWeight(Schema):
     cost = fields.Decimal(as_string=True)
 
 
-class ApiCountry(Resource):
-    def get(self, country_id=None):
-        if country_id:
-            return CountrySchema().dump(Country.objects.get_or_404(
-                                                           id=country_id)).data
-        else:
-            return CountrySchemaForList(many=True).dump(Country.objects).data
+class ApiCountries(Resource):
+
+    def get(self):
+        return CountrySchemaForList(many=True).dump(Country.objects).data
 
     @admin_required
-    def post(self, country_id=None):
+    def post(self):
         schema = CountrySchema()
         data = request.get_json()
-        if country_id:
-            data['id'] = country_id
+        data.pop('id', None)
+        result, errors = schema.load(data)
+        if errors:
+            abort(400, {'type': 'fields', 'errors': errors})
+        return schema.dump(result).data
+
+
+class ApiCountry(Resource):
+
+    @admin_required
+    def get(self, country_id):
+        return CountrySchema().dump(Country.objects.get_or_404(
+                                                           id=country_id)).data
+
+    @admin_required
+    def put(self, country_id):
+        schema = CountrySchema()
+        data = request.get_json()
+        data['id'] = country_id
         result, errors = schema.load(data)
         if errors:
             abort(400, {'type': 'fields', 'errors': errors})
@@ -160,22 +174,36 @@ class ApiCountry(Resource):
         return {'status': 'OK'}
 
 
-class ApiCountriesGroup(Resource):
+class ApiCountriesGroups(Resource):
+
     @admin_required
-    def get(self, group_id=None):
-        if group_id:
-            return CountriesGroupSchema().dump(
-                           CountriesGroup.objects.get_or_404(id=group_id)).data
-        else:
-            return CountriesGroupSchemaForList(many=True).dump(
+    def get(self):
+        return CountriesGroupSchemaForList(many=True).dump(
                                                    CountriesGroup.objects).data
 
     @admin_required
-    def post(self, group_id=None):
+    def post(self):
         schema = CountriesGroupSchema()
         data = request.get_json()
-        if group_id:
-            data['id'] = group_id
+        data.pop('id', None)
+        result, errors = schema.load(data)
+        if errors:
+            abort(400, {'type': 'fields', 'errors': errors})
+        return schema.dump(result).data
+
+
+class ApiCountriesGroup(Resource):
+
+    @admin_required
+    def get(self, group_id):
+        return CountriesGroupSchema().dump(
+                           CountriesGroup.objects.get_or_404(id=group_id)).data
+
+    @admin_required
+    def put(self, group_id):
+        schema = CountriesGroupSchema()
+        data = request.get_json()
+        data['id'] = group_id
         result, errors = schema.load(data)
         if errors:
             abort(400, {'type': 'fields', 'errors': errors})
@@ -187,21 +215,34 @@ class ApiCountriesGroup(Resource):
         return {'status': 'OK'}
 
 
-class ApiCarrier(Resource):
-    @admin_required
-    def get(self, carrier_id=None):
-        if carrier_id:
-            return CarrierSchema().dump(
-                                Carrier.objects.get_or_404(id=carrier_id)).data
-        else:
-            return CarrierSchemaForList(many=True).dump(Carrier.objects).data
+class ApiCarriers(Resource):
 
     @admin_required
-    def post(self, carrier_id=None):
+    def get(self):
+        return CarrierSchemaForList(many=True).dump(Carrier.objects).data
+
+    @admin_required
+    def post(self):
         schema = CarrierSchema()
         data = request.get_json()
-        if carrier_id:
-            data['id'] = carrier_id
+        data.pop('id', None)
+        result, errors = schema.load(data)
+        if errors:
+            abort(400, {'type': 'fields', 'errors': errors})
+        return schema.dump(result).data
+
+
+class ApiCarrier(Resource):
+    @admin_required
+    def get(self, carrier_id):
+        return CarrierSchema().dump(
+                                Carrier.objects.get_or_404(id=carrier_id)).data
+
+    @admin_required
+    def put(self, carrier_id):
+        schema = CarrierSchema()
+        data = request.get_json()
+        data['id'] = carrier_id
         result, errors = schema.load(data)
         if errors:
             abort(400, {'type': 'fields', 'errors': errors})
@@ -219,8 +260,10 @@ class ApiCarrierByWeight(Resource):
         return CarriersByCountryAndWeight(many=True).dump(result).data
 
 
-rest.add_resource(ApiCountry, '/api/country', '/api/country/<country_id>')
-rest.add_resource(ApiCountriesGroup, '/api/countriesgroup',
-                                     '/api/countriesgroup/<group_id>')
-rest.add_resource(ApiCarrier, '/api/carrier', '/api/carrier/<carrier_id>')
+rest.add_resource(ApiCountries, '/api/country')
+rest.add_resource(ApiCountry, '/api/country/<country_id>')
+rest.add_resource(ApiCountriesGroups, '/api/countriesgroup')
+rest.add_resource(ApiCountriesGroup, '/api/countriesgroup/<group_id>')
+rest.add_resource(ApiCarriers, '/api/carrier')
+rest.add_resource(ApiCarrier, '/api/carrier/<carrier_id>')
 rest.add_resource(ApiCarrierByWeight, '/api/carrier/<country>/<int:weight>')

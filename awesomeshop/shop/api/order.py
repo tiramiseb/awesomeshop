@@ -226,6 +226,7 @@ orders_reqparser.add_argument('status')
 
 class ApiOrders(Resource):
 
+    @login_required
     def get(self):
         if current_user.is_admin:
             schema = OrderSchemaForAdminList
@@ -286,6 +287,8 @@ class ApiOrder(Resource):
 
 
 class PayOrder(Resource):
+
+    @login_required
     def get(self, number):
         order = Order.objects.get_or_404(
                     customer=current_user.to_dbref(),

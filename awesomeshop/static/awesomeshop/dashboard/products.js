@@ -118,20 +118,25 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
         return '?';
     }
     $scope.submit = function() {
-        $http.post('/api/product', $scope.product)
-            .then(function(response) {
-                var is_new = !$scope.product.id;
-                $scope.product = response.data;
-                $scope.form.$setPristine();
-                if (is_new) {
+        if ($scope.product.id) {
+            $http.put('/api/product/'+$scope.product.id+'/edit', $scope.product)
+                .then(function(response) {
+                    $scope.product = response.data;
+                    $scope.form.$setPristine();
+                });
+        } else {
+            $http.post('/api/product', $scope.product)
+                .then(function(response) {
+                    $scope.product = response.data;
+                    $scope.form.$setPristine();
                     reinit($scope.product.id);
                     $state.go('product', {product_id:response.data.id}, {notify:false});
-                }
-            });
+                });
+        };
     }
     $scope.delete = function() {
         if ($scope.product.id) {
-            $http.delete('/api/product/'+$scope.product.id)
+            $http.delete('/api/product/'+$scope.product.id+'/edit')
                 .then(function(response) {
                     $state.go('products');
                 });

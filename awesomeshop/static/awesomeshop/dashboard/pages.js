@@ -78,16 +78,21 @@ angular.module('dbPages', ['angular-sortable-view', 'angularFileUpload', 'slugif
         };
     }
     $scope.submit = function() {
-        $http.post('/api/page', $scope.page)
-            .then(function(response) {
-                var is_new = !$scope.page.id;
-                $scope.page = response.data;
-                $scope.form.$setPristine();
-                if (is_new) {
+        if ($scope.page.id) {
+            $http.put('/api/page/'+$scope.page.id, $scope.page)
+                .then(function(response) {
+                    $scope.page = response.data;
+                    $scope.form.$setPristine();
+                });
+        } else {
+            $http.post('/api/page', $scope.page)
+                .then(function(response) {
+                    $scope.page = response.data;
+                    $scope.form.$setPristine();
                     $state.go('page', {page_id:response.data.id}, {notify:false});
                     reinit($scope.page.id);
-                }
-            });
+                });
+        };
     }
     $scope.delete = function() {
         if ($scope.page.id) {

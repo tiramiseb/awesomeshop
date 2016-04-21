@@ -39,7 +39,7 @@ angular.module('dbTaxrates', [])
             });
     }
     $scope.save = function(rate) {
-        $http.post('/api/taxrate', rate)
+        $http.put('/api/taxrate/'+rate.id, rate)
             .then(function(response) {
                 rate = response.data;
             });

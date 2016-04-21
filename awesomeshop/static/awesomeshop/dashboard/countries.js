@@ -59,15 +59,20 @@ angular.module('dbCountries', [])
 .controller('CountryCtrl', function($scope, $http, $stateParams, CONFIG) {
     $scope.langs = CONFIG.languages;
     $scope.submit = function() {
-        $http.post('/api/country', $scope.country)
-            .then(function(response) {
-                var is_new = !$scope.country.id;
-                $scope.country = response.data;
-                $scope.form.$setPristine();
-                if (is_new) {
+        if ($scope.country.id) {
+            $http.put('/api/country/'+$scope.country.id, $scope.country)
+                .then(function(response) {
+                    $scope.country = response.data;
+                    $scope.form.$setPristine();
+                });
+        } else {
+            $http.post('/api/country', $scope.country)
+                .then(function(response) {
+                    $scope.country = response.data;
+                    $scope.form.$setPristine();
                     $state.go('country', {country_id:response.data.id}, {notify:false});
-                }
-            });
+                });
+        };
     }
     $scope.delete = function() {
         if ($scope.country.id) {
@@ -90,7 +95,7 @@ angular.module('dbCountries', [])
             });
     } else {
         $scope.country = {};
-    }
+    };
 })
 .controller('CountriesGroupsCtrl', function($scope, $http) {
     $http.get('/api/countriesgroup')
@@ -100,15 +105,20 @@ angular.module('dbCountries', [])
 })
 .controller('CountriesGroupCtrl', function($scope, $http, $state, $stateParams) {
     $scope.submit = function () {
-        $http.post('/api/countriesgroup', $scope.group)
-            .then(function(response) {
-                var is_new = !$scope.group.id;
-                $scope.group = response.data;
-                $scope.form.$setPristine();
-                if (is_new) {
+        if ($scope.group.id) {
+            $http.put('/api/countriesgroup/'+$scope.group.id, $scope.group)
+                .then(function(response) {
+                    $scope.group = response.data;
+                    $scope.form.$setPristine();
+                });
+        } else {
+            $http.post('/api/countriesgroup', $scope.group)
+                .then(function(response) {
+                    $scope.group = response.data;
+                    $scope.form.$setPristine();
                     $state.go('countriesgroup', {group_id: response.data.id}, {notify:false});
-                }
-            });
+                });
+        };
     }
     $scope.delete = function() {
         if ($scope.group.id) {

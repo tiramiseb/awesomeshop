@@ -102,6 +102,7 @@ class ApiCategories(Resource):
     def post(self):
         schema = CategorySchemaForEdition()
         data = request.get_json()
+        data.pop('id', None)
         result, errors = schema.load(data)
         if errors:
             abort(400, {'type': 'fields', 'errors': errors})
@@ -117,7 +118,7 @@ class ApiCategoryEdit(Resource):
                     ).data
 
     @admin_required
-    def post(self, category_id):
+    def put(self, category_id):
         schema = CategorySchemaForEdition()
         data = request.get_json()
         data['id'] = category_id
