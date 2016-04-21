@@ -81,4 +81,5 @@ class ApiTax(Resource):
         Tax.objects.get_or_404(id=tax_id).delete()
         return {'status': 'OK'}
 
-rest.add_resource(ApiTax, '/api/taxrate', '/api/taxrate/<tax_id>')
+rest.add_resource(ApiTaxes, '/api/taxrate')
+rest.add_resource(ApiTax, '/api/taxrate/<tax_id>')
