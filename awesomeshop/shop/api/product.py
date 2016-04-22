@@ -254,7 +254,7 @@ class MoveProductPhoto(Resource):
         return {'status': 'OK'}
 
 rest.add_resource(ApiProducts, '/api/product')
-rest.add_resource(ApiNewProducts, '/api/newproduct')
+rest.add_resource(ApiNewProducts, '/api/newproducts')
 rest.add_resource(ApiProductEdit, '/api/product/<product_id>/edit')
 rest.add_resource(ApiProductFromId, '/api/product/<product_id>')
 rest.add_resource(ApiProductFromCatAndSlug,

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  N/A\n"
 "Report-Msgid-Bugs-To: sebastien@maccagnoni.eu\n"
-"POT-Creation-Date: 2016-04-19 20:30+0200\n"
-"PO-Revision-Date: 2016-04-19 20:32+0200\n"
+"POT-Creation-Date: 2016-04-22 06:54+0200\n"
+"PO-Revision-Date: 2016-04-22 06:55+0200\n"
 "Last-Translator: Sebastien Maccagnoni <sebastien@maccagnoni.eu>\n"
 "Language: fr\n"
 "Language-Team: Sébastien Maccagnoni <sebastien@maccagnoni.eu>\n"
@@ -37,7 +37,7 @@ msgid "Create an account"
 msgstr "Créer un compte"
 
 #: awesomeshop/messages.py:29 awesomeshop/templates/dashboard.html:81
-#: awesomeshop/templates/shop.html:143
+#: awesomeshop/templates/shop.html:144
 #: awesomeshop/templates/dashboard/product.html:35
 #: awesomeshop/templates/shop/product.html:110
 #: awesomeshop/templates/shop/search.html:31
@@ -49,7 +49,7 @@ msgid "Home"
 msgstr "Accueil"
 
 #: awesomeshop/messages.py:31 awesomeshop/templates/dashboard.html:102
-#: awesomeshop/templates/shop.html:181
+#: awesomeshop/templates/shop.html:182
 msgid "Information"
 msgstr "Information"
 
@@ -57,12 +57,13 @@ msgstr "Information"
 msgid "My cart"
 msgstr "Mon panier"
 
-#: awesomeshop/messages.py:33 awesomeshop/templates/shop.html:162
+#: awesomeshop/messages.py:33 awesomeshop/templates/shop.html:163
 #: awesomeshop/templates/shop/orders.html:19
 msgid "My orders"
 msgstr "Mes commandes"
 
-#: awesomeshop/messages.py:34 awesomeshop/templates/shop.html:129
+#: awesomeshop/messages.py:34 awesomeshop/templates/shop.html:130
+#: awesomeshop/templates/shop/newproducts.html:19
 msgid "New products"
 msgstr "Nouveaux produits"
 
@@ -161,7 +162,7 @@ msgstr "Livraison: %(description)s"
 msgid "TVA non applicable, article 293 B du Code général des impôts"
 msgstr "TVA non applicable, article 293 B du Code général des impôts"
 
-#: awesomeshop/page/api.py:129
+#: awesomeshop/page/api.py:132
 msgid "Could not delete: this documentation is used in a product."
 msgstr "Impossible de supprimer: cette documentation est utilisée par un produit."
 
@@ -234,15 +235,15 @@ msgstr ""
 "Veuillez exécuter un virement bancaire SEPA dans les %(num)d jours avec "
 "les critères suivants :"
 
-#: awesomeshop/shipping/api.py:156
+#: awesomeshop/shipping/api.py:170
 msgid "Could not delete : this country is part of a countries group."
 msgstr "Impossible de supprimer : ce pays fait partie d'un groupe de pays"
 
-#: awesomeshop/shop/api/category.py:140
+#: awesomeshop/shop/api/category.py:141
 msgid "Could not delete: this category has products."
 msgstr "Impossible de supprimer: cette catégorie a des produits."
 
-#: awesomeshop/shop/api/category.py:146
+#: awesomeshop/shop/api/category.py:147
 msgid "Could not delete: this category has children."
 msgstr "Impossible de supprimer: cette catégorie a des enfants."
 
@@ -351,11 +352,11 @@ msgstr "Utilisateurs"
 msgid "Logout"
 msgstr "Déconnexion"
 
-#: awesomeshop/templates/shop.html:75 awesomeshop/templates/shop.html:171
+#: awesomeshop/templates/shop.html:75 awesomeshop/templates/shop.html:172
 msgid "Login"
 msgstr "Connexion"
 
-#: awesomeshop/templates/shop.html:76 awesomeshop/templates/shop.html:174
+#: awesomeshop/templates/shop.html:76 awesomeshop/templates/shop.html:175
 msgid "Register"
 msgstr "S'enregistrer"
 
@@ -379,20 +380,20 @@ msgstr "[[ cart.count() ]] produits"
 msgid "Show the menu"
 msgstr "Afficher le menu"
 
-#: awesomeshop/templates/shop.html:154
+#: awesomeshop/templates/shop.html:155
 msgid "My account"
 msgstr "Mon compte"
 
-#: awesomeshop/templates/shop.html:158
+#: awesomeshop/templates/shop.html:159
 msgid "My profile"
 msgstr "Mon profil"
 
-#: awesomeshop/templates/shop.html:166
+#: awesomeshop/templates/shop.html:167
 #: awesomeshop/templates/shop/saved_carts.html:19
 msgid "My saved carts"
 msgstr "Mes paniers enregistrés"
 
-#: awesomeshop/templates/shop.html:192
+#: awesomeshop/templates/shop.html:193
 msgid ""
 "Please confirm your email address by clicking on the link in the email "
 "you have received."
@@ -400,15 +401,15 @@ msgstr ""
 "Veuillez confirmer votre adresse e-mail en cliquant sur le lien dans le "
 "courrier électronique que vous avez reçu."
 
-#: awesomeshop/templates/shop.html:194
+#: awesomeshop/templates/shop.html:195
 msgid "You have not received the validation email?"
 msgstr "Vous n'avez pas reçu l'e-mail de validation ?"
 
-#: awesomeshop/templates/shop.html:195
+#: awesomeshop/templates/shop.html:196
 msgid "Send it again"
 msgstr "Le renvoyer"
 
-#: awesomeshop/templates/shop.html:206
+#: awesomeshop/templates/shop.html:207
 msgid "Follow us..."
 msgstr "Nous suivre..."
 
@@ -1342,6 +1343,11 @@ msgstr "Créer une adresse"
 #: awesomeshop/templates/shop/checkout.html:238
 msgid "Verify and confirm the order"
 msgstr "Vérifier et confirmer la commande"
+
+#: awesomeshop/templates/shop/newproducts.html:20
+#, python-format
+msgid "These products have been added to the store in the last %(days)s days"
+msgstr "Ces produits ont été ajoutés à la boutique dans les %(days)s derniers jours"
 
 #: awesomeshop/templates/shop/order.html:22
 msgid "Order status:"
