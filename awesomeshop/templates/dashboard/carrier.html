@@ -16,9 +16,7 @@ details.
 You should have received a copy of the GNU Affero General Public License
 along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
-{% import "macros/dashboard.html" as d %}
 {% import "macros/form.html" as f %}
-
 <form name="form" ng-submit="submit()" novalidate>
 <h1>{{ _('Carrier:') }} [[ carrier.name ]]</h1>
 <div class="row">
@@ -137,5 +135,15 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </table>
     </div>
 </div>
-{{ d.submit_back('carriers') }}
+<div id="page-buttons">
+    <button type="submit" class="btn btn-link" uib-tooltip="{{ _('Save') }}" ng-disabled="form.$invalid">
+        <i class="fa fa-check-circle fa-4x text-success"></i>
+    </button>
+    <button type="button" class="btn btn-link" ng-click="delete()" uib-tooltip="{{ _('Remove') }}">
+        <i class="fa fa-times-circle fa-4x text-danger"></i>
+    </button>
+    <a class="btn btn-link" ui-sref="carriers" uib-tooltip="{{ _('Back') }}">
+        <i class="fa fa-arrow-circle-left fa-4x" ng-class="{'text-primary': form.$pristine, 'text-danger': form.$dirty }"></i>
+    </a>
+</div>
 </form>
