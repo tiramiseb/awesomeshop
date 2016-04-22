@@ -21,25 +21,31 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <div class="list-group">
     <input class="list-group-item" type="text" ng-model="query" placeholder="{{ _('Filter') }}">
     <div class="list-group-item" ng-repeat="rate in taxrates | filter:query">
-        <div class="row">
+        <form class="row" name="form" ng-submit="save(rate)" novalidate>
             <div class="col-xs-4">
-                <input class="form-control" type="text" ng-model="rate.name" placeholder="{{ _('Name') }}" required>
+                <input class="form-control" name="name" type="text" ng-model="rate.name" placeholder="{{ _('Name') }}" required>
+                <p ng-show="form.name.$dirty && form.name.$invalid" class="text-danger">
+                    {{ _('Name is mandatory') }}
+                </p>
             </div>
             <div class="col-xs-4">
                 <div class="input-group">
-                    <input class="form-control" type="text" ng-model="rate.rate" placeholder="{{ _('Rate') }}" required>
+                    <input class="form-control" name="rate" type="text" ng-model="rate.rate" placeholder="{{ _('Rate') }}" required>
                     <span class="input-group-addon">%</span>
                 </div>
+                <p ng-show="form.rate.$dirty && form.rate.$invalid" class="text-danger">
+                    {{ _('Rate is mandatory') }}
+                </p>
             </div>
             <div class="col-xs-4 text-right">
                 <div class="btn-group">
-                    <button class="btn btn-success" ng-click="save(rate)">
+                    <button type="submit" class="btn btn-success" ng-disabled="form.$invalid">
                         <i class="fa fa-check"></i>
                         <span class="hidden-xs hidden-sm">
                             {{ _('Save') }}
                         </span>
                     </button>
-                    <button class="btn btn-danger" ng-click="delete(rate)">
+                    <button type="button" class="btn btn-danger" ng-click="delete(rate)">
                         <i class="fa fa-times"></i>
                         <span class="hidden-xs hidden-sm">
                             {{ _('Delete') }}
@@ -47,21 +53,27 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     </button>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
     <div class="list-group-item">
-        <div class="row">
+        <form name="newrateform" class="row" ng-submit="add()" novalidate>
             <div class="col-xs-4">
-                <input class="form-control" type="text" ng-model="newrate.name" placeholder="{{ _('Name') }}" required>
+                <input class="form-control" name="name" type="text" ng-model="newrate.name" placeholder="{{ _('Name') }}" required>
+                <p ng-show="newrateform.name.$dirty && newrateform.name.$invalid" class="text-danger">
+                    {{ _('Name is mandatory') }}
+                </p>
             </div>
             <div class="col-xs-4">
                 <div class="input-group">
-                    <input class="form-control" type="text" ng-model="newrate.rate" placeholder="{{ _('Rate') }}" required>
+                    <input class="form-control" name="rate" type="text" ng-model="newrate.rate" placeholder="{{ _('Rate') }}" required>
                     <span class="input-group-addon">%</span>
                 </div>
+                <p ng-show="newrateform.rate.$dirty && newrateform.rate.$invalid" class="text-danger">
+                    {{ _('Rate is mandatory') }}
+                </p>
             </div>
             <div class="col-xs-4 text-right">
-                <button class="btn btn-primary" ng-click="add()">
+                <button type="submit" class="btn btn-primary" ng-disabled="newrateform.$invalid">
                     <i class="fa fa-plus"></i>
                     <span class="hidden-xs hidden-sm">
                         {{ _('Add') }}

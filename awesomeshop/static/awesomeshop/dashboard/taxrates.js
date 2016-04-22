@@ -35,6 +35,7 @@ angular.module('dbTaxrates', [])
         $http.post('/api/taxrate', $scope.newrate)
             .then(function(response) {
                 $scope.taxrates.push(response.data);
+                $scope.newrateform.$setPristine();
                 $scope.newrate = {};
             });
     }
