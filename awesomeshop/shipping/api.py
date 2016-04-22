@@ -110,7 +110,7 @@ class CarrierSchema(Schema):
             carrier = Carrier()
         carrier.name = data['name']
         carrier.description = data.get('description', {})
-        carrier.tracking_url = data.get('tracking_url', '')
+        carrier.tracking_url = data.get('tracking_url', u'')
         carrier.countries = data.get('countries', [])
         carrier.countries_groups = data.get('countries_groups', [])
         carrier.costs = [CarrierCosts(weight=cost['weight'],

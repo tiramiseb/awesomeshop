@@ -38,7 +38,7 @@ class Loc(fields.Field):
     Dump only: localize a TranslationField
     """
     def _serialize(self, value, attr, obj):
-        return value.get(get_locale(), '')
+        return value.get(get_locale(), u'')
 
 
 class LocObjField(fields.Field):
@@ -48,7 +48,7 @@ class LocObjField(fields.Field):
     * f: the field in the object
     """
     def _serialize(self, value, attr, obj):
-        return getattr(value, self.metadata['f']).get(get_locale(), '')
+        return getattr(value, self.metadata['f']).get(get_locale(), u'')
 
 
 class NetPrice(fields.Field):
@@ -70,9 +70,9 @@ class ObjField(fields.Field):
     """
     def _serialize(self, value, attr, obj):
         if self.metadata['f'] == 'id':
-            return unicode(getattr(value, self.metadata['f'], ''))
+            return unicode(getattr(value, self.metadata['f'], u''))
         else:
-            return getattr(value, self.metadata['f'], '')
+            return getattr(value, self.metadata['f'], u'')
 
     def _deserialize(self, value, attr, data):
         if value:

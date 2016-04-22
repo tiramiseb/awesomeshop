@@ -27,7 +27,7 @@ from . import rest
 class ApiSearch(Resource):
     def get(self):
         from .search import do_search
-        terms = request.args.get('terms', '')
+        terms = request.args.get('terms', u'')
         return do_search(terms)
 
 rest.add_resource(ApiSearch, '/api/search')

@@ -76,7 +76,7 @@ class Category(db.Document):
 
     @property
     def full_name(self):
-        name = self.name.get(get_locale(), '')
+        name = self.name.get(get_locale(), u'')
         if self.parent:
             return u'{} » {}'.format(self.parent.full_name, name)
         else:

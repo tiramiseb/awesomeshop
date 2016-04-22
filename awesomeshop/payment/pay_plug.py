@@ -129,5 +129,5 @@ def payplug_ipn(order_number):
             order.payment_data = None
             order.set_status('payment_failed')
         order.save()
-        return ''
+        return u''
     abort(403)

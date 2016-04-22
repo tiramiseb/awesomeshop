@@ -208,6 +208,9 @@ def index_products(objs):
         for lg in langs:
             obj['name_'+lg] = i.name.get(lg, u'')
             obj['description_'+lg] = i.description.get(lg, u'')
+        print "================================================"
+        print obj
+        print "------------------------------------------------"
         writer.update_document(**obj)
     writer.commit()
 

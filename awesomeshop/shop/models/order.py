@@ -200,7 +200,7 @@ class Order(db.Document):
             return u'{}{}'.format(self.invoice_number_prefix,
                                   self.invoice_number)
         else:
-            return ''
+            return u''
 
     @property
     def count_products(self):

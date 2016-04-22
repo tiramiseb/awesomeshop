@@ -35,7 +35,7 @@ class TranslationsList(f.Field):
         super(TranslationsList, self).__init__(label, validators,
                                                default=default, **kwargs)
         self.unbound_field = unbound_field
-        self._prefix = kwargs.get('_prefix', '')
+        self._prefix = kwargs.get('_prefix', u'')
 
     def process(self, formdata, data=unset_value):
         self.entries = {}

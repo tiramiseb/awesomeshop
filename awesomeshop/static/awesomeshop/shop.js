@@ -72,6 +72,21 @@ angular.module('awesomeshop', [
         }
     };
 })
+.factory('newproducts', function($http) {
+    var newproducts;
+    $http.get('/api/newproducts')
+        .then(function(response) {
+            newproducts = response.data;
+        });
+    return {
+        get: function() {
+            return newproducts;
+        },
+        count: function() {
+            return newproducts.length;
+        }
+    };
+})
 .factory('categories', function($http) {
     var categories;
     $http.get('/api/category', {params: {'flat':'true'}})
@@ -400,11 +415,14 @@ angular.module('awesomeshop', [
     $scope.saved_carts = savedCarts;
     $scope.orders = orders;
 })
-.controller('DocsListCtrl', function($scope, docs) {
-    $scope.docs = docs;
+.controller('NewProductsCtrl', function($scope, newproducts) {
+    $scope.newproducts = newproducts;
 })
 .controller('CategoriesListCtrl', function($scope, categories) {
     $scope.categories = categories;
+})
+.controller('DocsListCtrl', function($scope, docs) {
+    $scope.docs = docs;
 })
 .controller('InfosListCtrl', function($scope, infos) {
     $scope.infos = infos;

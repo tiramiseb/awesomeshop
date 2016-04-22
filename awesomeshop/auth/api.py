@@ -101,11 +101,11 @@ class UserSchema(Schema):
                     address = Address()
                 address.user = user
                 address.title = a['title']
-                address.firstname = a.get('firstname', '')
+                address.firstname = a.get('firstname', u'')
                 address.lastname = a['lastname']
                 address.address = a['address']
                 address.country = a['country']
-                address.phone = a.get('phone', '')
+                address.phone = a.get('phone', u'')
                 address.save()
             # Delete all addresses not in the request
             for a in user_s_addresses:

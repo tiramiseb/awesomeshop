@@ -124,7 +124,8 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     {{ _('Categories') }}
                 </div>
                 <div class="list-group" ng-cloak>
-                    <a ui-sref="new_products" ui-sref-active="active" class="list-group-item">
+                    <a ui-sref="new_products" ui-sref-active="active" class="list-group-item" ng-controller="NewProductsCtrl">
+                        <span class="badge" ng-show="true">[[ newproducts.count() ]]</span>
                         <span class="category_hierarchy_0">
                             {{ _('New products') }}
                         </span>

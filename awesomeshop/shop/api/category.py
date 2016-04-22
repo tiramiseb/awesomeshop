@@ -63,7 +63,7 @@ class CategorySchemaForEdition(Schema):
         else:
             category = Category()
         category.slug = data['slug']
-        category.parent = data.get('parent', '')
+        category.parent = data.get('parent', u'')
         category.name = data.get('name', {})
         category.description = data.get('description', {})
         category.save()
