@@ -24,7 +24,6 @@ from .helpers import Setting
 from .shipping.models import Carrier
 from .shop.models.order import Order
 from .shop.models.product import Product
-from .shop.models.url import Url
 
 ###############################################################################
 # Functions used to upgrade the database content
@@ -105,11 +104,12 @@ def reunite_products():
     products = Product._get_collection()
     products.update_many({},
                          {'$unset': {'_cls': ''}})
-    urls = Url._get_collection()
-    urls.update_many(
-            {'doc._cls': 'BaseProduct.Product'},
-            {'$set': {'doc._cls': 'Product'}}
-            )
+    # Url documents don't exist anymore
+    # urls = Url._get_collection()
+    # urls.update_many(
+    #         {'doc._cls': 'BaseProduct.Product'},
+    #         {'$set': {'doc._cls': 'Product'}}
+    #         )
 
 
 def remove_insuff_stock_from_orders():
