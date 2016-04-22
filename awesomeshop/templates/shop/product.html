@@ -74,7 +74,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                             <input name="quantity2" id="quantity2" type="number" min="1" class="form-control" ng-model="quantity">
                         </div>
                     </div>
-                    <button ng-show="(product.on_demand && form.quantity2.$valid) || (!product.on_demand && cart.stock(product)-quantity>=0 && form.quantity1.$valid)" class="btn btn-success btn-lg btn-wrap btn-block" ng-class="{ 'btn-success': cart.stock(product)-quantity>=0, 'btn-info': product.on_demand && cart.stock(product)-quantity<0 }" ng-click="cart.add(product, quantity);quantity=1;">
+                    <button type="button" ng-show="(product.on_demand && form.quantity2.$valid) || (!product.on_demand && cart.stock(product)-quantity>=0 && form.quantity1.$valid)" class="btn btn-success btn-lg btn-wrap btn-block" ng-class="{ 'btn-success': cart.stock(product)-quantity>=0, 'btn-info': product.on_demand && cart.stock(product)-quantity<0 }" ng-click="cart.add(product, quantity);quantity=1;">
                         {{ _('Add to cart') }}
                     </button>
                     <p class="text-center bottom-no-space" ng-show="product.on_demand && cart.stock(product)-quantity<0">{{ _('Available on demand, delay %(min)d-%(max)d days', min=config.ON_DEMAND_DELAY_MIN, max=config.ON_DEMAND_DELAY_MAX) }}</p>

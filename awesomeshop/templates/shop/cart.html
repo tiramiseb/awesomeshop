@@ -42,7 +42,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     <div class="input-group">
                         <input id="qty-[[ line.product.reference ]]" type="number" min="1" class="form-control" ng-model="line.quantity" ng-model-options="{debounce:{default:100}}">
                         <span class="input-group-btn">
-                            <button class="btn btn-danger" ng-click="cart.remove(line.product)" uib-tooltip="{{ _('Remove') }}">
+                            <button type="button" class="btn btn-danger" ng-click="cart.remove(line.product)" uib-tooltip="{{ _('Remove') }}">
                                 <i class="fa fa-trash"></i>
                             </button>
                         </span>
@@ -85,7 +85,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     <i class="fa fa-bookmark"></i>
                     {{ _('Saved') }}
                 </a>
-                <button class="btn btn-warning" uib-tooltip="{{ _('Remove all products') }}" ng-click="cart.reset()">
+                <button type="button" class="btn btn-warning" uib-tooltip="{{ _('Remove all products') }}" ng-click="cart.reset()">
                     <i class="fa fa-trash"></i>
                     <span class="hidden-xs hidden-sm">{{ _('Empty cart') }}</span>
                 </button>
@@ -96,11 +96,11 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <div class="input-group">
                     <input type="text" class="form-control" ng-model="cartname" placeholder="{{ _('Cart name') }}" required>
                     <span class="input-group-btn">
-                        <button class="btn btn-primary" uib-tooltip="{{ _('Save this cart for a later use') }}" ng-click="save()" ng-disabled="form.$invalid">
+                        <button type="button" class="btn btn-primary" uib-tooltip="{{ _('Save this cart for a later use') }}" ng-click="save()" ng-disabled="form.$invalid">
                             <i class="fa fa-bookmark"></i>
                             <span class="hidden-xs">{{ _('Save') }}</span>
                         </button>
-                        <button class="btn btn-danger" uib-tooltip="{{ _('Remove all products') }}" ng-click="cart.reset()">
+                        <button type="button" class="btn btn-danger" uib-tooltip="{{ _('Remove all products') }}" ng-click="cart.reset()">
                             <i class="fa fa-trash"></i>
                             <span class="hidden-xs hidden-sm">{{ _('Empty cart') }}</span>
                         </button>

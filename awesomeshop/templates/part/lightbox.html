@@ -18,7 +18,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
 <div class="modal-body" ng-swipe-left="Lightbox.nextImage()" ng-swipe-right="Lightbox.prevImage()">
     <div class="lightbox-nav">
-        <button class="close" aria-hidden="true" ng-click="$dismiss()">
+        <button type="button" class="close" aria-hidden="true" ng-click="$dismiss()">
             <i class="fa fa-times"></i>
         </button>
         <div class="btn-group" ng-if="Lightbox.images.length > 1">

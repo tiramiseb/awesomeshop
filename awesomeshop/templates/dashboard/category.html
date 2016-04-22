@@ -34,7 +34,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <div class="panel panel-default">
             <div class="panel-heading">[[ lang ]]</div>
             <div class="panel-body">
-                {{ f.input_text(_('Name'), 'name_[[ lang ]]', 'category.name[lang]', suffix='<span class="input-group-btn"><button class="btn btn-primary" ng-click="slug_from(category.name[lang])">'|safe+_('&rarr; slug')+'</button></span>'|safe) }}
+                {{ f.input_text(_('Name'), 'name_[[ lang ]]', 'category.name[lang]', suffix='<span class="input-group-btn"><button type="button" class="btn btn-primary" ng-click="slug_from(category.name[lang])">'|safe+_('&rarr; slug')+'</button></span>'|safe) }}
                 {{ f.textarea(_('Description'), 'description_[[ lang ]]', 'category.description[lang]') }}
             </div>
         </div>

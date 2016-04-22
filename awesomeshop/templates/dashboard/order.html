@@ -112,28 +112,28 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             </div>
         </form>
         <div class="form-group btn-group">
-            <button class="btn btn-primary" ng-if="order.next_states.indexOf('awaiting_payment')!=-1" ng-click="change_status('awaiting_payment')">
+            <button type="button" class="btn btn-primary" ng-if="order.next_states.indexOf('awaiting_payment')!=-1" ng-click="change_status('awaiting_payment')">
                 {{ _('Confirm (wait for payment)') }}
             </button>
-            <button class="btn btn-success" ng-if="order.next_states.indexOf('payment_received')!=-1" ng-click="change_status('payment_received')">
+            <button type="button" class="btn btn-success" ng-if="order.next_states.indexOf('payment_received')!=-1" ng-click="change_status('payment_received')">
                 {{ _('Payment received') }}
             </button>
-            <button class="btn btn-danger" ng-if="order.next_states.indexOf('payment_failed')!=-1" ng-click="change_status('payment_failed')">
+            <button type="button" class="btn btn-danger" ng-if="order.next_states.indexOf('payment_failed')!=-1" ng-click="change_status('payment_failed')">
                 {{ _('Payment failed') }}
             </button>
-            <button class="btn btn-info" ng-if="order.next_states.indexOf('preparation')!=-1" ng-click="change_status('preparation')">
+            <button type="button" class="btn btn-info" ng-if="order.next_states.indexOf('preparation')!=-1" ng-click="change_status('preparation')">
                 {{ _('Begin preparation') }}
             </button>
-            <button class="btn btn-primary" ng-if="order.next_states.indexOf('shipped')!=-1 && !order.tracking" ng-click="change_status('shipped')">
+            <button type="button" class="btn btn-primary" ng-if="order.next_states.indexOf('shipped')!=-1 && !order.tracking" ng-click="change_status('shipped')">
                 {{ _('Parcel shipped') }}
             </button>
-            <button class="btn btn-warning" ng-if="order.next_states.indexOf('awaiting_return')!=-1" ng-click="change_status('awaiting_return')">
+            <button type="button" class="btn btn-warning" ng-if="order.next_states.indexOf('awaiting_return')!=-1" ng-click="change_status('awaiting_return')">
                 {{ _('Accept a return') }}
             </button>
-            <button class="btn btn-danger" ng-if="order.next_states.indexOf('refund')!=-1" ng-click="change_status('refund')">
+            <button type="button" class="btn btn-danger" ng-if="order.next_states.indexOf('refund')!=-1" ng-click="change_status('refund')">
                 {{ _('Emit a refund') }}
             </button>
-            <button class="btn btn-danger" ng-if="order.next_states.indexOf('cancelled')!=-1" ng-click="change_status('cancelled')">
+            <button type="button" class="btn btn-danger" ng-if="order.next_states.indexOf('cancelled')!=-1" ng-click="change_status('cancelled')">
                 {{ _('Cancel') }}
             </button>
         </div>
@@ -247,7 +247,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <div class="panel panel-default">
             <div class="panel-heading">[[ lang ]]</div>
             <div class="panel-body">
-                {{ f.input_text(_('Name'), 'name_[[ lang ]]', 'category.name[lang]', suffix='<span class="input-group-btn"><button class="btn btn-primary" ng-click="slug_from(category.name[lang])">'|safe+_('&rarr; slug')+'</button></span>'|safe) }}
+                {{ f.input_text(_('Name'), 'name_[[ lang ]]', 'category.name[lang]', suffix='<span class="input-group-btn"><button type="button" class="btn btn-primary" ng-click="slug_from(category.name[lang])">'|safe+_('&rarr; slug')+'</button></span>'|safe) }}
                 {{ f.textarea(_('Description'), 'description_[[ lang ]]', 'category.description[lang]') }}
             </div>
         </div>

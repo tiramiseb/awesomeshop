@@ -48,7 +48,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <div class="panel panel-default">
             <div class="panel-heading">[[ lang ]]</div>
             <div class="panel-body">
-                {{ f.input_text(_('Name'), 'name[[ lang ]]', 'product.name[lang]', suffix='<span class="input-group-btn"><button class="btn btn-primary" ng-click="slug_from(product.name[lang])">'|safe+_('&rarr; slug')+'</button></span>'|safe) }}
+                {{ f.input_text(_('Name'), 'name[[ lang ]]', 'product.name[lang]', suffix='<span class="input-group-btn"><button type="button" class="btn btn-primary" ng-click="slug_from(product.name[lang])">'|safe+_('&rarr; slug')+'</button></span>'|safe) }}
                 {{ f.textarea(_('Description'), 'description_[[ lang ]]', 'product.description[lang]') }}
             </div>
         </div>
@@ -61,7 +61,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <div class="panel panel-default">
                     <div class="panel-heading">{{ _('Selected') }}</div>
                     <div class="list-group">
-                        <button class="list-group-item" ng-repeat="prodid in product.related_products" ng-click="remove_prod(prodid)">
+                        <button type="button" class="list-group-item" ng-repeat="prodid in product.related_products" ng-click="remove_prod(prodid)">
                             [[ name_from_id(prodid) ]]
                             <span class="pull-right">
                                 <i class="fa fa-arrow-right"></i>
@@ -75,7 +75,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     <div class="panel-heading">{{ _('Available') }}</div>
                     <div class="list-group">
                         <input class="list-group-item" type="text" ng-model="query" placeholder="{{ _('Filter') }}">
-                        <button class="list-group-item" ng-repeat="prod in filtered_products() | filter:query" ng-click="add_prod(prod.id)">
+                        <button type="button" class="list-group-item" ng-repeat="prod in filtered_products() | filter:query" ng-click="add_prod(prod.id)">
                             <i class="fa fa-arrow-left"></i>
                             &nbsp;&nbsp;
                             [[ prod.name ]]
@@ -142,7 +142,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <div class="thumbnail" sv-handle>
                     <img ng-src="[[ photo.thumbnail_url ]]" onmousedown="return false;">
                     <div class="caption text-center">
-                        <button class="btn btn-danger" ng-click="delete_photo(photo.filename, $index)">
+                        <button type="button" class="btn btn-danger" ng-click="delete_photo(photo.filename, $index)">
                             <i class="fa fa-trash"></i>
                             {{ _('Remove') }}
                         </button>

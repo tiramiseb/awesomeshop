@@ -83,13 +83,13 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                             <pre class="well" ng-bind="full_address(choice.delivery_address)"></pre>
                             <div class="btn-group btn-group-justified">
                                 <div class="btn-group">
-                                <button class="btn btn-info" ng-disabled="!choice.delivery_address" ng-click="modify_address(choice.delivery_address)">
+                                <button type="button" class="btn btn-info" ng-disabled="!choice.delivery_address" ng-click="modify_address(choice.delivery_address)">
                                     <i class="fa fa-pencil"></i>
                                     {{ _('Modify') }}
                                 </button>
                                 </div>
                                 <div class="btn-group">
-                                <button class="btn btn-warning" ng-click="add_address()">
+                                <button type="button" class="btn btn-warning" ng-click="add_address()">
                                     <i class="fa fa-plus"></i>
                                     {{ _('New address') }}
                                 </button>
@@ -121,13 +121,13 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                                 <pre class="well" ng-bind="full_address(choice.billing_address)"></pre>
                                 <div class="btn-group btn-group-justified">
                                     <div class="btn-group">
-                                    <button class="btn btn-info" ng-disabled="!choice.billing_address" ng-click="modify_address(choice.billing_address)">
+                                    <button type="button" class="btn btn-info" ng-disabled="!choice.billing_address" ng-click="modify_address(choice.billing_address)">
                                         <i class="fa fa-pencil"></i>
                                         {{ _('Modify') }}
                                     </button>
                                     </div>
                                     <div class="btn-group">
-                                    <button class="btn btn-warning" ng-click="add_address()">
+                                    <button type="button" class="btn btn-warning" ng-click="add_address()">
                                         <i class="fa fa-plus"></i>
                                         {{ _('New address') }}
                                     </button>
@@ -228,7 +228,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <div class="panel panel-danger" ng-hide="user.get().addresses.length">
             <div class="panel-body">
                 <p class="lead text-center">{{ _('You must define at least one address for delivery') }}</p>
-                <button class="btn btn-lg btn-block btn-success" ng-click="add_address()">
+                <button type="button" class="btn btn-lg btn-block btn-success" ng-click="add_address()">
                     <i class="fa fa-home"></i>
                     {{ _('Create an address') }}
                 </button>

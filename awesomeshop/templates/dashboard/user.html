@@ -53,7 +53,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <div class="col-sm-6">
                     {{ f.textarea(_('Address'), 'address_a_[[ $index ]]', 'address.address', 'required', _('Address is mandatory'), small=True) }}
                     {{ f.select(_('Country'), 'address_c_[[ $index ]]', 'address.country', 'country.code as prefixed(country) for country in countries', 'required', _('Country is mandatory')) }}
-                    <button class="btn btn-danger pull-right" ng-click="delete_address($index)">
+                    <button type="button" class="btn btn-danger pull-right" ng-click="delete_address($index)">
                         <i class="fa fa-trash"></i>
                         {{ _('Remove') }}
                     </button>
@@ -61,7 +61,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             </div>
     </uib-accordion-group>
 </uib-accordion>
-<button class="btn btn-success" ng-click='user.addresses.push({new:true})'>
+<button type="button" class="btn btn-success" ng-click='user.addresses.push({new:true})'>
     <i class="fa fa-plus"></i>
     {{ _('Add an address') }}
 </button>

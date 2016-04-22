@@ -42,13 +42,13 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <div class="panel panel-default">
                     <div class="panel-heading">{{ _('Selected') }}</div>
                     <div class="list-group">
-                        <button class="list-group-item" ng-repeat="groupid in carrier.countries_groups" ng-click="remove_countriesgroup(groupid)">
+                        <button type="button" class="list-group-item" ng-repeat="groupid in carrier.countries_groups" ng-click="remove_countriesgroup(groupid)">
                             [[ name_from_id(groupid) ]]
                             <span class="pull-right">
                                 <i class="fa fa-arrow-right"></i>
                             </span>
                         </button>
-                        <button class="list-group-item" ng-repeat="code in carrier.countries" ng-click="remove_country(code)">
+                        <button type="button" class="list-group-item" ng-repeat="code in carrier.countries" ng-click="remove_country(code)">
                             [[ name_from_code(code) ]]
                             <span class="pull-right">
                                 <i class="fa fa-arrow-right"></i>
@@ -62,12 +62,12 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     <div class="panel-heading">{{ _('Available') }}</div>
                     <div class="list-group">
                         <input class="list-group-item" type="text" ng-model="query" placeholder="{{ _('Filter') }}">
-                        <button class="list-group-item" ng-repeat="group in filtered_countriesgroups() | filter:query" ng-click="add_countriesgroup(group.id)">
+                        <button type="button" class="list-group-item" ng-repeat="group in filtered_countriesgroups() | filter:query" ng-click="add_countriesgroup(group.id)">
                             <i class="fa fa-arrow-left"></i>
                             &nbsp;&nbsp;
                             [[ group.name ]]
                         </button>
-                        <button class="list-group-item" ng-repeat="country in filtered_countries() | filter:query" ng-click="add_country(country.code)">
+                        <button type="button" class="list-group-item" ng-repeat="country in filtered_countries() | filter:query" ng-click="add_country(country.code)">
                             <i class="fa fa-arrow-left"></i>
                             &nbsp;&nbsp;
                             [[ country.name ]]
@@ -84,15 +84,15 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <table>
             <tr>
                 <td class="text-right">
-                    <button class="btn btn-success btn-sm" uib-tooltip="{{ _('Add a new weight') }}" ng-click="carrier.costs.unshift({weight:1})" ng-show="carrier.costs.length == 0 || carrier.costs[0].weight > 1">
+                    <button type="button" class="btn btn-success btn-sm" uib-tooltip="{{ _('Add a new weight') }}" ng-click="carrier.costs.unshift({weight:1})" ng-show="carrier.costs.length == 0 || carrier.costs[0].weight > 1">
                         <i class="fa fa-plus"></i>
                     </button>
                 </td>
                 <td class="text-center" ng-repeat="weight in carrier.costs track by $index">
-                    <button class="btn btn-danger btn-sm" uib-tooltip="{{ _('Delete this weight') }}" ng-click="carrier.costs.splice($index, 1)">
+                    <button type="button" class="btn btn-danger btn-sm" uib-tooltip="{{ _('Delete this weight') }}" ng-click="carrier.costs.splice($index, 1)">
                         <i class="fa fa-times"></i>
                     </button>
-                    <button class="btn btn-success pull-right btn-sm" uib-tooltip="{{ _('Add a new weight') }}", ng-click="carrier.costs.splice($index+1,0,{weight:weight.weight+1})">
+                    <button type="button" class="btn btn-success pull-right btn-sm" uib-tooltip="{{ _('Add a new weight') }}", ng-click="carrier.costs.splice($index+1,0,{weight:weight.weight+1})">
                         <i class="fa fa-plus"></i>
                     </button>
                 </td>
