@@ -21,7 +21,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <a href="[[ product.path ]]">
             <img ng-src="[[ product.main_photo.preview_url ]]" ng-show="product.main_photo">
             <div class="caption">
-                <p class="text-center">[[ product.name ]]</p>
+                <p class="text-center">[[ product.name || product.slug ]]</p>
                 <p class="text-center bottom-no-space">[[ product.net_price | currency:"{{ config.CURRENCY }}" ]]</p>
             </div>
         </a>
