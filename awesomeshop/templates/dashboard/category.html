@@ -19,7 +19,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {% import "macros/dashboard.html" as d %}
 {% import "macros/form.html" as f %}
 
-<form name="form" novalidate>
+<form name="form" ng-submit="submit()" ovalidate>
 <h1>{{ _('Category:') }} [[ category.slug ]]</h1>
 <div class="row">
     <div class="col-sm-6">

@@ -19,7 +19,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {% import "macros/dashboard.html" as d %}
 {% import "macros/form.html" as f %}
 
-<form name="form" novalidate>
+<form name="form" ng-submit="submit()" novalidate>
 <h1>{{ _('Countries group:') }} [[ group.name || "{{ _('(unnamed)') }}" ]]</h1>
 {{ f.input_text(_('Name'), 'name', 'group.name', 'required', _('Name is mandatory')) }}
 <div class="row">

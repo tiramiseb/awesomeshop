@@ -19,7 +19,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 {%- macro _generic_submit_back(option) %}
 <div id="page-buttons">
-    <button type="button" class="btn btn-link" ng-click="submit()" uib-tooltip="{{ _('Save') }}" ng-disabled="form.$invalid">
+    <button type="submit" class="btn btn-link" uib-tooltip="{{ _('Save') }}" ng-disabled="form.$invalid">
         <i class="fa fa-check-circle fa-4x text-success"></i>
     </button>
     <button type="button" class="btn btn-link" ng-click="delete()" uib-tooltip="{{ _('Remove') }}">
