@@ -83,7 +83,11 @@ angular.module('awesomeshop', [
             return newproducts;
         },
         count: function() {
-            return newproducts.length;
+            if (newproducts) {
+                return newproducts.length;
+            } else {
+                return 0;
+            };
         }
     };
 })
