@@ -56,13 +56,13 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <div id="wrapper" ng-class="{toggled: menuToggle}">
     <div id="sidebar-wrapper">
         <ul class="sidebar-nav">
-            <li class="sidebar-brand">
-                <a ui-sref="index">{{ _('Dashboard') }}</a>
-            </li>
             <li><a href="/" target="_blank">
                     <i class="fa fa-eye"></i>
                     {{ _('See the shop') }}
             </a></li>
+            <li class="sidebar-brand">
+                <a ui-sref="index">{{ _('Dashboard') }}</a>
+            </li>
             <li>{{ _('Day-to-day') }}</li>
             <li><a href="#/orders">
                     <i class="fa fa-shopping-cart"></i>
