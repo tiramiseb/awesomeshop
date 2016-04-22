@@ -91,15 +91,27 @@ angular.module('awesomeshop', [
         }
     };
 })
-.factory('categories', function($http) {
-    var categories;
+.factory('categories', function($rootScope, $http) {
+    var categories,
+        current_product_category;
     $http.get('/api/category', {params: {'flat':'true'}})
         .then(function(response) {
             categories = response.data;
         });
+    $rootScope.$on('$stateChangeStart', function() {
+        current_product_category = undefined;
+    });
+    $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams) {
+        if (toState.name == 'product') {
+            current_product_category = toParams.category;
+        };
+    });
     return {
         get: function() {
             return categories;
+        },
+        from_current_product() {
+            return current_product_category;
         }
     };
 })

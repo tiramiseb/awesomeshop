@@ -58,6 +58,21 @@
     text-decoration: none;
 }
 
+/* highlight the category containing the current product
+ *
+ * copied from bootstrap.css, .list-group-item.active and .list-group-item.active>.badge
+ */
+.list-group-item.activeproduct, .list-group-item.activeproduct:hover {
+    z-index: 2;
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #337ab7;
+}
+.list-group-item.activeproduct>.badge {
+    color: #337ab7;
+    background-color: #fff;
+}
+
 /***** FOLLOW ICONS ON THE BOTTOM BAR *****/
 .navbar-static-bottom .fa {
     font-size: 125%;

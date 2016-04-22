@@ -130,7 +130,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                             {{ _('New products') }}
                         </span>
                     </a>
-                    <a ui-sref="category_or_product({path:category.path})" ui-sref-active="active" class="list-group-item" ng-repeat="category in categories.get()">
+                    <a ui-sref="category_or_product({path:category.path})" ui-sref-active="active" ng-class="{'activeproduct': categories.from_current_product()==category.id}" class="list-group-item" ng-repeat="category in categories.get()">
                         <span class="badge" ng-show="category.products">[[ category.products ]]</span>
                         <span class="category_hierarchy_[[ category.level ]]">
                             [[ category.name ]]
