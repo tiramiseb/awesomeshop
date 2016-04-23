@@ -155,12 +155,12 @@ products_adminreqparser.add_argument('stock_lower_than_alert',
 class ApiProducts(Resource):
     def get(self):
         """List all products
-        
+
         The following (mutually exclusive) arguments are accepted:
-            
+
         out_of_stock=true
             Only list products which are out of (real) stock
-        
+
         stock_lower_than_alert=true
             Only list products for which the (real) stock is low
 
@@ -300,7 +300,8 @@ class MoveProductPhoto(Resource):
 rest.add_resource(ApiProducts, '/api/product')
 rest.add_resource(ApiSubProducts, '/api/product-<product_type>')
 rest.add_resource(ApiNewProducts, '/api/newproducts')
-rest.add_resource(ApiSubProductEdit, '/api/product-<product_type>/<product_id>/edit')
+rest.add_resource(ApiSubProductEdit,
+                  '/api/product-<product_type>/<product_id>/edit')
 rest.add_resource(ApiProductFromCatAndSlug,
                   '/api/product/catslug/<category_id>/<product_slug>')
 rest.add_resource(ApiProductFromId, '/api/product-regular/<product_id>')

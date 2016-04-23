@@ -135,8 +135,10 @@ class BaseProduct(db.Document, StockedItem):
                     writer_name='html')
         return parts['body']
 
+
 class RegularProduct(BaseProduct):
     type = 'regular'
+
 
 def update_search(sender, document, **kwargs):
     from ...search import index_product

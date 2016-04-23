@@ -102,8 +102,8 @@ def merge_weights_and_costs():
 
 def reunite_products():
     # Deprecated again, products inheritance is used again
-    #products = Product._get_collection()
-    #products.update_many({},
+    # products = Product._get_collection()
+    # products.update_many({},
     #                     {'$unset': {'_cls': ''}})
     pass
     # Url documents don't exist anymore
