@@ -30,8 +30,10 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
             controller: 'ProductCtrl'
         })
         .state('product', {
-            url: '/product/:product_id',
-            templateUrl: 'product',
+            url: '/product-{product_type}/:product_id',
+            templateUrl: function($stateParams) {
+                return 'product-'+$stateParams.product_type;
+            },
             controller: 'ProductCtrl'
         })
 })
@@ -119,13 +121,13 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
     }
     $scope.submit = function() {
         if ($scope.product.id) {
-            $http.put('/api/product/'+$scope.product.id+'/edit', $scope.product)
+            $http.put('/api/product-'+$scope.product.type+'/'+$scope.product.id+'/edit', $scope.product)
                 .then(function(response) {
                     $scope.product = response.data;
                     $scope.form.$setPristine();
                 });
         } else {
-            $http.post('/api/product', $scope.product)
+            $http.post('/api/product-'+$scope.product.type, $scope.product)
                 .then(function(response) {
                     $scope.product = response.data;
                     $scope.form.$setPristine();
@@ -136,7 +138,7 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
     }
     $scope.delete = function() {
         if ($scope.product.id) {
-            $http.delete('/api/product/'+$scope.product.id+'/edit')
+            $http.delete('/api/product-'+$scope.product.type+'/'+$scope.product.id+'/edit')
                 .then(function(response) {
                     $state.go('products');
                 });
@@ -154,7 +156,7 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
             })
     }
     if ($stateParams.product_id) {
-        $http.get('/api/product/'+$stateParams.product_id+'/edit')
+        $http.get('/api/product-'+$stateParams.product_type+'/'+$stateParams.product_id+'/edit')
             .then(function(response) {
                 $scope.product = response.data;
                 // angular-sortable-view doesn't seem to work with embedded lists

@@ -29,12 +29,13 @@ from ...marsh import Loc, MultiObjField, ObjField
 from ...page.models import Page
 from ...photo import Photo, PhotoSchema
 from ..models.category import Category
-from ..models.product import Product
+from ..models.product import products, BaseProduct
 from ..models.tax import Tax
 
 
-class ProductSchemaForList(Schema):
+class BaseProductSchemaForList(Schema):
     id = fields.String(dump_only=True)
+    type = fields.String(dump_only=True)
     slug = fields.String(dump_only=True)
     path = fields.String(dump_only=True)
     reference = fields.String(dump_only=True)
@@ -45,13 +46,21 @@ class ProductSchemaForList(Schema):
     main_photo = fields.Nested(PhotoSchema)
 
 
-class ProductSchemaForAdminList(ProductSchemaForList):
+class RegularProductSchemaForList(BaseProductSchemaForList):
+    pass
+
+productschemaforlist = {
+        'regular': RegularProductSchemaForList
+        }
+
+
+class BaseProductSchemaForAdminList(BaseProductSchemaForList):
     gross_price = fields.Decimal(dump_only=True, as_string=True)
     on_sale = fields.Boolean(dump_only=True)
     stock_alert = fields.Integer()
 
 
-class ProductSchemaForEdition(Schema):
+class BaseProductSchemaForEdition(Schema):
     id = fields.String(allow_none=True)
     slug = fields.String(required=True)
     reference = fields.String(required=True)
@@ -63,7 +72,7 @@ class ProductSchemaForEdition(Schema):
     photos = fields.Nested(PhotoSchema, many=True, dump_only=True)
     tax = ObjField(f='id', obj=Tax)
     on_sale = fields.Boolean(default=False)
-    related_products = MultiObjField(f='id', obj=Product)
+    related_products = MultiObjField(f='id', obj=BaseProduct)
     on_demand = fields.Boolean(allow_none=True, default=False)
     purchasing_price = fields.Decimal(as_string=True)
     gross_price = fields.Decimal(as_string=True, required=True)
@@ -71,12 +80,15 @@ class ProductSchemaForEdition(Schema):
     stock = fields.Integer()
     stock_alert = fields.Integer()
 
+
+class RegularProductSchemaForEdition(BaseProductSchemaForEdition):
+
     @post_load
     def make_product(self, data):
         if 'id' in data:
-            product = Product.objects.get_or_404(id=data['id'])
+            product = products['regular'].objects.get_or_404(id=data['id'])
         else:
-            product = Product()
+            product = products['regular']()
         product.slug = data['slug']
         product.reference = data['reference']
         product.name = data.get('name', {})
@@ -96,9 +108,14 @@ class ProductSchemaForEdition(Schema):
         product.save()
         return product
 
+productschemaforedition = {
+        'regular': RegularProductSchemaForEdition
+        }
 
-class ProductSchema(Schema):
+
+class BaseProductSchema(Schema):
     id = fields.String(dump_only=True)
+    type = fields.String(dump_only=True)
     slug = fields.String(dump_only=True)
     path = fields.String(dump_only=True)
     reference = fields.String(dump_only=True)
@@ -111,13 +128,22 @@ class ProductSchema(Schema):
     weight = fields.Integer(dump_only=True)
     on_demand = fields.Boolean(dump_only=True)
     related_products = fields.Nested(
-                                ProductSchemaForList,
+                                BaseProductSchemaForList,
                                 attribute='related_products_on_sale',
                                 many=True,
                                 dump_only=True
                                 )
     documentation = fields.String(attribute='documentation_content',
                                   dump_only=True)
+
+
+class RegularProductSchema(BaseProductSchema):
+    pass
+
+
+productschema = {
+        'regular': RegularProductSchema
+        }
 
 
 products_adminreqparser = reqparse.RequestParser()
@@ -128,6 +154,18 @@ products_adminreqparser.add_argument('stock_lower_than_alert',
 
 class ApiProducts(Resource):
     def get(self):
+        """List all products
+        
+        The following (mutually exclusive) arguments are accepted:
+            
+        out_of_stock=true
+            Only list products which are out of (real) stock
+        
+        stock_lower_than_alert=true
+            Only list products for which the (real) stock is low
+
+        If both are in use, out_of_stock has precedence
+        """
         if current_user.is_authenticated and current_user.is_admin:
             options = products_adminreqparser.parse_args()
             options = dict((k, v) for k, v in
@@ -135,27 +173,33 @@ class ApiProducts(Resource):
             query = {}
             if 'out_of_stock' in options:
                 if options.pop('out_of_stock'):
-                    obj = Product.objects(stock=0)
+                    obj = BaseProduct.objects(stock=0)
                 else:
-                    obj = Product.objects(stock__gt=0)
+                    obj = BaseProduct.objects(stock__gt=0)
             elif 'stock_lower_than_alert' in options:
                 if options.pop('stock_lower_than_alert'):
-                    obj = Product.objects.where(
+                    obj = BaseProduct.objects.where(
                                 'this.stock <= this.alert && this.stock != 0'
                                 )
                 else:
-                    obj = Product.objects.where('this.stock > this.alert')
+                    obj = BaseProduct.objects.where('this.stock > this.alert')
             else:
-                obj = Product.objects
-            return ProductSchemaForAdminList(many=True).dump(obj).data
+                obj = BaseProduct.objects
+            return BaseProductSchemaForAdminList(many=True).dump(obj).data
         else:
-            return ProductSchemaForList(many=True).dump(
-                    Product.objects(on_sale=True)
+            return BaseProductSchemaForList(many=True).dump(
+                    BaseProduct.objects(on_sale=True)
                     ).data
 
+
+class ApiSubProducts(Resource):
+
+    def get(self, product_type):
+        schema = productschemaforlist[product_type]()
+
     @admin_required
-    def post(self):
-        schema = ProductSchemaForEdition()
+    def post(self, product_type):
+        schema = productschemaforedition[product_type]()
         data = request.get_json()
         data.pop('id', None)
         result, errors = schema.load(data)
@@ -169,22 +213,22 @@ class ApiNewProducts(Resource):
         today = datetime.datetime.now()
         age = datetime.timedelta(days=app.config['NEW_PRODUCTS_MAX_AGE'])
         date_limit = today - age
-        return ProductSchemaForList(many=True).dump(
-                Product.objects(created_at__gt=date_limit, on_sale=True)
+        return BaseProductSchemaForList(many=True).dump(
+                BaseProduct.objects(created_at__gt=date_limit, on_sale=True)
                 ).data
 
 
-class ApiProductEdit(Resource):
+class ApiSubProductEdit(Resource):
 
     @admin_required
-    def get(self, product_id):
-        return ProductSchemaForEdition().dump(
-                Product.objects.get_or_404(id=product_id)
+    def get(self, product_type, product_id):
+        return productschemaforedition[product_type]().dump(
+                products[product_type].objects.get_or_404(id=product_id)
                 ).data
 
     @admin_required
-    def put(self, product_id):
-        schema = ProductSchemaForEdition()
+    def put(self, product_type, product_id):
+        schema = productschemaforedition[product_type]()
         data = request.get_json()
         data['id'] = product_id
         result, errors = schema.load(data)
@@ -193,35 +237,35 @@ class ApiProductEdit(Resource):
         return schema.dump(result).data
 
     @admin_required
-    def delete(self, product_id):
-        Product.objects.get_or_404(id=product_id).delete()
+    def delete(self, product_type, product_id):
+        products[product_type].objects.get_or_404(id=product_id).delete()
         return {'status': 'OK'}
 
 
 class ApiProductFromCatAndSlug(Resource):
 
     def get(self, category_id, product_slug):
-        return ProductSchema().dump(
-                Product.objects.get_or_404(
+        product = BaseProduct.objects.get_or_404(
                     category=category_id,
                     slug=product_slug
                     )
-                ).data
+        schema = productschema[product.type]
+        return schema().dump(product).data
 
 
 class ApiProductFromId(Resource):
 
     def get(self, product_id):
-        return ProductSchema().dump(
-                Product.objects.get_or_404(id=product_id)
-                ).data
+        product = BaseProduct.objects.get_or_404(id=product_id)
+        schema = productschema[product.type]
+        return schema().dump(product).data
 
 
 class ProductPhoto(Resource):
 
     @admin_required
     def post(self, product_id):
-        product = Product.objects.get_or_404(id=product_id)
+        product = BaseProduct.objects.get_or_404(id=product_id)
         photo = Photo.from_request(request.files['file'])
         product.photos.append(photo)
         product.save()
@@ -232,7 +276,7 @@ class DeleteProductPhoto(Resource):
 
     @admin_required
     def delete(self, product_id, filename):
-        product = Product.objects.get_or_404(id=product_id)
+        product = BaseProduct.objects.get_or_404(id=product_id)
         for p in product.photos:
             if p.filename == filename:
                 p.delete_files()
@@ -247,18 +291,19 @@ class MoveProductPhoto(Resource):
     @admin_required
     def get(self, product_id, from_rank, to_rank):
         # TODO Test if from_rank and to_rank < len(product.photos)
-        product = Product.objects.get_or_404(id=product_id)
+        product = BaseProduct.objects.get_or_404(id=product_id)
         item = product.photos.pop(from_rank)
         product.photos.insert(to_rank, item)
         product.save()
         return {'status': 'OK'}
 
 rest.add_resource(ApiProducts, '/api/product')
+rest.add_resource(ApiSubProducts, '/api/product-<product_type>')
 rest.add_resource(ApiNewProducts, '/api/newproducts')
-rest.add_resource(ApiProductEdit, '/api/product/<product_id>/edit')
-rest.add_resource(ApiProductFromId, '/api/product/<product_id>')
+rest.add_resource(ApiSubProductEdit, '/api/product-<product_type>/<product_id>/edit')
 rest.add_resource(ApiProductFromCatAndSlug,
                   '/api/product/catslug/<category_id>/<product_slug>')
+rest.add_resource(ApiProductFromId, '/api/product-regular/<product_id>')
 rest.add_resource(ProductPhoto, '/api/product/<product_id>/photo')
 rest.add_resource(DeleteProductPhoto,
                   '/api/product/<product_id>/photo/<filename>')

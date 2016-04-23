@@ -27,7 +27,7 @@ from ...mail import send_mail
 from ...auth.models import User
 from ...payment.modes import get_mode
 from ...shipping.models import Carrier
-from .product import Product
+from .product import BaseProduct
 
 
 class OrderProduct(db.EmbeddedDocument):
@@ -38,7 +38,7 @@ class OrderProduct(db.EmbeddedDocument):
     line_net_price = db.StringField(db_field='lnprice')
     quantity = db.IntField(db_field='qty')
     quantity_from_stock = db.IntField(db_field='stk')
-    product = db.ReferenceField(Product)
+    product = db.ReferenceField(BaseProduct)
     name = db.StringField()
     on_demand = db.BooleanField(db_field='dem')
     data = db.DictField()

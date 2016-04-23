@@ -88,13 +88,13 @@ class Page(db.Document):
     @property
     def products(self):
         """Return a list of products using this documentation"""
-        from ..shop.models.product import Product
-        return Product.objects(documentation=self)
+        from ..shop.models.product import BaseProduct
+        return BaseProduct.objects(documentation=self)
 
     @property
     def on_sale_products(self):
-        from ..shop.models.product import Product
-        return Product.objects(documentation=self, on_sale=True)
+        from ..shop.models.product import BaseProduct
+        return BaseProduct.objects(documentation=self, on_sale=True)
 
 
 def update_search(sender, document, **kwargs):

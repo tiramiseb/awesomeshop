@@ -28,7 +28,7 @@ from mongoengine import OperationError
 from .. import admin_required, rest
 from ..marsh import Loc
 from ..photo import Photo, PhotoSchema
-from ..shop.api.product import ProductSchemaForList
+from ..shop.api.product import BaseProductSchemaForList
 from .models import Page
 
 
@@ -72,7 +72,7 @@ class PageContentSchema(Schema):
     title = Loc(dump_only=True)
     content = fields.String(dump_only=True)
     products = fields.Nested(
-                    ProductSchemaForList,
+                    BaseProductSchemaForList,
                     attribute='on_sale_products',
                     many=True,
                     dump_only=True

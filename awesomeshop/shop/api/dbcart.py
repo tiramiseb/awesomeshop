@@ -25,8 +25,8 @@ from marshmallow import Schema, fields, pre_load, post_load, post_dump
 from ... import login_required, rest
 from ...marsh import ObjField, NetPrice
 from ..models.dbcart import DbCart, DbCartline
-from ..models.product import Product
-from .product import ProductSchema
+from ..models.product import BaseProduct
+from .product import BaseProductSchemaForList
 
 
 class LiveCartlineSchema(Schema):
@@ -35,17 +35,17 @@ class LiveCartlineSchema(Schema):
 
     @pre_load(pass_many=True)
     def use_existing_products(self, data, many):
-        pschema = ProductSchema()
+        pschema = BaseProductSchemaForList()
         newdata = []
         if not many:
             data = [data]
         for entry in data:
             try:
-                prod = Product.objects.get(
+                prod = BaseProduct.objects.get(
                                 id=entry['product']['id'],
                                 on_sale=True
                                 )
-            except Product.DoesNotExist:
+            except BaseProduct.DoesNotExist:
                 # Forget non-existing products
                 continue
             # Verify and adjust the quantity
@@ -66,7 +66,7 @@ class LiveCartlineSchema(Schema):
 
 
 class CartlineSchema(Schema):
-    product = ObjField(f='id', obj=Product)
+    product = ObjField(f='id', obj=BaseProduct)
     quantity = fields.Integer()
 
     @pre_load(pass_many=True)
@@ -76,11 +76,11 @@ class CartlineSchema(Schema):
             data = [data]
         for entry in data:
             try:
-                prod = Product.objects.get(
+                prod = BaseProduct.objects.get(
                                 id=entry['product']['id'],
                                 on_sale=True
                                 )
-            except Product.DoesNotExist:
+            except BaseProduct.DoesNotExist:
                 # Forget non-existing products
                 continue
             # Verify and adjust the quantity
@@ -108,17 +108,17 @@ class CartlineSchema(Schema):
 
     @post_dump(pass_many=True)
     def dump_cartline(self, data, many):
-        pschema = ProductSchema()
+        pschema = BaseProductSchemaForList()
         newdata = []
         if not many:
             data = [data]
         for entry in data:
             try:
-                prod = Product.objects.get(
+                prod = BaseProduct.objects.get(
                                 id=entry['product'],
                                 on_sale=True
                                 )
-            except Product.DoesNotExist:
+            except BaseProduct.DoesNotExist:
                 # Forget non-existing products
                 continue
             newdata.append({

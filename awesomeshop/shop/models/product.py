@@ -33,7 +33,7 @@ from .category import Category
 from .tax import Tax
 
 
-class Product(db.Document, StockedItem):
+class BaseProduct(db.Document, StockedItem):
     created_at = db.DateTimeField(db_field='create',
                                   default=datetime.datetime.now)
     slug = db.StringField()
@@ -66,8 +66,14 @@ class Product(db.Document, StockedItem):
     stock_alert = db.IntField(db_field='alert')
 
     meta = {
-        'ordering': ['reference']
-    }
+            'collection': 'product',
+            'allow_inheritance': True,
+            'ordering': ['reference']
+        }
+
+    @property
+    def type(self):
+        raise NotImplementedError
 
     @property
     def related_products_on_sale(self):
@@ -129,6 +135,8 @@ class Product(db.Document, StockedItem):
                     writer_name='html')
         return parts['body']
 
+class RegularProduct(BaseProduct):
+    type = 'regular'
 
 def update_search(sender, document, **kwargs):
     from ...search import index_product
@@ -139,5 +147,10 @@ def delete_search(sender, document, **kwargs):
     from ...search import delete_product
     delete_product(document)
 
-signals.post_save.connect(update_search, sender=Product)
-signals.pre_delete.connect(delete_search, sender=Product)
+signals.post_save.connect(update_search, sender=BaseProduct)
+signals.pre_delete.connect(delete_search, sender=BaseProduct)
+
+
+products = {
+        'regular': RegularProduct
+        }

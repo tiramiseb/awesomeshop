@@ -30,9 +30,9 @@ from . import app
 from .page.api import PageSchemaForList
 from .page.models import Page
 from .shop.api.category import CategorySchemaForFlatList
-from .shop.api.product import ProductSchemaForList
+from .shop.api.product import BaseProductSchemaForList
 from .shop.models.category import Category
-from .shop.models.product import Product
+from .shop.models.product import BaseProduct
 
 
 indexes = {}
@@ -118,7 +118,7 @@ def init_indexes_and_parsers():
                 glob=True
                 )
         indexes['product'] = create_in(path, schema, indexname=name)
-        index_products(Product.objects)
+        index_products(BaseProduct.objects)
 
     # Initialize the parsers
     docparserfields = []
@@ -265,11 +265,11 @@ def do_search(terms):
                                     ):
                 try:
                     products.append(
-                            ProductSchemaForList().dump(
-                                Product.objects.get(id=hit['id'], on_sale=True)
-                                ).data
-                            )
-                except Product.DoesNotExist:
+                        BaseProductSchemaForList().dump(
+                            BaseProduct.objects.get(id=hit['id'], on_sale=True)
+                            ).data
+                        )
+                except BaseProduct.DoesNotExist:
                     pass
     return {
         'docs': docs,

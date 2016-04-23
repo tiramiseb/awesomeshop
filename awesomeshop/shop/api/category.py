@@ -29,7 +29,7 @@ from mongoengine import OperationError
 from ... import admin_required, rest
 from ...marsh import Count, Loc, ObjField
 from ..models.category import Category
-from .product import ProductSchemaForList
+from .product import BaseProductSchemaForList
 
 
 class CategorySchemaForList(Schema):
@@ -75,7 +75,7 @@ class CategorySchema(Schema):
     name = Loc(dump_only=True)
     description = Loc(dump_only=True)
     products = fields.Nested(
-                    ProductSchemaForList,
+                    BaseProductSchemaForList,
                     attribute='recursive_on_sale_products',
                     many=True,
                     dump_only=True

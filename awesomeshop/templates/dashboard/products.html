@@ -23,7 +23,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 </a></p>
 <div class="list-group" id="categories-list">
     <input class="list-group-item" type="text" ng-model="query" placeholder="{{ _('Filter') }}">
-    <a class="list-group-item" ng-repeat="product in products | filter:query" ui-sref="product({product_id:product.id})">
+    <a class="list-group-item" ng-repeat="product in products | filter:query" ui-sref="product({product_type: product.type, product_id:product.id})">
         <div class="row">
             <div class="col-xs-6 col-sm-3 text-muted">
                 [[ product.reference ]]

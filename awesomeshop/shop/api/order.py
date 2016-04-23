@@ -32,8 +32,8 @@ from ...marsh import Count, Loc, ObjField
 from ...auth.models import Address
 from ...shipping.models import Carrier
 from ..models.order import Order, OrderProduct, InvalidNextStatus
-from ..models.product import Product
-from .product import ProductSchemaForList
+from ..models.product import BaseProduct
+from .product import BaseProductSchemaForList
 
 
 class OrderProductCartSubSchema(Schema):
@@ -53,7 +53,7 @@ class OrderProductSchema(Schema):
     line_gross_price = fields.String()
     line_net_price = fields.String()
     quantity = fields.Integer()
-    product = fields.Nested(ProductSchemaForList)
+    product = fields.Nested(BaseProductSchemaForList)
     name = fields.String()
     on_demand = fields.Boolean()
     data = fields.Raw()
@@ -155,7 +155,9 @@ class OrderSchema(Schema):
         total_weight = 0
         global_on_demand = False
         for productdata in data.get('cart', []):
-            productobj = Product.objects.get(id=productdata['product']['id'])
+            productobj = BaseProduct.objects.get(
+                                id=productdata['product']['id']
+                                )
             product = OrderProduct(
                 reference=productdata['product']['reference'],
                 product=productobj,
