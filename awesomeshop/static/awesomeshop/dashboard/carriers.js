@@ -44,15 +44,20 @@ angular.module('dbCarriers', [])
 .controller('CarrierCtrl', function($scope, $http, $stateParams, $state, CONFIG) {
     $scope.langs = CONFIG.languages;
     $scope.submit = function() {
-        $http.post('/api/carrier', $scope.carrier)
-            .then(function(response) {
-                var is_new = !$scope.carrier.id;
-                $scope.carrier = response.data;
-                $scope.form.$setPristine();
-                if (is_new) {
+        if ($scope.carrier.id) {
+            $http.put('/api/carrier/'+$scope.carrier.id, $scope.carrier)
+                .then(function(response) {
+                    $scope.carrier = response.data;
+                    $scope.form.$setPristine();
+                });
+        } else {
+            $http.post('/api/carrier', $scope.carrier)
+                .then(function(response) {
+                    $scope.carrier = response.data;
+                    $scope.form.$setPristine();
                     $state.go('carrier', {carrier_id:response.data.id}, {notify:false});
-                }
-            });
+                });
+        };
     }
     $scope.delete = function() {
         if ($scope.carrier.id) {

@@ -304,7 +304,7 @@ rest.add_resource(ApiSubProductEdit,
                   '/api/product-<product_type>/<product_id>/edit')
 rest.add_resource(ApiProductFromCatAndSlug,
                   '/api/product/catslug/<category_id>/<product_slug>')
-rest.add_resource(ApiProductFromId, '/api/product-regular/<product_id>')
+rest.add_resource(ApiProductFromId, '/api/product/<product_id>')
 rest.add_resource(ProductPhoto, '/api/product/<product_id>/photo')
 rest.add_resource(DeleteProductPhoto,
                   '/api/product/<product_id>/photo/<filename>')

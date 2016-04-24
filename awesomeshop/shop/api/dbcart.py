@@ -26,7 +26,7 @@ from ... import login_required, rest
 from ...marsh import ObjField, NetPrice
 from ..models.dbcart import DbCart, DbCartline
 from ..models.product import BaseProduct
-from .product import BaseProductSchemaForList
+from .product import productschema
 
 
 class LiveCartlineSchema(Schema):
@@ -35,7 +35,6 @@ class LiveCartlineSchema(Schema):
 
     @pre_load(pass_many=True)
     def use_existing_products(self, data, many):
-        pschema = BaseProductSchemaForList()
         newdata = []
         if not many:
             data = [data]
@@ -53,6 +52,7 @@ class LiveCartlineSchema(Schema):
                 quantity = entry['quantity']
             else:
                 quantity = min(entry['quantity'], prod.stock)
+            pschema = productschema[prod.type]()
             newdata.append({
                     'product': pschema.dump(prod).data,
                     'quantity': quantity
@@ -108,7 +108,6 @@ class CartlineSchema(Schema):
 
     @post_dump(pass_many=True)
     def dump_cartline(self, data, many):
-        pschema = BaseProductSchemaForList()
         newdata = []
         if not many:
             data = [data]
@@ -121,6 +120,7 @@ class CartlineSchema(Schema):
             except BaseProduct.DoesNotExist:
                 # Forget non-existing products
                 continue
+            pschema = productschema[prod.type]()
             newdata.append({
                     'product': pschema.dump(prod).data,
                     'quantity': entry['quantity']

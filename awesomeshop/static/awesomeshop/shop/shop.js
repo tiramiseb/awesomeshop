@@ -254,9 +254,11 @@ angular.module('shopShop', ['bootstrapLightbox'])
     };
     function code_to_country(code) {
         var countrieslist = countries.get();
-        for (i=0; i<countrieslist.length; i++) {
-            if (countrieslist[i].code == code) {
-                return code + ' - ' + countrieslist.name;
+        if (countrieslist) {
+            for (i=0; i<countrieslist.length; i++) {
+                if (countrieslist[i].code == code) {
+                    return code + ' - ' + countrieslist[i].name;
+                };
             };
         };
         return code;
@@ -310,7 +312,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
         var carriers = $scope.get_available_carriers();
         if (carriers) {
             for (var i=0; i<carriers.length; i++) {
-                if (carriers[i].carrier.id == $scope.choice.carrier) {
+                if (carriers[i].carrier && carriers[i].carrier.id == $scope.choice.carrier) {
                     return parseFloat(carriers[i].cost);
                 }
             };
