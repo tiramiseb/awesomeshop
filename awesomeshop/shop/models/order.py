@@ -63,6 +63,10 @@ class OrderProduct(db.EmbeddedDocument):
         self.line_net_price = format_currency(price, app.config['CURRENCY'])
 
     def _put_back_in_stock(self):
+        if self.quantity_from_stock:
+            quantity = self.quantity_from_stock
+        else:
+            quantity = self.quantity
         self.product.add_to_stock(self.quantity_from_stock, self.data)
         self.product.save()
 
