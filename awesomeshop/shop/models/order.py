@@ -67,7 +67,7 @@ class OrderProduct(db.EmbeddedDocument):
             quantity = self.quantity_from_stock
         else:
             quantity = self.quantity
-        self.product.add_to_stock(self.quantity_from_stock, self.data)
+        self.product.add_to_stock(quantity, self.data)
         self.product.save()
 
 
