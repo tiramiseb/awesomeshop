@@ -1,0 +1,36 @@
+{#-
+Copyright 2015 Sébastien Maccagnoni-Munch
+
+This file is part of AwesomeShop.
+
+AwesomeShop is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+details.
+
+You should have received a copy of the GNU Affero General Public License
+along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+#}
+{% import "macros/form.html" as f %}
+<form name="form" ng-submit="login()">
+<div class="modal-header">
+    <h3 class="modal-title">{{ _('%(shopname)s Login', shopname=config.SHOP_NAME) }}</h3>
+</div>
+<div class="modal-body">
+    {{ f.input_text(_('Email address'), 'authemail', 'auth.email', 'ng-focus="auth.success=undefined" required') }}
+    {{ f.input_password(_('Password'), 'authpassword', 'auth.password', 'ng-focus="auth.success=undefined" required') }}
+    <uib-alert type="danger" ng-show="auth.success==false" close="auth.success=undefined">
+        {{ _('Email address or Password is invalid.') }}
+    </uib-alert>
+</div>
+<div class="modal-footer">
+    <button type="submit" class="btn btn-success" ng-disabled="form.$invalid">
+        {{ _('Sign in') }}
+    </button>
+</div>
+</form>

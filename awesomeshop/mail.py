@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-# Copyright 2015 Sébastien Maccagnoni-Munch
+# Copyright 2015-2016 Sébastien Maccagnoni-Munch
 #
 # This file is part of AwesomeShop.
 #
@@ -21,28 +21,34 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
 
-from flask import render_template
+from flask import render_template, request
 
 from . import app, get_locale
 
-def send_message(recipient, msg_id, **kwargs):
-    locale = kwargs.get('locale', get_locale())
-    # Get the message content
-    sender = app.config['MAIL_FROM']
-    subject = render_template('email/{}/{}.subject'.format(msg_id, locale),
-                              **kwargs)
-    text = render_template('email/{}/{}.txt'.format(msg_id, locale), **kwargs)
-    html = render_template('email/{}/{}.html'.format(msg_id, locale),
-                           subject=subject, **kwargs)
-    # Create the message
-    msg = MIMEMultipart('alternative')
-    msg['Subject'] = subject
-    msg['From'] = sender
-    msg['To'] = recipient
-    part_text = MIMEText(text.encode('utf8'), 'plain')
-    part_html = MIMEText(html.encode('utf8'), 'html')
-    msg.attach(part_text)
-    msg.attach(part_html)
-    s = smtplib.SMTP(app.config['SMTP_SERVER'])
-    s.sendmail(sender, recipient, msg.as_string())
-    s.quit()
+
+def send_mail(recipient, template, **kwargs):
+    if app.config['SEND_MAILS']:
+        locale = kwargs.get('locale', get_locale())
+        # Get the message content
+        sender = app.config['MAIL_FROM']
+        subject = render_template('email/{}/{}.subject'.format(template,
+                                                               locale),
+                                  root=request.url_root, **kwargs)
+        text = render_template('email/{}/{}.txt'.format(template, locale),
+                               root=request.url_root, **kwargs)
+        html = render_template('email/{}/{}.html'.format(template, locale),
+                               subject=subject, root=request.url_root,
+                               **kwargs)
+        # Create the message
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = subject
+        msg['From'] = sender
+        msg['To'] = recipient
+        part_text = MIMEText(text.encode('utf8'), 'plain')
+        part_html = MIMEText(html.encode('utf8'), 'html')
+        msg.attach(part_text)
+        msg.attach(part_html)
+        # TODO Delay the message when the SMTP server is not available
+        s = smtplib.SMTP(app.config['SMTP_SERVER'])
+        s.sendmail(sender, recipient, msg.as_string())
+        s.quit()

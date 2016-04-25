@@ -1,5 +1,5 @@
 {#
-Copyright 2015 Sébastien Maccagnoni-Munch
+Copyright 2015-2016 Sébastien Maccagnoni-Munch
 
 This file is part of AwesomeShop.
 
@@ -20,10 +20,10 @@ Hello,
 
 Your order {{ order.full_number }} has been shipped!
 
-{%- if order.tracking_number -%}
+{%- if order.tracking_number %}
 You can track your package using the following link:
 {{ order.tracking_url }}
-{%- endif -%}
+{%- endif %}
 
 Regards,
 The {{ config.SHOP_NAME }} team

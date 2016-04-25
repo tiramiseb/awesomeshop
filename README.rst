@@ -2,24 +2,14 @@
 AwesomeShop
 ===========
 
-AwesomeShop is an e-boutique webapp written in Python with the following
-dependencies:
+AwesomeShop is an e-boutique webapp written in Python.
 
-Python dependencies installed with pip:
+AweshomeShop uses the following awesome tools:
 
-* *Flask*: web framework
-* *MongoDB*: data storage
-* *PayPlug*: online credit card payment
-* *Pillow*: images manipulation
-* *Satchless*: cart and stuff
-* *Scrypt*: passwords hashing
-* *Whoosh*: indexing and search engine
-
-Front-end libraries/frameworks included:
-
-* `Bootstrap <http://getbootstrap.com/>`_
-* `Font Awesome <http://fontawesome.io/>`_
-* `Start Bootstap Simple Sidebar <http://startbootstrap.com/template-overviews/simple-sidebar/>`_
+* webpages serving and API interface: Flask with Flask-RESTful, Marshmallow...
+* data storage: MongoDB, MongoEngine...
+* frontend: AngularJS, Bootstrap, FontAwesome...
+* and much more libraries, thanks to all their authors!
 
 General information
 ===================
@@ -38,13 +28,15 @@ Name
 
 Not related to *Font-Awesome* in any way... except that it uses it.
 
-This name is only because this app is awesome :)
+This name is only because this app is awesome, as all used modules. The world
+is awesome, Open Source is awesome, we are all awesome :)
 
 Licensing
 ---------
 
 GNU AGPL v3. You can take it, you can use it, you can modify it. But if you
-modify it, you must share your modifications. See ``COPYING``. Thanks!
+modify it and use it, you must share your modifications. See ``COPYING``.
+Thanks!
 
 Configuration
 =============
@@ -57,7 +49,7 @@ Any directive defined in ``config.py`` will override the equivalent in
 Locally using AwesomeShop
 =========================
 
-Example working on Ubuntu 15.10::
+Example working on Ubuntu 16.04::
 
     apt-get install mongodb-server
     ./init_pythonapp.sh
@@ -65,9 +57,6 @@ Example working on Ubuntu 15.10::
     ./init_database.py
     ./init_searchindex.py
     ./run.py
-
-When run locally, the Flask debug toolbar extension is enabled (see in
-``run.py``).
 
 Local templates
 ===============

@@ -1,5 +1,5 @@
-{#
-Copyright 2015 Sébastien Maccagnoni-Munch
+{#-
+Copyright 2016 Sébastien Maccagnoni-Munch
 
 This file is part of AwesomeShop.
 
@@ -16,189 +16,113 @@ details.
 You should have received a copy of the GNU Affero General Public License
 along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
-{% extends "skeleton.html" %}
-
-{% block title %}{{ _('My Cart') }}{% endblock %}
-{% block content %}
-<h1>{{ _('My Cart') }}</h1>
-{%- if cart %}
-<form method="POST" action>
+<h1>{{ _('My cart') }}</h1>
+<form name="form" novalidate ng-show="cart.count()">
     <div class="list-group">
-        {%- for line in cart %}
-        <div class="list-group-item cart-list">
+        <div class="list-group-item cart-list" ng-repeat="line in cart.list()">
             <div class="row">
-                <div class="col-xs-6 col-sm-4 col-md-6 col-lg-7">
-                    <a href="{{ line.product.url }}" class="hidden-xs hidden-sm pull-left">
-                        {%- if line.product.photos %}
-                        <img class="cart-illustration" src="{{ line.product.photos[0].thumbnail_url }}">
-                        {%- else -%}
-                        <span class="cart-illustration-placeholder">
-                            <i class="fa fa-ban"></i>
+                <div class="col-xs-7 col-sm-6 col-md-7 col-lg-8">
+                    <a href="[[ line.product.path ]]">
+                        <span class="hidden-xs hidden-sm pull-left">
+                            <img class="cart-illustration" ng-src="[[ line.product.photos[0].thumbnail_url ]]" ng-show="line.product.photos.length">
+                            <span class="cart-illustration-placeholder" ng-hide="line.product.photos.length">
+                                <i class="fa fa-ban"></i>
+                            </span>
                         </span>
-                        {%- endif %}
+                        [[ line.product.name ]]
                     </a>
-                        <a href="{{ line.product.url }}">
-                            {{ line.get_full_name() }}
-                        </a>
-                        {%- if line.stock_status == 'on_demand' and line.get_stock() > 0%}
-                        <br>
-                        ({{ _('for an immediate shipping, buy %(num)d or less', num=line.get_stock()) }})
-                        {%- endif %}
+                    <br>
+                    {{ _('Unit price:') }} [[ line.product.net_price | currency:"{{ config.CURRENCY }}" ]]
+                    <br>
+                    <span ng-if="line.quantity <= line.product.stock" class="text-success">{{ _('In stock') }}</span>
+                    <span ng-if="line.product.on_demand && line.quantity > line.product.stock" class="text-danger" uib-tooltip="{{ _('For an immediate shipping, order less than [[ line.product.stock ]]') }}">{{ _('Delay %(min)d-%(max)d days', min=config.ON_DEMAND_DELAY_MIN, max=config.ON_DEMAND_DELAY_MAX) }}</span>
                 </div>
-                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
-                    <input type="text" id="quantity_{{ line.product.id }}" name="quantity_{{ line.product.id }}" class="form-control text-center cart-quantity" value="{{ line.quantity }}">
-                    <div class="btn-group btn-group-justified">
-                        <a href="#" class="btn btn-default" id="dec_{{ line.product.id }}">
-                            <i class="fa fa-minus"></i>
-                        </a>
-                        <a href="{{ url_for('remove_from_cart', product_id=line.product.id) }}" class="btn btn-default">
-                            <i class="fa fa-trash"></i>
-                        </a>
-                        <a href="#" class="btn btn-default" id="inc_{{ line.product.id }}">
-                            <i class="fa fa-plus"></i>
-                        </a>
+                <div class="col-xs-5 col-sm-4 col-md-3 col-lg-2">
+                    <label for="qty-[[ line.product.reference ]]" class="hidden-xs">{{ _('Quantity') }}</label>
+                    <div class="input-group">
+                        <input id="qty-[[ line.product.reference ]]" type="number" min="1" class="form-control" ng-model="line.quantity" ng-model-options="{debounce:{default:100}}">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-danger" ng-click="cart.remove(line.product)" uib-tooltip="{{ _('Remove') }}">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </span>
                     </div>
                 </div>
-                <div class="col-sm-4 col-md-3 text-right">
-                    {{ line.stock_message|safe }}
-                    <br>
-                    {{ _('Unit:') }} {{ line.get_price_per_item().quantize('0.01').net }} {{ config.CURRENCY }}
-                    <br>
+                <div class="col-sm-2 text-right">
                     <strong>
-                        {{ _('Total:') }} {{ line.get_total().quantize('0.01').net }} {{ config.CURRENCY }}
+                        {{ _('Total:') }}<br class="hidden-xs">
+                        [[ line.product.net_price*line.quantity | currency:"{{ config.CURRENCY }}" ]]
                     </strong>
                 </div>
-             </div>
-        </div>
-        {%- endfor %}
-        {%- if cart.must_recalc %}
-        <div class="list-group-item">
-            <div class="text-right">
-                {{ cart.stock_message|safe }}
-                <br>
-                <button type="submit" class="btn btn-warning">
-                    {{ _('Recalculate') }}
-                </button>
             </div>
         </div>
-        {%- else %}
         <div class="list-group-item">
-            <div class="text-right">
-                <div id="recalculate" class="hidden">
-                    <button type="submit" class="btn btn-warning">
-                        {{ _('Recalculate') }}
-                    </button>
-                </div>
-                <div id="total">
-                    {{ cart.stock_message|safe }}
+            <div class="row">
+                <div class="col-sm-5 col-sm-push-7 col-md-4 col-md-push-8 text-right">
+                    <span ng-if="cart.in_stock()" class="text-success">{{ _('In stock') }}</span>
+                    <span ng-if="cart.on_demand()" class="text-danger">{{ _('Delay %(min)d-%(max)d days', min=config.ON_DEMAND_DELAY_MIN, max=config.ON_DEMAND_DELAY_MAX) }}</span>
                     <br>
-                    <strong>
-                        {{ _('Total:') }} {{ cart.get_total().quantize('0.01').net }} {{ config.CURRENCY }}
+                    <strong class="text-primary">
+                        {{ _('Total:') }} [[ cart.total() | currency:"{{ config.CURRENCY }}" ]]
                     </strong>
                     <br>
                     {{ _('+ shipping fee') }}
                 </div>
+                <div class="col-sm-7 col-sm-pull-5 col-md-8 col-md-pull-4">
+                    <small>
+                        {{ _('The price and availability of these products may change. The cart is a temporary and local list, products are not reserved until you place an order.') }}
+                        <br>
+                        {{ _('TVA non applicable, article 293 B du Code général des impôts') }}
+                    </small>
+                </div>
             </div>
-            <small class="push-left">
-                {{ _('The price and availability of these products may change. The cart is a temporary list which does not mean the products are reserved.') }}
-                <br>
-                {{ _('TVA non applicable, article 293 B du Code général des impôts') }}
-            </small>
         </div>
-        <div id="proceed">
-            <br>
-            <div class="row">
-                <div class="col-sm-6">
-                    {% if saved_cart %}
-                    <a href="{{ url_for('saved_cart', cart_id=saved_cart.id) }}" class="btn btn-primary">
-                            <i class="fa fa-check"></i>
-                            {{ _('Cart has been saved (%(name)s)', name=saved_cart.name) }}
-                        </a>
-                        <a href="{{ url_for('empty_cart') }}" class="btn btn-warning">
+    </div>
+    <div class="row">
+        <div class="col-xs-6 col-sm-7 col-md-8 col-lg-6" ng-show="user.get().auth && saved_cart">
+            <div class="btn-group">
+                <a ui-sref="saved_carts" class="btn btn-primary">
+                    <i class="fa fa-bookmark"></i>
+                    {{ _('Saved') }}
+                </a>
+                <button type="button" class="btn btn-warning" uib-tooltip="{{ _('Remove all products') }}" ng-click="cart.reset()">
+                    <i class="fa fa-trash"></i>
+                    <span class="hidden-xs hidden-sm hidden-md">{{ _('Empty cart') }}</span>
+                </button>
+            </div>
+        </div>
+        <div class="col-sm-5 col-md-6" ng-hide="!user.get().auth || saved_cart">
+            <form name="form" novalidate>
+                <div class="input-group">
+                    <input type="text" class="form-control" ng-model="cartname" placeholder="{{ _('Cart name') }}" required>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" uib-tooltip="{{ _('Save this cart for a later use') }}" ng-click="save()" ng-disabled="form.$invalid">
+                            <i class="fa fa-bookmark"></i>
+                            <span class="hidden-xs hidden-sm">{{ _('Save') }}</span>
+                        </button>
+                        <button type="button" class="btn btn-danger" uib-tooltip="{{ _('Remove all products') }}" ng-click="cart.reset()">
                             <i class="fa fa-trash"></i>
-                            {{ _('Empty cart') }}
-                        </a>
-                    {% else %}
-                    <div class="input-group">
-                        <input type="text" class="form-control" name="cartname" placeholder="{{ _('Cart name') }}">
-                        <span class="input-group-btn">
-                            <button class="btn btn-primary" type="submit" name="save">
-                                <i class="fa fa-bookmark"></i>
-                                {{ _('Save cart') }}
-                            </button>
-                            <a href="{{ url_for('empty_cart') }}" class="btn btn-warning">
-                                <i class="fa fa-trash"></i>
-                                {{ _('Empty cart') }}
-                            </a>
-                        </span>
-                    </div>
-                    {% endif %}
+                            <span class="hidden-xs hidden-sm hidden-md">{{ _('Empty cart') }}</span>
+                        </button>
+                    </span>
                 </div>
-                <div class="col-sm-6">
-                    <a href="{{ url_for('checkout') }}" class="btn btn-lg btn-success pull-right">
-                        {{ _('Proceed to checkout') }}
-                        <i class="fa fa-chevron-right"></i>
-                    </a>
-                </div>
+            </form>
+        </div>
+        <div class="col-sm-7 col-md-6 bottom-space text-right" ng-class="{'col-sm-offset-5': !user.get().auth, 'col-md-offset-6': !user.get().auth}">
+            <a ng-show="user.get().auth" ui-sref="checkout" class="btn btn-lg btn-success">
+                {{ _('Proceed to checkout') }}
+                <i class="fa fa-chevron-right"></i>
+            </a>
+            <p ng-show="!user.get().auth">{{ _('You need to log in to validate your order...') }}</p>
+            <div class="btn-group" ng-show="!user.get().auth">
+                <button type="button" class="btn btn-success" ng-click="user.forcelogin()">
+                    <i class="fa fa-sign-in"></i> {{ _('Login') }}
+                </button>
+                <a class="btn btn-warning" ui-sref="register">
+                    <i class="fa fa-user-plus"></i> {{ _('Register') }}
+                </a>
             </div>
         </div>
-        {%- endif %}
     </div>
 </form>
-<div id="stock-overlay" class="hidden" onclick="this.className='hidden';">
-    <div class="overlay">
-    </div>
-    <div class="alert alert-danger overlay-content">
-        <i class="fa fa-exclamation-triangle"></i>
-        <span class="sr-only">Warning:</span>
-        {{ _('Sorry, insufficient stock.') }}
-    </div>
-</div>
-<script>
-    {%- if not cart.must_recalc %}
-    function disp_recalc() {
-        document.getElementById('recalculate').className = "";
-        document.getElementById('total').className = "hidden";
-        document.getElementById('proceed').className = "hidden";
-    }
-    {%- endif %}
-    {% for line in cart %}
-    document.getElementById('inc_{{ line.product.id }}').addEventListener('click', function(e) {
-        e.preventDefault();
-        var orig = parseInt(document.getElementById('quantity_{{ line.product.id }}').value);
-        {%- if line.product.on_demand %}
-        document.getElementById('quantity_{{ line.product.id }}').value = orig + 1;
-        {%- if not cart.must_recalc %}
-        disp_recalc();
-        {%- endif %}
-        {%- else %}
-        if (orig < {{ line.get_stock() }}) {
-            document.getElementById('quantity_{{ line.product.id }}').value = orig + 1;
-            {%- if not cart.must_recalc %}
-            disp_recalc();
-            {%- endif %}
-        } else {
-            document.getElementById('stock-overlay').className = "";
-        }
-        {%- endif %}
-    });
-    document.getElementById('dec_{{ line.product.id }}').addEventListener('click', function(e) {
-        e.preventDefault();
-        var orig = parseInt(document.getElementById('quantity_{{ line.product.id }}').value);
-        if (orig > 0) {
-            document.getElementById('quantity_{{ line.product.id }}').value = orig - 1;
-            {%- if not cart.must_recalc %}
-            disp_recalc();
-            {%- endif %}
-        };
-    });
-    {% endfor %}
-    [].forEach.call(document.getElementsByClassName('cart-quantity'), function(elem) {
-        elem.addEventListener('keyup', disp_recalc);
-    });
-</script>
-{%- else %}
-<div class="alert alert-danger text-center">{{ _('Your cart is empty!') }}</div>
-{%- endif %}
-{%- endblock %}
-
+<div class="alert alert-danger text-center" ng-hide="cart.count()">{{ _('Your cart is empty!') }}</div>

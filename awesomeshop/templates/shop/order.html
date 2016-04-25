@@ -1,5 +1,5 @@
-{#
-Copyright 2015 Sébastien Maccagnoni-Munch
+{#-
+Copyright 2015-2016 Sébastien Maccagnoni-Munch
 
 This file is part of AwesomeShop.
 
@@ -16,56 +16,38 @@ details.
 You should have received a copy of the GNU Affero General Public License
 along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
-{% extends "skeleton.html" %}
-
-{% block title %}{% if order.invoice_number %}{{ _('Invoice') }}{% else %}{{ _('Order') }}{% endif %}{% endblock %}
-{% block content %}
-{%- if order.invoice_number %}
-<h1>{{ _('Invoice #%(num)s, on %(date)s', num=order.full_invoice_number, date=order.formated_invoice_date) }}</h1>
-<p>{{ _('Order #%(num)s, on %(date)s', num=order.full_number, date=order.formated_date) }}</p>
-{%- else %}
-<h1>{{ _('Order #%(num)s, on %(date)s', num=order.full_number, date=order.formated_date) }}</h1>
-{%- endif %}
+<h1>{{ _('Order [[ order.full_number ]], on [[ order.date | date ]]') }}</h1>
 <div class="panel panel-default">
     <div class="panel-body">
-        {{ _('Order status:' ) }} {{ order.human_status|safe }}
-        {%- if order.status == 'unconfirmed' %}
-        <br><b>{{ _('Cancelled if not paid within %(num)d days.', num=config.CONFIRM_DELAY) }}</b>
-        {%- elif order.status == 'awaiting_payment' %}
-        <br><b>{{ _('Cancelled if payment not received within %(num)d days.', num=config.PAYMENT_DELAY) }}</b>
-        {%- endif %}
-        {%- if order.payment_date %}
-        <br>{{ _('Payment received on %(date)s', date=order.formated_payment_date) }}
-        {%- endif %}
-        {%- if order.tracking_number %}
-        <br>
-        <b>
-            {{ _('Tracking number:') }}
-            <a href="{{ order.tracking_url }}" target="_blank">{{ order.tracking_number }}</a>
-        </b>
-        {%- endif %}
-        {%- if order.status == 'unconfirmed' %}
-        <div class="text-right hidden-print">
-            <a href="{{ url_for('pay_order', order_number=order.number) }}" class="btn btn-lg btn-success">
-                {{ _('Proceed to payment') }}
-                <i class="fa fa-chevron-right"></i>
-            </a>
+        {{ _('Order status:' ) }} <span class="text-[[ order.status_color ]]">[[ order.human_status ]]</span>
+        <div ng-if="order.status == 'unconfirmed'">
+            <b>{{ _('Cancelled if not confirmed within %(num)d days.', num=config.CONFIRM_DELAY) }}</b>
         </div>
-        {%- elif order.status == 'awaiting_payment' %}
-        <div class="text-right hidden-print">
-            <a href="{{ url_for('pay_order', order_number=order.number) }}" class="btn btn-lg btn-success btn-wrap">
-                {{ order.replay_payment_button_text }}
-                <i class="fa fa-chevron-right"></i>
-            </a>
+        <div ng-if="order.status == 'awaiting_payment'">
+            <b>{{ _('Cancelled if payment not received within %(num)d days.', num=config.PAYMENT_DELAY) }}</b>
         </div>
-        {%- elif order.status == 'payment_failed' %}
-        <div class="text-right hidden-print">
-            <a href="{{ url_for('pay_order', order_number=order.number) }}" class="btn btn-lg btn-success">
-                {{ _('Retry payment') }}
-                <i class="fa fa-chevron-right"></i>
-            </a>
+        <div ng-if="order.payment_date">
+            {{ _('Payment received on [[ order.payment_date | date ]]') }}
         </div>
-        {%- endif %}
+        <div ng-if="order.payment_message">
+            {{ _('Message about the payment:') }} [[ order.payment_message ]]
+        </div>
+        <div ng-if="order.shipping_date">
+            {{ _('Shipped on [[ order.shipping_date | date ]]') }}
+        </div>
+        <div ng-if="order.tracking_number">
+            <b>
+                {{ _('Tracking number:') }}
+                <a ng-href="[[ order.tracking_url ]]" target="_blank">[[ order.tracking_number ]]</a>
+            </b>
+        </div>
+        <div ng-if="['unconfirmed', 'awaiting_payment', 'payment_failed'].indexOf(order.status) != -1" class="text-right">
+            <button type="button" class="btn btn-lg btn-success" ng-click="pay()">
+                <span ng-if="order.status == 'unconfirmed'">{{ _('Confirm and proceed to payment') }}</span>
+                <span ng-if="order.status == 'awaiting_payment' || order.status == 'payment_failed'">{{ _('Retry payment') }}</span>
+                <i class="fa fa-chevron-right"></i>
+            </button>
+        </div>
     </div>
 </div>
 <div class="row">
@@ -75,7 +57,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <i class="fa fa-map-marker"></i>
                 {{ _('Delivery address') }}
             </div>
-            <div class="panel-body">{{ order.delivery|replace('\r\n', '<br>'|safe)|replace('\n', '<br>'|safe) }}</div>
+            <div class="panel-body" ng-bind-html="order.delivery | htmlbr"></div>
         </div>
     </div>
     <div class="col-sm-6">
@@ -84,57 +66,55 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <i class="fa fa-file-text-o"></i>
                 {{ _('Billing address') }}
             </div>
-            <div class="panel-body">{{ order.billing|replace('\r\n', '<br>'|safe)|replace('\n', '<br>'|safe) }}</div>
+            <div class="panel-body" ng-bind-html="order.billing | htmlbr"></div>
         </div>
     </div>
 </div>
 <div class="panel panel-default">
     <div class="panel-heading">
         <div class="row">
-            <div class="col-md-6 col-print-6">
+            <div class="col-md-7">
                 <i class="fa fa-cube"></i>
                 {{ _('Product') }}
             </div>
-            <div class="col-xs-4 col-sm-3 col-sm-offset-3 col-md-2 col-md-offset-0 col-print-2 col-print-offset-0 text-right">
+            <div class="col-xs-3 col-xs-offset-3 col-md-1 col-md-offset-0 text-right">
                 {{ _('Qty') }}
             </div>
-            <div class="col-xs-4 col-sm-3 col-md-2 col-print-2 text-right">
+            <div class="col-xs-3 col-md-2 text-right">
                 {{ _('Unit') }}
             </div>
-            <div class="col-xs-4 col-sm-3 col-md-2 col-print-2 text-right">
+            <div class="col-xs-3 col-md-2 text-right">
                 {{ _('Total') }}
             </div>
         </div>
     </div>
     <div class="list-group">
-        {%- for product in order.products %}
-        <div class="list-group-item">
+        <div class="list-group-item" ng-repeat="product in order.products">
             <div class="row">
-                <div class="col-xs-4 col-md-2 col-print-2">
-                    {{ product.reference }}
+                <div class="col-xs-4 col-md-3 col-lg-3">
+                    [[ product.reference ]]
                 </div>
-                <div class="col-xs-8 col-md-4 col-print-4">
-                    {{ product.name }}
+                <div class="col-xs-8 col-md-4 col-lg-4">
+                    [[ product.name ]]
                 </div>
-                <div class="col-xs-4 col-sm-3 col-sm-offset-3 col-md-2 col-md-offset-0 col-print-2 col-print-offset-0 text-right">
-                    {{ product.quantity }}
+                <div class="col-xs-3 col-xs-offset-3 col-md-1 col-md-offset-0 text-right">
+                    [[ product.quantity ]]
                 </div>
-                <div class="col-xs-4 col-sm-3 col-md-2 col-print-2 text-right">
-                    {{ product.net_price }}
+                <div class="col-xs-3 col-md-2 text-right">
+                    [[ product.net_price ]]
                 </div>
-                <div class="col-xs-4 col-sm-3 col-md-2 col-print-2 text-right">
-                    {{ product.line_net_price }}
+                <div class="col-xs-3 col-md-2 text-right">
+                    [[ product.line_net_price ]]
                 </div>
              </div>
         </div>
-        {%- endfor %}
         <div class="list-group-item">
             <div class="row">
                 <div class="col-xs-8">
                     <b>{{ _('Subtotal') }}</b>
                 </div>
                 <div class="col-xs-4 text-right">
-                    <b>{{ order.net_subtotal }}</b>
+                    <b>[[ order.net_subtotal ]]</b>
                 </div>
             </div>
         </div>
@@ -144,20 +124,20 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     {{ _('Shipping fee') }}
                 </div>
                 <div class="col-xs-5 col-sm-6 text-right">
-                    {{ order.carrier_description }}
+                    [[ order.carrier_description ]]
                 </div>
                 <div class="col-xs-3 col-sm-2 text-right">
-                    {{ order.net_shipping }}
+                    [[ order.net_shipping ]]
                 </div>
             </div>
         </div>
         <div class="list-group-item">
             <div class="row text-info total-cost">
-                <div class="col-xs-8">
+                <div class="col-xs-7">
                     <b>{{ _('Total') }}</b>
                 </div>
-                <div class="col-xs-4 text-right">
-                    <b>{{ order.net_total }}</b>
+                <div class="col-xs-5 text-right">
+                    <b>[[ order.net_total ]]</b>
                 </div>
             </div>
         </div>
@@ -166,31 +146,27 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <div class="panel panel-default">
     <div class="panel-body">
         <ul>
-            {%- if order.on_demand %}
-            <li>
-                {{ _('This order includes on demand products, shipping is delayed for %(min)d-%(max)d days', min=order.on_demand_delay_min, max=order.on_demand_delay_max) }}
+            <li ng-if="order.on_demand">
+                {{ _('This order includes on demand products, shipping is delayed for [[ order.on_demand_delay_min ]]-[[ order.on_demand_delay_max ]] days') }}
             </li>
-            {%- endif %}
-            <li>{{_('Payment:') }} {{ order.payment_description|safe }}</li>
-            {%- if order.accept_reused_package %}
-            <li>
+            <li>{{ _('Payment:') }} <i class="fa fa-[[ order.payment_icon ]]" ng-if="order.payment_icon"></i> [[ order.payment_description ]]</li>
+            <li ng-if="order.accept_reused_package">
                 <i class="fa fa-recycle"></i>
                 {{_('I accept that my order is shipped in a reused package') }}
             </li>
-            {%- endif %}
+            <li ng-if="order.paper_invoice">
+                <i class="fa fa-file-text-o"></i>
+                {{_('I want a paper invoice') }}
+            </li>
         </ul>
     </div>
 </div>
 <small>{{ _('TVA non applicable, article 293 B du Code général des impôts') }}</small>
-{%- if order.status == 'unconfirmed' %}
-<a href="{{ url_for('pay_order', order_number=order.number) }}" class="btn btn-lg btn-success pull-right">
-    {{ _('Proceed to payment') }}
+<button type="button" class="btn btn-lg btn-success pull-right" ng-show="order.status == 'unconfirmed'" ng-click="pay()">
+     {{ _('Confirm and proceed to payment') }}
     <i class="fa fa-chevron-right"></i>
+</button>
+<a ng-href="/pdf/invoice/[[ order.invoice_number ]]" class="btn btn-lg btn-primary pull-right" ng-hide="order.status == 'unconfirmed'" target="_blank">
+    <i class="fa fa-file-text-o"></i>
+    {{ _('Invoice [[ order.invoice_full_number ]], on [[ order.invoice_date | date ]]') }}
 </a>
-{%- else -%}
-<button class="btn btn-lg btn-primary pull-right hidden-print" onclick="window.print()">
-    <i class="fa fa-print"></i>
-    {{ _('Print') }}
-</a>
-{%- endif %}
-{%- endblock %}

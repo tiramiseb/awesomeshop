@@ -1,0 +1,114 @@
+{#-
+Copyright 2016 Sébastien Maccagnoni-Munch
+
+This file is part of AwesomeShop.
+
+AwesomeShop is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+details.
+
+You should have received a copy of the GNU Affero General Public License
+along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+#}
+<h1>[[ product.name || product.slug ]]</h1>
+<div class="row">
+    <div class="col-xs-7 col-md-8 col-lg-9">
+        <div class="row">
+            <div ng-show="product.photos.length" class="col-md-5 col-lg-6">
+                <a href="" ng-click="openLightboxModal(0)" target="_blank" class="thumbnail">
+                    <img ng-src="[[ product.photos[0].preview_url ]]">
+                </a>
+                <div ng-show="product.photos.length > 1" class="row small-gutter">
+                    <div class="col-xs-[[ thumb_width ]]" ng-repeat="photo in product.photos" ng-if="!$first">
+                        <a href="" ng-click="openLightboxModal($index)" target="_blank" class="thumbnail">
+                            <img ng-src="[[ photo.thumbnail_url ]]">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div ng-hide="product.photos.length" class="hidden-xs col-md-5 col-lg-6">
+                <div class="panel panel-default product-illustration-placeholder">
+                    <div class="panel-body">
+                        <i class="fa fa-ban"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7 col-lg-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">
+                            <i class="fa fa-ellipsis-h"></i>
+                            {{ _('Summary') }}
+                        </h2>
+                    </div>
+                    <div class="panel-body page-content">
+                        <div ng-bind-html="product.description | trusthtml"></div>
+                        <hr>
+                        <p>{{ _('Reference:') }} <i>[[ product.reference ]]</i></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-5 col-md-4 col-lg-3">
+        <div class="well">
+            <p class="price">[[ product.net_price | currency:"{{ config.CURRENCY }}" ]]</p>
+            <hr>
+            <div ng-show="cart.stock(product)>0 || product.on_demand">
+                <form name="form" class="form-horizontal" novalidate>
+                    <div class="form-group" ng-class="{ 'has-error' : form.quantity1.$invalid }" ng-hide="product.on_demand">
+                        <label class="col-sm-5 control-label" for="quantity1">{{ _('Quantity') }}</label>
+                        <div class="col-sm-7">
+                            <input name="quantity1" id="quantity1" type="number" min="1" max="[[ cart.stock(product) + 1 ]]" class="form-control" ng-model="quantity">
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error' : form.quantity2.$invalid }" ng-show="product.on_demand">
+                        <label class="col-sm-5 control-label" for="quantity2">{{ _('Quantity') }}</label>
+                        <div class="col-sm-7">
+                            <input name="quantity2" id="quantity2" type="number" min="1" class="form-control" ng-model="quantity">
+                        </div>
+                    </div>
+                    <button type="button" ng-show="(product.on_demand && form.quantity2.$valid) || (!product.on_demand && cart.stock(product)-quantity>=0 && form.quantity1.$valid)" class="btn btn-success btn-lg btn-wrap btn-block" ng-class="{ 'btn-success': cart.stock(product)-quantity>=0, 'btn-info': product.on_demand && cart.stock(product)-quantity<0 }" ng-click="cart.add(product, quantity);quantity=1;">
+                        {{ _('Add to cart') }}
+                    </button>
+                    <p class="text-center bottom-no-space" ng-show="product.on_demand && cart.stock(product)-quantity<0">{{ _('Available on demand, delay %(min)d-%(max)d days', min=config.ON_DEMAND_DELAY_MIN, max=config.ON_DEMAND_DELAY_MAX) }}</p>
+                    <div class="alert alert-danger text-center bottom-no-space" ng-show="!product.on_demand && (cart.stock(product)-quantity<0 || form.quantity1.$error.max)">
+                        {{ _('Insufficient stock') }}
+                    </div>
+                    <div class="alert alert-danger text-center bottom-no-space" ng-show="form.$invalid && !form.quantity1.$error.max">
+                        {{ _('Incorrect quantity') }}
+                    </div>
+                </form>
+            </div>
+            <div class="alert alert-danger text-center bottom-no-space" ng-hide="cart.stock(product)>0 || product.on_demand">
+                {{ _('Out of stock') }}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default" ng-show="product.related_products.length">
+    <div class="panel-heading">
+        <h2 class="panel-title">
+            <i class="fa fa-cubes"></i>
+            {{ _('Related products') }}
+        </h2>
+    </div>
+    <div class="panel-body">
+        <products-list products="product.related_products"></products-list>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2 class="panel-title">
+            <i class="fa fa-book"></i>
+            {{ _('Documentation') }}
+        </h2>
+    </div>
+    <div class="panel-body page-content" ng-bind-html="product.documentation | trusthtml"></div>
+</div>

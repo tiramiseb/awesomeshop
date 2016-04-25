@@ -1,5 +1,5 @@
-{#
-Copyright 2015 Sébastien Maccagnoni-Munch
+{#-
+Copyright 2015-2016 Sébastien Maccagnoni-Munch
 
 This file is part of AwesomeShop.
 
@@ -16,36 +16,32 @@ details.
 You should have received a copy of the GNU Affero General Public License
 along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
-{% extends "skeleton.html" %}
-
-{% block title %}{{ _('Search results') }}{% endblock %}
-{% block content %}
-<h1>{{ _('Search results for "%(terms)s"', terms=terms) }}</h1>
-{%- if products_result %}
-<h2>{{ _('Products') }}</h2>
-<div class="row">
-    {{ products_grid(products_result) }}
+<h1>{{ _('Search results for "[[ terms ]]"') }}</h1>
+<div ng-show="result.categories.length">
+    <h2>{{ _('Categories') }}</h2>
+    <ul>
+        <li ng-repeat="category in result.categories">
+            <a ui-sref="category_or_product({path:category.path})">
+                [[ category.full_name ]]
+            </a>
+        </li>
+    </ul>
 </div>
-{%- endif %}
-{%- if categories_result %}
-<h2>{{ _('Categories') }}</h2>
-<ul>
-    {%- for category in categories_result %}
-    <li><a href="/{{ category.url }}">{{ category.full_name }}</a></li>
-    {%- endfor %}
-</ul>
-{%- endif %}
-{%- if docs_result %}
-<h2>{{ _('Documentation') }}</h2>
-<ul>
-    {%- for d in docs_result %}
-    <li><a href="{{ url_for('doc', slug=d.slug) }}">{{ d }}</a></li>
-    {%- endfor %}
-</ul>
-{%- endif %}
-{%- if not products_result and not categories_result and not docs_result %}
-<p>{{ _('Sorry, there are no results for this search...') }}</p>
-{%- endif %}
+<div ng-show="result.docs.length">
+    <h2>{{ _('Documentation') }}</h2>
+    <ul>
+        <li ng-repeat="doc in result.docs">
+            <a ui-sref="doc({slug:doc.slug})">[[ doc.title ]]</a>
+        </li>
+    </ul>
 </div>
-{% endblock %}
-
+<div ng-show="result.products.length">
+    <h2>{{ _('Products') }}</h2>
+    <products-list products="result.products"></products-list>
+</div>
+<p ng-hide="waiting || result.products.length || result.categories.length || result.docs.length">
+{{ _('Sorry, there are no results for this search...') }}
+</p>
+<p ng-show="waiting">
+{{ _('Please wait, search is in progress...') }}
+</p>

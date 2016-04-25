@@ -16,16 +16,19 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+"""AwesomeShop: an e-commerce webapp using Flask"""
 
-from flask import Flask, request, session
-from flask.ext.babel import Babel
-from flask.ext.login import current_user
-from flask.ext.mongoengine import MongoEngine
+from functools import wraps
+
+from flask import abort, current_app, Flask, request, session
+from flask_babel import Babel
+from flask_login import current_user, LoginManager, login_required
+from flask_mongoengine import MongoEngine
 from flask_restful import Api
 
 app = Flask(__name__)
 app.config.from_object('awesomeshop.defaultconfig')
-rest = Api(app)
+rest = Api(app, catch_all_404s=True)
 try:
     app.config.from_object('config')
 except ImportError:
@@ -37,6 +40,8 @@ db = MongoEngine(app)
 
 # Initialize flask-babel
 babel = Babel(app)
+
+
 @babel.localeselector
 def get_locale(from_user=True):
     locale = None
@@ -53,7 +58,7 @@ def get_locale(from_user=True):
             pass
     if not locale:
         try:
-            # If there is no "best match", try pseudo-manually (but ignore weights)
+            # If there is no "best match", try pseudo-manually (ignore weights)
             for i in request.accept_languages.itervalues():
                 if '-' in i:
                     i = i.split('-')[0]
@@ -67,36 +72,46 @@ def get_locale(from_user=True):
         locale = app.config['LANGS'][0]
     return locale
 
-# Initialize the debug toolbar when in debug mode
-if app.config['DEBUG']:
-    app.config['DEBUG_TB_PANELS'] = [
-        'flask_debugtoolbar.panels.timer.TimerDebugPanel',
-        'flask_debugtoolbar.panels.headers.HeaderDebugPanel',
-        'flask_debugtoolbar.panels.request_vars.RequestVarsDebugPanel',
-        'flask_debugtoolbar.panels.config_vars.ConfigVarsDebugPanel',
-        'flask_debugtoolbar.panels.template.TemplateDebugPanel',
-        'flask_debugtoolbar.panels.logger.LoggingPanel',
-        'flask.ext.mongoengine.panels.MongoDebugPanel'
-        ]
-    app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
-    from flask_debugtoolbar import DebugToolbarExtension
-    toolbar = DebugToolbarExtension(app)
+app.jinja_env.globals.update(get_locale=get_locale)
+
+login_manager = LoginManager(app)
+
+
+@login_manager.user_loader
+def load_user(uid):
+    from .auth.models import User
+    try:
+        return User.objects.get(id=uid)
+    except User.DoesNotExist:
+        return None
+
+
+def admin_required(func):
+    """Decorator when a request can only be made by admins
+
+    Inspired by flask_login.login_required
+    """
+    @wraps(func)
+    @login_required
+    def decorated_view(*args, **kwargs):
+        if current_app.login_manager._login_disabled or current_user.is_admin:
+            return func(*args, **kwargs)
+        abort(403)
+    return decorated_view
+
+###############################################################################
 
 from . import autoupgrade
 autoupgrade.upgrade()
 
-# Initialize flask-login (code must not directly be here
-# or there is an import loop)
-from . import auth 
+###############################################################################
 
-# Imports views only in order to make them available
-from .auth import views
-from .dashboard import views
-from .home import views
-from .page import views
-from .payment import views
-from .shop import views
-from . import error_views
-
-from .auth import api
-from .shop import api
+# PEP 8 not respected here: the views and api entrypoints must be imported
+# after the above tools
+import views
+from auth import api
+from page import api
+from payment import api
+from shipping import api
+from shop.api import category, dbcart, order, product, tax
+import searchview

@@ -1,4 +1,4 @@
-{#
+{#-
 Copyright 2015 Sébastien Maccagnoni-Munch
 
 This file is part of AwesomeShop.
@@ -16,149 +16,105 @@ details.
 You should have received a copy of the GNU Affero General Public License
 along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
-{% extends "dashboard/skeleton.html" %}
-
-{% block title %}{{ _('Dashboard') }} - {{ _('User') }}{% endblock %}
-{% block content %}
-<h1>{% if form.email.data %}{{ form.email.data }}{% else %}{{ _('New user') }}{% endif %}</h1>
-<form method="POST" action>
-    <div class="panel panel-default">
-        <div class="panel-body">
-            {{ form.hidden_tag() }}
-            <div class="row">
-                <div class="col-sm-12 col-md-4">
-                    {{ forminput(form.email) }}
-                </div>
-                <div class="col-xs-6 col-md-4">
-                    {{ forminput(form.password) }}
-                </div>
-                <div class="col-xs-6 col-md-4">
-                    {{ forminput(form.password_again) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    {{ forminput(form.is_admin) }}
-                </div>
-                <div class="col-sm-6">
-                    <div class="btn-group pull-right">
-                        <button type="submit" class="btn btn-success">
-                            <i class="fa fa-check"></i>
-                            {{ _('Save') }}
-                        </button>
-                        <a href="{{ url_for('dashboard_users') }}" class="btn btn-danger">
-                            <i class="fa fa-undo"></i>
-                            {{ _('Cancel') }}
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+{% import "macros/form.html" as f %}
+<form name="form" ng-submit="submit()" novalidate>
+<h1>{{ _('User:') }} [[ form.email.$valid || form.email.$pristine ? user.email : "{{ _('incorrect email address') }}" ]]</h1>
+<div class="row">
+    <div class="col-xs-8 col-md-4">
+        {{ f.input_email(_('Email address'), 'email', 'user.email', 'required', _('Incorrect email address')) }}
     </div>
-</form>
-{%- if saved_carts %}
-<h2>{{ _('Saved carts') }}</h2>
-<div class="list-group">
-    {%- for cart in saved_carts %}
-    <div class="list-group">
-        {%- for line in cart.lines %}
-        <a href="{{ url_for('dashboard_product', product_id=line.product.id) }}" class="list-group-item cart-list">
+    <div class="col-xs-4 col-md-2">
+        {{ f.checkbox_button(_('Admin'), _('Not admin'), 'is_admin', 'user.is_admin') }}
+    </div>
+    <div class="col-xs-6 col-md-3">
+        {{ f.input_password(_('Password'), 'password', 'user.password', 'ng-required="!user.id"', _('Password is mandatory for new users')) }}
+    </div>
+    <div class="col-xs-6 col-md-3">
+        {{ f.input_password(_('Password (again)'), 'password_again', 'user.password_confirm', 'match="user.password"', _('Passwords must match')) }}
+    </div>
+</div>
+<h2>{{ _('Addresses') }}</h2>
+<uib-accordion>
+    <uib-accordion-group ng-repeat="address in user.addresses" heading="[[ address.title || '{{ _('Untitled address') }}' ]]" is-open="address.new">
             <div class="row">
-                <div class="col-xs-8 col-md-9 col-lg-10">
-                    {{ line.get_full_name() }}
+                <div class="col-sm-6">
+                    {{ f.input_text(_('Address title'), 'address_t_[[ $index ]]', 'address.title', 'required', _('Title is mandatory')) }}
+                    <div class="row">
+                        <div class="col-xs-6">
+                            {{ f.input_text(_('First name'), 'address_f_[[ $index ]]', 'address.firstname') }}
+                        </div>
+                        <div class="col-xs-6">
+                            {{ f.input_text(_('Last name'), 'address_l_[[ $index ]]', 'address.lastname', 'required', _('Last name is mandatory')) }}
+                        </div>
+                    </div>
+                    {{ f.input_text(_('Phone'), 'address_p_[[ $index ]]', 'address.phone') }}
                 </div>
-                <div class="col-xs-4 col-md-3 col-lg-2 text-right">
-                    {{ line.get_price_per_item().quantize('0.01').net }} {{ config.CURRENCY }}
-                    ×
-                    {{ line.available_quantity }}
-                    =
-                    <strong>
-                        {{ line.get_total().quantize('0.01').net }} {{ config.CURRENCY }}
-                    </strong>
-                </div>
-             </div>
-        </a>
-        {%- endfor %}
-        <div class="list-group-item">
-            <div class="row">
-                <div class="col-xs-6">
-                    <a href="{{ url_for('dashboard_delete_savedcart', cart_id=cart.id) }}" class="btn btn-danger">
+                <div class="col-sm-6">
+                    {{ f.textarea(_('Address'), 'address_a_[[ $index ]]', 'address.address', 'required', _('Address is mandatory'), small=True) }}
+                    {{ f.select(_('Country'), 'address_c_[[ $index ]]', 'address.country', 'country.code as prefixed(country) for country in countries', 'required', _('Country is mandatory')) }}
+                    <button type="button" class="btn btn-danger pull-right" ng-click="delete_address($index)">
                         <i class="fa fa-trash"></i>
-                        {{ _('Delete') }}
-                    </a>
+                        {{ _('Remove') }}
+                    </button>
                 </div>
-                <div class="col-xs-6 text-right">
-                    <strong>
-                        {{ _('Total:') }} {{ cart.total_price.quantize('0.01').net }} {{ config.CURRENCY }}
-                    </strong>
+            </div>
+    </uib-accordion-group>
+</uib-accordion>
+<button type="button" class="btn btn-success" ng-click='user.addresses.push({new:true})'>
+    <i class="fa fa-plus"></i>
+    {{ _('Add an address') }}
+</button>
+<h2>{{ _('Saved carts') }}</h2>
+<uib-accordion>
+    <uib-accordion-group ng-repeat="cart in user.carts" heading="[[ cart.name ]] ([[ cart.date | date ]])">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <i class="fa fa-cube"></i>
+                        {{ _('Product') }}
+                    </div>
+                    <div class="col-xs-4 col-sm-2 text-right">
+                        {{ _('Qty') }}
+                    </div>
+                    <div class="col-xs-4 col-sm-2 text-right">
+                        {{ _('Unit') }}
+                    </div>
+                    <div class="col-xs-4 col-sm-2 text-right">
+                        {{ _('Total') }}
+                    </div>
+                </div>
+            </div>
+            <div class="list-group">
+                <div class="list-group-item" ng-repeat="line in cart.lines">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            [[ line.product.name ]]
+                        </div>
+                        <div class="col-xs-4 col-sm-2 text-right">
+                            [[ line.quantity ]]
+                        </div>
+                        <div class="col-xs-4 col-sm-2 text-right">
+                            [[ line.product.net_price | currency:"{{ config.CURRENCY }}" ]]
+                        </div>
+                        <div class="col-xs-4 col-sm-2 text-right">
+                            [[ line.product.net_price * line.quantity | currency:"{{ config.CURRENCY }}" ]]
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    {%- endfor %}
+    </uib-accordion-group>
+</uib-accordion>
+<div id="page-buttons">
+    <button type="submit" class="btn btn-link" uib-tooltip="{{ _('Save') }}" ng-disabled="form.$invalid">
+        <i class="fa fa-check-circle fa-4x text-success"></i>
+    </button>
+    <button type="button" class="btn btn-link" ng-click="delete()" uib-tooltip="{{ _('Remove') }}">
+        <i class="fa fa-times-circle fa-4x text-danger"></i>
+    </button>
+    <a class="btn btn-link" ui-sref="users" uib-tooltip="{{ _('Back') }}">
+        <i class="fa fa-arrow-circle-left fa-4x" ng-class="{'text-primary': form.$pristine, 'text-danger': form.$dirty }"></i>
+    </a>
 </div>
-{%- endif %}
-{%- if addresses or newaddress %}
-<h2 id="addresses">{{ _('Addresses') }}</h2>
-<div class="panel panel-default">
-    <div class="list-group">
-        {%- for address in addresses %}
-        <div class="list-group-item">
-            <form method="POST" action>
-                {{ address.hidden_tag() }}
-                <div class="row">
-                    <div class="col-sm-6">
-                        {{ forminput(address.title) }}
-                        {{ forminput(address.firstname) }}
-                        {{ forminput(address.lastname) }}
-                        {{ forminput(address.phone) }}
-                    </div>
-                    <div class="col-sm-6">
-                        {{ forminput(address.address) }}
-                        {{ forminput(address.country) }}
-                        <div class="btn-group btn-group-justified" role="group">
-                            <div class="btn-group">
-                                <button type="submit" class="btn btn-success">
-                                    <i class="fa fa-check"></i>
-                                    {{ _('Change') }}
-                                </button>
-                            </div>
-                            <a href="{{ url_for('dashboard_remove_address', user_id=user_id, address_id=address._prefix[:-1]) }}" class="btn btn-danger">
-                                <i class="fa fa-trash"></i>
-                                {{ _('Remove') }}
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-        {%- endfor %}
-        <div class="list-group-item">
-            <h3>{{ _('New address') }}</h3>
-            <form method="POST" action>
-                {{ newaddress.hidden_tag() }}
-                <div class="row">
-                    <div class="col-sm-6">
-                        {{ forminput(newaddress.title) }}
-                        <div class="row">
-                            <div class="col-xs-6">
-                                {{ forminput(newaddress.firstname) }}
-                            </div>
-                            <div class="col-xs-6">
-                                {{ forminput(newaddress.lastname) }}
-                            </div>
-                        </div>
-                        {{ forminput(newaddress.phone) }}
-                    </div>
-                    <div class="col-sm-6">
-                        {{ forminput(newaddress.address) }}
-                        {{ forminput(newaddress.country) }}
-                        {{ formsubmit(_('Create'), 'plus') }}
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-{%- endif %}
-{%- endblock %}
+</form>

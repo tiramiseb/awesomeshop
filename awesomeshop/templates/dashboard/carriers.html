@@ -1,4 +1,4 @@
-{#
+{#-
 Copyright 2015 Sébastien Maccagnoni-Munch
 
 This file is part of AwesomeShop.
@@ -16,33 +16,14 @@ details.
 You should have received a copy of the GNU Affero General Public License
 along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
-{% extends "dashboard/skeleton.html" %}
-
-
-{% block title %}{{ _('Dashboard') }} - {{ _('Carriers') }}{% endblock %}
-{% block content %}
 <h1>{{ _('Carriers') }}</h1>
-<p><a href="{{ url_for('dashboard_carrier') }}" class="btn btn-primary">
-    <i class="fa fa-plus"></i>
+<p><a class="btn btn-primary" ui-sref="newcarrier">
+   <i class="fa fa-plus"></i>
     {{ _('Add a carrier') }}
 </a></p>
-<table class="table table-hover">
-    {%- for carrier in carriers %}
-    <tr>
-        <td class="pointer" onclick="document.location='{{ url_for('dashboard_carrier', carrier_id=carrier.id) }}'">
-            <p>{{ carrier.description_and_name }}</p>
-        </td>
-        <td>
-            <div class="btn-group pull-right">
-                <a class="btn btn-success" href="{{ url_for('dashboard_carrier', carrier_id=carrier.id) }}">
-                    <i class="fa fa-pencil"></i>
-                </a>
-                <a class="btn btn-danger" href="{{ url_for('dashboard_remove_carrier', carrier_id=carrier.id) }}">
-                    <i class="fa fa-trash"></i>
-                </a>
-            </div>
-        </td>
-    </tr>
-    {%- endfor %}
-</table>
-{%- endblock %}
+<div class="list-group" id="pages-list">
+    <input class="list-group-item" type="text" ng-model="query" placeholder="{{ _('Filter') }}">
+    <a class="list-group-item" ng-repeat="carrier in carriers | filter:query" ui-sref="carrier({carrier_id:carrier.id})">
+        [[ carrier.description ]] ([[ carrier.name ]])
+    </a>
+</div>

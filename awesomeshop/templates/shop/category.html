@@ -1,5 +1,5 @@
-{#
-Copyright 2015 Sébastien Maccagnoni-Munch
+{#-
+Copyright 2016 Sébastien Maccagnoni-Munch
 
 This file is part of AwesomeShop.
 
@@ -16,20 +16,6 @@ details.
 You should have received a copy of the GNU Affero General Public License
 along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
-{% extends "skeleton.html" %}
-
-{% block title %}{{ category.full_name }}{% endblock %}
-{% block content %}
-<h1>{{ category.short_name }}</h1>
-{%- if category.output_description %}
-<div class="panel panel-default">
-    <div class="panel-body">
-        {{ category.get_description()|safe }}
-    </div>
-</div>
-{%- endif %}
-<div class="row">
-{{- products_grid(category.onsale_products_recursive) }}
-</div>
-{%- endblock %}
-
+<h1>[[ category.name || category.slug ]]</h1>
+<div class="well" ng-show="category.description" ng-bind="category.description"></div>
+<products-list products="category.products"></products-list>

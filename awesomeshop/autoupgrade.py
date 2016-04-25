@@ -18,10 +18,12 @@
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
+import re
 
 from .helpers import Setting
-from .shop.models import BaseProduct, Order
-from .shop.models import Url
+from .shipping.models import Carrier
+from .shop.models.order import Order
+from .shop.models.product import Product
 
 ###############################################################################
 # Functions used to upgrade the database content
@@ -30,32 +32,129 @@ from .shop.models import Url
 # doesn't break if someone runs the upgrade functions on an already-upgraded
 # database)
 
+
 def add_product_cls():
-    products = BaseProduct._get_collection()
-    products.update_many({'_cls': None},
-                         {'$set': {'_cls': 'BaseProduct.Product'}})
-    urls = Url._get_collection()
-    urls.update_many(
-            {'doc._cls': 'Product'},
-            {'$set':{'doc._cls': 'BaseProduct.Product'}}
-            )
+    pass
+    # Deprecated because it has been reverted
+    # products = BaseProduct._get_collection()
+    # products.update_many({'_cls': None},
+    #                      {'$set': {'_cls': 'BaseProduct.Product'}})
+    # urls = Url._get_collection()
+    # urls.update_many(
+    #         {'doc._cls': 'Product'},
+    #         {'$set':{'doc._cls': 'BaseProduct.Product'}}
+    #         )
+
 
 def add_ondemand():
-    products = BaseProduct._get_collection()
+    products = Product._get_collection()
     products.update_many({'dem': None}, {'$set': {'dem': False}})
+
 
 def add_creationdate():
     old_date = datetime.datetime(1970, 1, 1)
-    products = BaseProduct._get_collection()
+    products = Product._get_collection()
     products.update_many({'create': None}, {'$set': {'create': old_date}})
+
+
+def merge_weights_and_costs():
+    # Old format:
+    #
+    # weights: list of weights (integers)
+    # costs : list of dicts associating countries IDs (strings) or
+    #         countriesgroups IDs (strings)
+    #         to dicts associating weights (strings) with costs (floats)
+    #
+    # New format:
+    #
+    # weights: list of lists, in which the first field is the weight (integer)
+    #          and the second field is a dict associating countries IDs
+    #          (strings) or countriesgroups IDs (strings) to costs (floats)
+    carriers = Carrier._get_collection()
+    for carrier in carriers.find(projection=('weights', 'costs')):
+        if 'weights' in carrier:
+            # If "weights" does not exist in the object, then it already used
+            # the new format
+            old_weights = carrier['weights']
+            old_weights.sort()
+            new_weights = {}
+            for weight in old_weights:
+                new_weights[unicode(weight)] = {}
+            for country, costs in carrier['costs'].iteritems():
+                for weight, cost in costs.iteritems():
+                    if weight in new_weights:
+                        # Lose data if the weight is not defined
+                        new_weights[weight][country] = cost
+            new_costs_as_list = []
+            for weight in old_weights:
+                new_costs_as_list.append({
+                            'weight': weight,
+                            'costs': new_weights[unicode(weight)]
+                            })
+            carriers.update_one(
+                    {'_id': carrier['_id']},
+                    {
+                        '$set': {'costs': new_costs_as_list},
+                        '$unset': {'weights': ''}
+                        }
+                    )
+
+
+def reunite_products():
+    products = Product._get_collection()
+    products.update_many({},
+                         {'$unset': {'_cls': ''}})
+    # Url documents don't exist anymore
+    # urls = Url._get_collection()
+    # urls.update_many(
+    #         {'doc._cls': 'BaseProduct.Product'},
+    #         {'$set': {'doc._cls': 'Product'}}
+    #         )
+
+
+def remove_insuff_stock_from_orders():
+    orders = Order._get_collection()
+    for o in orders.find():
+        newproducts = o['products'][:]
+        for p in newproducts:
+            if 'insuff_stock' in p:
+                p.pop('insuff_stock')
+        orders.find_one_and_update(
+                    {'_id': o['_id']},
+                    {'$set': {'products': newproducts}}
+                    )
+
+
+def change_payment_description():
+    orders = Order._get_collection()
+    for o in orders.find({'p_desc': {'$regex': '^<i class'}}):
+        m = re.match('<i class="fa fa-(.*)"></i> (.*)', o['p_desc'])
+        orders.find_one_and_update(
+                {'_id': o['_id']},
+                {'$set': {'p_ico': m.group(1), 'p_desc': m.group(2)}}
+                )
 
 ###############################################################################
 # Ordered list of all upgrade functions
 upgrades = [
-    add_product_cls,
-    add_ondemand,
-    add_creationdate
+    (add_product_cls, '2015: allow subproducts (deprecated)'),
+    (add_ondemand, '2015: allow "on demand" products'),
+    (add_creationdate, '2015: add creation date to products'),
+    (
+        merge_weights_and_costs,
+        '18/01/2016: change how weights and costs are stored'
+        ),
+    (reunite_products, '09/02/2016: cancel the subproducts feature'),
+    (
+        remove_insuff_stock_from_orders,
+        '16/04/2016: remove the "insufficient stock" info from orders'
+        ),
+    (
+        change_payment_description,
+        '16/04/2016: split the payment description and its icon'
+        )
     ]
+
 
 def upgrade():
     latest = len(upgrades)
@@ -64,8 +163,13 @@ def upgrade():
     except:
         version = Setting(name='db_upgrade_version', value=0)
     if version.value < latest:
-        print 'Upgrading from version {} to {}'.format(version.value, latest)
-        for fct in upgrades[version.value:]:
+        print 'Upgrading database from version {} to version {}...'.format(
+                                                                version.value,
+                                                                latest
+                                                                )
+        for fct, desc in upgrades[version.value:]:
+            print '>', desc
             fct()
         version.value = latest
         version.save()
+        print 'Done upgrading!'

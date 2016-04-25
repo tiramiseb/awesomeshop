@@ -1,0 +1,67 @@
+{#-
+Copyright 2016 Sébastien Maccagnoni-Munch
+
+This file is part of AwesomeShop.
+
+AwesomeShop is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+details.
+
+You should have received a copy of the GNU Affero General Public License
+along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+#}
+<ui-view>
+<h1>{{ _('Welcome on your profile, [[ user.get().email ]]!') }}</h1>
+<div class="list-group">
+    <a ui-sref="profile.addresses" class="list-group-item">
+        <h4 class="list-group-item-heading">
+            <i class="fa fa-home"></i>
+            {{ _('Addresses')}}
+        </h4>
+        <p class="list-group-item-text">{{ _('Configure your addresses') }}</p>
+    </a>
+    <a ui-sref="saved_carts" class="list-group-item">
+        <h4 class="list-group-item-heading">
+            <i class="fa fa-shopping-cart"></i>
+            {{ _('Saved carts')}}
+        </h4>
+        <p class="list-group-item-text">{{ _('View your saved carts') }}</p>
+    </a>
+    <a ui-sref="orders" class="list-group-item">
+        <h4 class="list-group-item-heading">
+            <i class="fa fa-shopping-cart"></i>
+            {{ _('Orders')}}
+        </h4>
+        <p class="list-group-item-text">{{ _('View your orders') }}</p>
+    </a>
+    <a href="" class="list-group-item" ng-click="change_email()">
+        <h4 class="list-group-item-heading">
+            <i class="fa fa-envelope-o"></i>
+            {{ _('Email address' ) }}
+        </h4>
+        <p class="list-group-item-text">{{ _('Modify your email address') }}</p>
+    </a>
+    <a href="" class="list-group-item" ng-click="change_password()">
+        <h4 class="list-group-item-heading">
+            <i class="fa fa-key"></i>
+            {{ _('Password')}}
+        </h4>
+        <p class="list-group-item-text">{{ _('Modify your password') }}</p>
+    </a>
+    <a href="" class="list-group-item" ng-click="delete_account()">
+        <h4 class="list-group-item-heading">
+            <span class="text-danger">
+            <i class="fa fa-trash"></i>
+            {{ _('Delete the account')}}
+            </span>
+        </h4>
+        <p class="list-group-item-text text-danger">{{ _('Delete your account once and for all') }}</p>
+    </a>
+</div>
+</ui-view>

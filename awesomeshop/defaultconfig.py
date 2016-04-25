@@ -48,8 +48,15 @@ FACEBOOK_ACCOUNT = ''
 TWITTER_ACCOUNT = ''
 BLOG_URL = ''
 
+# The max age for new products (in days)
+NEW_PRODUCTS_MAX_AGE = 60
+
 # Where to store indexes for the search engine
 SEARCH_INDEX_PATH = '/tmp/awesomeshop_search'
+
+# Average (or minimum, as you wish) weight of the package itself (will be added
+# to the weight of a cart before calculating the shipping cost) (in grams)
+PACKAGE_WEIGHT = 0
 
 # Shipping price multiplier before adding the preparation price
 # and before taxes
@@ -58,10 +65,6 @@ SHIPPING_MULTIPLIER = 1
 # How much the customer should pay for the preparation of each package
 # (will be integrated into the shipping price, no detail given to the customer)
 PACKAGE_PREPARATION_PRICE = 0
-
-# Average (or minimum) weight of the package itself (will be added to the
-# weight of a cart before calculating the shipping cost)
-PACKAGE_WEIGHT = 0
 
 # Rounding of the resulting shipping price (always rounding up)
 SHIPPING_ROUNDING = 0.1
@@ -81,17 +84,21 @@ ON_DEMAND_DELAY_MAX = 15
 CONFIRM_DELAY = 5
 PAYMENT_DELAY = 14
 
+# Footer for the order
+ORDER_FOOTER = 'Your company information here - multiline accepted'
+
 # Parameters for SEPA bank transfers
 SEPA_TRANSFER_RECIPIENT = 'Some name'
-SEPA_TRANSFER_RECIPIENT_ADDRESS = """Some address
-12345 Some City"""
 SEPA_TRANSFER_BIC = 'XXXXXXXX111'
 SEPA_TRANSFER_IBAN = 'XX11 1111 1111 1111 1111 1111 1111 1111 11'
 
 # Parameters for PayPlug
-PAYPLUG_API_KEY='sk_test_11111111111111111111111111111111'
+PAYPLUG_API_KEY = 'sk_test_11111111111111111111111111111111'
 
 # Parameters for sending emails
-MAIL_FROM="nobody@nowhere.com"
-SMTP_SERVER="localhost"
-
+# Really send mails ?
+SEND_MAILS = True
+# Sender address
+MAIL_FROM = "nobody@nowhere.com"
+# Mail server
+SMTP_SERVER = "localhost"

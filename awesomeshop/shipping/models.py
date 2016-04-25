@@ -17,146 +17,198 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
+import copy
 from decimal import Decimal
 
-from flask.ext.babel import lazy_gettext
 from mongoengine import signals
-import prices
+from prices import Price
 
 from .. import app, db, get_locale
 from ..mongo import TranslationsField
 
+
+class UnavailableCarrier(Exception):
+    pass
+
+
 class Country(db.Document):
-    code = db.StringField(required=True, max_length=10,
-                          verbose_name=lazy_gettext('Code'))
-    default_name = db.StringField(db_field='d_name', max_length=100,
-                                  verbose_name=lazy_gettext('Default name'))
-    name = TranslationsField(max_length=100)
+    code = db.StringField()
+    default_name = db.StringField(db_field='d_name')
+    name = TranslationsField()
+    # The "carriers" entry is automatically updated by update_mapping below
+    carriers = db.DictField()
 
     meta = {
         'ordering': ['code']
     }
 
-    def __unicode__(self):
-        return self.loc_name
-
-    @property
-    def loc_name(self):
-        return self.name.get(get_locale(), self.default_name)
-
     @property
     def prefixed_name(self):
-        return u'{} - {}'.format(self.code, self.loc_name)
+        return u'{} - {}'.format(
+                            self.code,
+                            self.name.get(get_locale(), self.default_name)
+                            )
+
+    def get_shipping_price(self, carrier, weight):
+        weights = self.carriers[unicode(carrier.id)]
+        for w in weights:
+            if w['weight'] > weight:
+                return result_carrier_cost(Decimal(w['cost']))
+        raise UnavailableCarrier
 
 
 class CountriesGroup(db.Document):
-    name = db.StringField(max_length=50, verbose_name=lazy_gettext('Name'))
+    name = db.StringField()
     countries = db.ListField(db.ReferenceField(
                         Country,
                         reverse_delete_rule=db.DENY,
-                        verbose_name=lazy_gettext('Countries')
                         ))
 
     meta = {
         'ordering': ['name']
     }
 
-    def __unicode__(self):
-        return self.name
 
-rounding = Decimal(str(app.config['SHIPPING_ROUNDING']))
-multiplier = Decimal(str(app.config['SHIPPING_MULTIPLIER']))
-preparation = Decimal(str(app.config['PACKAGE_PREPARATION_PRICE']))
-tax = 1 + Decimal(str(app.config['SHIPPING_TAX']))/100
-quantizer = Decimal('0.01')
+class CarrierCosts(db.EmbeddedDocument):
+    weight = db.IntField()
+    # costs maps countries or groups ids to costs
+    #
+    # {
+    #   '<country_or_group_id>': <price>,
+    #   '<country_or_group_id>': <price>,
+    #   'rest': <price>
+    # }
+    #
+    # 'rest' is a special placeholder meaning "the rest of the world"
+    costs = db.MapField(db.DecimalField())
+
+
 class Carrier(db.Document):
-    name = db.StringField(required=True, max_length=50,
-                          verbose_name=lazy_gettext('Name'))
-    description = TranslationsField(db_field='desc', max_length=100,
-                                    verbose_name=lazy_gettext('Description'))
+    name = db.StringField()
+    description = TranslationsField(db_field='desc')
     countries = db.ListField(db.ReferenceField(
                         Country,
                         reverse_delete_rule=db.DENY,
-                        verbose_name=lazy_gettext('Countries')
                         ))
     countries_groups = db.ListField(db.ReferenceField(
                                 CountriesGroup,
                                 reverse_delete_rule=db.DENY,
-                                verbose_name=lazy_gettext('Countries groups')
                                 ), db_field='cgroups')
-    weights = db.SortedListField(db.IntField(choices=None),
-                                 verbose_name=lazy_gettext('Weights'))
-    tracking_url = db.StringField(
-                        db_field='tr_url',
-                        max_length=250,
-                        verbose_name=lazy_gettext('Tracking URL (if any) - use "@" in place of the number')
-                        )
-    costs = db.DictField()
-
-    meta = {
-        'ordering': ['name']
-    }
+    tracking_url = db.StringField(db_field='tr_url')
+    costs = db.SortedListField(db.EmbeddedDocumentField(CarrierCosts),
+                               ordering='weight')
 
     @property
-    def loc_description(self):
-        return self.description.get(get_locale(), u'')
+    def full_description(self):
+        description = self.description.get(get_locale(), u'')
+        return '{} ({})'.format(description, self.name)
 
-    @property
-    def description_and_name(self):
-        return u'{} ({})'.format(self.loc_description, self.name)
 
-    def get_price(self, country_or_group, weight, which=None, exact=False):
-        """Get the price for the association of a country and a weight
+def remove_null_costs(sender, document, **kwargs):
+    costs = document.costs
+    for entry in costs:
+        if 'costs' in entry:
+            for objectid, cost in entry['costs'].items():
+                if cost is None:
+                    entry['costs'].pop(objectid)
+    document.costs = costs
 
-        country_or_group = "rest" for the rest of the world
 
-        which:
-        * 'purchasing' : the price we pay
-        * 'gross' : the gross price anounced to the customers
-        * 'net' : the net price paid by the customers
-        * None (default) : a dict with all three
-
-        exact: exact price (for dashboard), or the price immediately greater
-               (for shipping calculation)
-        """
-        c_or_g = self.costs.get(unicode(country_or_group))
-        if c_or_g:
-            # Get the price for the weight that is equal or
-            # immediately greater to the requested weight
-            for w in sorted([int(i) for i in c_or_g.keys()]):
-                if (exact and w == weight) or (not exact and w >= weight):
-                    purchasing = Decimal(c_or_g[str(w)])
-                    if which == 'purchasing':
-                        return purchasing.quantize(quantizer)
-                    net = (purchasing * multiplier + preparation) * tax
-                    how_many_roundings = net // rounding + 1
-                    net = rounding * how_many_roundings
-                    if which == 'net':
-                        return net.quantize(quantizer)
-                    gross = net / tax
-                    if which == 'gross':
-                        return gross.quantize(quantizer)
-                    return {
-                        'purchasing': purchasing.quantize(quantizer),
-                        'gross': gross.quantize(quantizer),
-                        'net': net.quantize(quantizer)
-                        }
-
-        return ''
-
-    @classmethod
-    def remove_orphan_costs(cls, sender, document, **kwargs):
-        countries = [ str(c.id) for c in document.countries ]
-        groups = [ str(g.id) for g in document.countries_groups ]
-        for cost in document.costs:
-            # First, remove all costs that do not have a corresponding country
-            # or a corresponding countries group anymore
-            if cost not in countries and cost not in groups and cost != 'rest':
-                document.costs.pop(cost)
-            # Then, remove costs for weights that do not exist anymore
+def update_mapping(sender, document, **kwargs):
+    # First, map countries IDs to carriers
+    countries_carriers_mapping = {}
+    rest = []
+    for data in document.costs:
+        weight = data['weight']
+        for country, cost in data['costs'].iteritems():
+            if country == 'rest':
+                countries = 'rest'
             else:
-                for w in document.costs[cost]:
-                    if int(w) not in document.weights:
-                        document.costs[cost].pop(w)
+                countries = []
+                try:
+                    countries = [Country.objects.get(id=country)]
+                except Country.DoesNotExist:
+                    try:
+                        countries = CountriesGroup.objects.get(
+                                                            id=country
+                                                            ).countries
+                    except:
+                        pass
+            result = {'weight': weight, 'cost': unicode(cost)}
+            if countries == 'rest':
+                rest.append(result)
+            else:
+                for c in countries:
+                    countries_carriers_mapping.setdefault(c, []).append(result)
 
-signals.pre_save.connect(Carrier.remove_orphan_costs, sender=Carrier)
+    docid = unicode(document.id)
+    for country in Country.objects:
+        costs = countries_carriers_mapping.get(country, rest)
+        country.carriers[docid] = costs
+        country.save()
+
+
+def delete_mapping(sender, document, **kwargs):
+    for country in Country.objects:
+        country.carriers.pop(unicode(document.id), None)
+        country.save()
+
+signals.pre_save.connect(remove_null_costs, sender=Carrier)
+signals.post_save.connect(update_mapping, sender=Carrier)
+signals.pre_delete.connect(delete_mapping, sender=Carrier)
+
+rounding = Decimal(unicode(app.config['SHIPPING_ROUNDING']))
+multiplier = Decimal(unicode(app.config['SHIPPING_MULTIPLIER']))
+preparation = Decimal(unicode(app.config['PACKAGE_PREPARATION_PRICE']))
+tax = 1 + Decimal(unicode(app.config['SHIPPING_TAX']))/100
+
+
+def result_carrier_cost(cost):
+    """
+    Add variable data to shipping costs
+
+    Uses the following data from the configuration:
+
+    * SHIPPING_MULTIPLIER: multiply the cost by this value before any other
+                           calculation
+    * PACKAGE_PREPARATION_PRICE: fixed price added to the shipping cost, no
+                                 detail given to the customer
+    * SHIPPING_ROUNDING: round the shipping price (always rounding up)
+    * SHIPPING_TAX: tax added to the shipping price
+
+    Returns a Price object
+    """
+    cost = Decimal(cost) * multiplier + preparation
+    how_many_roundings = cost // rounding + 1
+    cost = rounding * how_many_roundings
+    return Price(cost*tax, cost)
+
+
+def carriers_by_country_and_weight(country, weight):
+    """
+    Calculate and return all available carriers for a destination country and
+    a specific weight
+
+    The PACKAGE_WEIGHT configuration value will be added to the weight for
+    each calculation
+    """
+    try:
+        country = Country.objects.get(code=country)
+    except Country.DoesNotExist:
+        return []
+    weight += app.config['PACKAGE_WEIGHT']
+    resultcarriers = []
+    for carrier, costs in country.carriers.iteritems():
+        try:
+            carrierobj = Carrier.objects.get(id=carrier)
+        except Carrier.DoesNotExist:
+            continue
+        for cost in costs:
+            if cost['weight'] >= weight:
+                resultcarriers.append({
+                                'carrier': carrierobj,
+                                'cost': result_carrier_cost(cost['cost']).net
+                                })
+                break
+    resultcarriers.sort(key=lambda carrier: carrier['cost'])
+    return resultcarriers

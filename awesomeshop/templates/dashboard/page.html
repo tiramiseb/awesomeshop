@@ -1,4 +1,4 @@
-{#
+{#-
 Copyright 2015 Sébastien Maccagnoni-Munch
 
 This file is part of AwesomeShop.
@@ -16,87 +16,62 @@ details.
 You should have received a copy of the GNU Affero General Public License
 along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
-{% extends "dashboard/skeleton.html" %}
-
-{% block title %}{{ _('Dashboard') }} - {{ _('Page') }}{% endblock %}
-{% block content %}
-<h1>
-    {%- if page.slug %}
-    {{ page.slug }}
-    <a href="/{{ page.url }}" class="btn btn-primary btn-sm" target="_blank">
-        <i class="fa fa-search"></i>
-        {{ _('see in the shop') }}
-    </a>
-    {%- else %}
-    {{ _('New page') }}
-    {%- endif %}
-</h1>
-<form method="POST" action>
-    {{ form.hidden_tag() }}
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-xs-10">
-                    {{ forminput(form.slug) }}
-                </div>
-                <div class="col-xs-2">
-                    {{ forminput(form.in_menu) }}
-                </div>
+{% import "macros/form.html" as f %}
+<form name="form" ng-submit="submit()" novalidate>
+<h1>{{ _('Page:') }} [[ page.slug || "{{ _('(please set a slug)') }}" ]] <small>([[ page.pagetype ]])</small></h1>
+<div class="row">
+    <div class="col-sm-6 col-md-8">
+        {{ f.input_text(_('Slug'), 'slug', 'page.slug', 'required', _('Slug is mandatory')) }}
+    </div>
+    <div class="col-sm-6 col-md-4">
+        {{ f.checkbox_button(_('Display in menu'), _('Do not display'), 'in_menu', 'page.in_menu') }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6" ng-repeat="lang in langs">
+        <div class="panel panel-default">
+            <div class="panel-heading">[[ lang ]]</div>
+            <div class="panel-body">
+                {{ f.input_text(_('Title'), 'title_[[ lang ]]', 'page.title[lang]', suffix='<span class="input-group-btn"><button type="button" class="btn btn-primary" ng-click="slug_from(page.title[lang])">'|safe+_('&rarr; slug')+'</button></span>'|safe) }}
+                {{ f.textarea(_('Text'), 'text_[[ lang ]]', 'page.text[lang]') }}
             </div>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">{{ _('Translations') }}</div>
-        <div class="panel-body">
-            <div class="row">
-                {% for l in config.LANGS -%}
-                <div class="col-sm-6">
-                    {{ forminput(form.title.entries[l]) }}
-                    {{ forminput(form.text.entries[l], class='large-textarea') }}
-                </div>
-                {%- endfor %}
-            </div>
-        </div>
-    </div>
-    <div class="form-group text-right">
-        <div class="btn-group" role="group">
-            <button type="submit" class="btn btn-success">
-                <i class="fa fa-check"></i>
-                {{ _('Save') }}
-            </button>
-            <a href="{{ url_for('dashboard_pages', pagetype=pagetype) }}" class="btn btn-danger">
-                <i class="fa fa-undo"></i>
-                {{ _('Cancel') }}
-            </a>
-        </div>
-    </div>
-</form>
-{%- if page.id %}
-<div id="pictures" class="panel panel-default">
-    <div class="panel-heading">{{ _('Pictures') }}</div>
-    <div class="list-group">
-        {%- for photo in page.photos %}
-        <div class="list-group-item">
-        <img src="{{ photo.thumbnail_url }}">
-        <tt>.. image:: {{ photo.url }}</tt>
-        <a class="btn btn-danger" href="{{ url_for('dashboard_remove_page_photo', pagetype=page.pagetype, page_id=page.id, filename=photo.filename) }}">
-            <i class="fa fa-trash"></i>
-            {{ _('Remove') }}
-        </a>
-        </div>
-        {%- endfor %}
-        <div class="list-group-item">
-            <form class="form-inline" method="POST" action="{{ url_for('dashboard_add_page_photo', pagetype=page.pagetype, page_id=page.id) }}" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label class="sr-only" for="photo[]">Pictures</label>
-                    <input type="file" name="photo[]" multiple="multiple">
-                </div>
-                <button type="submit" class="btn btn-success">
-                    {{ _('Upload') }}
-                </button>
-            </form>
         </div>
     </div>
 </div>
-{%- endif %}
-{%- endblock %}
+<div id="pictures" class="panel panel-default">
+    <div class="panel-heading">{{ _('Pictures') }}</div>
+    <div class="list-group">
+        <div class="list-group-item" ng-repeat="photo in page.photos">
+            <div class="row">
+                <div class="col-xs-2">
+                    <img ng-src="[[ photo.thumbnail_url ]]">
+                </div>
+                <div class="col-xs-8">
+                    <tt>.. image:: [[ photo.url ]]</tt>
+                </div>
+                <div class="col-xs-2 text-right">
+                    <button type="button" class="btn btn-danger" ng-click="delete_photo(photo.filename, $index)">
+                        <i class="fa fa-trash"></i>
+                        {{ _('Remove') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="list-group-item">
+            <input type="file" nv-file-select uploader="uploader" ng-if="page.id">
+            <p ng-hide="page.id">{{ _('Please save the document before adding images') }}</p>
+        </div>
+    </div>
+</div>
+<div id="page-buttons">
+    <button type="submit" class="btn btn-link" uib-tooltip="{{ _('Save') }}" ng-disabled="form.$invalid">
+        <i class="fa fa-check-circle fa-4x text-success"></i>
+    </button>
+    <button type="button" class="btn btn-link" ng-click="delete()" uib-tooltip="{{ _('Remove') }}">
+        <i class="fa fa-times-circle fa-4x text-danger"></i>
+    </button>
+    <a class="btn btn-link" ng-click="$state.go(page.pagetype+'s')" uib-tooltip="{{ _('Back') }}">
+        <i class="fa fa-arrow-circle-left fa-4x" ng-class="{'text-primary': form.$pristine, 'text-danger': form.$dirty }"></i>
+    </a>
+</div>
+</form>

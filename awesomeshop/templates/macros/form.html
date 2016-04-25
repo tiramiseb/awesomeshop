@@ -1,0 +1,75 @@
+{#-
+Copyright 2015 Sébastien Maccagnoni-Munch
+
+This file is part of AwesomeShop.
+
+AwesomeShop is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+details.
+
+You should have received a copy of the GNU Affero General Public License
+along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+#}
+
+{%- macro _generic(field, label, name, errormessage) %}
+<div class="form-group" ng-class="{ 'has-error' : form.{{ name }}.$invalid && !form.{{ name }}.$pristine }">
+    <label for="{{ name }}">{{ label }}</label>
+    {{ field|safe }}
+    {%- if errormessage %}
+    <p ng-show="form.{{ name }}.$invalid" class="text-danger">
+        {{ errormessage }}
+    </p>
+    {%- endif %}
+</div>
+{%- endmacro %}
+
+{%- macro _input_generic(type, label, name, ngmodel, options, errormessage, suffix) %}
+{%- if suffix %}
+    {%- if suffix[0] == '<' %}
+        {%- set content='<div class="input-group"><input type="%s" id="%s" name="%s" class="form-control" ng-model="%s" %s>%s</div>'|format(type, name, name, ngmodel, options, suffix) %}
+    {%- else %}
+        {%- set content='<div class="input-group"><input type="%s" id="%s" name="%s" class="form-control" ng-model="%s" %s><span class="input-group-addon">%s</span></div>'|format(type, name, name, ngmodel, options, suffix) %}
+        {%- endif %}
+{%- else %}
+    {%- set content='<input type="%s" id="%s" name="%s" class="form-control" ng-model="%s" %s>'|format(type, name, name, ngmodel, options) %}
+{%- endif %}
+{{ _generic(content, label, name, errormessage) }}
+{%- endmacro %}
+
+{%- macro input_email(label, name, ngmodel, options, errormessage, suffix) %}
+{{ _input_generic('email', label, name, ngmodel, options, errormessage, suffix) }}
+{%- endmacro %}
+
+{%- macro input_password(label, name, ngmodel, options, errormessage, suffix) %}
+{{ _input_generic('password', label, name, ngmodel, options, errormessage, suffix) }}
+{%- endmacro %}
+
+{%- macro input_text(label, name, ngmodel, options, errormessage, suffix) %}
+{{ _input_generic('text', label, name, ngmodel, options, errormessage, suffix) }}
+{%- endmacro %}
+
+{%- macro textarea(label, name, ngmodel, options, errormessage, small=False) %}
+{%- if small %}
+{{ _generic('<textarea id="%s" name="%s" class="form-control small-textarea" ng-model="%s" %s></textarea>'|format(name, name, ngmodel, options), label, name, errormessage) }}
+{%- else %}
+{{ _generic('<textarea id="%s" name="%s" class="form-control" ng-model="%s" %s></textarea>'|format(name, name, ngmodel, options), label, name, errormessage) }}
+{%- endif %}
+{%- endmacro %}
+
+{%- macro typeahead(label, name, ngmodel, listname, fieldname, options='', errormessage='') %}
+{{ _input_generic('text', label, name, 'displayable'+listname, 'uib-typeahead="'+name+' as '+name+'.'+fieldname+' for '+name+' in '+listname+' | filter:{'+fieldname+':$viewValue}" typeahead-editable="false" typeahead-min-length="0" typeahead-on-select="'+ngmodel+'=$item.id" '+options, errormessage) }}
+{%- endmacro %}
+
+{%- macro select(label, name, ngmodel, ngoptions, options='', errormessage='') %}
+{{ _generic('<select id="%s" name="%s" class="form-control" ng-model="%s" ng-options="%s" %s></select>'|format(name, name, ngmodel, ngoptions, options), label, name, errormessage) }}
+{%- endmacro %}
+
+{%- macro checkbox_button(labelyes, labelno, name, ngmodel) %}
+{{ _generic('<button type="button" class="btn form-control" ng-class="{\'btn-success\': %s, \'btn-danger\': !%s}" ng-model="%s" uib-btn-checkbox><span ng-show="%s">%s</span><span ng-hide="%s">%s</span></button>'|format(ngmodel, ngmodel, ngmodel, ngmodel, labelyes, ngmodel, labelno), labelyes, name) }}
+{%- endmacro %}

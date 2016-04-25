@@ -18,13 +18,14 @@
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 import itertools
-from flask.ext.mongoengine.wtf.orm import converts, ModelConverter, \
-                                          model_form as orig_model_form
+from flask_mongoengine.wtf.orm import converts, ModelConverter, \
+                                      model_form as orig_model_form
 from mongoengine.fields import DictField, StringField
 from wtforms import fields as f
 from wtforms.utils import unset_value
 
 from . import app
+
 
 class TranslationsList(f.Field):
     """Inspired by FieldList"""
@@ -34,7 +35,7 @@ class TranslationsList(f.Field):
         super(TranslationsList, self).__init__(label, validators,
                                                default=default, **kwargs)
         self.unbound_field = unbound_field
-        self._prefix = kwargs.get('_prefix', '')
+        self._prefix = kwargs.get('_prefix', u'')
 
     def process(self, formdata, data=unset_value):
         self.entries = {}
@@ -50,7 +51,7 @@ class TranslationsList(f.Field):
                 self._add_entry(formdata, obj_data)
         # Finally, if a translation does not exist, add it in the form
         for lang in app.config['LANGS']:
-            if not lang in self.entries:
+            if lang not in self.entries:
                 self._add_entry(formdata, (lang, None))
 
     def validate(self, form, extra_validators=tuple()):
@@ -88,9 +89,9 @@ class TranslationsList(f.Field):
 
 class TranslationsField(DictField):
     """Inspired by MapField
-    
+
     Use it to define translations for a string in AwesomeShop
-    
+
     (database field)"""
     def __init__(self, max_length=None, **kwargs):
         super(TranslationsField, self).__init__(
@@ -110,8 +111,8 @@ class AwesomeShopConverter(ModelConverter):
             unbound_field = f.TextAreaField(**field_args)
         return TranslationsList(unbound_field, **kwargs)
 
-    # Exactly the same as the original one, but there, the correct model_form
-    # will be used, with conv_Translations
+    # Exactly the same as the original one, but if it is defined there,
+    # the correct model_form will be used, with conv_Translations
     @converts('EmbeddedDocumentField')
     def conv_EmbeddedDocument(self, model, field, kwargs):
         kwargs = {

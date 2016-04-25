@@ -17,20 +17,13 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
-from flask.ext.babel import lazy_gettext
-
 from ... import db
 
 
-
 class Tax(db.Document):
-    name = db.StringField(required=True, max_length=100,
-                          verbose_name=lazy_gettext('Name'))
-    rate = db.DecimalField(verbose_name=lazy_gettext('Rate'), default=0)
+    name = db.StringField()
+    rate = db.DecimalField()
 
     meta = {
         'ordering': ['name']
     }
-
-    def __unicode__(self):
-        return self.name

@@ -18,23 +18,22 @@
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 import docutils.core
-from flask.ext.babel import lazy_gettext
 from mongoengine import signals
+from mongoengine.connection import get_db
 
 from .. import db, get_locale
-from ..helpers import slugify_slug
 from ..mongo import TranslationsField
 from ..photo import Photo
 
+counters = get_db()['mongoengine.counters']
+
 
 class Page(db.Document):
-    pagetype = db.StringField(db_field='type', max_length=10)
-    rank = db.SequenceField(required=True, verbose_name=lazy_gettext('Rank'))
-    slug = db.StringField(max_length=100, required=True,
-                          verbose_name=lazy_gettext('Slug'))
-    in_menu = db.BooleanField(db_field='menu', default=False,
-                              verbose_name=lazy_gettext('Display in menu'))
-    title = TranslationsField(max_length=100)
+    pagetype = db.StringField(db_field='type')
+    rank = db.SequenceField()
+    slug = db.StringField(unique_with='pagetype')
+    in_menu = db.BooleanField(db_field='menu')
+    title = TranslationsField()
     text = TranslationsField()
     photos = db.EmbeddedDocumentListField(Photo)
 
@@ -42,54 +41,70 @@ class Page(db.Document):
         'ordering': ['rank']
     }
 
+    def move_up(self, up_to=None):
+        """up_to must be the object which has been initially moved"""
+        rank = self.rank + 1
+        try:
+            nextdoc = Page.objects.get(rank=rank)
+        except Page.DoesNotExist:
+            # There is no next doc
+            # * either because the end of the list is reached
+            last_count = counters.find_one({'_id': 'page.rank'})['next']
+            if rank > last_count:
+                counters.find_one_and_update({'_id': 'page.rank'},
+                                             {'$set': {'next': rank}})
+            # * or because there is a hole in the list (perfect,
+            #                                           no change elsewere)
+        else:
+            if nextdoc != up_to:
+                nextdoc.move_up(up_to)
+        self.rank = rank
+        self.save()
+
+    def move_before(self, target):
+        rank = target.rank
+        target.move_up(up_to=self)
+        self.rank = rank
+        self.save()
+
+    def move_to_end(self):
+        rank = counters.find_one({'_id': 'page.rank'})['next'] + 1
+        counters.find_one_and_update({'_id': 'page.rank'},
+                                     {'$set': {'next': rank}})
+        self.rank = rank
+        self.save()
+
     @property
-    def loc_title(self):
-        return self.title.get(get_locale(), u'')
-
-    def move(self, direction):
-        if direction == 'down':
-            target = Page.objects(
-                        pagetype=self.pagetype,
-                        rank__gt=self.rank
-                        ).first()
-        elif direction == 'up':
-            target = Page.objects(
-                        pagetype=self.pagetype,
-                        rank__lt=self.rank
-                        ).first()
-        if target:
-            refrank = self.rank
-            self.rank = target.rank
-            target.rank = refrank
-            self.save()
-            target.save()
-
-    @property
-    def loc_text(self):
-        return self.text.get(get_locale(), u'')
-
-    def get_text(self, initial_header_level=2):
+    def content(self):
+        """Return the formatted content of the page"""
         parts = docutils.core.publish_parts(
-                    source=self.loc_text,
-                    settings_overrides = {
-                        'initial_header_level': initial_header_level
+                    source=self.text.get(get_locale(), u''),
+                    settings_overrides={
+                        'initial_header_level': 2
                         },
                     writer_name='html')
         return parts['body']
 
     @property
     def products(self):
-        from ..shop.models import BaseProduct
-        return BaseProduct.objects(documentation=self)
+        """Return a list of products using this documentation"""
+        from ..shop.models.product import Product
+        return Product.objects(documentation=self)
 
     @property
-    def url(self):
-        return '{}/{}'.format(self.pagetype, self.slug)
+    def on_sale_products(self):
+        from ..shop.models.product import Product
+        return Product.objects(documentation=self, on_sale=True)
 
-    @classmethod
-    def remove_photos_from_disk(cls, sender, document, **kwargs):
-        for p in document.photos:
-            p.delete_files()
 
-signals.pre_save.connect(slugify_slug, sender=Page)
-signals.pre_delete.connect(Page.remove_photos_from_disk, sender=Page)
+def update_search(sender, document, **kwargs):
+    from ..search import index_doc
+    index_doc(document)
+
+
+def delete_search(sender, document, **kwargs):
+    from ..search import delete_doc
+    delete_doc(document)
+
+signals.post_save.connect(update_search, sender=Page)
+signals.pre_delete.connect(delete_search, sender=Page)

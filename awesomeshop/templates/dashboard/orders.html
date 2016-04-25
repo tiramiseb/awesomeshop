@@ -1,4 +1,4 @@
-{#
+{#-
 Copyright 2015 Sébastien Maccagnoni-Munch
 
 This file is part of AwesomeShop.
@@ -16,50 +16,24 @@ details.
 You should have received a copy of the GNU Affero General Public License
 along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
-{% extends "dashboard/skeleton.html" %}
-
-{% block title %}{{ _('Dashboard') }} - {{ _('Orders') }}{% endblock %}
-{% block content %}
 <h1>{{ _('Orders') }}</h1>
-<table class="table table-hover">
-    <tr>
-        <th>{{ _('Number') }}</th>
-        <th>{{ _('Status') }}</th>
-        <th>{{ _('Customer') }}</th>
-        <th>{{ _('Date') }}</th>
-        <th>{{ _('Gross') }}</th>
-        <th>{{ _('Net') }}</th>
-        <th></th>
-    </tr>
-    {%- for order in orders %}
-    <tr>
-        <td class="pointer" onclick="document.location='{{ url_for('dashboard_order', order_number=order.number) }}'">
-            {%- if order.invoice_number %}
-            {{ order.full_invoice_number }} ({{ order.full_number }})
-            {%- else %}
-            {{ order.full_number }}
-            {%- endif %}
-        </td>
-        <td class="pointer" onclick="document.location='{{ url_for('dashboard_order', order_number=order.number) }}'">
-            {{ order.human_status|safe }}
-        </td>
-        <td class="pointer" onclick="document.location='{{ url_for('dashboard_order', order_number=order.number) }}'">
-            {%- if order.customer.email %}
-            {{ order.customer }}
-            {%- else -%}
-            {{ _('Deleted user') }}
-            {%- endif %}
-        </td>
-        <td class="pointer" onclick="document.location='{{ url_for('dashboard_order', order_number=order.number) }}'">
-            {{ order.formated_date }}
-        </td>
-        <td class="pointer" onclick="document.location='{{ url_for('dashboard_order', order_number=order.number) }}'">
-            {{ order.gross_total }}
-        </td>
-        <td class="pointer" onclick="document.location='{{ url_for('dashboard_order', order_number=order.number) }}'">
-            {{ order.net_total }}
-        </td>
-    </tr>
-    {%- endfor %}
-</table>
-{% endblock %}
+<div class="list-group" id="categories-list">
+    <input class="list-group-item" type="text" ng-model="query" placeholder="{{ _('Filter') }}">
+    <a class="list-group-item" ng-repeat="order in orders | filter:query" ui-sref="order({number:order.number})">
+        <div class="row">
+            <div class="col-xs-6 col-md-3">
+                [[ order.full_number ]]
+                ([[ order.date | date ]])
+            </div>
+            <div class="col-xs-6 col-md-3">
+                [[ order.customer ]]
+            </div>
+            <div class="col-xs-6 col-md-4 text-[[ order.status_color ]]">
+                [[ order.human_status ]]
+            </div>
+            <div class="col-xs-6 col-md-2 text-right">
+                [[ order.net_total ]]
+            </div>
+        </div>
+    </a>
+</div>

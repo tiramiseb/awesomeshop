@@ -1,0 +1,45 @@
+{#-
+Copyright 2016 Sébastien Maccagnoni-Munch
+
+This file is part of AwesomeShop.
+
+AwesomeShop is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+details.
+
+You should have received a copy of the GNU Affero General Public License
+along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+#}
+{% import "macros/form.html" as f %}
+<form name="form" novalidate ng-submit="save()">
+<div class="modal-header">
+    <h3 class="modal-title">{{ _('Address') }}</h3>
+</div>
+<div class="modal-body">
+    {{ f.input_text(_('Address title'), 'address_title', 'address.title', 'required', _('Title is mandatory')) }}
+    <div class="row">
+        <div class="col-xs-6">
+            {{ f.input_text(_('First name'), 'address_firstname', 'address.firstname') }}
+        </div>
+        <div class="col-xs-6">
+            {{ f.input_text(_('Last name'), 'address_lastname', 'address.lastname', 'required', _('Last name is mandatory')) }}
+        </div>
+    </div>
+    {{ f.textarea(_('Address'), 'address_address', 'address.address', 'required', _('Address is mandatory'), small=True) }}
+    {{ f.select(_('Country'), 'address_country', 'address.country', 'country.code as prefixed(country) for country in countries.get()', 'required', _('Country is mandatory')) }}
+    {{ f.input_text(_('Phone'), 'address_phone', 'address.phone') }}
+</div>
+<div class="modal-footer">
+    <button type="submit" class="btn btn-success" ng-disabled="form.$invalid">
+        <i class="fa fa-check"></i>
+        <span ng-show="modify">{{ _('Modify this address') }}</span>
+        <span ng-hide="modify">{{ _('Add this address') }}</span>
+    </button>
+</div>
+</form>
