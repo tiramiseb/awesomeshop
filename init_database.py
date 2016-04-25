@@ -29,7 +29,10 @@ from awesomeshop.auth.models import Address, User
 from awesomeshop.page.models import Page
 from awesomeshop.shipping import init as shipping_init
 from awesomeshop.shipping.models import Country, CountriesGroup, Carrier
-from awesomeshop.shop.models import Tax, Category, Product, Url, Order
+from awesomeshop.shop.models.category import Category
+from awesomeshop.shop.models.order import Order
+from awesomeshop.shop.models.product import Product
+from awesomeshop.shop.models.tax import Tax
 
 sure = raw_input('WARNING! THE DATABASE WILL BE EMPTIED! ARE YOU SURE [yn]? ')
 
@@ -42,7 +45,6 @@ User.drop_collection()
 Carrier.drop_collection()
 CountriesGroup.drop_collection()
 Country.drop_collection()
-Url.drop_collection()
 Product.drop_collection()
 Category.drop_collection()
 Tax.drop_collection()
