@@ -76,7 +76,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                         <button type="button" class="list-group-item" ng-repeat="prod in filtered_products() | filter:query" ng-click="add_prod(prod.id)">
                             <i class="fa fa-arrow-left"></i>
                             &nbsp;&nbsp;
-                            [[ prod.name ]]
+                            [[ prod.name || prod.slug ]]
                         </button>
                     </div>
                 </div>
