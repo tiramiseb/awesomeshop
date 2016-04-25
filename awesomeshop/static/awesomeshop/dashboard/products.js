@@ -79,7 +79,7 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
         if ($scope.products) {
             for (i=0; i<$scope.products.length; i++) {
                 if ($scope.products[i].id == prodid) {
-                    return $scope.products[i].name;
+                    return $scope.products[i].name || $scope.products[i].slug;
                 }
             }
         }
