@@ -79,7 +79,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-6 col-sm-7 col-md-8 col-lg-6" ng-show="saved_cart">
+        <div class="col-xs-6 col-sm-7 col-md-8 col-lg-6" ng-show="user.get().auth && saved_cart">
             <div class="btn-group">
                 <a ui-sref="saved_carts" class="btn btn-primary">
                     <i class="fa fa-bookmark"></i>
@@ -87,32 +87,41 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 </a>
                 <button type="button" class="btn btn-warning" uib-tooltip="{{ _('Remove all products') }}" ng-click="cart.reset()">
                     <i class="fa fa-trash"></i>
-                    <span class="hidden-xs hidden-sm">{{ _('Empty cart') }}</span>
+                    <span class="hidden-xs hidden-sm hidden-md">{{ _('Empty cart') }}</span>
                 </button>
             </div>
         </div>
-        <div class="col-xs-6 col-sm-7 col-md-8 col-lg-6" ng-hide="saved_cart">
+        <div class="col-sm-5 col-md-6" ng-hide="!user.get().auth || saved_cart">
             <form name="form" novalidate>
                 <div class="input-group">
                     <input type="text" class="form-control" ng-model="cartname" placeholder="{{ _('Cart name') }}" required>
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-primary" uib-tooltip="{{ _('Save this cart for a later use') }}" ng-click="save()" ng-disabled="form.$invalid">
                             <i class="fa fa-bookmark"></i>
-                            <span class="hidden-xs">{{ _('Save') }}</span>
+                            <span class="hidden-xs hidden-sm">{{ _('Save') }}</span>
                         </button>
                         <button type="button" class="btn btn-danger" uib-tooltip="{{ _('Remove all products') }}" ng-click="cart.reset()">
                             <i class="fa fa-trash"></i>
-                            <span class="hidden-xs hidden-sm">{{ _('Empty cart') }}</span>
+                            <span class="hidden-xs hidden-sm hidden-md">{{ _('Empty cart') }}</span>
                         </button>
                     </span>
                 </div>
             </form>
         </div>
-        <div class="col-xs-6 col-sm-5 col-md-4 col-lg-6">
-            <a ui-sref="checkout" class="btn btn-lg btn-success pull-right">
+        <div class="col-sm-7 col-md-6 bottom-space text-right" ng-class="{'col-sm-offset-5': !user.get().auth, 'col-md-offset-6': !user.get().auth}">
+            <a ng-show="user.get().auth" ui-sref="checkout" class="btn btn-lg btn-success">
                 {{ _('Proceed to checkout') }}
                 <i class="fa fa-chevron-right"></i>
             </a>
+            <p ng-show="!user.get().auth">{{ _('You need to log in to validate your order...') }}</p>
+            <div class="btn-group" ng-show="!user.get().auth">
+                <button type="button" class="btn btn-success" ng-click="user.forcelogin()">
+                    <i class="fa fa-sign-in"></i> {{ _('Login') }}
+                </button>
+                <a class="btn btn-warning" ui-sref="register">
+                    <i class="fa fa-user-plus"></i> {{ _('Register') }}
+                </a>
+            </div>
         </div>
     </div>
 </form>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-04-22 07:41+0200\n"
+"POT-Creation-Date: 2016-04-25 13:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -285,12 +285,12 @@ msgid "cancelled"
 msgstr ""
 
 #: awesomeshop/templates/dashboard.html:50
-#: awesomeshop/templates/dashboard.html:60 awesomeshop/templates/shop.html:62
+#: awesomeshop/templates/dashboard.html:64 awesomeshop/templates/shop.html:62
 #: awesomeshop/templates/dashboard/index.html:19
 msgid "Dashboard"
 msgstr ""
 
-#: awesomeshop/templates/dashboard.html:64
+#: awesomeshop/templates/dashboard.html:61
 msgid "See the shop"
 msgstr ""
 
@@ -350,10 +350,12 @@ msgid "Logout"
 msgstr ""
 
 #: awesomeshop/templates/shop.html:75 awesomeshop/templates/shop.html:172
+#: awesomeshop/templates/shop/cart.html:119
 msgid "Login"
 msgstr ""
 
 #: awesomeshop/templates/shop.html:76 awesomeshop/templates/shop.html:175
+#: awesomeshop/templates/shop/cart.html:122
 msgid "Register"
 msgstr ""
 
@@ -1264,7 +1266,11 @@ msgstr ""
 msgid "Proceed to checkout"
 msgstr ""
 
-#: awesomeshop/templates/shop/cart.html:119
+#: awesomeshop/templates/shop/cart.html:116
+msgid "You need to log in to validate your order..."
+msgstr ""
+
+#: awesomeshop/templates/shop/cart.html:128
 #: awesomeshop/templates/shop/checkout.html:244
 msgid "Your cart is empty!"
 msgstr ""

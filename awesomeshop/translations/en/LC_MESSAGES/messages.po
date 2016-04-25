@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  N/A\n"
 "Report-Msgid-Bugs-To: sebastien@maccagnoni.eu\n"
-"POT-Creation-Date: 2016-04-22 07:41+0200\n"
+"POT-Creation-Date: 2016-04-25 13:20+0200\n"
 "PO-Revision-Date: 2016-04-22 06:55+0200\n"
 "Last-Translator: Sebastien Maccagnoni <sebastien@maccagnoni.eu>\n"
 "Language: en\n"
@@ -288,12 +288,12 @@ msgid "cancelled"
 msgstr "cancelled"
 
 #: awesomeshop/templates/dashboard.html:50
-#: awesomeshop/templates/dashboard.html:60 awesomeshop/templates/shop.html:62
+#: awesomeshop/templates/dashboard.html:64 awesomeshop/templates/shop.html:62
 #: awesomeshop/templates/dashboard/index.html:19
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: awesomeshop/templates/dashboard.html:64
+#: awesomeshop/templates/dashboard.html:61
 msgid "See the shop"
 msgstr "See the shop"
 
@@ -353,10 +353,12 @@ msgid "Logout"
 msgstr "Logout"
 
 #: awesomeshop/templates/shop.html:75 awesomeshop/templates/shop.html:172
+#: awesomeshop/templates/shop/cart.html:119
 msgid "Login"
 msgstr "Login"
 
 #: awesomeshop/templates/shop.html:76 awesomeshop/templates/shop.html:175
+#: awesomeshop/templates/shop/cart.html:122
 msgid "Register"
 msgstr "Register"
 
@@ -920,9 +922,8 @@ msgstr "Rate"
 
 #: awesomeshop/templates/dashboard/taxrates.html:37
 #: awesomeshop/templates/dashboard/taxrates.html:72
-#, fuzzy
 msgid "Rate is mandatory"
-msgstr "Tax rate is mandatory"
+msgstr "Rate is mandatory"
 
 #: awesomeshop/templates/dashboard/taxrates.html:51
 msgid "Delete"
@@ -1277,7 +1278,11 @@ msgstr "Save this cart for a later use"
 msgid "Proceed to checkout"
 msgstr "Proceed to checkout"
 
-#: awesomeshop/templates/shop/cart.html:119
+#: awesomeshop/templates/shop/cart.html:116
+msgid "You need to log in to validate your order..."
+msgstr "You need to log in to validate your order..."
+
+#: awesomeshop/templates/shop/cart.html:128
 #: awesomeshop/templates/shop/checkout.html:244
 msgid "Your cart is empty!"
 msgstr "Your cart is empty!"
