@@ -62,6 +62,7 @@ class BaseProductSchemaForAdminList(BaseProductSchemaForList):
 
 class BaseProductSchemaForEdition(Schema):
     id = fields.String(allow_none=True)
+    type = fields.String(dump_only=True)
     slug = fields.String(required=True)
     reference = fields.String(required=True)
     name = fields.Dict(default={})
