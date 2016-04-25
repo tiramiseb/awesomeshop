@@ -256,7 +256,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
         var countrieslist = countries.get();
         for (i=0; i<countrieslist.length; i++) {
             if (countrieslist[i].code == code) {
-                return code + ' - ' + countrieslist.name;
+                return code + ' - ' + countrieslist[i].name;
             };
         };
         return code;
