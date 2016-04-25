@@ -158,7 +158,8 @@ angular.module('shopShop', ['bootstrapLightbox'])
 .controller('CartButtonCtrl', function($scope, cart) {
     $scope.cart = cart;
 })
-.controller('CartCtrl', function($http, $scope, cart, savedCarts) {
+.controller('CartCtrl', function($http, $scope, cart, savedCarts, user) {
+    $scope.user = user;
     $scope.cart = cart;
     $scope.save = function() {
         var data = {
