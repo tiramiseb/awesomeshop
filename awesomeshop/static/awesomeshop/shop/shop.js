@@ -254,9 +254,11 @@ angular.module('shopShop', ['bootstrapLightbox'])
     };
     function code_to_country(code) {
         var countrieslist = countries.get();
-        for (i=0; i<countrieslist.length; i++) {
-            if (countrieslist[i].code == code) {
-                return code + ' - ' + countrieslist[i].name;
+        if (countrieslist) {
+            for (i=0; i<countrieslist.length; i++) {
+                if (countrieslist[i].code == code) {
+                    return code + ' - ' + countrieslist[i].name;
+                };
             };
         };
         return code;
