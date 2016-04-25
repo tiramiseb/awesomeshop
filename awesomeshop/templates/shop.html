@@ -206,13 +206,13 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <p class="navbar-text navbar-right lead">
             <b>{{ _('Follow us...') }}</b>
             {%- if config.FACEBOOK_ACCOUNT %}
-            <a href="https://www.facebook.com/{{ config.FACEBOOK_ACCOUNT }}"><i class="fa fa-facebook-square"></i></a>
+            <a href="https://www.facebook.com/{{ config.FACEBOOK_ACCOUNT }}" target="_blank"><i class="fa fa-facebook-square"></i></a>
             {%- endif %}
             {%- if config.TWITTER_ACCOUNT %}
-            <a href="https://www.twitter.com/{{ config.TWITTER_ACCOUNT }}"><i class="fa fa-twitter-square"></i></a>
+            <a href="https://www.twitter.com/{{ config.TWITTER_ACCOUNT }}" target="_blank"><i class="fa fa-twitter-square"></i></a>
             {%- endif %}
             {%- if config.BLOG_URL %}
-            <a href="{{ config.BLOG_URL }}"><i class="fa fa-rss-square"></i></a>
+            <a href="{{ config.BLOG_URL }}" target="_blank"><i class="fa fa-rss-square"></i></a>
             {%- endif %}
         </p>
   </div>
