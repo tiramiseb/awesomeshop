@@ -94,7 +94,8 @@ def payplug_cancel(order_number):
                                      customer=current_user.to_dbref())
     order.payment_data = None
     order.save()
-    return render_front('payment/payplug_cancel.html', order=order)
+    return redirect(os.path.join(request.url_root, 'orders',
+                                 unicode(order_number)))
 
 
 @app.route('/payplug/ipn/<order_number>', methods=['POST'])
