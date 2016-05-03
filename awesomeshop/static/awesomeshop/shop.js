@@ -230,24 +230,20 @@ angular.module('awesomeshop', [
     };
     return {
         add: function(product, quantity) {
-            $http.get('/api/product/'+product.id)
-                .then(function(response) {
-                    var found = false;
-                    for (var i=0; i<$localStorage.cart.length; i++) {
-                        if ($localStorage.cart[i].product.id == product.id) {
-                            $localStorage.cart[i].product = response.data;
-                            $localStorage.cart[i].quantity += quantity;
-                            found = true;
-                            break;
-                        }
-                    };
-                    if (!found) {
-                        $localStorage.cart.push({
-                            'product': response.data,
-                            'quantity': quantity
-                        })
-                    };
-                });
+            var found = false;
+            for (var i=0; i<$localStorage.cart.length; i++) {
+                if ($localStorage.cart[i].product.id == product.id) {
+                    $localStorage.cart[i].quantity += quantity;
+                    found = true;
+                    break;
+                }
+            };
+            if (!found) {
+                $localStorage.cart.push({
+                    'product': product,
+                    'quantity': quantity
+                })
+            };
         },
         remove: function(product) {
             var index = -1;
@@ -277,7 +273,8 @@ angular.module('awesomeshop', [
                 var stock = product.stock;
                 for (var i=0; i<$localStorage.cart.length; i++) {
                     if ($localStorage.cart[i].product.id == product.id) {
-                        stock = stock - $localStorage.cart[i].quantity;
+                        stock = Math.max(0, stock - $localStorage.cart[i].quantity);
+                        break;
                     };
                 };
                 return stock;
@@ -299,7 +296,8 @@ angular.module('awesomeshop', [
             for (var i=0; i<$localStorage.cart.length; i++) {
                 if (!$localStorage.cart[i].quantity) {
                     $localStorage.cart[i].quantity = 1;
-                } else if ($localStorage.cart[i].quantity > $localStorage.cart[i].product.stock && !$localStorage.cart[i].product.on_demand) {
+                } else if ($localStorage.cart[i].quantity > $localStorage.cart[i].product.stock && $localStorage.cart[i].product.overstock_delay == -1) {
+                    // Reduce quantity to stock if overstock is not allowed
                     $localStorage.cart[i].quantity = $localStorage.cart[i].product.stock;
                 };
                 count += $localStorage.cart[i].quantity;
@@ -327,8 +325,8 @@ angular.module('awesomeshop', [
             var in_stock = true;
             for (var i=0; i<$localStorage.cart.length; i++) {
                 if ($localStorage.cart[i].product.stock < $localStorage.cart[i].quantity) {
-                    // If the stock is not sufficient for a single "not on
-                    // demand" product, the whole cart is marked as "not in
+                    // If the stock is not sufficient for a single "not
+                    // overstock" product, the whole cart is marked as "not in
                     // stock"
                     in_stock = false;
                     break;
@@ -336,25 +334,21 @@ angular.module('awesomeshop', [
             };
             return in_stock;
         },
-        on_demand: function() {
-            var not_on_demand_in_stock = true,
-                on_demand_not_in_stock = false;
+        delay: function() {
+            var delay = 0;
             for (var i=0; i<$localStorage.cart.length; i++) {
-                if ($localStorage.cart[i].product.stock < $localStorage.cart[i].quantity) {
-                    if ($localStorage.cart[i].product.on_demand) {
-                        // If the stock is not sufficient for a single "on
-                        // demand" product, the whole car may be marked as "on
-                        // demand".
-                        on_demand_not_in_stock = true;
+                var product = $localStorage.cart[i].product;
+                if (product.stock < $localStorage.cart[i].quantity) {
+                    if (product.delay == -1) {
+                        delay = -1;
                     } else {
-                        // If the stock is not sufficient for a single "not on
-                        // demand" product, the whole cart is marked as "not on
-                        // demand" because it cannot be shipped.
-                        not_on_demand_in_stock = false;
+                        delay = Math.max(product.overstock_delay, delay);
                     }
+                } else {
+                    delay = Math.max(product.delay, delay);
                 };
             };
-            return (on_demand_not_in_stock && not_on_demand_in_stock);
+            return delay;
         }
     }
 })

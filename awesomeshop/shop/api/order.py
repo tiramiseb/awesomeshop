@@ -55,7 +55,7 @@ class OrderProductSchema(Schema):
     quantity = fields.Integer()
     product = fields.Nested(BaseProductSchemaForList)
     name = fields.String()
-    on_demand = fields.Boolean()
+    delay = fields.Integer()
     data = fields.Raw()
 
 
@@ -126,9 +126,7 @@ class OrderSchema(Schema):
     shipping_date = fields.Date(dump_only=True)
     tracking = fields.Boolean(dump_only=True)
     tracking_url = fields.String(dump_only=True)
-    on_demand = fields.Boolean(dump_only=True)
-    on_demand_delay_min = fields.Integer(dump_only=True)
-    on_demand_delay_max = fields.Integer(dump_only=True)
+    delay = fields.Integer(dump_only=True)
 
     @post_load
     def make_order(self, data):
@@ -153,7 +151,7 @@ class OrderSchema(Schema):
         products = []
         subtotal = Price(0)
         total_weight = 0
-        global_on_demand = False
+        global_delay = 0
         for productdata in data.get('cart', []):
             productobj = BaseProduct.objects.get(
                                 id=productdata['product']['id']
@@ -165,16 +163,15 @@ class OrderSchema(Schema):
                 data=None
                 )
             product.set_quantity(productdata['quantity'])
-            global_on_demand = global_on_demand or product.on_demand
-            quantity = product.quantity
-            product.set_gross_price(productobj.gross_price)
-            product.set_net_price(productobj.net_price)
-            line_gross_price = productobj.gross_price * quantity
-            line_net_price = productobj.net_price * quantity
-            product.set_line_gross_price(line_gross_price)
-            product.set_line_net_price(line_net_price)
-            subtotal += Price(line_net_price, line_gross_price)
-            total_weight += productobj.weight
+            global_delay = max(global_delay, product.delay)
+            price = productobj.get_price_per_item()
+            product.set_gross_price(price.gross)
+            product.set_net_price(price.net)
+            line_price = price * product.quantity
+            product.set_line_gross_price(line_price.gross)
+            product.set_line_net_price(line_price.net)
+            subtotal += line_price
+            total_weight += productobj.get_weight()
             products.append(product)
         order.products = products
         order.set_subtotal(subtotal)
@@ -190,9 +187,7 @@ class OrderSchema(Schema):
         order.set_payment_mode(data.get('payment'))
         order.accept_reused_package = data.get('accept_reused_package', False)
         order.paper_invoice = data.get('paper_invoice', False)
-        order.on_demand = global_on_demand
-        order.on_demand_delay_min = app.config['ON_DEMAND_DELAY_MIN']
-        order.on_demand_delay_max = app.config['ON_DEMAND_DELAY_MAX']
+        order.delay = global_delay
         order.save()
         current_user.latest_delivery_address = unicode(delivery_address.id)
         current_user.latest_billing_address = unicode(billing_address.id)

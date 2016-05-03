@@ -24,8 +24,8 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <div class="col-xs-7 col-sm-6 col-md-7 col-lg-8">
                     <a href="[[ line.product.path ]]">
                         <span class="hidden-xs hidden-sm pull-left">
-                            <img class="cart-illustration" ng-src="[[ line.product.photos[0].thumbnail_url ]]" ng-show="line.product.photos.length">
-                            <span class="cart-illustration-placeholder" ng-hide="line.product.photos.length">
+                            <img class="cart-illustration" ng-src="[[ line.product.main_photo.thumbnail_url ]]" ng-show="line.product.main_photo">
+                            <span class="cart-illustration-placeholder" ng-hide="line.product.main_photo">
                                 <i class="fa fa-ban"></i>
                             </span>
                         </span>
@@ -35,7 +35,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     {{ _('Unit price:') }} [[ line.product.net_price | currency:"{{ config.CURRENCY }}" ]]
                     <br>
                     <span ng-if="line.quantity <= line.product.stock" class="text-success">{{ _('In stock') }}</span>
-                    <span ng-if="line.product.on_demand && line.quantity > line.product.stock" class="text-danger" uib-tooltip="{{ _('For an immediate shipping, order less than [[ line.product.stock ]]') }}">{{ _('Delay %(min)d-%(max)d days', min=config.ON_DEMAND_DELAY_MIN, max=config.ON_DEMAND_DELAY_MAX) }}</span>
+                    <span ng-if="line.quantity > line.product.stock" class="text-danger" uib-tooltip="{{ _('For a faster shipping, order less than [[ line.product.stock ]]') }}">{{ _('Shipping delay: [[ line.product.overstock_delay ]] days') }}</span>
                 </div>
                 <div class="col-xs-5 col-sm-4 col-md-3 col-lg-2">
                     <label for="qty-[[ line.product.reference ]]" class="hidden-xs">{{ _('Quantity') }}</label>
@@ -59,8 +59,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <div class="list-group-item">
             <div class="row">
                 <div class="col-sm-5 col-sm-push-7 col-md-4 col-md-push-8 text-right">
-                    <span ng-if="cart.in_stock()" class="text-success">{{ _('In stock') }}</span>
-                    <span ng-if="cart.on_demand()" class="text-danger">{{ _('Delay %(min)d-%(max)d days', min=config.ON_DEMAND_DELAY_MIN, max=config.ON_DEMAND_DELAY_MAX) }}</span>
+                    {{ _('Shipping delay: [[ cart.delay() ]] days') }}
                     <br>
                     <strong class="text-primary">
                         {{ _('Total:') }} [[ cart.total() | currency:"{{ config.CURRENCY }}" ]]

@@ -25,8 +25,10 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
             controller: 'ProductsCtrl'
         })
         .state('newproduct', {
-            url: '/product/new',
-            templateUrl: 'product',
+            url: '/product-{product_type}/new',
+            templateUrl: function($stateParams) {
+                return 'product-'+$stateParams.product_type;
+            },
             controller: 'ProductCtrl'
         })
         .state('product', {

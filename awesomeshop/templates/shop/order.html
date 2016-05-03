@@ -146,8 +146,8 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <div class="panel panel-default">
     <div class="panel-body">
         <ul>
-            <li ng-if="order.on_demand">
-                {{ _('This order includes on demand products, shipping is delayed for [[ order.on_demand_delay_min ]]-[[ order.on_demand_delay_max ]] days') }}
+            <li>
+                {{ _('Shipping delay: [[ order.delay ]] days') }}
             </li>
             <li>{{ _('Payment:') }} <i class="fa fa-[[ order.payment_icon ]]" ng-if="order.payment_icon"></i> [[ order.payment_description ]]</li>
             <li ng-if="order.accept_reused_package">

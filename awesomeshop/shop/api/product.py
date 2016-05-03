@@ -40,10 +40,14 @@ class BaseProductSchemaForList(Schema):
     path = fields.String(dump_only=True)
     reference = fields.String(dump_only=True)
     name = Loc(dump_only=True)
-    stock = fields.Integer(dump_only=True)
-    on_demand = fields.Boolean(dump_only=True)
-    net_price = fields.Decimal(dump_only=True, as_string=True)
     main_photo = fields.Nested(PhotoSchema)
+    net_price = fields.Function(serialize=lambda obj:
+                                             str(obj.get_price_per_item().net))
+    delay = fields.Function(serialize=lambda obj: obj.get_delay())
+    overstock_delay = fields.Function(serialize=lambda obj:
+                                                     obj.get_overstock_delay())
+    # TODO Replace with some wrapper because stock belongs to regular products
+    stock = fields.Integer(dump_only=True)
 
 
 class RegularProductSchemaForList(BaseProductSchemaForList):
@@ -55,8 +59,10 @@ productschemaforlist = {
 
 
 class BaseProductSchemaForAdminList(BaseProductSchemaForList):
-    gross_price = fields.Decimal(dump_only=True, as_string=True)
+    gross_price = fields.Function(serialize=lambda obj: str(
+                                               obj.get_price_per_item().gross))
     on_sale = fields.Boolean(dump_only=True)
+    # TODO Replace with some wrapper, stock_alert belongs to regular products
     stock_alert = fields.Integer()
 
 
@@ -71,18 +77,31 @@ class BaseProductSchemaForEdition(Schema):
     category = ObjField(f='id', obj=Category)
     keywords = fields.String(allow_none=True)
     photos = fields.Nested(PhotoSchema, many=True, dump_only=True)
-    tax = ObjField(f='id', obj=Tax)
+    main_photo = fields.Nested(PhotoSchema, dump_only=True)
     on_sale = fields.Boolean(default=False)
     related_products = MultiObjField(f='id', obj=BaseProduct)
+    stock = fields.Integer()
+    stock_alert = fields.Integer()
+
+    def preinit_product(self, product, data):
+        product.slug = data['slug']
+        product.reference = data['reference']
+        product.category = data.get('category', u'')
+        product.documentation = data.get('documentation', u'')
+        product.keywords = data.get('keywords', u'')
+        product.on_sale = data.get('on_sale', False)
+        product.name = data.get('name', {})
+        product.description = data.get('description', {})
+        product.related_products = data.get('related_products', [])
+        return product
+
+
+class RegularProductSchemaForEdition(BaseProductSchemaForEdition):
+    tax = ObjField(f='id', obj=Tax)
     on_demand = fields.Boolean(allow_none=True, default=False)
     purchasing_price = fields.Decimal(as_string=True)
     gross_price = fields.Decimal(as_string=True, required=True)
     weight = fields.Integer()
-    stock = fields.Integer()
-    stock_alert = fields.Integer()
-
-
-class RegularProductSchemaForEdition(BaseProductSchemaForEdition):
 
     @post_load
     def make_product(self, data):
@@ -90,16 +109,8 @@ class RegularProductSchemaForEdition(BaseProductSchemaForEdition):
             product = products['regular'].objects.get_or_404(id=data['id'])
         else:
             product = products['regular']()
-        product.slug = data['slug']
-        product.reference = data['reference']
-        product.name = data.get('name', {})
-        product.description = data.get('description', {})
-        product.documentation = data.get('documentation', u'')
-        product.category = data.get('category', u'')
-        product.keywords = data.get('keywords', u'')
+        product = self.preinit_product(product, data)
         product.tax = data.get('tax', u'')
-        product.on_sale = data.get('on_sale', False)
-        product.related_products = data.get('related_products', [])
         product.on_demand = data.get('on_demand', False)
         product.purchasing_price = data.get('purchasing_price', '0.0')
         product.gross_price = data['gross_price']
@@ -123,11 +134,10 @@ class BaseProductSchema(Schema):
     name = Loc(dump_only=True)
     description = fields.String(attribute='description_content',
                                 dump_only=True)
-    net_price = fields.Decimal(dump_only=True, as_string=True)
+    net_price = fields.Function(serialize=lambda obj:
+                                             str(obj.get_price_per_item().net))
     photos = fields.Nested(PhotoSchema, many=True, dump_only=True)
-    stock = fields.Integer(dump_only=True)
-    weight = fields.Integer(dump_only=True)
-    on_demand = fields.Boolean(dump_only=True)
+    weight = fields.Function(serialize=lambda obj: obj.get_weight())
     related_products = fields.Nested(
                                 BaseProductSchemaForList,
                                 attribute='related_products_on_sale',
@@ -136,10 +146,13 @@ class BaseProductSchema(Schema):
                                 )
     documentation = fields.String(attribute='documentation_content',
                                   dump_only=True)
+    delay = fields.Function(serialize=lambda obj: obj.get_delay())
+    overstock_delay = fields.Function(serialize=lambda obj:
+                                                     obj.get_overstock_delay())
 
 
 class RegularProductSchema(BaseProductSchema):
-    pass
+    stock = fields.Integer(dump_only=True)
 
 
 productschema = {

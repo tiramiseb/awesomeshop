@@ -26,7 +26,7 @@ from ... import login_required, rest
 from ...marsh import ObjField, NetPrice
 from ..models.dbcart import DbCart, DbCartline
 from ..models.product import BaseProduct
-from .product import productschema
+from .product import BaseProductSchemaForList
 
 
 class LiveCartlineSchema(Schema):
@@ -38,6 +38,7 @@ class LiveCartlineSchema(Schema):
         newdata = []
         if not many:
             data = [data]
+        schema = BaseProductSchemaForList()
         for entry in data:
             try:
                 prod = BaseProduct.objects.get(
@@ -48,13 +49,12 @@ class LiveCartlineSchema(Schema):
                 # Forget non-existing products
                 continue
             # Verify and adjust the quantity
-            if prod.on_demand:
+            if prod.get_overstock_delay >= 0:
                 quantity = entry['quantity']
             else:
                 quantity = min(entry['quantity'], prod.stock)
-            pschema = productschema[prod.type]()
             newdata.append({
-                    'product': pschema.dump(prod).data,
+                    'product': schema.dump(prod).data,
                     'quantity': quantity
                     })
         if not many:
@@ -83,14 +83,9 @@ class CartlineSchema(Schema):
             except BaseProduct.DoesNotExist:
                 # Forget non-existing products
                 continue
-            # Verify and adjust the quantity
-            if prod.on_demand:
-                quantity = entry['quantity']
-            else:
-                quantity = min(entry['quantity'], prod.stock)
             newdata.append({
                     'product': prod.id,
-                    'quantity': quantity
+                    'quantity': entry['quantity']
                     })
         if not many:
             if len(data) == 1:
@@ -111,6 +106,7 @@ class CartlineSchema(Schema):
         newdata = []
         if not many:
             data = [data]
+        schema = BaseProductSchemaForList()
         for entry in data:
             try:
                 prod = BaseProduct.objects.get(
@@ -120,9 +116,8 @@ class CartlineSchema(Schema):
             except BaseProduct.DoesNotExist:
                 # Forget non-existing products
                 continue
-            pschema = productschema[prod.type]()
             newdata.append({
-                    'product': pschema.dump(prod).data,
+                    'product': schema.dump(prod).data,
                     'quantity': entry['quantity']
                     })
         if not many:

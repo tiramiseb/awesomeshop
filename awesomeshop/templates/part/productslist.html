@@ -26,14 +26,14 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             </div>
         </a>
             <div class="caption">
-                <button type="button" class="btn btn-success btn-block" ng-if="cart.stock(product) || product.on_demand" ng-class="{ 'btn-success': cart.stock(product), 'btn-info': product.on_demand && !cart.stock(product) }" ng-click="cart.add(product, 1)">
+                <button type="button" class="btn btn-success btn-block" ng-if="cart.stock(product) || product.overstock_delay >= 0" ng-class="{ 'btn-success': cart.stock(product), 'btn-info': product.overstock_delay >= 0 && !cart.stock(product) }" ng-click="cart.add(product, 1)">
                     {{ _('Add to cart') }}
                 </button>
-                <button type="button" class="btn btn-danger btn-block disabled" ng-if="!(cart.stock(product) || product.on_demand)">
+                <button type="button" class="btn btn-danger btn-block disabled" ng-if="!(cart.stock(product) || product.overstock_delay >= 0)">
                     {{ _('Out of stock') }}
                 </button>
-                <p class="text-center bottom-no-space" ng-if="cart.stock(product)==0&&product.on_demand">
-                    {{ _('Available on demand, delay %(min)d-%(max)d days', min=config.ON_DEMAND_DELAY_MIN, max=config.ON_DEMAND_DELAY_MAX) }}
+                <p class="text-center bottom-no-space" ng-if="cart.stock(product)==0 && product.overstock_delay >= 0">
+                {{ _('Shipping delay: ([[ product.overstock_delay ]]&nbsp;days)') }}
                 </p>
             </div>
     </div>

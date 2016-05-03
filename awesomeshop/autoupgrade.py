@@ -20,6 +20,7 @@
 import datetime
 import re
 
+from . import app
 from .helpers import Setting
 from .shipping.models import Carrier
 from .shop.models.order import Order
@@ -106,7 +107,7 @@ def reunite_products():
     # products.update_many({},
     #                     {'$unset': {'_cls': ''}})
     pass
-    # Url documents don't exist anymore
+    # Url documents don't exist anymore, cannot get their collection
     # urls = Url._get_collection()
     # urls.update_many(
     #         {'doc._cls': 'BaseProduct.Product'},
@@ -144,6 +145,50 @@ def readd_product_cls():
     products.update_many({'_cls': None},
                          {'$set': {'_cls': 'BaseProduct.RegularProduct'}})
 
+
+def on_demand_to_delay():
+    orders = Order._get_collection()
+    for o in orders.find():
+        on_demand = o.get('dem', None)
+        order_delay = o.get('dem_max', app.config['ON_DEMAND_DELAY'])
+        for p in o['products']:
+            dem = p.get('dem', None)
+            if dem is True:
+                p['delay'] = order_delay
+            else:
+                p['delay'] = shipping_delay
+            p.pop('dem', None)
+        if on_demand is True:
+            orders.find_one_and_update(
+                    {'_id': o['_id']},
+                    {
+                        '$set': {
+                            'delay': order_delay,
+                            'products': o['products']
+                            },
+                        '$unset': {
+                            'dem': '',
+                            'dem_min': '',
+                            'dem_max': ''
+                            }
+                        }
+                    )
+        elif on_demand is False:
+            orders.find_one_and_update(
+                    {'_id': o['_id']},
+                    {
+                        '$set': {
+                            'delay': shipping_delay,
+                            'products': o['products']
+                            },
+                        '$unset': {
+                            'dem': '',
+                            'dem_min': '',
+                            'dem_max': ''
+                            }
+                        }
+                    )
+
 ###############################################################################
 # Ordered list of all upgrade functions
 upgrades = [
@@ -163,7 +208,8 @@ upgrades = [
         change_payment_description,
         '16/04/2016: split the payment description and its icon'
         ),
-    (readd_product_cls, '22/04/2016: allow subproducts again')
+    (readd_product_cls, '22/04/2016: allow subproducts again'),
+    (on_demand_to_delay, '03/05/2016: store delays instead of on_demand')
     ]
 
 
