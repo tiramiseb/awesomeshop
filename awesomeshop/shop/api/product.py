@@ -214,8 +214,6 @@ class ApiProducts(Resource):
                 schema = productschemaforadminlist[product_type]
             else:
                 schema = BaseProductSchemaForAdminList
-            import pprint
-            pprint.pprint(schema(many=True).dump(obj).data)
             return schema(many=True).dump(obj).data
         else:
             if product_type:
