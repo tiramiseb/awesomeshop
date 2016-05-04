@@ -41,7 +41,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     [[ product.gross_price | currency:"{{ config.CURRENCY }}" ]]
                 </span>
                 &ndash;
-                <span uib-tooltip="{{ _('Stock remaining') }}" tooltip-placement="left" ng-class="{'text-danger': product.stock==0, 'text-warning': product.stock < product.stock_alert}">
+                <span uib-tooltip="{{ _('Stock remaining') }}" tooltip-placement="left" ng-class="{'text-danger': product.stock==0}">
                     [[ product.stock ]]
                     <i class="fa fa-cubes"></i>
                 </span>

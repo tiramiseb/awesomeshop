@@ -72,11 +72,11 @@ angular.module('awesomeshop', [
         .then(function(response) {
             $scope.awaiting_payment_orders = response.data;
         })
-    $http.get('/api/product', {params: {'out_of_stock': 'true'}})
+    $http.get('/api/product-regular', {params: {'out_of_stock': 'true'}})
         .then(function(response) {
             $scope.out_of_stock_products = response.data;
         })
-    $http.get('/api/product', {params: {'stock_lower_than_alert': 'true'}})
+    $http.get('/api/product-regular', {params: {'stock_lower_than_alert': 'true'}})
         .then(function(response) {
             $scope.stock_alert_products = response.data;
         })

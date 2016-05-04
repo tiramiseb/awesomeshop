@@ -62,8 +62,14 @@ class BaseProductSchemaForAdminList(BaseProductSchemaForList):
     gross_price = fields.Function(serialize=lambda obj: str(
                                                obj.get_price_per_item().gross))
     on_sale = fields.Boolean(dump_only=True)
-    # TODO Replace with some wrapper, stock_alert belongs to regular products
+
+
+class RegularProductSchemaForAdminList(BaseProductSchemaForAdminList):
     stock_alert = fields.Integer()
+
+productschemaforadminlist = {
+        'regular': RegularProductSchemaForAdminList
+        }
 
 
 class BaseProductSchemaForEdition(Schema):
@@ -81,7 +87,6 @@ class BaseProductSchemaForEdition(Schema):
     on_sale = fields.Boolean(default=False)
     related_products = MultiObjField(f='id', obj=BaseProduct)
     stock = fields.Integer()
-    stock_alert = fields.Integer()
 
     def preinit_product(self, product, data):
         product.slug = data['slug']
@@ -102,6 +107,7 @@ class RegularProductSchemaForEdition(BaseProductSchemaForEdition):
     purchasing_price = fields.Decimal(as_string=True)
     gross_price = fields.Decimal(as_string=True, required=True)
     weight = fields.Integer()
+    stock_alert = fields.Integer()
 
     @post_load
     def make_product(self, data):
@@ -167,7 +173,7 @@ products_adminreqparser.add_argument('stock_lower_than_alert',
 
 
 class ApiProducts(Resource):
-    def get(self):
+    def get(self, product_type=None):
         """List all products
 
         The following (mutually exclusive) arguments are accepted:
@@ -180,36 +186,45 @@ class ApiProducts(Resource):
 
         If both are in use, out_of_stock has precedence
         """
+        if product_type:
+            product = products[product_type]
+        else:
+            product = BaseProduct
         if current_user.is_authenticated and current_user.is_admin:
             options = products_adminreqparser.parse_args()
             options = dict((k, v) for k, v in
                            options.iteritems() if v is not None)
             query = {}
-            if 'out_of_stock' in options:
+            if product_type == 'regular' and 'out_of_stock' in options:
                 if options.pop('out_of_stock'):
-                    obj = BaseProduct.objects(stock=0)
+                    obj = product.objects(stock=0)
                 else:
-                    obj = BaseProduct.objects(stock__gt=0)
-            elif 'stock_lower_than_alert' in options:
+                    obj = product.objects(stock__gt=0)
+            elif (product_type == 'regular' and
+                  'stock_lower_than_alert' in options):
                 if options.pop('stock_lower_than_alert'):
-                    obj = BaseProduct.objects.where(
+                    obj = product.objects.where(
                                 'this.stock <= this.alert && this.stock != 0'
                                 )
                 else:
-                    obj = BaseProduct.objects.where('this.stock > this.alert')
+                    obj = product.objects.where('this.stock > this.alert')
             else:
-                obj = BaseProduct.objects
-            return BaseProductSchemaForAdminList(many=True).dump(obj).data
+                obj = product.objects
+            if product_type:
+                schema = productschemaforadminlist[product_type]
+            else:
+                schema = BaseProductSchemaForAdminList
+            import pprint
+            pprint.pprint(schema(many=True).dump(obj).data)
+            return schema(many=True).dump(obj).data
         else:
-            return BaseProductSchemaForList(many=True).dump(
-                    BaseProduct.objects(on_sale=True)
+            if product_type:
+                schema = productschemaforlist[product_type]
+            else:
+                schema = BaseProductSchemaForList
+            return schema(many=True).dump(
+                    product.objects(on_sale=True)
                     ).data
-
-
-class ApiSubProducts(Resource):
-
-    def get(self, product_type):
-        schema = productschemaforlist[product_type]()
 
     @admin_required
     def post(self, product_type):
@@ -311,8 +326,7 @@ class MoveProductPhoto(Resource):
         product.save()
         return {'status': 'OK'}
 
-rest.add_resource(ApiProducts, '/api/product')
-rest.add_resource(ApiSubProducts, '/api/product-<product_type>')
+rest.add_resource(ApiProducts, '/api/product', '/api/product-<product_type>')
 rest.add_resource(ApiNewProducts, '/api/newproducts')
 rest.add_resource(ApiSubProductEdit,
                   '/api/product-<product_type>/<product_id>/edit')
