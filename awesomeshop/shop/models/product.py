@@ -37,11 +37,7 @@ class BaseProduct(db.Document, StockedItem):
     """Base class for products: this one should not be used alone
 
     All methods (and properties) raising NotImplementedError must be
-    implemented in the children classes. This is the list of what must be
-    implemented in the children classes:
-
-    * type: a static name for the product type (string or @property)
-    * get_price_per_item(self, data): the item price, as a prices.Price object
+    implemented in the children classes.
 
     External code must not call methods or attributes present only on one
     of the children classes.
@@ -129,6 +125,12 @@ class BaseProduct(db.Document, StockedItem):
         """
         raise NotImplementedError
 
+    def get_stock(self, data=None):
+        """
+        Return the stock for the item
+        """
+        raise NotImplementedError
+
     def get_delay(self, data=None):
         """
         Return the delay needed before shipping (preparation, etc), in days
@@ -138,7 +140,7 @@ class BaseProduct(db.Document, StockedItem):
 
         When the product is not available, must return -1
         """
-        return NotImplementedError
+        raise NotImplementedError
 
     def get_overstock_delay(self, data=None):
         """
@@ -148,6 +150,7 @@ class BaseProduct(db.Document, StockedItem):
         When the product cannot be ordered without an immediate availability,
         must return -1
         """
+        raise NotImplementedError
 
     def destock(self, quantity, data=None):
         """
@@ -185,16 +188,19 @@ class RegularProduct(BaseProduct):
     stock_alert = db.IntField(db_field='alert')
 
     @property
-    def net_price(self):
+    def _net_price(self):
         return (self.gross_price * Decimal(1 + self.tax.rate)).quantize(
                                                                 Decimal('1.00')
                                                                 )
 
     def get_price_per_item(self, data=None):
-        return prices.Price(self.net_price, self.gross_price)
+        return prices.Price(self._net_price, self.gross_price)
 
     def get_weight(self, data=None):
         return self.weight
+
+    def get_stock(self, data=None):
+        return self.stock
 
     def get_delay(self, data=None):
         if self.stock:

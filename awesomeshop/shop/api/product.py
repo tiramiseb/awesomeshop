@@ -46,8 +46,7 @@ class BaseProductSchemaForList(Schema):
     delay = fields.Function(serialize=lambda obj: obj.get_delay())
     overstock_delay = fields.Function(serialize=lambda obj:
                                                      obj.get_overstock_delay())
-    # TODO Replace with some wrapper because stock belongs to regular products
-    stock = fields.Integer(dump_only=True)
+    stock = fields.Function(serialize=lambda obj: obj.get_stock())
 
 
 class RegularProductSchemaForList(BaseProductSchemaForList):
@@ -86,7 +85,6 @@ class BaseProductSchemaForEdition(Schema):
     main_photo = fields.Nested(PhotoSchema, dump_only=True)
     on_sale = fields.Boolean(default=False)
     related_products = MultiObjField(f='id', obj=BaseProduct)
-    stock = fields.Integer()
 
     def preinit_product(self, product, data):
         product.slug = data['slug']
@@ -107,6 +105,7 @@ class RegularProductSchemaForEdition(BaseProductSchemaForEdition):
     purchasing_price = fields.Decimal(as_string=True)
     gross_price = fields.Decimal(as_string=True, required=True)
     weight = fields.Integer()
+    stock = fields.Integer()
     stock_alert = fields.Integer()
 
     @post_load
@@ -155,10 +154,11 @@ class BaseProductSchema(Schema):
     delay = fields.Function(serialize=lambda obj: obj.get_delay())
     overstock_delay = fields.Function(serialize=lambda obj:
                                                      obj.get_overstock_delay())
+    stock = fields.Function(serialize=lambda obj: obj.get_stock())
 
 
 class RegularProductSchema(BaseProductSchema):
-    stock = fields.Integer(dump_only=True)
+    pass
 
 
 productschema = {

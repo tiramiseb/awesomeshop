@@ -52,7 +52,7 @@ class LiveCartlineSchema(Schema):
             if prod.get_overstock_delay >= 0:
                 quantity = entry['quantity']
             else:
-                quantity = min(entry['quantity'], prod.stock)
+                quantity = min(entry['quantity'], prod.get_stock())
             newdata.append({
                     'product': schema.dump(prod).data,
                     'quantity': quantity
