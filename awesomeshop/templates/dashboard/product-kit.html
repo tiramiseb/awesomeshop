@@ -1,0 +1,57 @@
+{#-
+Copyright 2016 Sébastien Maccagnoni-Munch
+
+This file is part of AwesomeShop.
+
+AwesomeShop is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+details.
+
+You should have received a copy of the GNU Affero General Public License
+along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+#}
+{% import "macros/form.html" as f %}
+{% extends "dashboard/product-base.html" %}
+{% block details %}
+<div class="panel panel-default">
+    <div class="panel-heading">{{ _('Products') }}</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">{{ _('Included') }}</div>
+                    <div class="list-group" id="included_products" sv-root sv-part="product.products">
+                        <div class="list-group-item" ng-repeat="prodid in product.products" sv-element="{containment:'#included_products'}">
+                            <i class="fa fa-bars" sv-handle></i>&nbsp;
+                            [[ product_name_from_id(prodid) ]]
+                            <button type="button" class="btn btn-link pull-right no-padding" ng-click="remove_included_product(prodid)">
+                                <i class="fa fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">{{ _('Available') }}</div>
+                    <div class="list-group">
+                        <input class="list-group-item" type="text" ng-model="not_included_query" placeholder="{{ _('Filter') }}">
+                        <button type="button" class="list-group-item" ng-repeat="prod in not_included_products() | filter:not_included_query" ng-click="add_included_product(prod.id)">
+                            <i class="fa fa-arrow-left"></i>
+                            &nbsp;&nbsp;
+                            [[ prod.name || prod.slug ]]
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+[[ product ]]
+{% endblock %}

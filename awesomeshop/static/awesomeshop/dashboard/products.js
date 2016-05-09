@@ -91,24 +91,20 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
     $scope.unrelated_products = function() {
         var filtered = [];
         if ($scope.products && $scope.product) {
-            if ($scope.product.id) {
-                for (i=0; i<$scope.products.length; i++) {
-                    if ($scope.products[i].id != $scope.product.id && $scope.product.related_products.indexOf($scope.products[i].id) == -1) {
-                        filtered.push($scope.products[i])
-                    }
+            for (i=0; i<$scope.products.length; i++) {
+                if ($scope.products[i].id != $scope.product.id && $scope.product.related_products.indexOf($scope.products[i].id) == -1) {
+                    filtered.push($scope.products[i])
                 }
-            } else {
-                filtered = $scope.products;
             }
         }
         return filtered;
     }
-    $scope.add_included_product = function(prodid) {
+    $scope.add_related_product = function(prodid) {
         $scope.product.related_products.push(prodid);
         $scope.product.related_products.sort();
         $scope.form.$setDirty();
     }
-    $scope.remove_included_product = function(prodid) {
+    $scope.remove_related_product = function(prodid) {
         $scope.product.related_products.splice($scope.product.related_products.indexOf(prodid), 1);
         $scope.form.$setDirty();
     }
@@ -163,17 +159,43 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
             related_products: []
         };
     }
-    if ($stateParams.product_type == 'regular') {
-        // Specific to regular products
-        $scope.net_price = function() {
-            if ($scope.taxrates && $scope.product) {
-                for (i=0; i<$scope.taxrates.length; i++) {
-                    if ($scope.product.tax == $scope.taxrates[i].id) {
-                        return parseFloat($scope.product.gross_price) * ( 1 + parseFloat($scope.taxrates[i].rate) );
+    switch ($stateParams.product_type) {
+        case 'regular':
+            // Specific to regular products
+            $scope.net_price = function() {
+                if ($scope.taxrates && $scope.product) {
+                    for (i=0; i<$scope.taxrates.length; i++) {
+                        if ($scope.product.tax == $scope.taxrates[i].id) {
+                            return parseFloat($scope.product.gross_price) * ( 1 + parseFloat($scope.taxrates[i].rate) );
+                        }
                     }
                 }
+                return '?';
+            };
+            break;
+        case 'kit':
+            if (!$stateParams.product_id) {
+                $scope.product.products = []
+            };
+            $scope.not_included_products = function() {
+                var filtered = [];
+                if ($scope.products && $scope.product) {
+                    for (i=0; i<$scope.products.length; i++) {
+                        if ($scope.products[i].id != $scope.product.id && $scope.product.products.indexOf($scope.products[i].id) == -1) {
+                            filtered.push($scope.products[i])
+                        }
+                    }
+                }
+                return filtered;
+            };
+            $scope.add_included_product = function(prodid) {
+                $scope.product.products.push(prodid);
+                $scope.form.$setDirty();
             }
-            return '?';
-        };
+            $scope.remove_included_product = function(prodid) {
+                $scope.product.products.splice($scope.product.products.indexOf(prodid), 1);
+                $scope.form.$setDirty();
+            }
+            break;
     };
 });
