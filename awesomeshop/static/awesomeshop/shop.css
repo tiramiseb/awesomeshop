@@ -16,10 +16,6 @@
  * along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
  */
 
-.bottom-no-space {
-    margin-bottom: 0 !important;
-}
-    
 .navbar-static-bottom {
     border-radius: 0;
     margin-top: 20px;
