@@ -45,9 +45,10 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
             $scope.products = response.data;
         });
 })
-.controller('ProductCtrl', function($timeout, $scope, $http, $stateParams, $state, FileUploader, Slug, CONFIG) {
+.controller('ProductCtrl', function($scope, $http, $stateParams, $state, FileUploader, Slug, CONFIG) {
+    // Common stuff
     $scope.langs = CONFIG.languages;
-    $scope.sortoptions = {containment:'#photos'};
+    $scope.photos_sortoptions = {containment:'#photos'};
     $scope.sort_photo = function(from_rank, to_rank) {
         $http.get('/api/product/'+$scope.product.id+'/photo/'+from_rank+'/move/'+to_rank);
     };
@@ -77,7 +78,7 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
             $scope.photos.push(response);
         };
     }
-    $scope.name_from_id = function(prodid) {
+    $scope.product_name_from_id = function(prodid) {
         if ($scope.products) {
             for (i=0; i<$scope.products.length; i++) {
                 if ($scope.products[i].id == prodid) {
@@ -87,7 +88,7 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
         }
         return prodid;
     }
-    $scope.filtered_products = function() {
+    $scope.unrelated_products = function() {
         var filtered = [];
         if ($scope.products && $scope.product) {
             if ($scope.product.id) {
@@ -102,24 +103,14 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
         }
         return filtered;
     }
-    $scope.add_prod = function(prodid) {
+    $scope.add_included_product = function(prodid) {
         $scope.product.related_products.push(prodid);
         $scope.product.related_products.sort();
         $scope.form.$setDirty();
     }
-    $scope.remove_prod = function(prodid) {
+    $scope.remove_included_product = function(prodid) {
         $scope.product.related_products.splice($scope.product.related_products.indexOf(prodid), 1);
         $scope.form.$setDirty();
-    }
-    $scope.net_price = function() {
-        if ($scope.taxrates && $scope.product) {
-            for (i=0; i<$scope.taxrates.length; i++) {
-                if ($scope.product.tax == $scope.taxrates[i].id) {
-                    return parseFloat($scope.product.gross_price) * ( 1 + parseFloat($scope.taxrates[i].rate) );
-                }
-            }
-        }
-        return '?';
     }
     $scope.submit = function() {
         if ($scope.product.id) {
@@ -172,4 +163,17 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
             related_products: []
         };
     }
+    if ($stateParams.product_type == 'regular') {
+        // Specific to regular products
+        $scope.net_price = function() {
+            if ($scope.taxrates && $scope.product) {
+                for (i=0; i<$scope.taxrates.length; i++) {
+                    if ($scope.product.tax == $scope.taxrates[i].id) {
+                        return parseFloat($scope.product.gross_price) * ( 1 + parseFloat($scope.taxrates[i].rate) );
+                    }
+                }
+            }
+            return '?';
+        };
+    };
 });
