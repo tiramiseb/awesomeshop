@@ -42,7 +42,14 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     <div class="panel-heading">{{ _('Available') }}</div>
                     <div class="list-group">
                         <input class="list-group-item" type="text" ng-model="not_included_query" placeholder="{{ _('Filter') }}">
-                        <button type="button" class="list-group-item" ng-repeat="prod in not_included_products() | filter:not_included_query" ng-click="add_included_product(prod.id)">
+                        <button type="button" class="list-group-item"  ng-model="show_all_not_included" uib-btn-checkbox>
+                            <i class="fa" ng-class="{'fa-eye-slash': !show_all_not_included, 'fa-eye': show_all_not_included}"></i>
+                            {{ _('Show all corresponding products') }}
+                            <span class="text-muted" ng-show="!show_all_not_included">
+                                {{ _('(limited to 10 products)') }}
+                            </span>
+                        </button>
+                        <button type="button" class="list-group-item" ng-repeat="prod in not_included_products() | filter:not_included_query | limitTo:!show_all_not_included&&10" ng-click="add_included_product(prod.id)">
                             <i class="fa fa-arrow-left"></i>
                             &nbsp;&nbsp;
                             [[ prod.name || prod.slug ]]
@@ -53,5 +60,4 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </div>
     </div>
 </div>
-[[ product ]]
 {% endblock %}
