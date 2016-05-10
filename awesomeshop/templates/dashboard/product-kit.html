@@ -20,44 +20,65 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {% extends "dashboard/product-base.html" %}
 {% block details %}
 <div class="panel panel-default">
-    <div class="panel-heading">{{ _('Products') }}</div>
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-xs-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">{{ _('Included') }}</div>
-                    <div class="list-group" id="included_products" sv-root sv-part="product.products">
-                        <div class="list-group-item" ng-repeat="prodid in product.products" sv-element="{containment:'#included_products'}">
-                            <i class="fa fa-bars" sv-handle></i>&nbsp;
-                            [[ product_name_from_id(prodid) ]]
-                            <button type="button" class="btn btn-link pull-right no-padding" ng-click="remove_included_product(prodid)">
-                                <i class="fa fa-arrow-right"></i>
+    <div class="panel-heading">{{ _('Products in the kit') }}</div>
+    <div class="panel-body" id="included_products" sv-root sv-part="product.products">
+        <div class="panel panel-default" ng-repeat="subproduct in product.products" sv-element="{containment:'#included_products'}">
+            <div class="panel-heading" sv-handle>
+                <i class="fa fa-bars"></i>
+                {{ _('Item #[[ $index ]]') }}
+            </div>
+            <div class="list-group" id="options[[ $index ]]" sv-root sv-part="subproduct.options">
+                <div class="list-group-item handle" ng-repeat="option in subproduct.options" sv-element="{containment:'#options'+$parent.$index}">
+                    <div class="row">
+                        <div class="col-xs-10">
+                            <img ng-show="option.main_photo" ng-src="[[ option.main_photo.thumbnail_url ]]">
+                            [[ option.name || option.slug ]]
+                        </div>
+                        <div class="col-xs-2 text-right">
+                            <button type="button" class="btn btn-sm btn-danger" ng-click="subproduct.options.splice($index, 1);form.$setDirty();">
+                                <i class="fa fa-times"></i>
+                                <span class="hidden-xs hidden-sm">
+                                    {{ _('Remove') }}
+                                </span>
                             </button>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-xs-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">{{ _('Available') }}</div>
-                    <div class="list-group">
-                        <input class="list-group-item" type="text" ng-model="not_included_query" placeholder="{{ _('Filter') }}">
-                        <button type="button" class="list-group-item"  ng-model="show_all_not_included" uib-btn-checkbox>
-                            <i class="fa" ng-class="{'fa-eye-slash': !show_all_not_included, 'fa-eye': show_all_not_included}"></i>
-                            {{ _('Show all corresponding products') }}
-                            <span class="text-muted" ng-show="!show_all_not_included">
-                                {{ _('(limited to 10 products)') }}
-                            </span>
-                        </button>
-                        <button type="button" class="list-group-item" ng-repeat="prod in not_included_products() | filter:not_included_query | limitTo:!show_all_not_included&&10" ng-click="add_included_product(prod.id)">
-                            <i class="fa fa-arrow-left"></i>
-                            &nbsp;&nbsp;
-                            [[ prod.name || prod.slug ]]
-                        </button>
+                <div class="list-group-item">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-6">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-danger" ng-click="product.products.splice($index, 1);form.$setDirty();">
+                                    <i class="fa fa-times"></i>
+                                    <span class="hidden-xs hidden-sm">
+                                        {{ _('Remove') }}
+                                    </span>
+                                </button>
+                                <button type="button" class="btn btn-info" ng-model="subproduct.can_be_disabled" uib-btn-checkbox>
+                                    <i class="fa" ng-class="{'fa-check': subproduct.can_be_disabled, 'fa-times': !subproduct.can_be_disabled}"></i>
+                                    {{ _('Allow empty choice') }}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-6 text-right">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="{{ _('Product') }}" ng-model="subproduct.to_add" uib-typeahead="product as product.name for product in products | filter:{name:$viewValue}" typeahead-editable="false" typeahead-min-length="0">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-primary" ng-click="subproduct.options.push(subproduct.to_add);subproduct.to_add=undefined;form.$setDirty();" ng-disabled="!subproduct.to_add">
+                                        <i class="fa fa-plus"></i>
+                                        {{ _('Add as an option') }}
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        <button type="button" class="btn btn-success pull-right" ng-click="product.products.push({options:[], can_be_disabled:false})">
+            <i class="fa fa-plus"></i>
+            {{ _('Add an item') }}
+        </button>
     </div>
 </div>
 {% endblock %}

@@ -29,7 +29,7 @@ from ...marsh import Loc, MultiObjField, ObjField
 from ...page.models import Page
 from ...photo import Photo, PhotoSchema
 from ..models.category import Category
-from ..models.product import products, BaseProduct
+from ..models.product import products, BaseProduct, KitSubProduct
 from ..models.tax import Tax
 
 
@@ -41,19 +41,26 @@ class BaseProductSchemaForList(Schema):
     reference = fields.String(dump_only=True)
     name = Loc(dump_only=True)
     main_photo = fields.Nested(PhotoSchema)
-    net_price = fields.Function(serialize=lambda obj:
-                                             str(obj.get_price_per_item().net))
+    net_price = fields.Function(
+                    serialize=lambda obj: str(obj.get_price_per_item().net)
+                    )
     delay = fields.Function(serialize=lambda obj: obj.get_delay())
-    overstock_delay = fields.Function(serialize=lambda obj:
-                                                     obj.get_overstock_delay())
+    overstock_delay = fields.Function(
+                            serialize=lambda obj: obj.get_overstock_delay()
+                            )
     stock = fields.Function(serialize=lambda obj: obj.get_stock())
 
 
 class RegularProductSchemaForList(BaseProductSchemaForList):
     pass
 
+
+class KitProductSchemaForList(BaseProductSchemaForList):
+    pass
+
 productschemaforlist = {
-        'regular': RegularProductSchemaForList
+        'regular': RegularProductSchemaForList,
+        'kit': KitProductSchemaForList
         }
 
 
@@ -66,8 +73,13 @@ class BaseProductSchemaForAdminList(BaseProductSchemaForList):
 class RegularProductSchemaForAdminList(BaseProductSchemaForAdminList):
     stock_alert = fields.Integer()
 
+
+class KitProductSchemaForAdminList(BaseProductSchemaForAdminList):
+    pass
+
 productschemaforadminlist = {
-        'regular': RegularProductSchemaForAdminList
+        'regular': RegularProductSchemaForAdminList,
+        'kit': KitProductSchemaForAdminList
         }
 
 
@@ -86,7 +98,11 @@ class BaseProductSchemaForEdition(Schema):
     on_sale = fields.Boolean(default=False)
     related_products = MultiObjField(f='id', obj=BaseProduct)
 
-    def preinit_product(self, product, data):
+    def preinit_product(self, product_type, data):
+        if 'id' in data:
+            product = products[product_type].objects.get_or_404(id=data['id'])
+        else:
+            product = products[product_type]()
         product.slug = data['slug']
         product.reference = data['reference']
         product.category = data.get('category', u'')
@@ -110,11 +126,7 @@ class RegularProductSchemaForEdition(BaseProductSchemaForEdition):
 
     @post_load
     def make_product(self, data):
-        if 'id' in data:
-            product = products['regular'].objects.get_or_404(id=data['id'])
-        else:
-            product = products['regular']()
-        product = self.preinit_product(product, data)
+        product = self.preinit_product('regular', data)
         product.tax = data.get('tax', u'')
         product.on_demand = data.get('on_demand', False)
         product.purchasing_price = data.get('purchasing_price', '0.0')
@@ -125,8 +137,37 @@ class RegularProductSchemaForEdition(BaseProductSchemaForEdition):
         product.save()
         return product
 
+
+class BaseProductSchemaForKitSubProduct(Schema):
+    id = fields.String(required=True)
+    name = Loc(dump_only=True)
+    main_photo = fields.Nested(PhotoSchema, dump_only=True)
+
+
+class KitSubProductSchemaForEdition(Schema):
+    options = fields.Nested(BaseProductSchemaForKitSubProduct, many=True)
+    can_be_disabled = fields.Boolean(default=False)
+
+
+class KitProductSchemaForEdition(BaseProductSchemaForEdition):
+    products = fields.Nested(KitSubProductSchemaForEdition, many=True)
+
+    @post_load
+    def make_product(self, data):
+        import pprint
+        pprint.pprint(data)
+        product = self.preinit_product('kit', data)
+        product.products = [KitSubProduct(
+                                options=[op['id'] for op in sub['options']],
+                                can_be_disabled=sub.get('can_be_disabled')
+                            ) for sub in data['products']]
+        product.save()
+        return product
+
+
 productschemaforedition = {
-        'regular': RegularProductSchemaForEdition
+        'regular': RegularProductSchemaForEdition,
+        'kit': KitProductSchemaForEdition
         }
 
 
@@ -139,8 +180,9 @@ class BaseProductSchema(Schema):
     name = Loc(dump_only=True)
     description = fields.String(attribute='description_content',
                                 dump_only=True)
-    net_price = fields.Function(serialize=lambda obj:
-                                             str(obj.get_price_per_item().net))
+    net_price = fields.Function(
+                        serialize=lambda obj: str(obj.get_price_per_item().net)
+                        )
     photos = fields.Nested(PhotoSchema, many=True, dump_only=True)
     weight = fields.Function(serialize=lambda obj: obj.get_weight())
     related_products = fields.Nested(
@@ -152,8 +194,9 @@ class BaseProductSchema(Schema):
     documentation = fields.String(attribute='documentation_content',
                                   dump_only=True)
     delay = fields.Function(serialize=lambda obj: obj.get_delay())
-    overstock_delay = fields.Function(serialize=lambda obj:
-                                                     obj.get_overstock_delay())
+    overstock_delay = fields.Function(
+                                serialize=lambda obj: obj.get_overstock_delay()
+                                )
     stock = fields.Function(serialize=lambda obj: obj.get_stock())
 
 
@@ -161,8 +204,16 @@ class RegularProductSchema(BaseProductSchema):
     pass
 
 
+class KitSubProductSchema(Schema):
+    pass
+
+
+class KitProductSchema(BaseProductSchema):
+    pass
+
 productschema = {
-        'regular': RegularProductSchema
+        'regular': RegularProductSchema,
+        'kit': KitProductSchema
         }
 
 

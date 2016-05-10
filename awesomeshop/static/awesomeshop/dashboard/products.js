@@ -162,6 +162,9 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
     switch ($stateParams.product_type) {
         case 'regular':
             // Specific to regular products
+            if (!$stateParams.product_id) {
+                $scope.product.type = 'regular';
+            }
             $scope.net_price = function() {
                 if ($scope.taxrates && $scope.product) {
                     for (i=0; i<$scope.taxrates.length; i++) {
@@ -175,27 +178,9 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
             break;
         case 'kit':
             if (!$stateParams.product_id) {
-                $scope.product.products = []
+                $scope.product.type = 'kit';
+                $scope.product.products = [];
             };
-            $scope.not_included_products = function() {
-                var filtered = [];
-                if ($scope.products && $scope.product) {
-                    for (i=0; i<$scope.products.length; i++) {
-                        if ($scope.products[i].id != $scope.product.id && $scope.product.products.indexOf($scope.products[i].id) == -1) {
-                            filtered.push($scope.products[i])
-                        }
-                    }
-                }
-                return filtered;
-            };
-            $scope.add_included_product = function(prodid) {
-                $scope.product.products.push(prodid);
-                $scope.form.$setDirty();
-            }
-            $scope.remove_included_product = function(prodid) {
-                $scope.product.products.splice($scope.product.products.indexOf(prodid), 1);
-                $scope.form.$setDirty();
-            }
             break;
     };
 });

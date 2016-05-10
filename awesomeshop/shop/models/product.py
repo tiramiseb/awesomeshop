@@ -168,7 +168,7 @@ class BaseProduct(db.Document, StockedItem):
         """
         raise NotImplementedError
 
-    def destock(self, quantity, data=None):
+    def restock(self, quantity, data=None):
         """
         Add product(s) tp stock, when cancelling an order
 
@@ -238,10 +238,35 @@ class RegularProduct(BaseProduct):
         self.save()
 
 
+class KitSubProduct(db.EmbeddedDocument):
+    options = db.ListField(db.ReferenceField(BaseProduct))
+    can_be_disabled = db.BooleanField(db_field='dis')
+
+
 class KitProduct(BaseProduct):
     type = 'kit'
-    products = db.ListField(db.ReferenceField(BaseProduct,
-                                              reverse_delete_rule=db.DENY))
+    products = db.EmbeddedDocumentListField(KitSubProduct)
+
+    def get_price_per_item(self, data=None):
+        return prices.Price(0)
+
+    def get_weight(self, data=None):
+        return 0
+
+    def get_stock(self, data=None):
+        return 0
+
+    def get_delay(self, data=None):
+        return 0
+
+    def get_overstock_delay(self, data=None):
+        return 0
+
+    def destock(self, quantity, data=None):
+        return
+
+    def restock(self, quantity, data=None):
+        return
 
 
 def update_search(sender, document, **kwargs):
@@ -249,13 +274,15 @@ def update_search(sender, document, **kwargs):
     index_product(document)
 
 
-def delete_search(sender, document, **kwargs):
+def forbid_if_used_in_kit_and_delete_search(sender, document, **kwargs):
+    # TODO Forbid deleting product if used in a kit product
     from ...search import delete_product
     delete_product(document)
 
-signals.post_save.connect(update_search, sender=BaseProduct)
-signals.pre_delete.connect(delete_search, sender=BaseProduct)
 
+signals.post_save.connect(update_search, sender=BaseProduct)
+signals.pre_delete.connect(forbid_if_used_in_kit_and_delete_search,
+                           sender=BaseProduct)
 
 products = {
         'regular': RegularProduct,
