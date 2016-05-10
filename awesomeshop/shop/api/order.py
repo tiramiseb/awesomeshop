@@ -290,10 +290,13 @@ class PayOrder(Resource):
 
     @login_required
     def get(self, number):
-        order = Order.objects.get_or_404(
-                    customer=current_user.to_dbref(),
-                    number=number
-                    )
+        if current_user.is_admin:
+            order = Order.objects.get_or_404(number=number)
+        else:
+            order = Order.objects.get_or_404(
+                        customer=current_user.to_dbref(),
+                        number=number
+                        )
         payment_data = order.trigger_payment()
         if payment_data['type'] == 'message':
             payment_data['message'] = docutils.core.publish_parts(
@@ -301,6 +304,8 @@ class PayOrder(Resource):
                     writer_name='html'
                     )['body']
         return PaymentInfoSchema().dump(payment_data).data
+
+
 
 rest.add_resource(ApiAllOrders, '/api/order/all')
 rest.add_resource(ApiOrders, '/api/order')
