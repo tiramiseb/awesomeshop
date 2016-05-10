@@ -25,7 +25,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <p class="text-center bottom-no-space">[[ product.net_price | currency:"{{ config.CURRENCY }}" ]]</p>
             </div>
         </a>
-            <div class="caption">
+            <div class="caption" ng-if="product.type == 'regular'">
                 <button type="button" class="btn btn-success btn-block" ng-if="cart.stock(product) || product.overstock_delay >= 0" ng-class="{ 'btn-success': cart.stock(product), 'btn-info': product.overstock_delay >= 0 && !cart.stock(product) }" ng-click="cart.add(product, 1)">
                     {{ _('Add to cart') }}
                 </button>
@@ -35,6 +35,11 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <p class="text-center bottom-no-space" ng-if="cart.stock(product)==0 && product.overstock_delay >= 0">
                 {{ _('Shipping delay: ([[ product.overstock_delay ]]&nbsp;days)') }}
                 </p>
+            </div>
+            <div class="caption" ng-if="product.type == 'kit'">
+                <a class="btn btn-info btn-block" href="[[ product.path ]]">
+                    {{ _('Customize') }}
+                </a>
             </div>
     </div>
 </div>
