@@ -251,24 +251,31 @@ class KitProduct(BaseProduct):
     euros_instead_of_percent = db.BooleanField(db_field='euro', default=False)
 
     def get_price_per_item(self, data=None):
+        # TODO
         return prices.Price(0)
 
     def get_weight(self, data=None):
+        # TODO
         return 0
 
     def get_stock(self, data=None):
+        # TODO
         return 0
 
     def get_delay(self, data=None):
+        # TODO
         return 0
 
     def get_overstock_delay(self, data=None):
+        # TODO
         return 0
 
     def destock(self, quantity, data=None):
+        # TODO
         return
 
     def restock(self, quantity, data=None):
+        # TODO
         return
 
 
