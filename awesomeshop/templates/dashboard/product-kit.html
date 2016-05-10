@@ -21,13 +21,13 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {% block details %}
 <div class="panel panel-default">
     <div class="panel-heading">{{ _('Products in the kit') }}</div>
-    <div class="panel-body" id="included_products" sv-root sv-part="product.products">
+    <div class="panel-body" id="included_products" sv-root sv-part="product.products" sv-on-sort="form.$setdirty();">
         <div class="panel panel-default" ng-repeat="subproduct in product.products" sv-element="{containment:'#included_products'}">
             <div class="panel-heading" sv-handle>
                 <i class="fa fa-bars"></i>
                 {{ _('Item #[[ $index ]]') }}
             </div>
-            <div class="list-group" id="options[[ $index ]]" sv-root sv-part="subproduct.options">
+            <div class="list-group" id="options[[ $index ]]" sv-root sv-part="subproduct.options" sv-on-sort="form.$setdirty();">
                 <div class="list-group-item handle" ng-repeat="option in subproduct.options" sv-element="{containment:'#options'+$parent.$index}">
                     <div class="row">
                         <div class="col-xs-10">
@@ -36,7 +36,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                         </div>
                         <div class="col-xs-2 text-right">
                             <button type="button" class="btn btn-sm btn-danger" ng-click="subproduct.options.splice($index, 1);form.$setDirty();">
-                                <i class="fa fa-times"></i>
+                                <i class="fa fa-trash"></i>
                                 <span class="hidden-xs hidden-sm">
                                     {{ _('Remove') }}
                                 </span>
@@ -49,7 +49,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                         <div class="col-xs-12 col-md-6">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-danger" ng-click="product.products.splice($index, 1);form.$setDirty();">
-                                    <i class="fa fa-times"></i>
+                                    <i class="fa fa-trash"></i>
                                     <span class="hidden-xs hidden-sm">
                                         {{ _('Remove') }}
                                     </span>
@@ -79,6 +79,42 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             <i class="fa fa-plus"></i>
             {{ _('Add an item') }}
         </button>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">{{ _('Pricing') }}</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-6">
+                <label for="price_variation">{{ _('Price variation') }}</label>
+                <div class="input-group">
+                    <input type="text" id="price_variation" name="price_variation" class="form-control" ng-model="product.price_variation">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-model="product.euros_instead_of_percent" uib-btn-checkbox>
+                            <span ng-show="product.euros_instead_of_percent">&euro;</span>
+                            <span ng-hide="product.euros_instead_of_percent">%</span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label for="gross_price">{{ _('Gross price') }}</label>
+                <div class="input-group">
+                    <input type="text" id="gross_price" name="gross_price" class="form-control" ng-value="gross_price()" disabled>
+                    <span class="input-group-addon">{{ config.CURRENCY }}</span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                {{ f.select(_('Tax'), 'tax', 'product.tax', 'tax.id as tax.name for tax in taxrates', 'required', _('Tax rate is mandatory')) }}
+            </div>
+            <div class="col-md-6">
+                <label for="net_price">{{ _('Net price') }}</label>
+                <div class="input-group">
+                    <input type="text" id="net_price" name="net_price" class="form-control" ng-value="net_price()" disabled>
+                    <span class="input-group-addon">{{ config.CURRENCY }}</span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

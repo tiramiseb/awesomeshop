@@ -138,29 +138,36 @@ class RegularProductSchemaForEdition(BaseProductSchemaForEdition):
         return product
 
 
-class BaseProductSchemaForKitSubProduct(Schema):
+class BaseProductSchemaForKitSubProductForEdition(Schema):
     id = fields.String(required=True)
     name = Loc(dump_only=True)
     main_photo = fields.Nested(PhotoSchema, dump_only=True)
+    gross_price = fields.Decimal(as_string=True, required=True)
 
 
 class KitSubProductSchemaForEdition(Schema):
-    options = fields.Nested(BaseProductSchemaForKitSubProduct, many=True)
+    options = fields.Nested(BaseProductSchemaForKitSubProductForEdition,
+                            many=True)
     can_be_disabled = fields.Boolean(default=False)
 
 
 class KitProductSchemaForEdition(BaseProductSchemaForEdition):
     products = fields.Nested(KitSubProductSchemaForEdition, many=True)
+    tax = ObjField(f='id', obj=Tax)
+    price_variation = fields.Decimal(as_string=True, required=True)
+    euros_instead_of_percent = fields.Boolean(default=False)
 
     @post_load
     def make_product(self, data):
-        import pprint
-        pprint.pprint(data)
         product = self.preinit_product('kit', data)
         product.products = [KitSubProduct(
                                 options=[op['id'] for op in sub['options']],
                                 can_be_disabled=sub.get('can_be_disabled')
                             ) for sub in data['products']]
+        product.tax = data.get('tax', u'')
+        product.price_variation = data.get('price_variation', 0)
+        product.euros_instead_of_percent = data.get('euros_instead_of_percent',
+                                                    False)
         product.save()
         return product
 

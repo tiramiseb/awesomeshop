@@ -181,6 +181,46 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
                 $scope.product.type = 'kit';
                 $scope.product.products = [];
             };
+            function price(tax) {
+                var from = 0.0,
+                    to = 0.0,
+                    variation = parseFloat($scope.product.price_variation) || 0;
+                $scope.product.products.forEach(function(prod) {
+                    var min=999999999999,
+                        max=0;
+                    prod.options.forEach(function(option) {
+                        var gross = parseFloat(option.gross_price);
+                        min = Math.min(gross, min);
+                        max = Math.max(gross, max);
+                    });
+                    from = from + min;
+                    to = to + max;
+                })
+                if ($scope.product.euros_instead_of_percent) {
+                    from = (from + variation) * (1 + tax);
+                    to = (to + variation) * (1 + tax);
+                } else {
+                    from = from * (1 + variation/100 + tax);
+                    to = to * (1 + variation/100 + tax);
+                }
+                return from.toFixed(2) + ' - ' + to.toFixed(2);
+            }
+            $scope.gross_price = function() {
+                if ($scope.product) {
+                    return price(0);
+                };
+                return '';
+            };
+            $scope.net_price = function() {
+                if ($scope.taxrates && $scope.product) {
+                    for (i=0; i<$scope.taxrates.length; i++) {
+                        if ($scope.product.tax == $scope.taxrates[i].id) {
+                            return price(parseFloat($scope.taxrates[i].rate));
+                        }
+                    }
+                };
+                return '';
+            };
             break;
     };
 });
