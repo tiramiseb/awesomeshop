@@ -86,32 +86,38 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     <div class="panel-body">
         <div class="row">
             <div class="col-md-6">
-                <label for="price_variation">{{ _('Price variation') }}</label>
-                <div class="input-group">
-                    <input type="text" id="price_variation" name="price_variation" class="form-control" ng-model="product.price_variation">
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-model="product.euros_instead_of_percent" uib-btn-checkbox>
-                            <span ng-show="product.euros_instead_of_percent">&euro;</span>
-                            <span ng-hide="product.euros_instead_of_percent">%</span>
-                        </button>
-                    </span>
+                <div class="form-group">
+                    <label for="price_variation">{{ _('Price variation') }}</label>
+                    <div class="input-group">
+                        <input type="text" id="price_variation" name="price_variation" class="form-control" ng-model="product.price_variation">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-model="product.euros_instead_of_percent" uib-btn-checkbox>
+                                <span ng-show="product.euros_instead_of_percent">&euro;</span>
+                                <span ng-hide="product.euros_instead_of_percent">%</span>
+                            </button>
+                        </span>
+                    </div>
                 </div>
             </div>
             <div class="col-md-6">
-                <label for="gross_price">{{ _('Gross price') }}</label>
-                <div class="input-group">
-                    <input type="text" id="gross_price" name="gross_price" class="form-control" ng-value="gross_price()" disabled>
-                    <span class="input-group-addon">{{ config.CURRENCY }}</span>
+                <div class="form-group">
+                    <label for="gross_price">{{ _('Gross price') }}</label>
+                    <div class="input-group">
+                        <input type="text" id="gross_price" name="gross_price" class="form-control" ng-value="gross_price()" disabled>
+                        <span class="input-group-addon">{{ config.CURRENCY }}</span>
+                    </div>
                 </div>
             </div>
             <div class="col-md-6">
                 {{ f.select(_('Tax'), 'tax', 'product.tax', 'tax.id as tax.name for tax in taxrates', 'required', _('Tax rate is mandatory')) }}
             </div>
             <div class="col-md-6">
-                <label for="net_price">{{ _('Net price') }}</label>
-                <div class="input-group">
-                    <input type="text" id="net_price" name="net_price" class="form-control" ng-value="net_price()" disabled>
-                    <span class="input-group-addon">{{ config.CURRENCY }}</span>
+                <div class="form-group">
+                    <label for="net_price">{{ _('Net price') }}</label>
+                    <div class="input-group">
+                        <input type="text" id="net_price" name="net_price" class="form-control" ng-value="net_price()" disabled>
+                        <span class="input-group-addon">{{ config.CURRENCY }}</span>
+                    </div>
                 </div>
             </div>
         </div>
