@@ -228,19 +228,20 @@ class ApiOrders(Resource):
 
     @login_required
     def get(self):
+        options = orders_reqparser.parse_args()
+        options = dict((k, v) for k, v in options.iteritems() if v is not None)
         if current_user.is_admin:
             schema = OrderSchemaForAdminList
+            orders = Order.objects(
+                        **options
+                        )
         else:
             schema = OrderSchemaForList
-        options = orders_reqparser.parse_args()
-        options = dict((k, v) for k, v in
-                       options.iteritems() if v is not None)
-        return schema(many=True).dump(
-                    Order.objects(
+            orders = Order.objects(
                         customer=current_user.to_dbref(),
                         **options
                         )
-                    ).data
+        return schema(many=True).dump(orders).data
 
     @login_required
     def post(self):
