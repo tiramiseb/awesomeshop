@@ -29,7 +29,8 @@ from ...marsh import Loc, MultiObjField, ObjField
 from ...page.models import Page
 from ...photo import Photo, PhotoSchema
 from ..models.category import Category
-from ..models.product import products, BaseProduct, KitSubProduct
+from ..models.product import products, BaseProduct, KitSubProduct, \
+                             KitSubProductOption
 from ..models.tax import Tax
 
 
@@ -138,16 +139,20 @@ class RegularProductSchemaForEdition(BaseProductSchemaForEdition):
         return product
 
 
-class BaseProductSchemaForKitSubProductForEdition(Schema):
+class BaseProductSchemaForKitSubProductOptionForEdition(Schema):
     id = fields.String(required=True)
     name = Loc(dump_only=True)
     main_photo = fields.Nested(PhotoSchema, dump_only=True)
     gross_price = fields.Decimal(as_string=True, required=True)
 
 
+class KitSubProductOptionSchemaForEdition(Schema):
+    quantity = fields.Integer(required=True)
+    product = fields.Nested(BaseProductSchemaForKitSubProductOptionForEdition)
+
+
 class KitSubProductSchemaForEdition(Schema):
-    options = fields.Nested(BaseProductSchemaForKitSubProductForEdition,
-                            many=True)
+    options = fields.Nested(KitSubProductOptionSchemaForEdition, many=True)
     can_be_disabled = fields.Boolean(default=False)
 
 
@@ -160,10 +165,23 @@ class KitProductSchemaForEdition(BaseProductSchemaForEdition):
     @post_load
     def make_product(self, data):
         product = self.preinit_product('kit', data)
-        product.products = [KitSubProduct(
-                                options=[op['id'] for op in sub['options']],
-                                can_be_disabled=sub.get('can_be_disabled')
-                            ) for sub in data['products']]
+        products = []
+        for sub in data['products']:
+            options = []
+            for opt in sub['options']:
+                options.append(
+                    KitSubProductOption(
+                        quantity = opt['quantity'],
+                        product = opt['product']['id']
+                        )
+                    )
+            products.append(
+                KitSubProduct(
+                    options = options,
+                    can_be_disabled=sub.get('can_be_disabled')
+                    )
+                )
+        product.products = products
         product.tax = data.get('tax', u'')
         product.price_variation = data.get('price_variation', 0)
         product.euros_instead_of_percent = data.get('euros_instead_of_percent',
@@ -188,10 +206,10 @@ class BaseProductSchema(Schema):
     description = fields.String(attribute='description_content',
                                 dump_only=True)
     net_price = fields.Function(
-                        serialize=lambda obj: str(obj.get_price_per_item().net)
-                        )
+                  lambda obj, ctx: str(obj.get_price_per_item(ctx['data']).net)
+                  )
     photos = fields.Nested(PhotoSchema, many=True, dump_only=True)
-    weight = fields.Function(serialize=lambda obj: obj.get_weight())
+    weight = fields.Function(lambda obj, ctx: obj.get_weight(ctx['data']))
     related_products = fields.Nested(
                                 BaseProductSchemaForList,
                                 attribute='related_products_on_sale',
@@ -200,14 +218,22 @@ class BaseProductSchema(Schema):
                                 )
     documentation = fields.String(attribute='documentation_content',
                                   dump_only=True)
-    delay = fields.Function(serialize=lambda obj: obj.get_delay())
+    delay = fields.Function(lambda obj, ctx: obj.get_delay(ctx['data']))
     overstock_delay = fields.Function(
-                                serialize=lambda obj: obj.get_overstock_delay()
-                                )
-    stock = fields.Function(serialize=lambda obj: obj.get_stock())
+                          lambda obj, ctx: obj.get_overstock_delay(ctx['data'])
+                          )
+    stock = fields.Function(lambda obj, ctx: obj.get_stock(ctx['data']))
 
 
 class RegularProductSchema(BaseProductSchema):
+    pass
+
+
+class BaseProductSchemaForKitSubProduct(Schema):
+    pass
+
+
+class KitSubProductSchemaOption(Schema):
     pass
 
 
@@ -327,6 +353,10 @@ class ApiSubProductEdit(Resource):
         return {'status': 'OK'}
 
 
+product_dataparser = reqparse.RequestParser()
+product_dataparser.add_argument('data')
+
+
 class ApiProductFromCatAndSlug(Resource):
 
     def get(self, category_id, product_slug):
@@ -335,7 +365,8 @@ class ApiProductFromCatAndSlug(Resource):
                     slug=product_slug
                     )
         schema = productschema[product.type]
-        return schema().dump(product).data
+        ctx = {'data': product_dataparser.parse_args()['data']}
+        return schema(context=ctx).dump(product).data
 
 
 class ApiProductFromId(Resource):
@@ -343,7 +374,8 @@ class ApiProductFromId(Resource):
     def get(self, product_id):
         product = BaseProduct.objects.get_or_404(id=product_id)
         schema = productschema[product.type]
-        return schema().dump(product).data
+        ctx = {'data': product_dataparser.parse_args()['data']}
+        return schema(context=ctx).dump(product).data
 
 
 class ProductPhoto(Resource):

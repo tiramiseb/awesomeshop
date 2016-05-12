@@ -238,8 +238,13 @@ class RegularProduct(BaseProduct):
         self.save()
 
 
+class KitSubProductOption(db.EmbeddedDocument):
+    quantity = db.IntField(db_field='qty')
+    product = db.ReferenceField(BaseProduct)
+
+
 class KitSubProduct(db.EmbeddedDocument):
-    options = db.ListField(db.ReferenceField(BaseProduct))
+    options = db.EmbeddedDocumentListField(KitSubProductOption)
     can_be_disabled = db.BooleanField(db_field='dis')
 
 
@@ -247,7 +252,7 @@ class KitProduct(BaseProduct):
     type = 'kit'
     products = db.EmbeddedDocumentListField(KitSubProduct)
     tax = db.ReferenceField(Tax, reverse_delete_rule=db.DENY)
-    price_variation = db.DecimalField(db_fiend='var', default=0)
+    price_variation = db.DecimalField(db_field='var', default=0)
     euros_instead_of_percent = db.BooleanField(db_field='euro', default=False)
 
     def get_price_per_item(self, data=None):

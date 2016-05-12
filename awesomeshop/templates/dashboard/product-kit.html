@@ -30,9 +30,12 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             <div class="list-group" id="options[[ $index ]]" sv-root sv-part="subproduct.options" sv-on-sort="form.$setdirty();">
                 <div class="list-group-item handle" ng-repeat="option in subproduct.options" sv-element="{containment:'#options'+$parent.$index}">
                     <div class="row">
-                        <div class="col-xs-10">
-                            <img ng-show="option.main_photo" ng-src="[[ option.main_photo.thumbnail_url ]]">
-                            [[ option.name || option.slug ]]
+                        <div class="col-xs-2">
+                            <input type="number" id="qty-[[ $parent.$index ]]-[[ $index ]]" name="qty-[[ $parent.$index ]]-[[ $index ]]" min="1" class="form-control" ng-model="option.quantity">
+                        </div>
+                        <div class="col-xs-8">
+                            <img ng-show="option.product.main_photo" ng-src="[[ option.product.main_photo.thumbnail_url ]]">
+                            [[ option.product.name || option.product.slug ]]
                         </div>
                         <div class="col-xs-2 text-right">
                             <button type="button" class="btn btn-sm btn-danger" ng-click="subproduct.options.splice($index, 1);form.$setDirty();">
@@ -64,7 +67,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="{{ _('Product') }}" ng-model="subproduct.to_add" uib-typeahead="product as product.name for product in products | filter:{name:$viewValue}" typeahead-editable="false" typeahead-min-length="0">
                                 <span class="input-group-btn">
-                                    <button type="button" class="btn btn-primary" ng-click="subproduct.options.push(subproduct.to_add);subproduct.to_add=undefined;form.$setDirty();" ng-disabled="!subproduct.to_add">
+                                    <button type="button" class="btn btn-primary" ng-click="subproduct.options.push({quantity: 1, product: subproduct.to_add});subproduct.to_add=undefined;form.$setDirty();" ng-disabled="!subproduct.to_add">
                                         <i class="fa fa-plus"></i>
                                         {{ _('Add as an option') }}
                                     </button>

@@ -121,7 +121,7 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
                     $scope.product = response.data;
                     $scope.form.$setPristine();
                     reinit($scope.product.id);
-                    $state.go('product', {product_id:response.data.id}, {notify:false});
+                    $state.go('product', {product_type:response.data.type, product_id:response.data.id}, {notify:false});
                 });
         };
     }
@@ -158,21 +158,21 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
         $scope.product = {
             related_products: []
         };
-    }
+    };
     switch ($stateParams.product_type) {
         case 'regular':
             // Specific to regular products
             if (!$stateParams.product_id) {
                 $scope.product.type = 'regular';
-            }
+            };
             $scope.net_price = function() {
                 if ($scope.taxrates && $scope.product) {
                     for (i=0; i<$scope.taxrates.length; i++) {
                         if ($scope.product.tax == $scope.taxrates[i].id) {
                             return parseFloat($scope.product.gross_price) * ( 1 + parseFloat($scope.taxrates[i].rate) );
-                        }
-                    }
-                }
+                        };
+                    };
+                };
                 return '?';
             };
             break;
@@ -186,10 +186,10 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
                     to = 0.0,
                     variation = parseFloat($scope.product.price_variation) || 0;
                 $scope.product.products.forEach(function(prod) {
-                    var min=999999999999,
-                        max=0;
+                    var min = 999999999999,
+                        max = 0;
                     prod.options.forEach(function(option) {
-                        var gross = parseFloat(option.gross_price);
+                        var gross = parseFloat(option.quantity * option.product.gross_price);
                         min = Math.min(gross, min);
                         max = Math.max(gross, max);
                     });
