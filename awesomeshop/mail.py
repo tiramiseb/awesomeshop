@@ -28,7 +28,7 @@ from . import app, get_locale
 
 def send_mail(recipient, template, **kwargs):
     if app.config['SEND_MAILS']:
-        locale = kwargs.get('locale', get_locale())
+        locale = kwargs.get('locale') or get_locale()
         # Get the message content
         sender = app.config['MAIL_FROM']
         subject = render_template('email/{}/{}.subject'.format(template,
