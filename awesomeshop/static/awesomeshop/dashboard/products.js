@@ -177,6 +177,7 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
             };
             break;
         case 'kit':
+            // Specific to kit produts
             if (!$stateParams.product_id) {
                 $scope.product.type = 'kit';
                 $scope.product.products = [];
