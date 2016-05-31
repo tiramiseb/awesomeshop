@@ -169,6 +169,49 @@ angular.module('shopShop', ['bootstrapLightbox'])
                         overstock_delay: $scope.product.overstock_delay
                     };
                 };
+            } else if ($scope.product.type == 'kit') {
+                $scope.options = [];
+                $scope.prices = {'': 0};
+                // Functions for frontend
+                $scope.net_price = function() {
+                    var price = 0;
+                    for (var i=0; i<$scope.options.length; i++) {
+                        price += $scope.prices[ $scope.options[i] ];
+                    }
+                    return price;
+                }
+                $scope.stock_status = function() {
+                    // TODO Ask this to the server, depending on the
+                    // customers's choices
+                    return {
+                        quantity: $scope.product.stock,
+                        delay: $scope.product.delay,
+                        overstock_delay: $scope.product.overstock_delay
+                    };
+                }
+                // Options initialization
+                for (var i=0; i<$scope.product.products.length; i++) {
+                    var prod = $scope.product.products[i],
+                        lower_price = 999999999999,
+                        selected = null;
+                    if (prod.can_be_disabled) {
+                        selected = '';
+                        lower_price = 0;
+                    }
+                    for (var j=0; j<prod.options.length; j++) {
+                        var this_quantity = prod.options[j].quantity,
+                            this_price = parseFloat(prod.options[j].product.net_price) * this_quantity,
+                            this_id = prod.options[j].product.id+'*'+this_quantity;
+                        $scope.prices[this_id] = this_price;
+                        prod.options[j].id = this_id;
+                        if (this_price < lower_price) {
+                            // Select the cheaper option by default
+                            lower_price = this_price;
+                            selected = this_id;
+                        };
+                    };
+                    $scope.options[i] = selected;
+                };
             };
             // Common stuff
             if ($scope.product.photos.length > 1) {
