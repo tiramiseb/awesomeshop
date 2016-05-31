@@ -229,20 +229,29 @@ class RegularProductSchema(BaseProductSchema):
     pass
 
 
-class BaseProductSchemaForKitSubProduct(Schema):
-    pass
+class BaseProductSchemaForKitSubProductOption(Schema):
+    id = fields.String(required=True)
+    name = Loc(dump_only=True)
+    #main_photo = fields.Nested(PhotoSchema, dump_only=True)
+    net_price = fields.Function(
+                    serialize=lambda obj: str(obj.get_price_per_item().net)
+                    )
 
 
-class KitSubProductSchemaOption(Schema):
-    pass
+class KitSubProductOptionSchema(Schema):
+    quantity = fields.Integer(dump_only=True)
+    product = fields.Nested(BaseProductSchemaForKitSubProductOption,
+                            dump_only=True)
 
 
 class KitSubProductSchema(Schema):
-    pass
+    options = fields.Nested(KitSubProductOptionSchema, many=True,
+                            dump_only=True)
+    can_be_disabled = fields.Boolean(dump_only=True)
 
 
 class KitProductSchema(BaseProductSchema):
-    pass
+    products = fields.Nested(KitSubProductSchema, many=True)
 
 productschema = {
         'regular': RegularProductSchema,
