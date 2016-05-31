@@ -313,7 +313,7 @@ class Order(db.Document):
 
 def email_admin(sender, document, **kwargs):
     template = None
-    if document.status == 'unconfirmed':
+    if document.status == 'awaiting_payment':
         template = 'admin_new_order'
     if document.status == 'payment_received':
         template = 'admin_payment_received'
