@@ -19,6 +19,7 @@
 
 import datetime
 
+from mongoengine import signals
 from flask import abort
 from flask_babel import format_currency, lazy_gettext
 
@@ -308,3 +309,19 @@ class Order(db.Document):
     def _put_products_back_in_stock(self):
         for prod in self.products:
             prod._put_back_in_stock()
+
+
+def email_admin(sender, document, **kwargs):
+    template = None
+    if document.status == 'unconfirmed':
+        template = 'admin_new_order'
+    if document.status == 'payment_received':
+        template = 'admin_payment_received'
+    if template:
+        for email in app.config['ADMIN_EMAILS']:
+            send_mail(email, template, order=document)
+
+signals.post_save.connect(email_admin, sender=Order)
+
+
+
