@@ -268,12 +268,12 @@ angular.module('awesomeshop', [
                     });
             };
         },
-        stock: function(product) {
-            // Check the available stock for a product, deducing quantity in cart
-            if (product) {
+        quantity: function(product) {
+            // Return the quantity in stock for a product
+            if (product) { // product may be undefined, before it is loaded
                 for (var i=0; i<$localStorage.cart.length; i++) {
                     if ($localStorage.cart[i].product.id == product.id) {
-                        return Math.max(0, product.stock - $localStorage.cart[i].quantity);
+                        return $localStorage.cart[i].quantity;
                     };
                 };
             };
@@ -284,7 +284,7 @@ angular.module('awesomeshop', [
             var amount = 0;
             for (var i=0; i<$localStorage.cart.length; i++) {
                 var cartline = $localStorage.cart[i];
-                amount += cartline.quantity + cartline.product.net_price;
+                amount += cartline.quantity + parseFloat(cartline.product.net_price);
             }
             return amount;
         },
@@ -314,7 +314,7 @@ angular.module('awesomeshop', [
             $localStorage.cart = [];
         },
         list: function() {
-            // List the cart content
+            // Return the whole cart data
             return $localStorage.cart;
         },
         overstock: function() {

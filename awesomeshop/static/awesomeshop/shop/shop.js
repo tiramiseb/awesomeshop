@@ -140,6 +140,37 @@ angular.module('shopShop', ['bootstrapLightbox'])
     $http.get('/api/product/catslug/'+$stateParams.category+'/'+$stateParams.slug)
         .then(function(response) {
             $scope.product = response.data;
+            // Initialize product-type-dependent functions
+            //
+            // the following functions must be created, dependent on each product type:
+            //
+            // $scope.net_price
+            //      return the product net price as a float, an int or a string,
+            //      depending on the current display
+            //
+            // $scope.stock_status
+            //      return the stock status, quantity and delay as an obj :
+            //      {
+            //          quantity: <quantity of this product in stock>,
+            //          delay: <regular delivery delay, in days>,
+            //          overstock_delay: <delivery delay when out of stock, in days>
+            //      }
+            //      overstock_delay = -1 when the product cannot be ordered
+            //      "on demand" when it is out of stock
+            if ($scope.product.type == 'regular') {
+                // Functions for frontend
+                $scope.net_price = function() {
+                    return $scope.product.net_price;
+                }
+                $scope.stock_status = function() {
+                    return {
+                        quantity: $scope.product.stock,
+                        delay: $scope.product.delay,
+                        overstock_delay: $scope.product.overstock_delay
+                    };
+                };
+            };
+            // Common stuff
             if ($scope.product.photos.length > 1) {
                 $scope.thumb_width = parseInt(12 / ($scope.product.photos.length - 1));
             };

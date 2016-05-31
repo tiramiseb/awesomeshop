@@ -58,35 +58,29 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     </div>
     <div class="col-xs-5 col-md-4 col-lg-3">
         <div class="well">
-            <p class="price">[[ product.net_price | currency:"{{ config.CURRENCY }}" ]]</p>
+            <p class="price">[[ net_price() | currency:"{{ config.CURRENCY }}" ]]</p>
             <hr>
-            <div ng-show="cart.stock(product)>0 || product.overstock_delay != -1">
+            <div ng-show="cart.quantity(product) < stock_status().quantity || stock_status().overstock_delay >= 0">
                 <form name="form" class="form-horizontal" novalidate>
-                    <div class="form-group" ng-class="{ 'has-error' : form.quantity1.$invalid }" ng-show="product.overstock_delay == -1">
-                        <label class="col-sm-5 control-label" for="quantity1">{{ _('Quantity') }}</label>
+                    <div class="form-group" ng-class="{ 'has-error' : form.quantity.$invalid }">
+                        <label class="col-sm-5 control-label" for="quantity">{{ _('Quantity') }}</label>
                         <div class="col-sm-7">
-                            <input name="quantity1" id="quantity1" type="number" min="1" max="[[ cart.stock(product) + 1 ]]" class="form-control" ng-model="quantity">
+                            <input name="quantity" id="quantity" type="number" min="1" class="form-control" ng-model="quantity">
                         </div>
                     </div>
-                    <div class="form-group" ng-class="{ 'has-error' : form.quantity2.$invalid }" ng-show="product.overstock_delay >= 0">
-                        <label class="col-sm-5 control-label" for="quantity2">{{ _('Quantity') }}</label>
-                        <div class="col-sm-7">
-                            <input name="quantity2" id="quantity2" type="number" min="1" class="form-control" ng-model="quantity">
-                        </div>
-                    </div>
-                    <button type="button" ng-show="(product.overstock_delay >= 0 && form.quantity2.$valid) || (product.overstock_delay == -1 && cart.stock(product)-quantity>=0 && form.quantity1.$valid)" class="btn btn-success btn-lg btn-wrap btn-block" ng-class="{ 'btn-success': cart.stock(product)-quantity>=0, 'btn-info': product.overstock_delay >= 0 && cart.stock(product)-quantity<0 }" ng-click="cart.add(product, quantity);quantity=1;">
+                    <button type="button" ng-show="form.quantity.$valid && (cart.quantity(product) + quantity <= stock_status().quantity || stock_status().overstock_delay >= 0)" class="btn btn-success btn-lg btn-wrap btn-block" ng-class="{ 'btn-success': cart.quantity(product)+quantity <= stock_status().quantity, 'btn-info': cart.quantity(product) + quantity > stock_status().quantity && stock_status().overstock_delay >= 0 }" ng-click="cart.add(product, quantity); quantity=1;">
                         {{ _('Add to cart') }}
                     </button>
-                    <p class="text-center bottom-no-space" ng-show="product.overstock_delay >= 0 && cart.stock(product)-quantity<0">{{ _('Shipping delay: [[ product.overstock_delay ]]&nbsp;days') }}</p>
-                    <div class="alert alert-danger text-center bottom-no-space" ng-show="product.overstock_delay == -1 && (cart.stock(product)-quantity<0 || form.quantity1.$error.max)">
+                    <p class="text-center bottom-no-space" ng-show="cart.quantity(product) + quantity > stock_status().quantity && stock_status().overstock_delay >= 0">{{ _('Shipping delay: [[ stock_status().overstock_delay ]]&nbsp;days') }}</p>
+                    <div class="alert alert-danger text-center bottom-no-space" ng-show="cart.quantity(product) + quantity > stock_status().quantity && stock_status().overstock_delay < 0">
                         {{ _('Insufficient stock') }}
                     </div>
-                    <div class="alert alert-danger text-center bottom-no-space" ng-show="form.$invalid && !form.quantity1.$error.max">
+                    <div class="alert alert-danger text-center bottom-no-space" ng-show="form.$invalid">
                         {{ _('Incorrect quantity') }}
                     </div>
                 </form>
             </div>
-            <div class="alert alert-danger text-center bottom-no-space" ng-hide="cart.stock(product)>0 || product.overstock_delay >= 0">
+            <div class="alert alert-danger text-center bottom-no-space" ng-show="cart.quantity(product) >= stock_status().quantity && stock_status().overstock_delay < 0">
                 {{ _('Out of stock') }}
             </div>
         </div>
