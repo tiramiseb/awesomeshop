@@ -39,6 +39,9 @@ class BaseProduct(db.Document, StockedItem):
     All methods (and properties) raising NotImplementedError must be
     implemented in the children classes.
 
+    When there is no data given to the methods, all products types must act
+    as if they were regular products, without variations etc.
+
     External code must not call methods or attributes present only on one
     of the children classes.
 
