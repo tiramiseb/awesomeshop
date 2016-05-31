@@ -137,8 +137,6 @@ class BaseProduct(db.Document, StockedItem):
 
         For immediate shipping, must return a minimal shipping delay
         (see app.config['SHIPPING_DELAY'])
-
-        When the product is not available, must return -1
         """
         raise NotImplementedError
 
@@ -203,12 +201,7 @@ class RegularProduct(BaseProduct):
         return self.stock
 
     def get_delay(self, data=None):
-        if self.stock:
-            return app.config['SHIPPING_DELAY']
-        elif self.on_demand:
-            return app.config['ON_DEMAND_DELAY']
-        else:
-            return -1
+        return app.config['SHIPPING_DELAY']
 
     def get_overstock_delay(self, data=None):
         if self.on_demand:
