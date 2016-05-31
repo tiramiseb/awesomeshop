@@ -225,7 +225,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
                     $scope.stock_changed = true;
                 }
             }
-            cart.set(response.data, true);
+            cart.load(response.data, true);
         });
     $http.get('/api/payment')
         .then(function(response) {
@@ -256,7 +256,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
     function code_to_country(code) {
         var countrieslist = countries.get();
         if (countrieslist) {
-            for (i=0; i<countrieslist.length; i++) {
+            for (var i=0; i<countrieslist.length; i++) {
                 if (countrieslist[i].code == code) {
                     return code + ' - ' + countrieslist[i].name;
                 };
@@ -354,7 +354,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
 .controller('SavedCartsCtrl', function($scope, savedCarts, cart) {
     $scope.saved_carts = savedCarts;
     $scope.load_cart = function(targetcart) {
-        cart.set(targetcart);
+        cart.load(targetcart);
     }
 })
 .controller('OrdersCtrl', function($scope, orders) {

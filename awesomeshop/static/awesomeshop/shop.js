@@ -230,22 +230,21 @@ angular.module('awesomeshop', [
     };
     return {
         add: function(product, quantity) {
-            var found = false;
+            // Add a product to the cart
             for (var i=0; i<$localStorage.cart.length; i++) {
                 if ($localStorage.cart[i].product.id == product.id) {
                     $localStorage.cart[i].quantity += quantity;
-                    found = true;
-                    break;
+                    return;
                 }
             };
-            if (!found) {
-                $localStorage.cart.push({
-                    'product': product,
-                    'quantity': quantity
-                })
-            };
+            // Product was not found, adding it
+            $localStorage.cart.push({
+                'product': product,
+                'quantity': quantity
+            })
         },
         remove: function(product) {
+            // Completely remove the product from the cart
             var index = -1;
             for (var i=0; i<$localStorage.cart.length; i++) {
                 if ($localStorage.cart[i].product.id == product.id) {
@@ -257,93 +256,89 @@ angular.module('awesomeshop', [
                 $localStorage.cart.splice(index, 1);
             };
         },
-        set: function(targetcart, do_not_verify) {
+        load: function(cart, do_not_verify) {
+            // Load a stored cart in the live cart
+            // do_not_verify = False, ask the server to confirm the quantity in cart
             if (do_not_verify) {
-                $localStorage.cart = targetcart;
+                $localStorage.cart = cart;
             } else {
-                $http.post('/api/cart/verify', targetcart)
+                $http.post('/api/cart/verify', cart)
                     .then(function(response) {
                         $localStorage.cart = response.data;
                     });
             };
         },
         stock: function(product) {
+            // Check the available stock for a product, deducing quantity in cart
             if (product) {
-                // Check the available stock, deducing quantity in cart
-                var stock = product.stock;
                 for (var i=0; i<$localStorage.cart.length; i++) {
                     if ($localStorage.cart[i].product.id == product.id) {
-                        stock = Math.max(0, stock - $localStorage.cart[i].quantity);
-                        break;
+                        return Math.max(0, product.stock - $localStorage.cart[i].quantity);
                     };
                 };
-                return stock;
-            } else {
-                return 0;
-            }
+            };
+            return 0;
         },
-        amount: function() {
+        total: function() {
+            // Calculate the total amount of the cart
             var amount = 0;
             for (var i=0; i<$localStorage.cart.length; i++) {
-                var qt = $localStorage.cart[i].quantity,
-                    unitprice = $localStorage.cart[i].product.net_price;
-                amount += qt * unitprice;
+                var cartline = $localStorage.cart[i];
+                amount += cartline.quantity + cartline.product.net_price;
             }
             return amount;
         },
         count: function() {
+            // Count the number of products in the cart
             var count = 0;
             for (var i=0; i<$localStorage.cart.length; i++) {
-                if (!$localStorage.cart[i].quantity) {
-                    $localStorage.cart[i].quantity = 1;
-                } else if ($localStorage.cart[i].quantity > $localStorage.cart[i].product.stock && $localStorage.cart[i].product.overstock_delay == -1) {
+                var cartline = $localStorage.cart[i];
+                // First, check and adjust the quantity
+                if (!cartline.quantity) {
+                    cartline.quantity = 1;
+                } else if (cartline.quantity > cartline.product.stock && cartline.product.overstock_delay >= 0) {
                     // Reduce quantity to stock if overstock is not allowed
-                    $localStorage.cart[i].quantity = $localStorage.cart[i].product.stock;
+                    cartline.quantity = cartline.product.stock;
                 };
-                count += $localStorage.cart[i].quantity;
+                count += cartline.quantity;
             }
             return count;
         },
         reset: function() {
+            // Empty the cart and go back to the index
             $localStorage.cart = [];
             $state.go('index');
         },
         empty: function() {
+            // Empty the cart;
             $localStorage.cart = [];
         },
         list: function() {
+            // List the cart content
             return $localStorage.cart;
         },
-        total: function() {
-            var total = 0;
+        overstock: function() {
+            // Is any product in the cart to be ordered on demand
+            // (used for checkout)
             for (var i=0; i<$localStorage.cart.length; i++) {
-                total += $localStorage.cart[i].product.net_price * $localStorage.cart[i].quantity;
-            };
-            return total;
-        },
-        in_stock: function() {
-            var in_stock = true;
-            for (var i=0; i<$localStorage.cart.length; i++) {
-                if ($localStorage.cart[i].product.stock < $localStorage.cart[i].quantity) {
+                var cartline = $localStorage.cart[i];
+                if (cartline.product.overstock_delay >= 0 && cartline.product.stock < cartline.quantity) {
                     // If the stock is not sufficient for a single "not
                     // overstock" product, the whole cart is marked as "not in
                     // stock"
-                    in_stock = false;
-                    break;
+                    return true;
                 };
             };
-            return in_stock;
+            return false;
         },
         delay: function() {
+            // Delay for the whole cart
+            // (used for checkout and cart display)
             var delay = 0;
             for (var i=0; i<$localStorage.cart.length; i++) {
                 var product = $localStorage.cart[i].product;
                 if (product.stock < $localStorage.cart[i].quantity) {
-                    if (product.delay == -1) {
-                        delay = -1;
-                    } else {
-                        delay = Math.max(product.overstock_delay, delay);
-                    }
+                    delay = Math.max(product.overstock_delay, delay);
                 } else {
                     delay = Math.max(product.delay, delay);
                 };
