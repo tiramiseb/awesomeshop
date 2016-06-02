@@ -319,6 +319,3 @@ def email_admin(sender, document, **kwargs):
             send_mail(email, template, order=document)
 
 signals.post_save.connect(email_admin, sender=Order)
-
-
-
