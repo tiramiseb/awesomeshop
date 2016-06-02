@@ -42,7 +42,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     <div class="input-group">
                         <input id="qty-[[ line.product.reference ]]" type="number" min="1" class="form-control" ng-model="line.quantity" ng-model-options="{debounce:{default:100}}">
                         <span class="input-group-btn">
-                            <button type="button" class="btn btn-danger" ng-click="cart.remove(line.product)" uib-tooltip="{{ _('Remove') }}">
+                            <button type="button" class="btn btn-danger" ng-click="cart.remove(line.product.id)" uib-tooltip="{{ _('Remove') }}">
                                 <i class="fa fa-trash"></i>
                             </button>
                         </span>

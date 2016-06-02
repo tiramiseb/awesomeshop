@@ -26,7 +26,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             </div>
         </a>
         <div class="caption" ng-if="product.type == 'regular'">
-            <button type="button" class="btn btn-success btn-block" ng-if="cart.quantity(product) < product.stock || product.overstock_delay >= 0" ng-class="{ 'btn-success': cart.quantity(product) < product.stock, 'btn-info': product.overstock_delay >= 0 && cart.quantity(product) >= product.stock }" ng-click="cart.add(product, 1)">
+            <button type="button" class="btn btn-success btn-block" ng-if="cart.quantity(product) < product.stock || product.overstock_delay >= 0" ng-class="{ 'btn-success': cart.quantity(product) < product.stock, 'btn-info': product.overstock_delay >= 0 && cart.quantity(product) >= product.stock }" ng-click="cart.add(product.id, 1)">
                 {{ _('Add to cart') }}
             </button>
             <button type="button" class="btn btn-danger btn-block disabled" ng-if="product.overstock_delay < 0 && cart.quantity(product) >= product.stock">

@@ -135,11 +135,11 @@ angular.module('shopShop', ['bootstrapLightbox'])
             title.set($scope.category.name);
         });
 })
-.controller('ProductCtrl', function($http, $scope, $state, $stateParams, Lightbox, cart, title) {
+.controller('ProductCtrl', function($http, $scope, $state, $stateParams, Lightbox, products, cart, title) {
     $scope.cart = cart;
-    $http.get('/api/product/catslug/'+$stateParams.category+'/'+$stateParams.slug)
-        .then(function(response) {
-            $scope.product = response.data;
+    products.get('catslug/'+$stateParams.category+'/'+$stateParams.slug)
+        .then(function(product) {
+            $scope.product = product;
             // Initialize product-type-dependent functions
             //
             // the following functions must be created, dependent on each product type:
@@ -157,19 +157,19 @@ angular.module('shopShop', ['bootstrapLightbox'])
             //      }
             //      overstock_delay = -1 when the product cannot be ordered
             //      "on demand" when it is out of stock
-            if ($scope.product.type == 'regular') {
+            if (product.type == 'regular') {
                 // Functions for frontend
                 $scope.net_price = function() {
-                    return $scope.product.net_price;
+                    return product.net_price;
                 }
                 $scope.stock_status = function() {
                     return {
-                        quantity: $scope.product.stock,
-                        delay: $scope.product.delay,
-                        overstock_delay: $scope.product.overstock_delay
+                        quantity: product.stock,
+                        delay: product.delay,
+                        overstock_delay: product.overstock_delay
                     };
                 };
-            } else if ($scope.product.type == 'kit') {
+            } else if (product.type == 'kit') {
                 $scope.options = [];
                 $scope.prices = {'': 0};
                 // Functions for frontend
@@ -184,14 +184,14 @@ angular.module('shopShop', ['bootstrapLightbox'])
                     // TODO Ask this to the server, depending on the
                     // customers's choices
                     return {
-                        quantity: $scope.product.stock,
-                        delay: $scope.product.delay,
-                        overstock_delay: $scope.product.overstock_delay
+                        quantity: product.stock,
+                        delay: product.delay,
+                        overstock_delay: product.overstock_delay
                     };
                 }
                 // Options initialization
-                for (var i=0; i<$scope.product.products.length; i++) {
-                    var prod = $scope.product.products[i],
+                for (var i=0; i<product.products.length; i++) {
+                    var prod = product.products[i],
                         lower_price = 999999999999,
                         selected = null;
                     if (prod.can_be_disabled) {
@@ -214,10 +214,10 @@ angular.module('shopShop', ['bootstrapLightbox'])
                 };
             };
             // Common stuff
-            if ($scope.product.photos.length > 1) {
-                $scope.thumb_width = parseInt(12 / ($scope.product.photos.length - 1));
+            if (product.photos.length > 1) {
+                $scope.thumb_width = parseInt(12 / (product.photos.length - 1));
             };
-            title.set($scope.product.name);
+            title.set(product.name);
         }, function(response) {
             $state.go('index');
         });

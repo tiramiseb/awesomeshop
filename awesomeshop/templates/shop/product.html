@@ -68,7 +68,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                             <input name="quantity" id="quantity" type="number" min="1" class="form-control" ng-model="quantity">
                         </div>
                     </div>
-                    <button type="button" ng-show="form.quantity.$valid && (cart.quantity(product) + quantity <= stock_status().quantity || stock_status().overstock_delay >= 0)" class="btn btn-success btn-lg btn-wrap btn-block" ng-class="{ 'btn-success': cart.quantity(product)+quantity <= stock_status().quantity, 'btn-info': cart.quantity(product) + quantity > stock_status().quantity && stock_status().overstock_delay >= 0 }" ng-click="cart.add(product, quantity); quantity=1;">
+                    <button type="button" ng-show="form.quantity.$valid && (cart.quantity(product) + quantity <= stock_status().quantity || stock_status().overstock_delay >= 0)" class="btn btn-success btn-lg btn-wrap btn-block" ng-class="{ 'btn-success': cart.quantity(product)+quantity <= stock_status().quantity, 'btn-info': cart.quantity(product) + quantity > stock_status().quantity && stock_status().overstock_delay >= 0 }" ng-click="cart.add(product.id, quantity); quantity=1;">
                         {{ _('Add to cart') }}
                     </button>
                     <p class="text-center bottom-no-space" ng-show="cart.quantity(product) + quantity > stock_status().quantity && stock_status().overstock_delay >= 0">{{ _('Shipping delay: [[ stock_status().overstock_delay ]]&nbsp;days') }}</p>

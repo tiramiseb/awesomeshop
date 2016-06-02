@@ -91,6 +91,29 @@ angular.module('awesomeshop', [
         }
     };
 })
+.factory('products', function() {
+    var products = {};
+    return {
+        get: function(productid) {
+            return $q(function(resolve, reject) {
+                var prod = products[productid];
+                if (prod) {
+                    resolve(prod);
+                } else {
+                    $http.get('/api/product/'+productid)
+                        .then(function(response) {
+                            var prod = response.data;
+                            products[productid] = prod;
+                            if (productid.indexof('catslug/') == 0) {
+                                products[prod.id] = prod;
+                            };
+                            resolve(prod);
+                        }, reject);
+                };
+            });
+        }
+    }
+})
 .factory('categories', function($rootScope, $http) {
     var categories,
         current_product_category;
@@ -218,7 +241,7 @@ angular.module('awesomeshop', [
         }
     };
 })
-.factory('cart', function($localStorage, $http, $state) {
+.factory('cart', function($localStorage, $http, $state, products) {
     if ($localStorage.cart) {
         // Ask the server to adjust the cart (availability and price)
         $http.post('/api/cart/verify', $localStorage.cart)
@@ -229,32 +252,38 @@ angular.module('awesomeshop', [
         $localStorage.cart = [];
     };
     return {
-        add: function(product, quantity) {
+        add: function(productid, quantity) {
             // Add a product to the cart
-            for (var i=0; i<$localStorage.cart.length; i++) {
-                if ($localStorage.cart[i].product.id == product.id) {
-                    $localStorage.cart[i].quantity += quantity;
-                    return;
-                }
-            };
-            // Product was not found, adding it
-            $localStorage.cart.push({
-                'product': product,
-                'quantity': quantity
-            })
+            products.get(productid)
+                .then(function(prod) {
+                    for (var i=0; i<$localStorage.cart.length; i++) {
+                        if ($localStorage.cart[i].product.id == prod.id) {
+                            $localStorage.cart[i].quantity += quantity;
+                            return;
+                        }
+                    };
+                    // Product was not found, adding it
+                    $localStorage.cart.push({
+                        'product': prod,
+                        'quantity': quantity
+                    })
+                })
         },
-        remove: function(product) {
+        remove: function(productid) {
             // Completely remove the product from the cart
-            var index = -1;
-            for (var i=0; i<$localStorage.cart.length; i++) {
-                if ($localStorage.cart[i].product.id == product.id) {
-                    index=i;
-                    break;
-                };
-            };
-            if (index >= 0) {
-                $localStorage.cart.splice(index, 1);
-            };
+            products.get(productid)
+                .then(function(prod) {
+                    var index = -1;
+                    for (var i=0; i<$localStorage.cart.length; i++) {
+                        if ($localStorage.cart[i].product.id == prod.id) {
+                            index=i;
+                            break;
+                        };
+                    };
+                    if (index >= 0) {
+                        $localStorage.cart.splice(index, 1);
+                    };
+                })
         },
         load: function(cart, do_not_verify) {
             // Load a stored cart in the live cart
