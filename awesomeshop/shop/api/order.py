@@ -303,8 +303,6 @@ class PayOrder(Resource):
                     )['body']
         return PaymentInfoSchema().dump(payment_data).data
 
-
-
 rest.add_resource(ApiAllOrders, '/api/order/all')
 rest.add_resource(ApiOrders, '/api/order')
 rest.add_resource(ApiOrder, '/api/order/<number>')

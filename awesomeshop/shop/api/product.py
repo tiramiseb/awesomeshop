@@ -169,18 +169,14 @@ class KitProductSchemaForEdition(BaseProductSchemaForEdition):
         for sub in data['products']:
             options = []
             for opt in sub['options']:
-                options.append(
-                    KitSubProductOption(
-                        quantity = opt['quantity'],
-                        product = opt['product']['id']
-                        )
-                    )
-            products.append(
-                KitSubProduct(
-                    options = options,
-                    can_be_disabled=sub.get('can_be_disabled')
-                    )
-                )
+                options.append(KitSubProductOption(
+                    quantity=opt['quantity'],
+                    product=opt['product']['id']
+                    ))
+            products.append(KitSubProduct(
+                options=options,
+                can_be_disabled=sub.get('can_be_disabled')
+                ))
         product.products = products
         product.tax = data.get('tax', u'')
         product.price_variation = data.get('price_variation', 0)
@@ -232,7 +228,7 @@ class RegularProductSchema(BaseProductSchema):
 class BaseProductSchemaForKitSubProductOption(Schema):
     id = fields.String(required=True)
     name = Loc(dump_only=True)
-    #main_photo = fields.Nested(PhotoSchema, dump_only=True)
+    # main_photo = fields.Nested(PhotoSchema, dump_only=True)
     net_price = fields.Function(
                     serialize=lambda obj: str(obj.get_price_per_item().net)
                     )
