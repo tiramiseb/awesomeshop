@@ -91,28 +91,48 @@ angular.module('awesomeshop', [
         }
     };
 })
-.factory('products', function() {
-    var products = {};
+.factory('products', function($http, $q) {
+    var catslugs = {},
+        products = {};
+    function get_product(productid, resolve, reject) {
+        var prod = products[productid];
+        if (prod) {
+            resolve(prod);
+        } else {
+            $http.get('/api/product/'+productid)
+                .then(function(response) {
+                    var prod = response.data;
+                    products[prod.id] = prod;
+                    resolve(prod);
+                }, reject);
+        };
+    };
     return {
         get: function(productid) {
             return $q(function(resolve, reject) {
-                var prod = products[productid];
-                if (prod) {
-                    resolve(prod);
-                } else {
-                    $http.get('/api/product/'+productid)
-                        .then(function(response) {
-                            var prod = response.data;
-                            products[productid] = prod;
-                            if (productid.indexof('catslug/') == 0) {
+                if (productid.indexOf('catslug/') == 0) {
+                    // Product requested with its category id and its slug
+                    var new_productid = catslugs[productid];
+                    if (new_productid) {
+                        // This product is already known
+                        get_product(new_productid, resolve, reject);
+                    } else {
+                        // Download from the catslug
+                        $http.get('/api/product/'+productid)
+                            .then(function(response) {
+                                var prod = response.data;
                                 products[prod.id] = prod;
-                            };
-                            resolve(prod);
-                        }, reject);
+                                catslugs[productid] = prod;
+                                resolve(prod);
+                            }, reject);
+                    };
+                } else {
+                    // Product requested with its product id
+                    return get_product(productid, resolve, reject);
                 };
-            });
+            })
         }
-    }
+    };
 })
 .factory('categories', function($rootScope, $http) {
     var categories,
