@@ -350,22 +350,22 @@ class KitProduct(BaseProduct):
     price_variation = db.DecimalField(db_field='var', default=0)
     euros_instead_of_percent = db.BooleanField(db_field='euro', default=False)
 
-    def get_price_per_item(self, data=None):
+    def get_price_per_item(self, data={}):
         price = prices.Price(0)
         for prod in self.products:
             price += prod.get_price(data)
         return price
 
-    def get_weight(self, data=None):
+    def get_weight(self, data={}):
         return sum(prod.get_weight(data) for prod in self.products)
 
-    def get_stock(self, data=None):
+    def get_stock(self, data={}):
         return min(prod.get_stock(data) for prod in self.products)
 
-    def get_delay(self, data=None):
+    def get_delay(self, data={}):
         return max(prod.get_delay(data) for prod in self.products)
 
-    def get_overstock_delay(self, data=None):
+    def get_overstock_delay(self, data={}):
         delays = []
         for prod in self.products:
             this_delay = prod.get_overstock_delay(data)
@@ -377,7 +377,7 @@ class KitProduct(BaseProduct):
                 delays.append(this_delay)
         return max(delays)
 
-    def destock(self, quantity, data=None):
+    def destock(self, quantity, data={}):
         # TODO Be more precise on destocking so restocking would be correct
         quantities = []
         from_stock_s = []
@@ -389,7 +389,7 @@ class KitProduct(BaseProduct):
             delays.append(delay)
         return (max(quantities), max(from_stock_s), max(delays))
 
-    def restock(self, quantity, data=None):
+    def restock(self, quantity, data={}):
         for prod in self.products:
             prod.restock(quantity, data)
 
