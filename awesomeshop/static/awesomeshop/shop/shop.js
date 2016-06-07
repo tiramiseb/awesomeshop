@@ -169,10 +169,10 @@ angular.module('shopShop', ['bootstrapLightbox'])
                 }
             };
             // Common stuff
+            $scope.add_to_cart = function() {
+                cart.add($scope.product.id, make_data(), $scope.quantity);
+            };
             if ($scope.product.photos.length > 1) {
-                $scope.add_to_cart = function() {
-                    cart.add($scope.product.id, make_data(), $scope.quantity);
-                };
                 $scope.thumb_width = parseInt(12 / ($scope.product.photos.length - 1));
             };
             title.set($scope.product.name);
