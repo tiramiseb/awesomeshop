@@ -91,44 +91,63 @@ angular.module('awesomeshop', [
         }
     };
 })
-.factory('products', function($http, $q) {
+.factory('products', function($http, $q, $httpParamSerializer, $timeout) { // XXX virer timeout
     var catslugs = {},
         products = {};
-    function get_product(productid, resolve, reject) {
-        var prod = products[productid];
+    function get_product(productid, data, resolve, reject) {
+        var prod;
+        if (products[productid]) {
+            prod = products[productid][data];
+        };
         if (prod) {
-            resolve(prod);
+            resolve(angular.copy(prod));
         } else {
-            $http.get('/api/product/'+productid)
+            if (data) {
+                params = {data: data};
+            } else {
+                params = {};
+            }
+            $http.get('/api/product/'+productid, {params: params})
                 .then(function(response) {
                     var prod = response.data;
-                    products[prod.id] = prod;
-                    resolve(prod);
+                    if (!products[prod.id]) {
+                        products[prod.id] = {};
+                    };
+                    products[prod.id][data] = prod;
+                    resolve(angular.copy(prod));
                 }, reject);
         };
     };
     return {
-        get: function(productid) {
+        getid: function(productid, data, scope) {
             return $q(function(resolve, reject) {
-                if (productid.indexOf('catslug/') == 0) {
-                    // Product requested with its category id and its slug
-                    var new_productid = catslugs[productid];
-                    if (new_productid) {
-                        // This product is already known
-                        get_product(new_productid, resolve, reject);
-                    } else {
-                        // Download from the catslug
-                        $http.get('/api/product/'+productid)
-                            .then(function(response) {
-                                var prod = response.data;
-                                products[prod.id] = prod;
-                                catslugs[productid] = prod;
-                                resolve(prod);
-                            }, reject);
-                    };
+                get_product(productid, data, resolve, reject);
+            })
+        },
+        getcatslug: function(cat, slug, data) {
+            var catslug = cat+'/'+slug;
+            return $q(function(resolve, reject) {
+                var productid = catslugs[catslug];
+                if (productid) {
+                    // This product is already known
+                    get_product(productid, data, resolve, reject);
                 } else {
-                    // Product requested with its product id
-                    return get_product(productid, resolve, reject);
+                    // Download from the catslug
+                    if (data) {
+                        params = {data: data};
+                    } else {
+                        params = {};
+                    }
+                    $http.get('/api/product/catslug/'+catslug, {params: params})
+                        .then(function(response) {
+                            var prod = response.data;
+                            if (!products[prod.id]) {
+                                products[prod.id] = {};
+                            };
+                            products[prod.id][data] = prod;
+                            catslugs[catslug] = prod.id;
+                            get_product(prod.id, data, resolve, reject);
+                        }, reject);
                 };
             })
         }
@@ -272,38 +291,35 @@ angular.module('awesomeshop', [
         $localStorage.cart = [];
     };
     return {
-        add: function(productid, quantity) {
+        add: function(productid, data, quantity) {
             // Add a product to the cart
-            products.get(productid)
+            products.getid(productid, data)
                 .then(function(prod) {
                     for (var i=0; i<$localStorage.cart.length; i++) {
-                        if ($localStorage.cart[i].product.id == prod.id) {
-                            $localStorage.cart[i].quantity += quantity;
-                            return;
+                        var cartline = $localStorage.cart[i];
+                        if (cartline.product.id == prod.id &&
+                            cartline.data == data) {
+                                cartline.quantity += quantity;
+                                return;
                         }
                     };
                     // Product was not found, adding it
                     $localStorage.cart.push({
-                        'product': prod,
-                        'quantity': quantity
+                        product: prod,
+                        data: data,
+                        quantity: quantity
                     })
                 })
         },
-        remove: function(productid) {
+        remove: function(productid, data) {
             // Completely remove the product from the cart
-            products.get(productid)
-                .then(function(prod) {
-                    var index = -1;
-                    for (var i=0; i<$localStorage.cart.length; i++) {
-                        if ($localStorage.cart[i].product.id == prod.id) {
-                            index=i;
-                            break;
-                        };
-                    };
-                    if (index >= 0) {
-                        $localStorage.cart.splice(index, 1);
-                    };
-                })
+            for (var i=0; i<$localStorage.cart.length; i++) {
+                if ($localStorage.cart[i].product.id == productid &&
+                    $localStorage.cart[i].data == data) {
+                        $localStorage.cart.splice(i, 1);
+                        break;
+                };
+            };
         },
         load: function(cart, do_not_verify) {
             // Load a stored cart in the live cart

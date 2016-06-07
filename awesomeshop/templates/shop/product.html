@@ -58,9 +58,9 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     </div>
     <div class="col-xs-5 col-md-4 col-lg-3">
         <div class="well">
-            <p class="price">[[ net_price() | currency:"{{ config.CURRENCY }}" ]]</p>
+            <p class="price">[[ product.net_price | currency:"{{ config.CURRENCY }}" ]]</p>
             <hr>
-            <div ng-show="cart.quantity(product) < stock_status().quantity || stock_status().overstock_delay >= 0">
+            <div ng-show="cart.quantity(product) < product.quantity || product.overstock_delay >= 0">
                 <form name="form" class="form-horizontal" novalidate>
                     <div class="form-group" ng-class="{ 'has-error' : form.quantity.$invalid }">
                         <label class="col-sm-5 control-label" for="quantity">{{ _('Quantity') }}</label>
@@ -68,11 +68,11 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                             <input name="quantity" id="quantity" type="number" min="1" class="form-control" ng-model="quantity">
                         </div>
                     </div>
-                    <button type="button" ng-show="form.quantity.$valid && (cart.quantity(product) + quantity <= stock_status().quantity || stock_status().overstock_delay >= 0)" class="btn btn-success btn-lg btn-wrap btn-block" ng-class="{ 'btn-success': cart.quantity(product)+quantity <= stock_status().quantity, 'btn-info': cart.quantity(product) + quantity > stock_status().quantity && stock_status().overstock_delay >= 0 }" ng-click="cart.add(product.id, quantity); quantity=1;">
+                    <button type="button" ng-show="form.quantity.$valid && (cart.quantity(product) + quantity <= product.quantity || product.overstock_delay >= 0)" class="btn btn-success btn-lg btn-wrap btn-block" ng-class="{ 'btn-success': cart.quantity(product)+quantity <= product.quantity, 'btn-info': cart.quantity(product) + quantity > product.quantity && product.overstock_delay >= 0 }" ng-click="add_to_cart(); quantity=1;">
                         {{ _('Add to cart') }}
                     </button>
-                    <p class="text-center bottom-no-space" ng-show="cart.quantity(product) + quantity > stock_status().quantity && stock_status().overstock_delay >= 0">{{ _('Shipping delay: [[ stock_status().overstock_delay ]]&nbsp;days') }}</p>
-                    <div class="alert alert-danger text-center bottom-no-space" ng-show="cart.quantity(product) + quantity > stock_status().quantity && stock_status().overstock_delay < 0">
+                    <p class="text-center bottom-no-space" ng-show="cart.quantity(product) + quantity > product.quantity && product.overstock_delay >= 0">{{ _('Shipping delay: [[ product.overstock_delay ]]&nbsp;days') }}</p>
+                    <div class="alert alert-danger text-center bottom-no-space" ng-show="cart.quantity(product) + quantity > product.quantity && product.overstock_delay < 0">
                         {{ _('Insufficient stock') }}
                     </div>
                     <div class="alert alert-danger text-center bottom-no-space" ng-show="form.$invalid">
@@ -80,7 +80,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     </div>
                 </form>
             </div>
-            <div class="alert alert-danger text-center bottom-no-space" ng-show="cart.quantity(product) >= stock_status().quantity && stock_status().overstock_delay < 0">
+            <div class="alert alert-danger text-center bottom-no-space" ng-show="cart.quantity(product) >= product.quantity && product.overstock_delay < 0">
                 {{ _('Out of stock') }}
             </div>
         </div>
@@ -91,25 +91,25 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <label class="list-group-item" ng-repeat="option in prod.options">
             <div class="row">
                 <div class="col-sm-6">
-                    <input type="radio" ng-model="options[$parent.$index]" ng-value="option.id" ng-show="prod.options.length > 1 || prod.can_be_disabled">
+                    <input type="radio" ng-model="prod.selected" ng-value="option.selected_string" ng-show="prod.options.length > 1 || prod.can_be_disabled" ng-change="update_price()">
                     [[ option.product.name ]]
                 </div>
                 <div class="col-xs-6 col-sm-3 text-right">
-                    [[ option.quantity ]]
+                    ×[[ option.quantity ]]
                 </div>
-                <div class="col-xs-6 col-sm-3 text-right" ng-hide="option.id == options[$parent.$index]">
-                    <span ng-show="prices[option.id] > prices[ options[$parent.$index] ]">+</span>[[ prices[option.id] - prices[ options[$parent.$index] ] | currency:"{{ config.CURRENCY }}" ]]
+                <div class="col-xs-6 col-sm-3 text-right" ng-hide="option.selected_string == prod.selected">
+                    <span ng-show="option.net_price >= prod.reference_price">+</span>[[ option.net_price - prod.reference_price | currency:"{{ config.CURRENCY }}" ]]
                 </div>
             </div>
         </label>
         <label class="list-group-item" ng-if="prod.can_be_disabled">
             <div class="row">
                 <div class="col-xs-6 col-sm-9">
-                    <input type="radio" ng-model="options[$index]" ng-value="''">
+                    <input type="radio" ng-model="prod.selected" ng-value="'none'" ng-change="update_price()">
                     {{ _('None') }}<br>
                 </div>
-                <div class="col-xs-6 col-sm-3 text-right" ng-hide="options[$index] == ''">
-                    [[ 0 - prices[ options[$index] ] | currency:"{{ config.CURRENCY }}" ]]
+                <div class="col-xs-6 col-sm-3 text-right" ng-hide="prod.selected == 'none'">
+                    [[ 0 - prod.reference_price | currency:"{{ config.CURRENCY }}" ]]
                 </div>
             </div>
         </label>

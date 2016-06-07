@@ -135,89 +135,47 @@ angular.module('shopShop', ['bootstrapLightbox'])
             title.set($scope.category.name);
         });
 })
-.controller('ProductCtrl', function($http, $scope, $state, $stateParams, Lightbox, products, cart, title) {
+.controller('ProductCtrl', function($http, $scope, $state, $stateParams, $httpParamSerializer, Lightbox, products, cart, title, $timeout) {
     $scope.cart = cart;
-    products.get('catslug/'+$stateParams.category+'/'+$stateParams.slug)
+    products.getcatslug($stateParams.category, $stateParams.slug)
         .then(function(product) {
             $scope.product = product;
             // Initialize product-type-dependent functions
             //
             // the following functions must be created, dependent on each product type:
             //
-            // $scope.net_price
-            //      return the product net price as a float, an int or a string,
-            //      depending on the current display
-            //
-            // $scope.stock_status
-            //      return the stock status, quantity and delay as an obj :
-            //      {
-            //          quantity: <quantity of this product in stock>,
-            //          delay: <regular delivery delay, in days>,
-            //          overstock_delay: <delivery delay when out of stock, in days>
-            //      }
-            //      overstock_delay = -1 when the product cannot be ordered
-            //      "on demand" when it is out of stock
+            // make_data:
+            //      return the data as a string or null/undef
             if (product.type == 'regular') {
-                // Functions for frontend
-                $scope.net_price = function() {
-                    return product.net_price;
+                function make_data() {
+                    return null;
                 }
-                $scope.stock_status = function() {
-                    return {
-                        quantity: product.stock,
-                        delay: product.delay,
-                        overstock_delay: product.overstock_delay
-                    };
-                };
             } else if (product.type == 'kit') {
-                $scope.options = [];
-                $scope.prices = {'': 0};
-                // Functions for frontend
-                $scope.net_price = function() {
-                    var price = 0;
-                    for (var i=0; i<$scope.options.length; i++) {
-                        price += $scope.prices[ $scope.options[i] ];
-                    }
-                    return price;
-                }
-                $scope.stock_status = function() {
-                    // TODO Ask this to the server, depending on the
-                    // customers's choices
-                    return {
-                        quantity: product.stock,
-                        delay: product.delay,
-                        overstock_delay: product.overstock_delay
-                    };
-                }
-                // Options initialization
-                for (var i=0; i<product.products.length; i++) {
-                    var prod = product.products[i],
-                        lower_price = 999999999999,
-                        selected = null;
-                    if (prod.can_be_disabled) {
-                        selected = '';
-                        lower_price = 0;
-                    }
-                    for (var j=0; j<prod.options.length; j++) {
-                        var this_quantity = prod.options[j].quantity,
-                            this_price = parseFloat(prod.options[j].product.net_price) * this_quantity,
-                            this_id = prod.options[j].product.id+'*'+this_quantity;
-                        $scope.prices[this_id] = this_price;
-                        prod.options[j].id = this_id;
-                        if (this_price < lower_price) {
-                            // Select the cheaper option by default
-                            lower_price = this_price;
-                            selected = this_id;
-                        };
-                    };
-                    $scope.options[i] = selected;
+                $scope.update_price = function() {
+                    // Whenever a choice changes, reload the product with
+                    // the corresponding data
+                    products.getid($scope.product.id, make_data())
+                        .then(function(prod) {
+                            $scope.product = prod;
+                        })
                 };
+                function make_data() {
+                    var query = [];
+                    for (var i=0; i<$scope.product.products.length; i++) {
+                        var prod = $scope.product.products[i];
+                        query.push(prod.id+':'+prod.selected);
+                    };
+                    return query.join(',');
+                }
             };
             // Common stuff
-            if (product.photos.length > 1) {
-                $scope.thumb_width = parseInt(12 / (product.photos.length - 1));
+            if ($scope.product.photos.length > 1) {
+                $scope.add_to_cart = function() {
+                    cart.add($scope.product.id, make_data(), $scope.quantity);
+                };
+                $scope.thumb_width = parseInt(12 / ($scope.product.photos.length - 1));
             };
-            title.set(product.name);
+            title.set($scope.product.name);
         }, function(response) {
             $state.go('index');
         });

@@ -19,6 +19,8 @@
 
 import datetime
 import docutils.core
+import random
+import string
 from decimal import Decimal
 
 from mongoengine import signals
@@ -38,6 +40,8 @@ class BaseProduct(db.Document, StockedItem):
 
     All methods (and properties) raising NotImplementedError must be
     implemented in the children classes.
+
+    The data argument must be a dictionary, allowing variations to a product.
 
     When there is no data given to the methods, all products types must act
     as if they were regular products, without variations etc.
@@ -164,7 +168,7 @@ class BaseProduct(db.Document, StockedItem):
         (
             <integer: quantity to be added to the order>,
             <integer: quantity directly taken from stock>,
-            <boolean: true if on demand>
+            <integer: shipping delay, in days>
         )
         """
         raise NotImplementedError
@@ -238,10 +242,105 @@ class KitSubProductOption(db.EmbeddedDocument):
     quantity = db.IntField(db_field='qty')
     product = db.ReferenceField(BaseProduct)
 
+    @property
+    def selected_string(self):
+        return '{}*{}'.format(self.quantity, self.product.id)
+    
+    def get_price(self):
+        return self.product.get_price_per_item() * self.quantity
+
+    def get_weight(self):
+        return self.product.get_weight() * self.quantity
+
+    def get_stock(self):
+        return self.product.get_stock() / self.quantity
+
+    def get_delay(self):
+        return self.product.get_delay()
+
+    def get_overstock_delay(self):
+        return self.product.get_overstock_delay()
+
+    def destock(self, quantity):
+        quantity, from_stock, delay = self.product.destock(
+                                                    quantity * self.quantity
+                                                    )
+        quantity = quantity / self.quantity
+        from_stock = from_stock / self.quantity
+        return (quantity, from_stock, delay)
+
+    def restock(self, quantity):
+        self.product.restock(quantity * self.quantity)
+
+
+class DisabledFakeSubProductOption:
+
+    def get_price(self):
+        return prices.Price(0)
+
+    def get_weight(self):
+        return 0
+
+    def get_stock(self):
+        # Randomly chosen 2^32 :)
+        return 4294967296
+
+    def get_delay(self):
+        return 0
+
+    def get_overstock_delay(self):
+        return 0
+
+    def destock(self, quantity):
+        return (quantity, quantity, 0)
+
+    def restock(self, quantity):
+        pass
+
 
 class KitSubProduct(db.EmbeddedDocument):
+    id = db.StringField(default=lambda:
+            ''.join(random.choice(string.ascii_lowercase) for _ in range(8))
+            )
     options = db.EmbeddedDocumentListField(KitSubProductOption)
     can_be_disabled = db.BooleanField(db_field='dis')
+    default = db.StringField(db_field='dft')
+
+    def get_selected_string(self, data):
+        return data.get(self.id, self.default)
+
+    def get_selected(self, data):
+        selected = self.get_selected_string(data)
+        default = DisabledFakeSubProductOption()
+        for opt in self.options:
+            if opt.selected_string == selected:
+                return opt
+            if opt.selected_string == self.default:
+                default = opt
+        # If this method has not returned yet, it means the requested
+        # value is invalid, so the default option is used
+        return default
+
+    def get_price(self, data):
+        return self.get_selected(data).get_price()
+
+    def get_weight(self, data):
+        return self.get_selected(data).get_weight()
+
+    def get_stock(self, data):
+        return self.get_selected(data).get_stock()
+
+    def get_delay(self, data):
+        return self.get_selected(data).get_delay()
+
+    def get_overstock_delay(self, data):
+        return self.get_selected(data).get_overstock_delay()
+
+    def destock(self, quantity, data):
+        return self.get_selected(data).destock(quantity)
+
+    def restock(self, quantity, data):
+        self.get_selected(data).restock(quantity)
 
 
 class KitProduct(BaseProduct):
@@ -252,32 +351,58 @@ class KitProduct(BaseProduct):
     euros_instead_of_percent = db.BooleanField(db_field='euro', default=False)
 
     def get_price_per_item(self, data=None):
-        # TODO
-        return prices.Price(0)
+        price = prices.Price(0)
+        for prod in self.products:
+            price += prod.get_price(data)
+        return price
 
     def get_weight(self, data=None):
-        # TODO
-        return 0
+        return sum(prod.get_weight(data) for prod in self.products)
 
     def get_stock(self, data=None):
-        # TODO
-        return 0
+        return min(prod.get_stock(data) for prod in self.products)
 
     def get_delay(self, data=None):
-        # TODO
-        return 0
+        return max(prod.get_delay(data) for prod in self.products)
 
     def get_overstock_delay(self, data=None):
-        # TODO
-        return 0
+        delays = []
+        for prod in self.products:
+            this_delay = prod.get_overstock_delay(data)
+            # If one option is unavailable overstock,
+            # this kit is unavailable overstock too
+            if this_delay == -1:
+                return -1
+            else:
+                delays.append(this_delay)
+        return max(delays)
 
     def destock(self, quantity, data=None):
-        # TODO
-        return
+        # TODO Be more precise on destocking so restocking would be correct
+        quantities = []
+        from_stock_s = []
+        delays = []
+        for prod in self.products:
+            quantity, from_stock, delay = prod.destock(quantity, data)
+            quantities.append(quantity)
+            from_stock_s.append(from_stock)
+            delays.append(delay)
+        return (max(quantities), max(from_stock_s), max(delays))
 
     def restock(self, quantity, data=None):
-        # TODO
-        return
+        for prod in self.products:
+            prod.restock(quantity, data)
+
+
+def check_defaults(sender, document, **kwargs):
+    """For kit products, if no default option is set, select the first one"""
+    for product in document.products:
+        possible_options = ['{}*{}'.format(o.quantity, o.product.id)
+                            for o in product.options]
+        if product.can_be_disabled:
+            possible_options.append('none')
+        if product.default not in possible_options:
+            product.default = possible_options[0]
 
 
 def update_search(sender, document, **kwargs):
@@ -291,6 +416,7 @@ def forbid_if_used_in_kit_and_delete_search(sender, document, **kwargs):
     delete_product(document)
 
 
+signals.pre_save.connect(check_defaults, sender=KitProduct)
 signals.post_save.connect(update_search, sender=BaseProduct)
 signals.pre_delete.connect(forbid_if_used_in_kit_and_delete_search,
                            sender=BaseProduct)

@@ -30,40 +30,52 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             <div class="list-group" id="options[[ $index ]]" sv-root sv-part="subproduct.options" sv-on-sort="form.$setdirty();">
                 <div class="list-group-item handle" ng-repeat="option in subproduct.options" sv-element="{containment:'#options'+$parent.$index}">
                     <div class="row">
-                        <div class="col-xs-2">
+                        <div class="col-xs-3 col-md-2 col-lg-1">
                             <input type="number" id="qty-[[ $parent.$index ]]-[[ $index ]]" name="qty-[[ $parent.$index ]]-[[ $index ]]" min="1" class="form-control" ng-model="option.quantity">
                         </div>
-                        <div class="col-xs-8">
+                        <div class="col-xs-5 col-md-6 col-lg-7">
                             <img ng-show="option.product.main_photo" ng-src="[[ option.product.main_photo.thumbnail_url ]]">
                             [[ option.product.name || option.product.slug ]]
                         </div>
-                        <div class="col-xs-2 text-right">
-                            <button type="button" class="btn btn-sm btn-danger" ng-click="subproduct.options.splice($index, 1);form.$setDirty();">
-                                <i class="fa fa-trash"></i>
-                                <span class="hidden-xs hidden-sm">
-                                    {{ _('Remove') }}
-                                </span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item">
-                    <div class="row">
-                        <div class="col-xs-12 col-md-6">
+                        <div class="col-xs-4 text-right">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-danger" ng-click="product.products.splice($index, 1);form.$setDirty();">
+                                <button type="button" class="btn btn-sm" ng-class="{'btn-success': subproduct.default == option.quantity.toString() + '*' + option.product.id, 'btn-warning': subproduct.default != option.quantity.toString() + '*' + option.product.id}" ng-model="subproduct.default" uib-btn-radio="option.quantity.toString() + '*' + option.product.id">
+                                    <i class="fa" ng-class="{'fa-check': subproduct.default == option.quantity.toString() + '*' + option.product.id, 'fa-times': subproduct.default != option.quantity.toString() + '*' + option.product.id }"></i>
+                                    <span class="hidden-xs hidden-sm">
+                                        {{ _('Default') }}
+                                    </span>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger" ng-click="subproduct.options.splice($index, 1);form.$setDirty();">
                                     <i class="fa fa-trash"></i>
                                     <span class="hidden-xs hidden-sm">
                                         {{ _('Remove') }}
                                     </span>
                                 </button>
-                                <button type="button" class="btn btn-info" ng-model="subproduct.can_be_disabled" uib-btn-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-danger" ng-click="product.products.splice($index, 1);form.$setDirty();">
+                                    <i class="fa fa-trash"></i>
+                                    <span class="hidden-xs hidden-sm">
+                                        {{ _('Remove') }}
+                                    </span>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-info" ng-model="subproduct.can_be_disabled" uib-btn-checkbox>
                                     <i class="fa" ng-class="{'fa-check': subproduct.can_be_disabled, 'fa-times': !subproduct.can_be_disabled}"></i>
-                                    {{ _('Allow empty choice') }}
+                                    {{ _('Allow empty') }}
+                                </button>
+                                <button type="button" class="btn btn-sm" ng-class="{'btn-success': subproduct.default == 'none', 'btn-warning': subproduct.default != 'none'}" ng-model="subproduct.default" uib-btn-radio="'none'" ng-if="subproduct.can_be_disabled">
+                                    <i class="fa" ng-class="{'fa-check': subproduct.default == 'none', 'fa-times': subproduct.default != 'none'}"></i>
+                                    {{ _('Empty as default') }}
                                 </button>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-md-6 text-right">
+                        <div class="col-md-6 text-right">
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="{{ _('Product') }}" ng-model="subproduct.to_add" uib-typeahead="product as product.name for product in products | filter:{name:$viewValue}" typeahead-editable="false" typeahead-min-length="0">
                                 <span class="input-group-btn">

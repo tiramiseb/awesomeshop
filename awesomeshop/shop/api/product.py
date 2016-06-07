@@ -18,11 +18,12 @@
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
+from decimal import Decimal
 
 from flask import abort, request
 from flask_login import current_user
 from flask_restful import Resource, reqparse, inputs
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields, post_load, post_dump
 
 from ... import admin_required, app, rest
 from ...marsh import Loc, MultiObjField, ObjField
@@ -42,14 +43,10 @@ class BaseProductSchemaForList(Schema):
     reference = fields.String(dump_only=True)
     name = Loc(dump_only=True)
     main_photo = fields.Nested(PhotoSchema)
-    net_price = fields.Function(
-                    serialize=lambda obj: str(obj.get_price_per_item().net)
-                    )
-    delay = fields.Function(serialize=lambda obj: obj.get_delay())
-    overstock_delay = fields.Function(
-                            serialize=lambda obj: obj.get_overstock_delay()
-                            )
-    stock = fields.Function(serialize=lambda obj: obj.get_stock())
+    net_price = fields.Function(lambda obj: str(obj.get_price_per_item().net))
+    delay = fields.Function(lambda obj: obj.get_delay())
+    overstock_delay = fields.Function(lambda obj: obj.get_overstock_delay())
+    stock = fields.Function(lambda obj: obj.get_stock())
 
 
 class RegularProductSchemaForList(BaseProductSchemaForList):
@@ -66,8 +63,9 @@ productschemaforlist = {
 
 
 class BaseProductSchemaForAdminList(BaseProductSchemaForList):
-    gross_price = fields.Function(serialize=lambda obj: str(
-                                               obj.get_price_per_item().gross))
+    gross_price = fields.Function(
+                                lambda obj: str(obj.get_price_per_item().gross)
+                                )
     on_sale = fields.Boolean(dump_only=True)
 
 
@@ -154,6 +152,7 @@ class KitSubProductOptionSchemaForEdition(Schema):
 class KitSubProductSchemaForEdition(Schema):
     options = fields.Nested(KitSubProductOptionSchemaForEdition, many=True)
     can_be_disabled = fields.Boolean(default=False)
+    default = fields.String(allow_none=True)
 
 
 class KitProductSchemaForEdition(BaseProductSchemaForEdition):
@@ -175,7 +174,8 @@ class KitProductSchemaForEdition(BaseProductSchemaForEdition):
                     ))
             products.append(KitSubProduct(
                 options=options,
-                can_be_disabled=sub.get('can_be_disabled')
+                can_be_disabled=sub.get('can_be_disabled'),
+                default=sub.get('default')
                 ))
         product.products = products
         product.tax = data.get('tax', u'')
@@ -227,10 +227,11 @@ class RegularProductSchema(BaseProductSchema):
 
 class BaseProductSchemaForKitSubProductOption(Schema):
     id = fields.String(required=True)
+    reference = fields.String(required=True)
     name = Loc(dump_only=True)
     # main_photo = fields.Nested(PhotoSchema, dump_only=True)
     net_price = fields.Function(
-                    serialize=lambda obj: str(obj.get_price_per_item().net)
+                    lambda obj: str(obj.get_price_per_item().net)
                     )
 
 
@@ -238,12 +239,40 @@ class KitSubProductOptionSchema(Schema):
     quantity = fields.Integer(dump_only=True)
     product = fields.Nested(BaseProductSchemaForKitSubProductOption,
                             dump_only=True)
+    net_price = fields.Function(
+                    lambda obj: str(obj.get_price().net)
+                    )
+    selected_string = fields.String()
 
 
 class KitSubProductSchema(Schema):
+    id = fields.String(dump_only=True)
     options = fields.Nested(KitSubProductOptionSchema, many=True,
                             dump_only=True)
     can_be_disabled = fields.Boolean(dump_only=True)
+    default = fields.String(dump_only=True)
+    selected = fields.Function(
+                        lambda obj, ctx: obj.get_selected_string(ctx['data'])
+                        )
+    reference_price = fields.Decimal()
+
+    @post_dump
+    def set_referenceprice(self, data):
+        # Include as post_dump instead of using a Function so that the
+        # "selected" value is known
+        print data
+        selected = data['selected']
+        if selected == 'none':
+            data['reference_price'] = '0.00'
+        else:
+            for o in data['options']:
+                if '{}*{}'.format(
+                                o['quantity'],
+                                o['product']['id']
+                                ) == selected:
+                    data['reference_price'] = o['net_price']
+                    break
+        return data
 
 
 class KitProductSchema(BaseProductSchema):
@@ -370,7 +399,12 @@ class ApiProductFromCatAndSlug(Resource):
                     slug=product_slug
                     )
         schema = productschema[product.type]
-        ctx = {'data': product_dataparser.parse_args()['data']}
+        data = product_dataparser.parse_args()['data']
+        if data:
+            data = dict(i.split(':') for i in data.split(','))
+        else:
+            data = {}
+        ctx = {'data': data}
         return schema(context=ctx).dump(product).data
 
 
@@ -379,7 +413,12 @@ class ApiProductFromId(Resource):
     def get(self, product_id):
         product = BaseProduct.objects.get_or_404(id=product_id)
         schema = productschema[product.type]
-        ctx = {'data': product_dataparser.parse_args()['data']}
+        data = product_dataparser.parse_args()['data']
+        if data:
+            data = dict(i.split(':') for i in data.split(','))
+        else:
+            data = {}
+        ctx = {'data': data}
         return schema(context=ctx).dump(product).data
 
 
