@@ -31,6 +31,7 @@ from .product import BaseProductSchemaForList
 
 class LiveCartlineSchema(Schema):
     product = fields.Dict()
+    data = fields.Dict()
     quantity = fields.Integer()
 
     @pre_load(pass_many=True)
@@ -55,6 +56,7 @@ class LiveCartlineSchema(Schema):
                 quantity = min(entry['quantity'], prod.get_stock())
             newdata.append({
                     'product': schema.dump(prod).data,
+                    'data': entry['data'],
                     'quantity': quantity
                     })
         if not many:
@@ -67,6 +69,7 @@ class LiveCartlineSchema(Schema):
 
 class CartlineSchema(Schema):
     product = ObjField(f='id', obj=BaseProduct)
+    data = fields.Dict()
     quantity = fields.Integer()
 
     @pre_load(pass_many=True)
@@ -85,6 +88,7 @@ class CartlineSchema(Schema):
                 continue
             newdata.append({
                     'product': prod.id,
+                    'data': entry['data'],
                     'quantity': entry['quantity']
                     })
         if not many:
@@ -98,6 +102,7 @@ class CartlineSchema(Schema):
     def make_cartline(self, data):
         cartline = DbCartline()
         cartline.product = data['product']
+        cartline.data = data['data']
         cartline.quantity = data['quantity']
         return cartline
 
@@ -118,6 +123,7 @@ class CartlineSchema(Schema):
                 continue
             newdata.append({
                     'product': schema.dump(prod).data,
+                    'data': entry['data'],
                     'quantity': entry['quantity']
                     })
         if not many:
