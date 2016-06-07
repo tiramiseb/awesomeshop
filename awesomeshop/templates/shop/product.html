@@ -60,7 +60,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <div class="well">
             <p class="price">[[ product.net_price | currency:"{{ config.CURRENCY }}" ]]</p>
             <hr>
-            <div ng-show="cart.quantity(product) < product.quantity || product.overstock_delay >= 0">
+            <div ng-show="cart.quantity(product) < product.stock || product.overstock_delay >= 0">
                 <form name="form" class="form-horizontal" novalidate>
                     <div class="form-group" ng-class="{ 'has-error' : form.quantity.$invalid }">
                         <label class="col-sm-5 control-label" for="quantity">{{ _('Quantity') }}</label>
@@ -68,11 +68,11 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                             <input name="quantity" id="quantity" type="number" min="1" class="form-control" ng-model="quantity">
                         </div>
                     </div>
-                    <button type="button" ng-show="form.quantity.$valid && (cart.quantity(product) + quantity <= product.quantity || product.overstock_delay >= 0)" class="btn btn-success btn-lg btn-wrap btn-block" ng-class="{ 'btn-success': cart.quantity(product)+quantity <= product.quantity, 'btn-info': cart.quantity(product) + quantity > product.quantity && product.overstock_delay >= 0 }" ng-click="add_to_cart(); quantity=1;">
+                    <button type="button" ng-show="form.quantity.$valid && (cart.quantity(product) + quantity <= product.stock || product.overstock_delay >= 0)" class="btn btn-success btn-lg btn-wrap btn-block" ng-class="{ 'btn-success': cart.quantity(product)+quantity <= product.stock, 'btn-info': cart.quantity(product) + quantity > product.stock && product.overstock_delay >= 0 }" ng-click="add_to_cart(); quantity=1;">
                         {{ _('Add to cart') }}
                     </button>
-                    <p class="text-center bottom-no-space" ng-show="cart.quantity(product) + quantity > product.quantity && product.overstock_delay >= 0">{{ _('Shipping delay: [[ product.overstock_delay ]]&nbsp;days') }}</p>
-                    <div class="alert alert-danger text-center bottom-no-space" ng-show="cart.quantity(product) + quantity > product.quantity && product.overstock_delay < 0">
+                    <p class="text-center bottom-no-space" ng-show="cart.quantity(product) + quantity > product.stock && product.overstock_delay >= 0">{{ _('Shipping delay: [[ product.overstock_delay ]]&nbsp;days') }}</p>
+                    <div class="alert alert-danger text-center bottom-no-space" ng-show="cart.quantity(product) + quantity > product.stock && product.overstock_delay < 0">
                         {{ _('Insufficient stock') }}
                     </div>
                     <div class="alert alert-danger text-center bottom-no-space" ng-show="form.$invalid">
@@ -80,7 +80,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     </div>
                 </form>
             </div>
-            <div class="alert alert-danger text-center bottom-no-space" ng-show="cart.quantity(product) >= product.quantity && product.overstock_delay < 0">
+            <div class="alert alert-danger text-center bottom-no-space" ng-show="cart.quantity(product) >= product.stock && product.overstock_delay < 0">
                 {{ _('Out of stock') }}
             </div>
         </div>
