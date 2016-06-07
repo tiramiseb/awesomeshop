@@ -349,7 +349,7 @@ angular.module('awesomeshop', [
             var amount = 0;
             for (var i=0; i<$localStorage.cart.length; i++) {
                 var cartline = $localStorage.cart[i];
-                amount += cartline.quantity + parseFloat(cartline.product.net_price);
+                amount += cartline.quantity * parseFloat(cartline.product.net_price);
             }
             return amount;
         },
