@@ -45,9 +45,9 @@ class OrderProduct(db.EmbeddedDocument):
     data = db.DictField()
 
     def set_quantity(self, quantity):
-        quantity, stock, delay = self.product.destock(quantity, self.data)
+        quantity, from_stock, delay = self.product.destock(quantity, self.data)
         self.quantity = quantity
-        self.quantity_from_stock = stock
+        self.quantity_from_stock = from_stock
         self.delay = delay
         return delay
 
