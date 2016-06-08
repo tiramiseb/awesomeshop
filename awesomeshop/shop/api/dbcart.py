@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
-from flask import request
+from flask import abort, request
 from flask_login import current_user
 from flask_restful import Resource
 from marshmallow import Schema, fields, pre_load, post_load, post_dump
@@ -31,7 +31,7 @@ from .product import BaseProductSchemaForList
 
 class LiveCartlineSchema(Schema):
     product = fields.Dict()
-    data = fields.Dict()
+    data = fields.String()
     quantity = fields.Integer()
 
     @pre_load(pass_many=True)
@@ -56,7 +56,7 @@ class LiveCartlineSchema(Schema):
                 quantity = min(entry['quantity'], prod.get_stock())
             newdata.append({
                     'product': schema.dump(prod).data,
-                    'data': entry['data'],
+                    'data': entry.get('data', {}),
                     'quantity': quantity
                     })
         if not many:
@@ -69,7 +69,7 @@ class LiveCartlineSchema(Schema):
 
 class CartlineSchema(Schema):
     product = ObjField(f='id', obj=BaseProduct)
-    data = fields.Dict()
+    data = fields.String()
     quantity = fields.Integer()
 
     @pre_load(pass_many=True)
