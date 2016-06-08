@@ -91,7 +91,7 @@ angular.module('awesomeshop', [
         }
     };
 })
-.factory('products', function($http, $q, $httpParamSerializer, $timeout) { // XXX virer timeout
+.factory('products', function($http, $q, $httpParamSerializer) {
     var catslugs = {},
         products = {};
     function get_product(productid, data, resolve, reject) {
