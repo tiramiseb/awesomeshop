@@ -153,6 +153,7 @@ class OrderSchema(Schema):
         total_weight = 0
         global_delay = 0
         for productdata in data.get('cart', []):
+            
             productobj = BaseProduct.objects.get(
                                 id=productdata['product']['id']
                                 )
@@ -164,14 +165,16 @@ class OrderSchema(Schema):
                 )
             product.set_quantity(productdata['quantity'])
             global_delay = max(global_delay, product.delay)
-            price = productobj.get_price_per_item()
+            price = productobj.get_price_per_item(productdata['data'])
             product.set_gross_price(price.gross)
             product.set_net_price(price.net)
             line_price = price * product.quantity
             product.set_line_gross_price(line_price.gross)
             product.set_line_net_price(line_price.net)
             subtotal += line_price
-            total_weight += productobj.get_weight()
+            total_weight += (
+                productobj.get_weight(productdata['data']) * product.quantity
+                )
             products.append(product)
         order.products = products
         order.set_subtotal(subtotal)
