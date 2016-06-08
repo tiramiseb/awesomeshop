@@ -160,7 +160,7 @@ class OrderSchema(Schema):
                 reference=productdata['product']['reference'],
                 product=productobj,
                 name=productobj.name.get(get_locale(), u''),
-                data=None
+                data=productdata['data']
                 )
             product.set_quantity(productdata['quantity'])
             global_delay = max(global_delay, product.delay)
