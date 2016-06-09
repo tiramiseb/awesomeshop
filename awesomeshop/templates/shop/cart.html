@@ -34,8 +34,9 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     <br>
                     {{ _('Unit price:') }} [[ line.product.net_price | currency:"{{ config.CURRENCY }}" ]]
                     <br>
-                    <span ng-if="line.quantity <= line.product.stock" class="text-success">{{ _('In stock') }}</span>
-                    <span ng-if="line.quantity > line.product.stock" class="text-danger" uib-tooltip="{{ _('For a faster shipping, order less than [[ line.product.stock ]]') }}">{{ _('Shipping delay: [[ line.product.overstock_delay ]] days') }}</span>
+                    <span ng-show="line.quantity <= line.product.stock" class="text-success">{{ _('In stock') }}</span>
+                    <span ng-show="line.quantity > line.product.stock && line.product.overstock_delay >= 0" class="text-danger" uib-tooltip="{{ _('For a faster shipping, order less than [[ line.product.stock ]]') }}">{{ _('Shipping delay: [[ line.product.overstock_delay ]] days') }}</span>
+                    <span ng-show="line.quantity > line.product.stock && line.product.overstock_delay < 0" class="text-danger">{{ _('Insufficient stock') }}</span>
                 </div>
                 <div class="col-xs-5 col-sm-4 col-md-3 col-lg-2">
                     <label for="qty-[[ line.product.reference ]]" class="hidden-xs">{{ _('Quantity') }}</label>
@@ -59,7 +60,8 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <div class="list-group-item">
             <div class="row">
                 <div class="col-sm-5 col-sm-push-7 col-md-4 col-md-push-8 text-right">
-                    {{ _('Shipping delay: [[ cart.delay() ]] days') }}
+                    <span ng-show="cart.delay()">{{ _('Shipping delay: [[ cart.delay() ]] days') }}</span>
+                    <span ng-hide="cart.delay()" class="text-danger">{{ _('Insufficient stock') }}</span>
                     <br>
                     <strong class="text-primary">
                         {{ _('Total:') }} [[ cart.total() | currency:"{{ config.CURRENCY }}" ]]
@@ -108,12 +110,12 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             </form>
         </div>
         <div class="col-sm-7 col-md-6 bottom-space text-right" ng-class="{'col-sm-offset-5': !user.get().auth, 'col-md-offset-6': !user.get().auth}">
-            <a ng-show="user.get().auth" ui-sref="checkout" class="btn btn-lg btn-success">
+            <a ng-show="user.get().auth && cart.delay()" ui-sref="checkout" class="btn btn-lg btn-success">
                 {{ _('Proceed to checkout') }}
                 <i class="fa fa-chevron-right"></i>
             </a>
-            <p ng-show="!user.get().auth">{{ _('You need to log in to validate your order...') }}</p>
-            <div class="btn-group" ng-show="!user.get().auth">
+            <p ng-hide="user.get().auth">{{ _('You need to log in to validate your order...') }}</p>
+            <div class="btn-group" ng-hide="user.get().auth">
                 <button type="button" class="btn btn-success" ng-click="user.forcelogin()">
                     <i class="fa fa-sign-in"></i> {{ _('Login') }}
                 </button>

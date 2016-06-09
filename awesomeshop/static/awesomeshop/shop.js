@@ -403,7 +403,11 @@ angular.module('awesomeshop', [
             for (var i=0; i<$localStorage.cart.length; i++) {
                 var product = $localStorage.cart[i].product;
                 if (product.stock < $localStorage.cart[i].quantity) {
-                    delay = Math.max(product.overstock_delay, delay);
+                    if (product.overstock_delay >= 0) {
+                        delay = Math.max(product.overstock_delay, delay);
+                    } else {
+                        delay = false;
+                    }
                 } else {
                     delay = Math.max(product.delay, delay);
                 };
