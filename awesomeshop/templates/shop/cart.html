@@ -97,7 +97,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <div class="input-group">
                     <input type="text" class="form-control" ng-model="cartname" placeholder="{{ _('Cart name') }}" required>
                     <span class="input-group-btn">
-                        <button type="button" class="btn btn-primary" uib-tooltip="{{ _('Save this cart for a later use') }}" ng-click="save()" ng-disabled="form.$invalid">
+                        <button type="button" class="btn btn-primary" uib-tooltip="{{ _('Save this cart for a later use') }}" ng-click="save_cart()" ng-disabled="form.$invalid">
                             <i class="fa fa-bookmark"></i>
                             <span class="hidden-xs hidden-sm">{{ _('Save') }}</span>
                         </button>

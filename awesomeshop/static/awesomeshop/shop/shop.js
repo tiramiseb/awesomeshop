@@ -54,13 +54,13 @@ angular.module('shopShop', ['bootstrapLightbox'])
         .state('cart', {
             url: '/cart',
             templateUrl: 'shop/cart',
-            controller: 'CartCtrl',
+            controller: 'CartAndCheckoutCtrl',
             title: 'My cart'
         })
         .state('checkout', {
             url: '/checkout',
             templateUrl: 'shop/checkout',
-            controller: 'CheckoutCtrl',
+            controller: 'CartAndCheckoutCtrl',
             title: 'Checkout'
         })
         .state('saved_carts', {
@@ -190,22 +190,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
 .controller('CartButtonCtrl', function($scope, cart) {
     $scope.cart = cart;
 })
-.controller('CartCtrl', function($http, $scope, cart, savedCarts, user) {
-    $scope.user = user;
-    $scope.cart = cart;
-    $scope.save = function() {
-        var data = {
-            name: $scope.cartname,
-            lines: cart.list()
-        };
-        $http.post('/api/cart', data)
-            .then(function(response) {
-                $scope.saved_cart = response.data.name;
-                savedCarts.add(response.data);
-            });
-    }
-})
-.controller('CheckoutCtrl', function($timeout, $scope, $state, $http, $uibModal, cart, user, orders, countries) {
+.controller('CartAndCheckoutCtrl', function($timeout, $scope, $state, $http, $uibModal, cart, savedCarts, user, orders, countries) {
     var totalweight = 0,
         cartlines = cart.list(),
         available_carriers = {};
@@ -263,6 +248,17 @@ angular.module('shopShop', ['bootstrapLightbox'])
         .then(function(response) {
             $scope.payments = response.data;
         });
+    $scope.save_cart = function() {
+        var data = {
+            name: $scope.cartname,
+            lines: cart.list()
+        };
+        $http.post('/api/cart', data)
+            .then(function(response) {
+                $scope.saved_cart = response.data.name;
+                savedCarts.add(response.data);
+            });
+    }
     $scope.add_address = function() {
         $uibModal.open({
             templateUrl: 'part/address',
