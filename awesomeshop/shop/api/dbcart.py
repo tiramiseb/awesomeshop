@@ -69,7 +69,7 @@ class LiveCartlineSchema(Schema):
 
 class CartlineSchema(Schema):
     product = ObjField(f='id', obj=BaseProduct)
-    data = fields.String()
+    data = fields.String(missing=None)
     quantity = fields.Integer()
 
     @pre_load(pass_many=True)
