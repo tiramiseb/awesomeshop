@@ -31,7 +31,7 @@ from .product import BaseProductSchemaForList
 
 class LiveCartlineSchema(Schema):
     product = fields.Dict()
-    data = fields.String()
+    data = fields.String(missing=None)
     quantity = fields.Integer()
 
     @pre_load(pass_many=True)
