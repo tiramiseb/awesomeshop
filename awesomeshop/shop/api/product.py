@@ -260,7 +260,6 @@ class KitSubProductSchema(Schema):
     def set_referenceprice(self, data):
         # Include as post_dump instead of using a Function so that the
         # "selected" value is known
-        print data
         selected = data['selected']
         if selected == 'none':
             data['reference_price'] = '0.00'
