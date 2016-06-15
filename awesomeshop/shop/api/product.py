@@ -44,6 +44,7 @@ class BaseProductSchemaForList(Schema):
     name = Loc(dump_only=True)
     main_photo = fields.Nested(PhotoSchema)
     net_price = fields.Function(lambda obj, ctx: str(obj.get_price_per_item(ctx.get('data')).net))
+    weight = fields.Function(lambda obj, ctx: obj.get_weight(ctx['data']))
     delay = fields.Function(lambda obj, ctx: obj.get_delay(ctx.get('data')))
     overstock_delay = fields.Function(lambda obj, ctx: obj.get_overstock_delay(ctx.get('data')))
     stock = fields.Function(lambda obj, ctx: obj.get_stock(ctx.get('data')))
