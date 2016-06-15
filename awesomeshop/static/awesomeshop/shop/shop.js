@@ -191,6 +191,8 @@ angular.module('shopShop', ['bootstrapLightbox'])
     $scope.cart = cart;
 })
 .controller('CartAndCheckoutCtrl', function($timeout, $scope, $state, $http, $uibModal, cart, savedCarts, user, orders, countries) {
+    // cart and checkout will be merged later, so the same controller is used
+    // for now, even if there are some useless stuff in each page
     var totalweight = 0,
         cartlines = cart.list(),
         available_carriers = {};
@@ -227,6 +229,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
         };
     }, 100);
     for (var i=0; i<cartlines.length; i++) {
+        // Prepare total weight and total price for checkout
         totalweight += cartlines[i].product.weight * cartlines[i].quantity;
         $scope.cart_total += cartlines[i].product.net_price * cartlines[i].quantity;
     };
