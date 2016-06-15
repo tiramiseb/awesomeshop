@@ -62,3 +62,8 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </div>
     </div>
 </div>
+<div class="panel panel-default" ng-show="saved_carts.count()==0">
+    <div class="panel-body">
+        {{ _('You have no saved cart...') }}
+    </div>
+</div>
