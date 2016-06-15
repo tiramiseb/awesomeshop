@@ -39,7 +39,6 @@ class LiveCartlineSchema(Schema):
         newdata = []
         if not many:
             data = [data]
-        schema = BaseProductSchemaForList()
         for entry in data:
             try:
                 prod = BaseProduct.objects.get(
@@ -54,9 +53,17 @@ class LiveCartlineSchema(Schema):
                 quantity = entry['quantity']
             else:
                 quantity = min(entry['quantity'], prod.get_stock())
+            # Extract product data
+            this_data_s = entry.get('data')
+            if this_data_s:
+                this_data = dict(i.split(':') for i in this_data_s.split(','))
+            else:
+                this_data = {}
             newdata.append({
-                    'product': schema.dump(prod).data,
-                    'data': entry.get('data', {}),
+                    'product': BaseProductSchemaForList(
+                                            context={'data': this_data}
+                                            ).dump(prod).data,
+                    'data': this_data_s,
                     'quantity': quantity
                     })
         if not many:
@@ -111,7 +118,6 @@ class CartlineSchema(Schema):
         newdata = []
         if not many:
             data = [data]
-        schema = BaseProductSchemaForList()
         for entry in data:
             try:
                 prod = BaseProduct.objects.get(
@@ -121,9 +127,17 @@ class CartlineSchema(Schema):
             except BaseProduct.DoesNotExist:
                 # Forget non-existing products
                 continue
+            # Extract product data
+            this_data_s = entry.get('data')
+            if this_data_s and this_data_s != '{}':
+                this_data = dict(i.split(':') for i in this_data_s.split(','))
+            else:
+                this_data = {}
             newdata.append({
-                    'product': schema.dump(prod).data,
-                    'data': entry['data'],
+                    'product': BaseProductSchemaForList(
+                                        context={'data': this_data}
+                                        ).dump(prod).data,
+                    'data': this_data_s,
                     'quantity': entry['quantity']
                     })
         if not many:

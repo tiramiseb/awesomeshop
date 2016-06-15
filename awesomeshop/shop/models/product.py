@@ -157,6 +157,13 @@ class BaseProduct(db.Document, StockedItem):
         """
         raise NotImplementedError
 
+    def get_details(self, data=None):
+        """
+        Return details for the product (for instance, to be displayed in the
+        cart page, to differentiate instanves with different data)
+        """
+        raise NotImplementedError
+
     def destock(self, quantity, data=None):
         """
         Remove product(s) from stock, when creating an order
@@ -216,6 +223,9 @@ class RegularProduct(BaseProduct):
         else:
             return -1
 
+    def get_details(self, data=None):
+        return None
+
     def destock(self, quantity, data=None):
         """Remove the given quantity or less if the stock is not enough"""
         if self.on_demand:
@@ -261,6 +271,12 @@ class KitSubProductOption(db.EmbeddedDocument):
     def get_overstock_delay(self):
         return self.product.get_overstock_delay()
 
+    def get_details(self):
+        return {
+                'name': self.product.name.get(get_locale(), u''),
+                'quantity': self.quantity
+                }
+
     def destock(self, quantity):
         quantity, from_stock, delay = self.product.destock(
                                                     quantity * self.quantity
@@ -290,6 +306,9 @@ class DisabledFakeSubProductOption:
 
     def get_overstock_delay(self):
         return 0
+
+    def get_details(self):
+        return None
 
     def destock(self, quantity):
         return (quantity, quantity, 0)
@@ -336,6 +355,9 @@ class KitSubProduct(db.EmbeddedDocument):
     def get_overstock_delay(self, data):
         return self.get_selected(data).get_overstock_delay()
 
+    def get_details(self, data):
+        return self.get_selected(data).get_details()
+
     def destock(self, quantity, data):
         return self.get_selected(data).destock(quantity)
 
@@ -364,6 +386,14 @@ class KitProduct(BaseProduct):
 
     def get_delay(self, data={}):
         return max(prod.get_delay(data) for prod in self.products)
+
+    def get_details(self, data={}):
+        details = []
+        for prod in self.products:
+            this_detail = prod.get_details(data)
+            if this_detail:
+                details.append(this_detail)
+        return details
 
     def get_overstock_delay(self, data={}):
         delays = []

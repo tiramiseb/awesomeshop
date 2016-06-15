@@ -19,7 +19,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <h1>{{ _('My cart') }}</h1>
 <form name="form" novalidate ng-show="cart.count()">
     <div class="list-group">
-        <div class="list-group-item cart-list" ng-repeat="line in cart.list()">
+        <div class="list-group-item cart-list" ng-repeat="line in cart.list()" uib-popover-template="'/part/product_'+line.product.type+'_popup'" popover-trigger="mouseenter" popover-enable="line.product.details">
             <div class="row">
                 <div class="col-xs-7 col-sm-6 col-md-7 col-lg-8">
                     <a href="[[ line.product.path ]]">

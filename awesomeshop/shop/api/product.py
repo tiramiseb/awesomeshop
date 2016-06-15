@@ -43,10 +43,11 @@ class BaseProductSchemaForList(Schema):
     reference = fields.String(dump_only=True)
     name = Loc(dump_only=True)
     main_photo = fields.Nested(PhotoSchema)
-    net_price = fields.Function(lambda obj: str(obj.get_price_per_item().net))
-    delay = fields.Function(lambda obj: obj.get_delay())
-    overstock_delay = fields.Function(lambda obj: obj.get_overstock_delay())
-    stock = fields.Function(lambda obj: obj.get_stock())
+    net_price = fields.Function(lambda obj, ctx: str(obj.get_price_per_item(ctx.get('data')).net))
+    delay = fields.Function(lambda obj, ctx: obj.get_delay(ctx.get('data')))
+    overstock_delay = fields.Function(lambda obj, ctx: obj.get_overstock_delay(ctx.get('data')))
+    stock = fields.Function(lambda obj, ctx: obj.get_stock(ctx.get('data')))
+    details = fields.Function(lambda obj, c: obj.get_details(c.get('data')))
 
 
 class RegularProductSchemaForList(BaseProductSchemaForList):
@@ -251,9 +252,7 @@ class KitSubProductSchema(Schema):
                             dump_only=True)
     can_be_disabled = fields.Boolean(dump_only=True)
     default = fields.String(dump_only=True)
-    selected = fields.Function(
-                        lambda obj, ctx: obj.get_selected_string(ctx['data'])
-                        )
+    selected = fields.Function(lambda o, c: o.get_selected_string(c['data']))
     reference_price = fields.Decimal()
 
     @post_dump
