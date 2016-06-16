@@ -30,9 +30,9 @@ from .models import Country, CountriesGroup, Carrier, CarrierCosts, \
 
 
 class CountrySchemaForList(Schema):
-    id = fields.String(dump_only=True)
-    code = fields.String(dump_only=True)
-    name = Loc(dump_only=True)
+    id = fields.String()
+    code = fields.String()
+    name = Loc()
 
 
 class CountrySchema(Schema):
@@ -55,8 +55,8 @@ class CountrySchema(Schema):
 
 
 class CountriesGroupSchemaForList(Schema):
-    id = fields.String(dump_only=True)
-    name = fields.String(dump_only=True)
+    id = fields.String()
+    name = fields.String()
     countries = Count()
 
 
@@ -88,8 +88,8 @@ class CarrierCostsSchema(Schema):
 
 
 class CarrierSchemaForList(Schema):
-    id = fields.String(dump_only=True)
-    name = fields.String(dump_only=True)
+    id = fields.String()
+    name = fields.String()
     description = Loc()
 
 

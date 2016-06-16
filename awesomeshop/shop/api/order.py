@@ -60,18 +60,18 @@ class OrderProductSchema(Schema):
 
 
 class OrderSchemaForList(Schema):
-    full_number = fields.String(dump_only=True)
-    number = fields.String(dump_only=True)
-    human_status = fields.String(dump_only=True)
-    status_color = fields.String(dump_only=True)
-    date = fields.Date(dump_only=True)
-    products = fields.Integer(dump_only=True, attribute='count_products')
-    net_total = fields.String(dump_only=True)
+    full_number = fields.String()
+    number = fields.String()
+    human_status = fields.String()
+    status_color = fields.String()
+    date = fields.Date()
+    products = fields.Integer(attribute='count_products')
+    net_total = fields.String()
 
 
 class OrderSchemaForAdminList(OrderSchemaForList):
-    customer = fields.String(attribute='customer.email', dump_only=True)
-    payment_date = fields.Date(dump_only=True)
+    customer = fields.String(attribute='customer.email')
+    payment_date = fields.Date()
 
 
 class OrderSchema(Schema):

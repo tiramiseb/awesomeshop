@@ -33,13 +33,13 @@ from .models import Page
 
 
 class PageSchemaForList(Schema):
-    id = fields.String(dump_only=True)
-    slug = fields.String(dump_only=True)
-    title = Loc(dump_only=True)
+    id = fields.String()
+    slug = fields.String()
+    title = Loc()
 
 
 class PageSchemaForAdminList(PageSchemaForList):
-    in_menu = fields.Boolean(dump_only=True)
+    in_menu = fields.Boolean()
 
 
 class PageSchema(Schema):
@@ -67,15 +67,14 @@ class PageSchema(Schema):
 
 
 class PageContentSchema(Schema):
-    pagetype = fields.String(dump_only=True)
-    slug = fields.String(dump_only=True)
-    title = Loc(dump_only=True)
-    content = fields.String(dump_only=True)
+    pagetype = fields.String()
+    slug = fields.String()
+    title = Loc()
+    content = fields.String()
     products = fields.Nested(
                     BaseProductSchemaForList,
                     attribute='on_sale_products',
-                    many=True,
-                    dump_only=True
+                    many=True
                     )
 
 

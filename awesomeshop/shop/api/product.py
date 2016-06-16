@@ -36,12 +36,12 @@ from ..models.tax import Tax
 
 
 class BaseProductSchemaForList(Schema):
-    id = fields.String(dump_only=True)
-    type = fields.String(dump_only=True)
-    slug = fields.String(dump_only=True)
-    path = fields.String(dump_only=True)
-    reference = fields.String(dump_only=True)
-    name = Loc(dump_only=True)
+    id = fields.String()
+    type = fields.String()
+    slug = fields.String()
+    path = fields.String()
+    reference = fields.String()
+    name = Loc()
     main_photo = fields.Nested(PhotoSchema)
     net_price = fields.Function(lambda obj, ctx: str(obj.get_lower_price_per_item().net))
     weight = fields.Function(lambda obj, ctx: obj.get_weight(ctx.get('data')))
@@ -68,7 +68,7 @@ class BaseProductSchemaForAdminList(BaseProductSchemaForList):
     gross_price = fields.Function(
                                 lambda obj: str(obj.get_price_per_item().gross)
                                 )
-    on_sale = fields.Boolean(dump_only=True)
+    on_sale = fields.Boolean()
 
 
 class RegularProductSchemaForAdminList(BaseProductSchemaForAdminList):
@@ -197,27 +197,24 @@ productschemaforedition = {
 
 
 class BaseProductSchema(Schema):
-    id = fields.String(dump_only=True)
-    type = fields.String(dump_only=True)
-    slug = fields.String(dump_only=True)
-    path = fields.String(dump_only=True)
-    reference = fields.String(dump_only=True)
-    name = Loc(dump_only=True)
-    description = fields.String(attribute='description_content',
-                                dump_only=True)
+    id = fields.String()
+    type = fields.String()
+    slug = fields.String()
+    path = fields.String()
+    reference = fields.String()
+    name = Loc()
+    description = fields.String(attribute='description_content')
     net_price = fields.Function(
                   lambda obj, ctx: str(obj.get_price_per_item(ctx['data']).net)
                   )
-    photos = fields.Nested(PhotoSchema, many=True, dump_only=True)
+    photos = fields.Nested(PhotoSchema, many=True)
     weight = fields.Function(lambda obj, ctx: obj.get_weight(ctx['data']))
     related_products = fields.Nested(
                                 BaseProductSchemaForList,
                                 attribute='related_products_on_sale',
-                                many=True,
-                                dump_only=True
+                                many=True
                                 )
-    documentation = fields.String(attribute='documentation_content',
-                                  dump_only=True)
+    documentation = fields.String(attribute='documentation_content')
     delay = fields.Function(lambda obj, ctx: obj.get_delay(ctx['data']))
     overstock_delay = fields.Function(
                           lambda obj, ctx: obj.get_overstock_delay(ctx['data'])
@@ -232,17 +229,15 @@ class RegularProductSchema(BaseProductSchema):
 class BaseProductSchemaForKitSubProductOption(Schema):
     id = fields.String(required=True)
     reference = fields.String(required=True)
-    name = Loc(dump_only=True)
-    # main_photo = fields.Nested(PhotoSchema, dump_only=True)
+    name = Loc()
     net_price = fields.Function(
                     lambda obj: str(obj.get_price_per_item().net)
                     )
 
 
 class KitSubProductOptionSchema(Schema):
-    quantity = fields.Integer(dump_only=True)
-    product = fields.Nested(BaseProductSchemaForKitSubProductOption,
-                            dump_only=True)
+    quantity = fields.Integer()
+    product = fields.Nested(BaseProductSchemaForKitSubProductOption)
     net_price = fields.Function(
                     lambda obj: str(obj.get_price().net)
                     )
@@ -250,11 +245,10 @@ class KitSubProductOptionSchema(Schema):
 
 
 class KitSubProductSchema(Schema):
-    id = fields.String(dump_only=True)
-    options = fields.Nested(KitSubProductOptionSchema, many=True,
-                            dump_only=True)
-    can_be_disabled = fields.Boolean(dump_only=True)
-    default = fields.String(dump_only=True)
+    id = fields.String()
+    options = fields.Nested(KitSubProductOptionSchema, many=True)
+    can_be_disabled = fields.Boolean()
+    default = fields.String()
     selected = fields.Function(lambda o, c: o.get_selected_string(c['data']))
     reference_price = fields.Decimal()
 

@@ -40,9 +40,9 @@ class AddressSchema(Schema):
 
 
 class UserSchemaForList(Schema):
-    id = fields.String(dump_only=True)
-    email = fields.Email(dump_only=True)
-    is_admin = fields.Boolean(dump_only=True)
+    id = fields.String()
+    email = fields.Email()
+    is_admin = fields.Boolean()
     addresses = Count()
     carts = Count()
 
