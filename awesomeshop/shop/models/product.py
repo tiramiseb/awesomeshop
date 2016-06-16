@@ -41,7 +41,9 @@ class BaseProduct(db.Document, StockedItem):
     All methods (and properties) raising NotImplementedError must be
     implemented in the children classes.
 
-    The data argument must be a dictionary, allowing variations to a product.
+    The data argument may be :
+    * a dictionary, allowing variations to a product
+    * None for a base price
 
     When there is no data given to the methods, all products types must act
     as if they were regular products, without variations etc.
@@ -119,6 +121,12 @@ class BaseProduct(db.Document, StockedItem):
     def main_photo(self):
         if self.photos:
             return self.photos[0]
+
+    def get_lower_price_per_item(self):
+        """
+        Return the lower price for the item, as a prices.Price object
+        """
+        raise NotImplementedError
 
     def get_price_per_item(self, data=None):
         """
@@ -204,6 +212,9 @@ class RegularProduct(BaseProduct):
         return (self.gross_price * Decimal(1 + self.tax.rate)).quantize(
                                                                 Decimal('1.00')
                                                                 )
+
+    def get_lower_price_per_item(self):
+        return self.get_price_per_item()
 
     def get_price_per_item(self, data=None):
         return prices.Price(self._net_price, self.gross_price)
@@ -334,8 +345,21 @@ class KitSubProduct(db.EmbeddedDocument):
     can_be_disabled = db.BooleanField(db_field='dis')
     default = db.StringField(db_field='dft')
 
+    def clean(self):
+        # If the subproduct cannot be disabled and a default option has not
+        # been chosen, take the cheaper one
+        if not self.default and not self.can_be_disabled:
+            # Randomly chosen 2^32 :)
+            ref_price = prices.Price(4294967296)
+            for o in self.options:
+                if o.get_price() < ref_price:
+                    self.default = o.selected_string
+
+
     def get_selected_string(self, data):
-        return data.get(self.id, self.default)
+        if data:
+            return data.get(self.id, self.default)
+        return self.default
 
     def get_selected(self, data):
         selected = self.get_selected_string(data)
@@ -348,6 +372,11 @@ class KitSubProduct(db.EmbeddedDocument):
         # If this method has not returned yet, it means the requested
         # value is invalid, so the default option is used
         return default
+
+    def get_lower_price(self):
+        if self.can_be_disabled:
+            return prices.Price(0)
+        return min(o.get_price() for o in self.options)
 
     def get_price(self, data):
         return self.get_selected(data).get_price()
@@ -380,6 +409,13 @@ class KitProduct(BaseProduct):
     tax = db.ReferenceField(Tax, reverse_delete_rule=db.DENY)
     price_variation = db.DecimalField(db_field='var', default=0)
     amount_instead_of_percent = db.BooleanField(db_field='euro', default=False)
+
+    def get_lower_price_per_item(self):
+        price = prices.Price(0)
+        for prod in self.products:
+            price += prod.get_lower_price()
+        return price
+
 
     def get_price_per_item(self, data={}):
         price = prices.Price(0)
