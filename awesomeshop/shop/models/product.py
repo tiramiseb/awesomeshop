@@ -257,7 +257,16 @@ class KitSubProductOption(db.EmbeddedDocument):
         return '{}*{}'.format(self.quantity, self.product.id)
     
     def get_price(self):
-        return self.product.get_price_per_item() * self.quantity
+        var = self._instance._instance.price_variation
+        if self._instance._instance.euros_instead_of_percent:
+            result = self.product.get_price_per_item() * self.quantity + var
+        else:
+            result = (
+                        self.product.get_price_per_item() * self.quantity
+                     ) * (
+                        1 + var / 100
+                     )
+        return result
 
     def get_weight(self):
         return self.product.get_weight() * self.quantity
