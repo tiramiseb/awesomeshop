@@ -161,7 +161,7 @@ class KitProductSchemaForEdition(BaseProductSchemaForEdition):
     products = fields.Nested(KitSubProductSchemaForEdition, many=True)
     tax = ObjField(f='id', obj=Tax)
     price_variation = fields.Decimal(as_string=True, required=True)
-    euros_instead_of_percent = fields.Boolean(default=False)
+    amount_instead_of_percent = fields.Boolean(default=False)
 
     @post_load
     def make_product(self, data):
@@ -182,8 +182,10 @@ class KitProductSchemaForEdition(BaseProductSchemaForEdition):
         product.products = products
         product.tax = data.get('tax', u'')
         product.price_variation = data.get('price_variation', 0)
-        product.euros_instead_of_percent = data.get('euros_instead_of_percent',
-                                                    False)
+        product.amount_instead_of_percent = data.get(
+                                                'amount_instead_of_percent',
+                                                False
+                                                )
         product.save()
         return product
 

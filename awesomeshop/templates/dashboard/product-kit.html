@@ -106,9 +106,9 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     <div class="input-group">
                         <input type="text" id="price_variation" name="price_variation" class="form-control" ng-model="product.price_variation">
                         <span class="input-group-btn">
-                            <button type="button" class="btn btn-default" ng-model="product.euros_instead_of_percent" uib-btn-checkbox>
-                                <span ng-show="product.euros_instead_of_percent">&euro;</span>
-                                <span ng-hide="product.euros_instead_of_percent">%</span>
+                            <button type="button" class="btn btn-default" ng-model="product.amount_instead_of_percent" uib-btn-checkbox>
+                                <span ng-show="product.amount_instead_of_percent">{{ config.CURRENCY }}</span>
+                                <span ng-hide="product.amount_instead_of_percent">%</span>
                             </button>
                         </span>
                     </div>

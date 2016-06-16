@@ -197,7 +197,7 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
                     from = from + min;
                     to = to + max;
                 })
-                if ($scope.product.euros_instead_of_percent) {
+                if ($scope.product.amount_instead_of_percent) {
                     from = (from + variation) * (1 + tax);
                     to = (to + variation) * (1 + tax);
                 } else {

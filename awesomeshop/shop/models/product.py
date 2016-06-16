@@ -258,7 +258,7 @@ class KitSubProductOption(db.EmbeddedDocument):
     
     def get_price(self):
         var = self._instance._instance.price_variation
-        if self._instance._instance.euros_instead_of_percent:
+        if self._instance._instance.amount_instead_of_percent:
             result = self.product.get_price_per_item() * self.quantity + var
         else:
             result = (
@@ -379,7 +379,7 @@ class KitProduct(BaseProduct):
     products = db.EmbeddedDocumentListField(KitSubProduct)
     tax = db.ReferenceField(Tax, reverse_delete_rule=db.DENY)
     price_variation = db.DecimalField(db_field='var', default=0)
-    euros_instead_of_percent = db.BooleanField(db_field='euro', default=False)
+    amount_instead_of_percent = db.BooleanField(db_field='euro', default=False)
 
     def get_price_per_item(self, data={}):
         price = prices.Price(0)
