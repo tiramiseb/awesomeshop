@@ -189,6 +189,9 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
                 $scope.product.products.forEach(function(prod) {
                     var min = 999999999999,
                         max = 0;
+                    if (prod.can_be_disabled) {
+                        min = 0;
+                    }
                     prod.options.forEach(function(option) {
                         var gross = parseFloat(option.quantity * option.product.gross_price);
                         min = Math.min(gross, min);
