@@ -341,6 +341,7 @@ class KitSubProduct(db.EmbeddedDocument):
     id = db.StringField(default=lambda:
             ''.join(random.choice(string.ascii_lowercase) for _ in range(8))
             )
+    title = db.StringField(db_field='tit', default='')
     options = db.EmbeddedDocumentListField(KitSubProductOption)
     can_be_disabled = db.BooleanField(db_field='dis')
     default = db.StringField(db_field='dft')

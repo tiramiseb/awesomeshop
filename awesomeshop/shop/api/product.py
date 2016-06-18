@@ -152,6 +152,7 @@ class KitSubProductOptionSchemaForEdition(Schema):
 
 
 class KitSubProductSchemaForEdition(Schema):
+    title = fields.String(allow_none=True)
     options = fields.Nested(KitSubProductOptionSchemaForEdition, many=True)
     can_be_disabled = fields.Boolean(default=False)
     default = fields.String(allow_none=True)
@@ -175,6 +176,7 @@ class KitProductSchemaForEdition(BaseProductSchemaForEdition):
                     product=opt['product']['id']
                     ))
             products.append(KitSubProduct(
+                title=sub.get('title'),
                 options=options,
                 can_be_disabled=sub.get('can_be_disabled'),
                 default=sub.get('default')
@@ -246,6 +248,7 @@ class KitSubProductOptionSchema(Schema):
 
 class KitSubProductSchema(Schema):
     id = fields.String()
+    title = fields.String()
     options = fields.Nested(KitSubProductOptionSchema, many=True)
     can_be_disabled = fields.Boolean()
     default = fields.String()

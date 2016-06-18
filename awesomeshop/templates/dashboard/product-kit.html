@@ -23,9 +23,10 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
     <div class="panel-heading">{{ _('Products in the kit') }}</div>
     <div class="panel-body" id="included_products" sv-root sv-part="product.products" sv-on-sort="form.$setdirty();">
         <div class="panel panel-default" ng-repeat="subproduct in product.products" sv-element="{containment:'#included_products'}">
-            <div class="panel-heading" sv-handle>
+            <div class="panel-heading form-inline" sv-handle>
                 <i class="fa fa-bars"></i>
-                {{ _('Item #[[ $index ]]') }}
+                {#{{ _('Item #[[ $index ]]') }}#}
+                <input type="text" ng-model="subproduct.title" placeholder="{{ _('Item #[[ $index ]]') }}" class="form-control">
             </div>
             <div class="list-group" id="options[[ $index ]]" sv-root sv-part="subproduct.options" sv-on-sort="form.$setdirty();">
                 <div class="list-group-item handle" ng-repeat="option in subproduct.options" sv-element="{containment:'#options'+$parent.$index}">

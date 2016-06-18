@@ -88,6 +88,9 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 </div>
 <div class="well" ng-if="product.type=='kit'">
     <div class="list-group options-list" ng-repeat="prod in product.products" ng-class="{'options-list-clickable': prod.options.length > 1 || prod.can_be_disabled, 'bottom-no-space': $last }">
+        <label class="list-group-item noclick" ng-if="prod.title">
+            <strong>[[ prod.title ]]</strong>
+        </label>
         <label class="list-group-item" ng-repeat="option in prod.options">
             <div class="row">
                 <div class="col-sm-6">

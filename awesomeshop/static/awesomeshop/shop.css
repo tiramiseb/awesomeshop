@@ -180,6 +180,12 @@ p.price {
 #checkout-form label.list-group-item:hover, .options-list-clickable label.list-group-item:hover {
     background: #f5f5f5;
 }
+label.list-group-item.noclick {
+    cursor: default;
+}
+label.list-group-item.noclick:hover {
+    background: #fff;
+}
 #checkout-form textarea {
     min-height: 3em;
     margin-bottom: 20px;
