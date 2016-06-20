@@ -167,17 +167,17 @@ p.price {
 }
 
 /* Checkout and order stuff */
-#checkout-form label, .options-list label {
+.options-list label {
     font-weight: normal;
 }
 .total-cost {
     font-size: 21px;
 }
-#checkout-form label.list-group-item, .options-list-clickable label.list-group-item {
+.options-list-clickable label {
     cursor: pointer;
     font-weight: normal;
 }
-#checkout-form label.list-group-item:hover, .options-list-clickable label.list-group-item:hover {
+.options-list-clickable label.list-group-item:hover {
     background: #f5f5f5;
 }
 label.list-group-item.noclick {
@@ -186,11 +186,10 @@ label.list-group-item.noclick {
 label.list-group-item.noclick:hover {
     background: #fff;
 }
-#checkout-form textarea {
-    min-height: 3em;
-    margin-bottom: 20px;
+textarea {
+    resize: vertical;
 }
-#checkout-form input[type="radio"] {
+.options-list-clickable input[type="radio"] {
     margin-right: 1em;
 }
 

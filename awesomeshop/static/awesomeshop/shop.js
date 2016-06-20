@@ -353,6 +353,15 @@ angular.module('awesomeshop', [
             }
             return amount;
         },
+        weight: function() {
+            // Calculate the total weight of the cart
+            var weight = 0;
+            for (var i=0; i<$localStorage.cart.length; i++) {
+                var cartline = $localStorage.cart[i];
+                weight += cartline.quantity * cartline.product.weight;
+            }
+            return weight;
+        },
         count: function() {
             // Count the number of products in the cart
             var count = 0;
@@ -384,7 +393,6 @@ angular.module('awesomeshop', [
         },
         overstock: function() {
             // Is any product in the cart to be ordered on demand
-            // (used for checkout)
             for (var i=0; i<$localStorage.cart.length; i++) {
                 var cartline = $localStorage.cart[i];
                 if (cartline.product.overstock_delay >= 0 && cartline.product.stock < cartline.quantity) {
@@ -398,7 +406,6 @@ angular.module('awesomeshop', [
         },
         delay: function() {
             // Delay for the whole cart
-            // (used for checkout and cart display)
             var delay = 0;
             for (var i=0; i<$localStorage.cart.length; i++) {
                 var product = $localStorage.cart[i].product;

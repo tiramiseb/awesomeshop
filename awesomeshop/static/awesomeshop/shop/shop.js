@@ -54,14 +54,8 @@ angular.module('shopShop', ['bootstrapLightbox'])
         .state('cart', {
             url: '/cart',
             templateUrl: 'shop/cart',
-            controller: 'CartAndCheckoutCtrl',
+            controller: 'CartCtrl',
             title: 'My cart'
-        })
-        .state('checkout', {
-            url: '/checkout',
-            templateUrl: 'shop/checkout',
-            controller: 'CartAndCheckoutCtrl',
-            title: 'Checkout'
         })
         .state('saved_carts', {
             url: '/saved_carts',
@@ -190,13 +184,8 @@ angular.module('shopShop', ['bootstrapLightbox'])
 .controller('CartButtonCtrl', function($scope, cart) {
     $scope.cart = cart;
 })
-.controller('CartAndCheckoutCtrl', function($timeout, $scope, $state, $http, $uibModal, cart, savedCarts, user, orders, countries) {
-    // cart and checkout will be merged later, so the same controller is used
-    // for now, even if there are some useless stuff in each page
-    var totalweight = 0,
-        cartlines = cart.list(),
-        available_carriers = {};
-    user.forcelogin();
+.controller('CartCtrl', function($timeout, $scope, $state, $http, $uibModal, cart, savedCarts, user, orders, countries) {
+    var available_carriers = {};
     $scope.cart = cart;
     $scope.user = user;
     $scope.cart_total = 0;
@@ -204,9 +193,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
         delivery_as_billing: true,
         accept_reused_package: true
     };
-    $timeout(function() {
-        // Reused latest data from the user
-        var userdata = user.get();
+    function load_preferences(foobar, userdata) {
         if (userdata) {
             if (userdata.latest_delivery_address) {
                 $scope.choice.delivery_address = userdata.latest_delivery_address;
@@ -227,12 +214,14 @@ angular.module('shopShop', ['bootstrapLightbox'])
                 $scope.choice.accept_reused_package = userdata.latest_reused_package;
             };
         };
+    }
+    $scope.$on('event:auth-loginConfirmed', load_preferences);
+    $timeout(function() {
+        var userdata = user.get();
+        if (userdata) {
+            load_preferences(null, userdata);
+        };
     }, 100);
-    for (var i=0; i<cartlines.length; i++) {
-        // Prepare total weight and total price for checkout
-        totalweight += cartlines[i].product.weight * cartlines[i].quantity;
-        $scope.cart_total += cartlines[i].product.net_price * cartlines[i].quantity;
-    };
     $http.post('/api/cart/verify', cart.list())
         .then(function(response) {
             var oldcart = cart.list(),
@@ -308,6 +297,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
         };
         return '';
     };
+    /*
     $scope.$watch('choice.delivery_address', function(address_id) {
         var addresses = [];
         if (address_id) {
@@ -318,7 +308,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
                 if (addresses[i].id == address_id) {
                     var country = addresses[i].country;
                     if (!available_carriers[country]) {
-                        $http.get('/api/carrier/'+country+'/'+totalweight.toString())
+                        $http.get('/api/carrier/'+country+'/'+cart.weight().toString())
                             .then(function(response) {
                                 available_carriers[country] = response.data;
                             });
@@ -328,17 +318,41 @@ angular.module('shopShop', ['bootstrapLightbox'])
             };
         };
     });
+    */
     $scope.get_available_carriers = function() {
-        var addresses = [],
-            address_id = $scope.choice.delivery_address;
-        if (user.get() && user.get().addresses) {
-            addresses = user.get().addresses;
-        };
-        for (var i=0; i<addresses.length; i++) {
-            if (addresses[i].id == address_id) {
-                return available_carriers[addresses[i].country];
+        if (cart.delay()) {
+            var addresses = [],
+                address_id = $scope.choice.delivery_address,
+                weight = cart.weight().toString(),
+                country;
+            if (user.get() && user.get().addresses) {
+                addresses = user.get().addresses;
             };
-        };
+            for (var i=0; i<addresses.length; i++) {
+                if (addresses[i].id == address_id) {
+                    country = addresses[i].country;
+                    var carriers = available_carriers[country];
+                    if (carriers && carriers[weight]) {
+                        return carriers[weight];
+                    };
+                };
+            };
+            // The function has not returned yet, it means the available
+            // carriers are unknown: get them, but only if the country is known
+            if (country) {
+                if (!available_carriers[country]) {
+                    available_carriers[country] = {};
+                }
+                available_carriers[country][weight] = [];
+                $http.get('/api/carrier/'+country+'/'+weight)
+                    .then(function(response) {
+                        available_carriers[country][weight] = response.data;
+                        // and then a new digest cycle is run, this content
+                        // is now present in available_carriers
+                    });
+            }
+        }
+
     };
     $scope.get_shipping_fee = function() {
         var carriers = $scope.get_available_carriers();
@@ -353,7 +367,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
     $scope.open_terms = function() {
         $uibModal.open({
             templateUrl: 'part/page_in_modal',
-            controller: 'CheckoutTermsCtrl'
+            controller: 'CartTermsCtrl'
         })
     };
     $scope.confirm = function() {
@@ -376,7 +390,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
             });
     };
 })
-.controller('CheckoutTermsCtrl', function($http, $scope) {
+.controller('CartTermsCtrl', function($http, $scope) {
     $http.get('/api/page-info/terms_of_purchase')
         .then(function(response) {
             $scope.page = response.data;

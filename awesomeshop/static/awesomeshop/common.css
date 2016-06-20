@@ -30,6 +30,9 @@
 .bottom-space {
     margin-bottom: 15px !important;
 }
+.bottom-large-space {
+    margin-bottom: 20px !important;
+}
 .bottom-no-space {
     margin-bottom: 0 !important;
 }

@@ -17,7 +17,7 @@ You should have received a copy of the GNU Affero General Public License
 along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
 <h1>{{ _('My cart') }}</h1>
-<form name="form" novalidate ng-show="cart.count()">
+<form name="form" novalidate ng-show="cart.count()" ng-submit="confirm()">
     <div class="list-group">
         <div class="list-group-item cart-list" ng-repeat="line in cart.list()" uib-popover-template="'/part/product_'+line.product.type+'_popup'" popover-trigger="mouseenter" popover-enable="line.product.details">
             <div class="row">
@@ -59,71 +59,244 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </div>
         <div class="list-group-item">
             <div class="row">
-                <div class="col-sm-5 col-sm-push-7 col-md-4 col-md-push-8 text-right">
+                <div class="col-xs-7 col-sm-6 col-md-7 col-lg-8">
                     <span ng-show="cart.delay()">{{ _('Shipping delay: [[ cart.delay() ]] days') }}</span>
                     <span ng-hide="cart.delay()" class="text-danger">{{ _('Insufficient stock') }}</span>
-                    <br>
-                    <strong class="text-primary">
-                        {{ _('Total:') }} [[ cart.total() | currency:"{{ config.CURRENCY }}" ]]
-                    </strong>
-                    <br>
-                    {{ _('+ shipping fee') }}
                 </div>
-                <div class="col-sm-7 col-sm-pull-5 col-md-8 col-md-pull-4">
-                    <small>
-                        {{ _('The price and availability of these products may change. The cart is a temporary and local list, products are not reserved until you place an order.') }}
-                        <br>
-                        {{ _('TVA non applicable, article 293 B du Code général des impôts') }}
-                    </small>
+                <div class="col-xs-5 col-sm-4 col-md-3 col-lg-2">
+                    <button type="button" class="btn btn-danger btn-block" ng-click="cart.reset()">
+                        <i class="fa fa-trash"></i>
+                        {{ _('Empty') }}
+                    </button>
+                </div>
+                <div class="col-sm-2 text-right">
+                    <strong class="text-primary">
+                        {{ _('Subtotal:') }}<br class="hidden-xs">
+                        [[ cart.total() | currency:"{{ config.CURRENCY }}" ]]
+                    </strong>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-xs-6 col-sm-7 col-md-8 col-lg-6" ng-show="user.get().auth && saved_cart">
-            <div class="btn-group">
-                <a ui-sref="saved_carts" class="btn btn-primary">
-                    <i class="fa fa-bookmark"></i>
-                    {{ _('Saved') }}
-                </a>
-                <button type="button" class="btn btn-warning" uib-tooltip="{{ _('Remove all products') }}" ng-click="cart.reset()">
-                    <i class="fa fa-trash"></i>
-                    <span class="hidden-xs hidden-sm hidden-md">{{ _('Empty cart') }}</span>
-                </button>
+    <div ng-show="user.get().auth">
+        <div class="panel panel-default">
+            <div class="panel-heading">{{ _('Save for later') }}</div>
+            <div class="panel-body">
+                <div ng-show="user.get().auth && saved_cart">
+                    <div class="btn-group">
+                        <a ui-sref="saved_carts" class="btn btn-primary">
+                            <i class="fa fa-bookmark"></i>
+                            {{ _('Saved') }}
+                        </a>
+                    </div>
+                </div>
+                <div ng-hide="!user.get().auth || saved_cart">
+                    <form name="form" novalidate>
+                        <div class="input-group">
+                            <input type="text" class="form-control" ng-model="cartname" placeholder="{{ _('Cart name') }}" required>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-primary" uib-tooltip="{{ _('Save this cart for a later use') }}" ng-click="save_cart()" ng-disabled="form.$invalid">
+                                    <i class="fa fa-bookmark"></i>
+                                    {{ _('Save') }}
+                                </button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-        <div class="col-sm-5 col-md-6" ng-hide="!user.get().auth || saved_cart">
-            <form name="form" novalidate>
-                <div class="input-group">
-                    <input type="text" class="form-control" ng-model="cartname" placeholder="{{ _('Cart name') }}" required>
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-primary" uib-tooltip="{{ _('Save this cart for a later use') }}" ng-click="save_cart()" ng-disabled="form.$invalid">
-                            <i class="fa fa-bookmark"></i>
-                            <span class="hidden-xs hidden-sm">{{ _('Save') }}</span>
-                        </button>
-                        <button type="button" class="btn btn-danger" uib-tooltip="{{ _('Remove all products') }}" ng-click="cart.reset()">
-                            <i class="fa fa-trash"></i>
-                            <span class="hidden-xs hidden-sm hidden-md">{{ _('Empty cart') }}</span>
-                        </button>
-                    </span>
+        <div ng-show="cart.delay() && user.get().addresses.length">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <i class="fa fa-map-marker"></i>
+                                {{ _('Delivery address') }}
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <select class="form-control" name="delivery" ng-model="choice.delivery_address" ng-options="address.id as address.title for address in user.get().addresses" required></select>
+                            </div>
+                            <p>{{ _('The package will be shipped to:') }}</p>
+                            <pre class="well" ng-bind="full_address(choice.delivery_address)"></pre>
+                            <div class="btn-group btn-group-justified">
+                                <div class="btn-group">
+                                <button type="button" class="btn btn-info" ng-disabled="!choice.delivery_address" ng-click="modify_address(choice.delivery_address)">
+                                    <i class="fa fa-pencil"></i>
+                                    {{ _('Modify') }}
+                                </button>
+                                </div>
+                                <div class="btn-group">
+                                <button type="button" class="btn btn-warning" ng-click="add_address()">
+                                    <i class="fa fa-plus"></i>
+                                    {{ _('New address') }}
+                                </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </form>
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <i class="fa fa-map-marker"></i>
+                                {{ _('Billing address') }}
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary btn-block" ng-model="choice.delivery_as_billing" uib-btn-checkbox>
+                                    <i class="fa fa-check" ng-show="choice.delivery_as_billing"></i>
+                                    <i class="fa fa-times" ng-hide="choice.delivery_as_billing"></i>
+                                    {{ _('Use the delivery address') }}
+                                </button>
+                            </div>
+                            <div ng-hide="choice.delivery_as_billing">
+                                <div class="form-group">
+                                    <select class="form-control" name="billing" ng-model="choice.billing_address" ng-options="address.id as address.title for address in user.get().addresses"></select>
+                                </div>
+                                <pre class="well" ng-bind="full_address(choice.billing_address)"></pre>
+                                <div class="btn-group btn-group-justified">
+                                    <div class="btn-group">
+                                    <button type="button" class="btn btn-info" ng-disabled="!choice.billing_address" ng-click="modify_address(choice.billing_address)">
+                                        <i class="fa fa-pencil"></i>
+                                        {{ _('Modify') }}
+                                    </button>
+                                    </div>
+                                    <div class="btn-group">
+                                    <button type="button" class="btn btn-warning" ng-click="add_address()">
+                                        <i class="fa fa-plus"></i>
+                                        {{ _('New address') }}
+                                    </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">
+                        <i class="fa fa-truck"></i>
+                        {{ _('Shipping') }}
+                    </h2>
+                </div>
+                <div class="list-group options-list-clickable">
+                    <label class="list-group-item" ng-repeat="available_carrier in get_available_carriers()">
+                        <div class="row">
+                            <div class="col-xs-8">
+                                <input type="radio" ng-model="choice.carrier" ng-value="available_carrier.carrier.id">
+                                [[ available_carrier.carrier.description ]]
+                                ([[ available_carrier.carrier.name ]])
+                            </div>
+                            <div class="col-xs-4 text-right">
+                                <b>[[ available_carrier.cost | currency:"{{ config.CURRENCY }}" ]]</b>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <div class="well">
+                <div class="row">
+                    <div class="col-xs-8 col-md-9 text-right">
+                        {{ _('Subtotal') }}
+                    </div>
+                    <div class="col-xs-4 col-md-3 text-right">
+                        [[ cart.total() | currency:"{{ config.CURRENCY }}" ]]
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-8 col-md-9 text-right">
+                        {{ _('Shipping fee') }}
+                    </div>
+                    <div class="col-xs-4 col-md-3 text-right">
+                        [[ get_shipping_fee() | currency:"{{ config.CURRENCY }}" ]]
+                    </div>
+                </div>
+                <div class="row total-cost text-info">
+                    <div class="col-xs-8 col-md-9 text-right">
+                        {{ _('Total') }}
+                    </div>
+                    <div class="col-xs-4 col-md-3 text-right">
+                        <b>[[ cart.total() + get_shipping_fee() | currency:"{{ config.CURRENCY }}" ]]</b>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">
+                        <i class="fa fa-money"></i>
+                        {{_('Payment') }}
+                    </h2>
+                </div>
+                <div class="list-group options-list-clickable">
+                    <label class="list-group-item" ng-repeat="mode in payments">
+                        <input type="radio" ng-model="choice.payment" ng-value="mode.id">
+                        <i class="fa fa-[[ mode.icon ]]"></i>
+                        [[ mode.description ]]
+                    </label>
+                </div>
+            </div>
+            <textarea placeholder="{{ _('If you have any message for us about this order, write it here!') }}" ng-model="choice.message" class="form-control bottom-large-space"></textarea>
+            <div class="panel panel-default">
+                <div class="panel-body text-right options-list-clickable">
+                    <label>
+                        <i class="fa fa-recycle"></i>
+                        {{ _('I accept that my order is shipped in a reused package') }}
+                        <input type="checkbox" ng-model="choice.accept_reused_package">
+                    </label><br>
+                    <label>
+                        <i class="fa fa-file-text-o"></i>
+                        {{ _('I want to receive a paper invoice') }}
+                        <input type="checkbox" ng-model="choice.paper_invoice">
+                    </label><br>
+                    <label>
+                        <i class="fa fa-check"></i>
+                        <b>{{ _('I agree to the %(terms)s and adhere to them unconditionally', terms='<a href="#" ng-click="open_terms()">'|safe+_('terms of purchase')+'</a>'|safe) }}</b>
+                        <input type="checkbox" ng-model="choice.accept_terms">
+                    </label>
+                    <div ng-show="cart.overstock()">
+                        <b class="text-danger">{{ _('I understand that the cart contains products to be ordered on demand and that shipping will be delayed for [[ cart.delay() ]]') }}</b>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5 col-lg-7 bottom-large-space">
+                    <small>{{ _('TVA non applicable, article 293 B du Code général des impôts') }}</small>
+                </div>
+                <div class="col-md-7 col-lg-5 text-right">
+                    <button type="submit" id="proceed" class="btn btn-lg btn-success" ng-disabled="!(choice.delivery_address && (choice.delivery_as_billing || choice.billing_address) && choice.payment && choice.accept_terms)">
+                        {{ _('Verify and confirm the order') }}
+                        <i class="fa fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
         </div>
-        <div class="col-sm-7 col-md-6 bottom-space text-right" ng-class="{'col-sm-offset-5': !user.get().auth, 'col-md-offset-6': !user.get().auth}">
-            <a ng-show="user.get().auth && cart.delay()" ui-sref="checkout" class="btn btn-lg btn-success">
-                {{ _('Proceed to checkout') }}
-                <i class="fa fa-chevron-right"></i>
-            </a>
-            <p ng-hide="user.get().auth">{{ _('You need to log in to validate your order...') }}</p>
-            <div class="btn-group" ng-hide="user.get().auth">
-                <button type="button" class="btn btn-success" ng-click="user.forcelogin()">
-                    <i class="fa fa-sign-in"></i> {{ _('Login') }}
+        <div class="panel panel-default" ng-hide="!user.get().auth || !cart.count() || user.get().addresses.length">
+            <div class="panel-body">
+                <p class="lead text-center">{{ _('You must define at least one address for delivery') }}</p>
+                <button type="button" class="btn btn-lg btn-block btn-success" ng-click="add_address()">
+                    <i class="fa fa-home"></i>
+                    {{ _('Create an address') }}
                 </button>
-                <a class="btn btn-warning" ui-sref="register">
-                    <i class="fa fa-user-plus"></i> {{ _('Register') }}
-                </a>
             </div>
         </div>
     </div>
 </form>
-<div class="alert alert-danger text-center" ng-hide="cart.count()">{{ _('Your cart is empty!') }}</div>
+<div class="alert alert-warning text-center" ng-hide="!cart.count() || user.get().auth">
+    <p class="bottom-space">{{ _('You must log in or register to place an order!') }}</p>
+    <div class="btn-group">
+        <a href="#" ng-click="user.forcelogin()" class="btn btn-default"><i class="fa fa-sign-in"></i> {{ _('Login') }}</a>
+        <a ui-sref="register" class="btn btn-default"><i class="fa fa-user-plus"></i> {{ _('Register') }}</a>
+    </div>
+</div>
+<div class="alert alert-danger text-center" ng-hide="cart.count()">
+    {{ _('Your cart is empty!') }}
+</div>
+<div class="alert alert-danger text-center" ng-hide="!cart.count() || cart.delay()">
+    <p>{{ _("This cart's content cannot be ordered because the stock is insufficient. Please reduce quantities.") }}</p>
+</div>
