@@ -44,6 +44,7 @@ class OrderProductCartSubSchema(Schema):
 class OrderProductCartSchema(Schema):
     product = fields.Nested(OrderProductCartSubSchema, required=True)
     quantity = fields.Integer(required=True)
+    data = fields.String(missing=None)
 
 
 class OrderProductSchema(Schema):
@@ -153,7 +154,12 @@ class OrderSchema(Schema):
         total_weight = 0
         global_delay = 0
         for productdata in data.get('cart', []):
-            
+            this_data_s = productdata.get('data')
+            if this_data_s and this_data_s != '{}':
+                this_data = dict(i.split(':') for i in this_data_s.split(','))
+            else:
+                this_data = {}
+            productdata['data'] = this_data
             productobj = BaseProduct.objects.get(
                                 id=productdata['product']['id']
                                 )
