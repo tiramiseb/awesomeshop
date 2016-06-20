@@ -159,7 +159,6 @@ class OrderSchema(Schema):
                 this_data = dict(i.split(':') for i in this_data_s.split(','))
             else:
                 this_data = {}
-            productdata['data'] = this_data
             productobj = BaseProduct.objects.get(
                                 id=productdata['product']['id']
                                 )
@@ -167,7 +166,7 @@ class OrderSchema(Schema):
                 reference=productdata['product']['reference'],
                 product=productobj,
                 name=productobj.name.get(get_locale(), u''),
-                data=productdata['data']
+                data=this_data
                 )
             product.set_quantity(productdata['quantity'])
             global_delay = max(global_delay, product.delay)
