@@ -281,7 +281,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </div>
     </div>
 </form>
-<div class="panel panel-default" ng-show="!user.get().auth || (cart.count() && !user.get().addresses.length)">
+<div class="panel panel-default" ng-show="cart.count() && (!user.get().auth || !user.get().addresses.length)">
     <div class="panel-heading">{{ _('Estimate your shiping fee') }}</div>
     <div class="panel-body">
         <div class="row">
