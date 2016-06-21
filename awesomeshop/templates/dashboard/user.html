@@ -86,7 +86,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 </div>
             </div>
             <div class="list-group">
-                <div class="list-group-item" ng-repeat="line in cart.lines">
+                <div class="list-group-item" ng-repeat="line in cart.lines" uib-popover-template="'/part/product_'+line.product.type+'_popup'" popover-trigger="mouseenter" popover-enable="line.product.details">
                     <div class="row">
                         <div class="col-sm-6">
                             [[ line.product.name ]]
