@@ -1314,7 +1314,7 @@ msgstr "Délai d'expédition : [[ cart.delay() ]] jours"
 
 #: awesomeshop/templates/shop/cart.html:69
 msgid "Empty"
-msgstr "Vide"
+msgstr "Vider"
 
 #: awesomeshop/templates/shop/cart.html:74
 msgid "Subtotal:"
