@@ -181,8 +181,26 @@ angular.module('shopShop', ['bootstrapLightbox'])
 .controller('ProductInListCtrl', function($scope, cart) {
     $scope.cart = cart;
 })
-.controller('CartButtonCtrl', function($scope, cart) {
+.controller('CartButtonCtrl', function($rootScope, $scope, $timeout, cart) {
     $scope.cart = cart;
+    $scope.$on('cart:added', function(event, data) {
+        $rootScope.added_to_cart = data;
+        $timeout(function() {
+            // Only hide the popup if there is no new event
+            if ($rootScope.added_to_cart == data) {
+                $rootScope.added_to_cart = null;
+            }
+        }, 5000);
+    });
+    $scope.$on('cart:loaded', function(event, data) {
+        $rootScope.loaded_to_cart = data;
+        $timeout(function() {
+            // Only hide the popup if there is no new event
+            if ($rootScope.loaded_to_cart == data) {
+                $rootScope.loaded_to_cart = null;
+            }
+        }, 5000);
+    });
 })
 .controller('CartCtrl', function($timeout, $scope, $state, $http, $uibModal, cart, savedCarts, user, orders, countries) {
     var available_carriers = {};

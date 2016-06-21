@@ -22,6 +22,31 @@
     margin-bottom: 0;
 }
 
+/* The cart popup (when adding products to the cart */
+.cartpopup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2000;
+    padding: 2em;
+    opacity: 1;
+}
+@media (max-width: 767px) {
+    .cartpopup {
+        padding: 0.5em;
+    }
+}
+
+.cartpopup {
+  transition: all linear 0.3s;
+}
+
+.cartpopup.ng-hide {
+  top: -2em;
+  opacity: 0;
+}
+
 /***** HIDE OR SHOW THE MENU ON XS SCREENS *****/
 @media (max-width: 767px) {
     #leftmenu {

@@ -280,7 +280,7 @@ angular.module('awesomeshop', [
         }
     };
 })
-.factory('cart', function($localStorage, $http, $state, products) {
+.factory('cart', function($rootScope, $localStorage, $http, $state, products) {
     if ($localStorage.cart) {
         // Ask the server to adjust the cart (availability and price)
         $http.post('/api/cart/verify', $localStorage.cart)
@@ -295,20 +295,23 @@ angular.module('awesomeshop', [
             // Add a product to the cart
             products.getid(productid, data)
                 .then(function(prod) {
+                    var full_data = {
+                        product: prod,
+                        data: data,
+                        quantity: quantity
+                    };
                     for (var i=0; i<$localStorage.cart.length; i++) {
                         var cartline = $localStorage.cart[i];
                         if (cartline.product.id == prod.id &&
                             cartline.data == data) {
                                 cartline.quantity += quantity;
+                                $rootScope.$broadcast('cart:added', full_data);
                                 return;
                         }
                     };
                     // Product was not found, adding it
-                    $localStorage.cart.push({
-                        product: prod,
-                        data: data,
-                        quantity: quantity
-                    })
+                    $localStorage.cart.push(full_data);
+                    $rootScope.$broadcast('cart:added', full_data);
                 })
         },
         remove: function(productid, data) {
@@ -325,11 +328,13 @@ angular.module('awesomeshop', [
             // Load a stored cart in the live cart
             // do_not_verify = False, ask the server to confirm the quantity in cart
             if (do_not_verify) {
+                // Used to verify the current live cart
                 $localStorage.cart = cart;
             } else {
                 $http.post('/api/cart/verify', cart)
                     .then(function(response) {
                         $localStorage.cart = response.data;
+                        $rootScope.$broadcast('cart:loaded', response.data);
                     });
             };
         },

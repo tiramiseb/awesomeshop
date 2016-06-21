@@ -50,6 +50,20 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <div id="spinner">
     <i class="fa fa-spinner fa-pulse fa-5x text-primary"></i>
 </div>
+<div class="cartpopup" ng-show="added_to_cart" ng-cloak>
+    <div class="alert alert-info text-center" ng-show="added_to_cart.quantity == 1">
+        {{ _('[[ added_to_cart.quantity ]] of "[[ added_to_cart.product.name ]]" has been added to the cart') }}
+    </div>
+    <div class="alert alert-info text-center" ng-show="added_to_cart.quantity > 1">
+        {{ _('[[ added_to_cart.quantity ]] of "[[ added_to_cart.product.name ]]" have been added to the cart') }}
+    </div>
+</div>
+<div class="cartpopup" ng-show="loaded_to_cart" ng-cloak>
+    [[ loaded_to_cart ]]
+    <div class="alert alert-info text-center">
+        {{ _('Saved cart has been loaded into the current cart') }}
+    </div>
+</div>
 <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
     <div class="container">
         <div class="navbar-header hidden-xs">
