@@ -86,8 +86,12 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     <div class="btn-group">
                         <a ui-sref="saved_carts" class="btn btn-primary">
                             <i class="fa fa-bookmark"></i>
-                            {{ _('Saved') }}
+                            {{ _('Cart saved') }}
                         </a>
+                        <button type="button" class="btn btn-danger" ng-click="cart.reset()">
+                            <i class="fa fa-trash"></i>
+                            {{ _('Empty the cart') }}
+                        </button>
                     </div>
                 </div>
                 <div ng-hide="!user.get().auth || saved_cart">

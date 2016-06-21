@@ -20,7 +20,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <div class="panel panel-default" ng-repeat="cart in saved_carts.get()">
     <div class="panel-heading">[[ cart.name ]] ([[ cart.date | date ]])</div>
     <div class="list-group">
-        <div class="list-group-item cart-list" ng-repeat="line in cart.lines">
+        <div class="list-group-item cart-list" ng-repeat="line in cart.lines" uib-popover-template="'/part/product_'+line.product.type+'_popup'" popover-trigger="mouseenter" popover-enable="line.product.details">
             <div class="row">
                 <div class="col-xs-7 col-sm-6 col-md-7 col-lg-8">
                     <a href="[[ line.product.path ]]">

@@ -76,7 +76,7 @@ class LiveCartlineSchema(Schema):
 
 class CartlineSchema(Schema):
     product = ObjField(f='id', obj=BaseProduct)
-    data = fields.String(missing=None)
+    data = fields.Dict(missing=None)
     quantity = fields.Integer()
 
     @pre_load(pass_many=True)
@@ -93,9 +93,16 @@ class CartlineSchema(Schema):
             except BaseProduct.DoesNotExist:
                 # Forget non-existing products
                 continue
+            this_data_s = entry['data']
+            if isinstance(this_data_s, unicode) and this_data_s != u'':
+                this_data = dict(i.split(':') for i in this_data_s.split(','))
+            elif isinstance(this_data_s, dict):
+                this_data = this_data_s
+            else:
+                this_data = {}
             newdata.append({
                     'product': prod.id,
-                    'data': entry['data'],
+                    'data': this_data,
                     'quantity': entry['quantity']
                     })
         if not many:
@@ -128,11 +135,8 @@ class CartlineSchema(Schema):
                 # Forget non-existing products
                 continue
             # Extract product data
-            this_data_s = entry.get('data')
-            if this_data_s and this_data_s != '{}':
-                this_data = dict(i.split(':') for i in this_data_s.split(','))
-            else:
-                this_data = {}
+            this_data = entry.get('data')
+            this_data_s = ','.join(':'.join(i) for i in this_data.items())
             newdata.append({
                     'product': BaseProductSchemaForList(
                                         context={'data': this_data}
