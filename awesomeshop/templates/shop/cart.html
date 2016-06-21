@@ -38,7 +38,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     <span ng-show="line.quantity > line.product.stock && line.product.overstock_delay >= 0" class="text-danger" uib-tooltip="{{ _('For a faster shipping, order less than [[ line.product.stock ]]') }}">{{ _('Shipping delay: [[ line.product.overstock_delay ]] days') }}</span>
                     <span ng-show="line.quantity > line.product.stock && line.product.overstock_delay < 0" class="text-danger">{{ _('Insufficient stock') }}</span>
                 </div>
-                <div class="col-xs-5 col-sm-4 col-md-3 col-lg-2">
+                <div class="col-xs-5 col-sm-3 col-lg-2">
                     <label for="qty-[[ line.product.reference ]]" class="hidden-xs">{{ _('Quantity') }}</label>
                     <div class="input-group">
                         <input id="qty-[[ line.product.reference ]]" type="number" min="1" class="form-control" ng-model="line.quantity" ng-model-options="{debounce:{default:100}}">
@@ -49,7 +49,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                         </span>
                     </div>
                 </div>
-                <div class="col-sm-2 text-right">
+                <div class="col-sm-3 col-md-2 text-right">
                     <strong>
                         {{ _('Total:') }}<br class="hidden-xs">
                         [[ line.product.net_price*line.quantity | currency:"{{ config.CURRENCY }}" ]]
@@ -63,13 +63,13 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                     <span ng-show="cart.delay()">{{ _('Shipping delay: [[ cart.delay() ]] days') }}</span>
                     <span ng-hide="cart.delay()" class="text-danger">{{ _('Insufficient stock') }}</span>
                 </div>
-                <div class="col-xs-5 col-sm-4 col-md-3 col-lg-2">
+                <div class="col-xs-5 col-sm-3 col-lg-2">
                     <button type="button" class="btn btn-danger btn-block" ng-click="cart.reset()">
                         <i class="fa fa-trash"></i>
                         {{ _('Empty') }}
                     </button>
                 </div>
-                <div class="col-sm-2 text-right">
+                <div class="col-sm-3 col-md-2 text-right">
                     <strong class="text-primary">
                         {{ _('Subtotal:') }}<br class="hidden-xs">
                         [[ cart.total() | currency:"{{ config.CURRENCY }}" ]]
@@ -280,17 +280,30 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 </div>
             </div>
         </div>
-        <div class="panel panel-default" ng-hide="!user.get().auth || !cart.count() || user.get().addresses.length">
-            <div class="panel-body">
-                <p class="lead text-center">{{ _('You must define at least one address for delivery') }}</p>
-                <button type="button" class="btn btn-lg btn-block btn-success" ng-click="add_address()">
-                    <i class="fa fa-home"></i>
-                    {{ _('Create an address') }}
-                </button>
+    </div>
+</form>
+<div class="panel panel-default" ng-show="!user.get().auth || (cart.count() && !user.get().addresses.length)">
+    <div class="panel-heading">{{ _('Estimate your shiping fee') }}</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-6">
+                <select id="address_country" name="address_country" class="form-control" ng-model="estimation_country" ng-options="country.code as prefixed(country) for country in countries.get()"></select>
+            </div>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" disabled ng-show="shipping_fee_estimation()" value="{{ _('From') }} [[ shipping_fee_estimation() | currency:'{{ config.CURRENCY }}' ]]">
             </div>
         </div>
     </div>
-</form>
+</div>
+<div class="panel panel-default" ng-show="user.get().auth && cart.count() && !user.get().addresses.length">
+    <div class="panel-body">
+        <p class="lead text-center">{{ _('You must define at least one address for delivery') }}</p>
+        <button type="button" class="btn btn-lg btn-block btn-success" ng-click="add_address()">
+            <i class="fa fa-home"></i>
+            {{ _('Create an address') }}
+        </button>
+    </div>
+</div>
 <div class="alert alert-warning text-center" ng-show="cart.count() && !user.get().auth">
     <p class="bottom-space">{{ _('You must log in or register to place an order!') }}</p>
     <div class="btn-group">

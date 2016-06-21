@@ -206,6 +206,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
     var available_carriers = {};
     $scope.cart = cart;
     $scope.user = user;
+    $scope.countries = countries;
     $scope.cart_total = 0;
     $scope.choice = {
         delivery_as_billing: true,
@@ -302,6 +303,9 @@ angular.module('shopShop', ['bootstrapLightbox'])
         };
         return code;
     };
+    $scope.prefixed = function(country) {
+        return country.code+' - '+country.name;
+    }
     $scope.full_address = function(address_id) {
         var addresses = [];
         if (user.get() && user.get().addresses) {
@@ -315,63 +319,45 @@ angular.module('shopShop', ['bootstrapLightbox'])
         };
         return '';
     };
-    /*
-    $scope.$watch('choice.delivery_address', function(address_id) {
-        var addresses = [];
-        if (address_id) {
-            if (user.get() && user.get().addresses) {
-                addresses = user.get().addresses;
-            };
-            for (var i=0; i<addresses.length; i++) {
-                if (addresses[i].id == address_id) {
-                    var country = addresses[i].country;
-                    if (!available_carriers[country]) {
-                        $http.get('/api/carrier/'+country+'/'+cart.weight().toString())
-                            .then(function(response) {
-                                available_carriers[country] = response.data;
-                            });
-                    };
-                    return;
-                };
+    find_carriers = function(country) {
+        var weight = cart.weight().toString(),
+            carriers = available_carriers[country];
+        if (carriers && carriers[weight]) {
+            return carriers[weight];
+        };
+        // The function has not returned yet, it means the available
+        // carriers are unknown: get them, but only if the country is known
+        if (country) {
+            if (!available_carriers[country]) {
+                available_carriers[country] = {};
+            }
+            available_carriers[country][weight] = [];
+            $http.get('/api/carrier/'+country+'/'+weight)
+                .then(function(response) {
+                    available_carriers[country][weight] = response.data;
+                    // and then a new digest cycle is run, this content
+                    // is now present in available_carriers, it will be read
+                });
+        }
+    }
+    $scope.get_available_carriers = function() {
+        var addresses = [],
+            address_id = $scope.choice.delivery_address;
+        if (user.get() && user.get().addresses) {
+            addresses = user.get().addresses;
+        };
+        for (var i=0; i<addresses.length; i++) {
+            if (addresses[i].id == address_id) {
+                return find_carriers(addresses[i].country);
             };
         };
-    });
-    */
-    $scope.get_available_carriers = function() {
-        if (cart.delay()) {
-            var addresses = [],
-                address_id = $scope.choice.delivery_address,
-                weight = cart.weight().toString(),
-                country;
-            if (user.get() && user.get().addresses) {
-                addresses = user.get().addresses;
-            };
-            for (var i=0; i<addresses.length; i++) {
-                if (addresses[i].id == address_id) {
-                    country = addresses[i].country;
-                    var carriers = available_carriers[country];
-                    if (carriers && carriers[weight]) {
-                        return carriers[weight];
-                    };
-                };
-            };
-            // The function has not returned yet, it means the available
-            // carriers are unknown: get them, but only if the country is known
-            if (country) {
-                if (!available_carriers[country]) {
-                    available_carriers[country] = {};
-                }
-                available_carriers[country][weight] = [];
-                $http.get('/api/carrier/'+country+'/'+weight)
-                    .then(function(response) {
-                        available_carriers[country][weight] = response.data;
-                        // and then a new digest cycle is run, this content
-                        // is now present in available_carriers
-                    });
-            }
-        }
-
     };
+    $scope.shipping_fee_estimation = function() {
+        var carriers = find_carriers($scope.estimation_country);
+        if (carriers && carriers.length) {
+            return parseFloat(carriers[0].cost);
+        };
+    }
     $scope.get_shipping_fee = function() {
         var carriers = $scope.get_available_carriers();
         if (carriers) {
