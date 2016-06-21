@@ -291,7 +291,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </div>
     </div>
 </form>
-<div class="alert alert-warning text-center" ng-hide="!cart.count() || user.get().auth">
+<div class="alert alert-warning text-center" ng-show="cart.count() && !user.get().auth">
     <p class="bottom-space">{{ _('You must log in or register to place an order!') }}</p>
     <div class="btn-group">
         <a href="#" ng-click="user.forcelogin()" class="btn btn-default"><i class="fa fa-sign-in"></i> {{ _('Login') }}</a>
