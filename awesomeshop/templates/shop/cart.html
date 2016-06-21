@@ -151,7 +151,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                             </h3>
                         </div>
                         <div class="panel-body">
-                            <div class="form-group">
+                            <div class="form-group" ng-class="{'bottom-no-space': choice.delivery_as_billing}">
                                 <button type="button" class="btn btn-primary btn-block" ng-model="choice.delivery_as_billing" uib-btn-checkbox>
                                     <i class="fa fa-check" ng-show="choice.delivery_as_billing"></i>
                                     <i class="fa fa-times" ng-hide="choice.delivery_as_billing"></i>
