@@ -170,7 +170,7 @@ class OrderSchema(Schema):
                 )
             product.set_quantity(productdata['quantity'])
             global_delay = max(global_delay, product.delay)
-            price = productobj.get_price_per_item(productdata['data'])
+            price = productobj.get_price_per_item(this_data)
             product.set_gross_price(price.gross)
             product.set_net_price(price.net)
             line_price = price * product.quantity
@@ -178,7 +178,7 @@ class OrderSchema(Schema):
             product.set_line_net_price(line_price.net)
             subtotal += line_price
             total_weight += (
-                productobj.get_weight(productdata['data']) * product.quantity
+                productobj.get_weight(this_data) * product.quantity
                 )
             products.append(product)
         order.products = products
