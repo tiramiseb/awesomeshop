@@ -150,16 +150,23 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 </div>
             </div>
             <div class="list-group">
-                <div class="list-group-item" ng-repeat="product in order.products">
+                <div class="list-group-item" ng-repeat="line in order.products">
                     <div class="row">
                         <div class="col-xs-3">
-                            [[ product.reference ]]
+                            [[ line.reference ]]
                         </div>
                         <div class="col-xs-7">
-                            [[ product.name ]]
+                            [[ line.name ]]
                         </div>
                         <div class="col-xs-2 text-right">
-                            [[ product.quantity ]]
+                            [[ line.quantity ]]
+                        </div>
+                        <div class="col-xs-12" ng-show="line.product.type == 'kit'">
+                            <ul>
+                                <li ng-repeat="detail in line.product.details">
+                                    [[ detail.quantity ]]× [[ detail.name ]]
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>

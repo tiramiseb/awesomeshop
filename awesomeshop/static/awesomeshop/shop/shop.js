@@ -57,12 +57,6 @@ angular.module('shopShop', ['bootstrapLightbox'])
             controller: 'CartCtrl',
             title: 'My cart'
         })
-        .state('checkout', {
-            url: '/checkout',
-            templateUrl: 'shop/checkout',
-            controller: 'CheckoutCtrl',
-            title: 'Checkout'
-        })
         .state('saved_carts', {
             url: '/saved_carts',
             templateUrl: 'shop/saved_carts',
@@ -135,11 +129,43 @@ angular.module('shopShop', ['bootstrapLightbox'])
             title.set($scope.category.name);
         });
 })
-.controller('ProductCtrl', function($http, $scope, $state, $stateParams, Lightbox, cart, title) {
+.controller('ProductCtrl', function($http, $scope, $state, $stateParams, $httpParamSerializer, Lightbox, products, cart, title, $timeout) {
     $scope.cart = cart;
-    $http.get('/api/product/catslug/'+$stateParams.category+'/'+$stateParams.slug)
-        .then(function(response) {
-            $scope.product = response.data;
+    products.getcatslug($stateParams.category, $stateParams.slug)
+        .then(function(product) {
+            $scope.product = product;
+            // Initialize product-type-dependent functions
+            //
+            // the following functions must be created, dependent on each product type:
+            //
+            // make_data:
+            //      return the data as a string or null/undef
+            if (product.type == 'regular') {
+                function make_data() {
+                    return null;
+                }
+            } else if (product.type == 'kit') {
+                $scope.update_price = function() {
+                    // Whenever a choice changes, reload the product with
+                    // the corresponding data
+                    products.getid($scope.product.id, make_data())
+                        .then(function(prod) {
+                            $scope.product = prod;
+                        })
+                };
+                function make_data() {
+                    var query = [];
+                    for (var i=0; i<$scope.product.products.length; i++) {
+                        var prod = $scope.product.products[i];
+                        query.push(prod.id+':'+prod.selected);
+                    };
+                    return query.join(',');
+                }
+            };
+            // Common stuff
+            $scope.add_to_cart = function() {
+                cart.add($scope.product.id, make_data(), $scope.quantity);
+            };
             if ($scope.product.photos.length > 1) {
                 $scope.thumb_width = parseInt(12 / ($scope.product.photos.length - 1));
             };
@@ -155,39 +181,38 @@ angular.module('shopShop', ['bootstrapLightbox'])
 .controller('ProductInListCtrl', function($scope, cart) {
     $scope.cart = cart;
 })
-.controller('CartButtonCtrl', function($scope, cart) {
+.controller('CartButtonCtrl', function($rootScope, $scope, $timeout, cart) {
     $scope.cart = cart;
+    $scope.$on('cart:added', function(event, data) {
+        $rootScope.added_to_cart = data;
+        $timeout(function() {
+            // Only hide the popup if there is no new event
+            if ($rootScope.added_to_cart == data) {
+                $rootScope.added_to_cart = null;
+            }
+        }, 5000);
+    });
+    $scope.$on('cart:loaded', function(event, data) {
+        $rootScope.loaded_to_cart = data;
+        $timeout(function() {
+            // Only hide the popup if there is no new event
+            if ($rootScope.loaded_to_cart == data) {
+                $rootScope.loaded_to_cart = null;
+            }
+        }, 5000);
+    });
 })
-.controller('CartCtrl', function($http, $scope, cart, savedCarts, user) {
-    $scope.user = user;
-    $scope.cart = cart;
-    $scope.save = function() {
-        var data = {
-            name: $scope.cartname,
-            lines: cart.list()
-        };
-        $http.post('/api/cart', data)
-            .then(function(response) {
-                $scope.saved_cart = response.data.name;
-                savedCarts.add(response.data);
-            });
-    }
-})
-.controller('CheckoutCtrl', function($timeout, $scope, $state, $http, $uibModal, cart, user, orders, countries) {
-    var totalweight = 0,
-        cartlines = cart.list(),
-        available_carriers = {};
-    user.forcelogin();
+.controller('CartCtrl', function($timeout, $scope, $state, $http, $uibModal, cart, savedCarts, user, orders, countries) {
+    var available_carriers = {};
     $scope.cart = cart;
     $scope.user = user;
+    $scope.countries = countries;
     $scope.cart_total = 0;
     $scope.choice = {
         delivery_as_billing: true,
         accept_reused_package: true
     };
-    $timeout(function() {
-        // Reused latest data from the user
-        var userdata = user.get();
+    function load_preferences(foobar, userdata) {
         if (userdata) {
             if (userdata.latest_delivery_address) {
                 $scope.choice.delivery_address = userdata.latest_delivery_address;
@@ -208,11 +233,14 @@ angular.module('shopShop', ['bootstrapLightbox'])
                 $scope.choice.accept_reused_package = userdata.latest_reused_package;
             };
         };
+    }
+    $scope.$on('event:auth-loginConfirmed', load_preferences);
+    $timeout(function() {
+        var userdata = user.get();
+        if (userdata) {
+            load_preferences(null, userdata);
+        };
     }, 100);
-    for (var i=0; i<cartlines.length; i++) {
-        totalweight += cartlines[i].product.weight * cartlines[i].quantity;
-        $scope.cart_total += cartlines[i].product.net_price * cartlines[i].quantity;
-    };
     $http.post('/api/cart/verify', cart.list())
         .then(function(response) {
             var oldcart = cart.list(),
@@ -225,12 +253,23 @@ angular.module('shopShop', ['bootstrapLightbox'])
                     $scope.stock_changed = true;
                 }
             }
-            cart.set(response.data, true);
+            cart.load(response.data, true);
         });
     $http.get('/api/payment')
         .then(function(response) {
             $scope.payments = response.data;
         });
+    $scope.save_cart = function() {
+        var data = {
+            name: $scope.cartname,
+            lines: cart.list()
+        };
+        $http.post('/api/cart', data)
+            .then(function(response) {
+                $scope.saved_cart = response.data.name;
+                savedCarts.add(response.data);
+            });
+    }
     $scope.add_address = function() {
         $uibModal.open({
             templateUrl: 'part/address',
@@ -256,7 +295,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
     function code_to_country(code) {
         var countrieslist = countries.get();
         if (countrieslist) {
-            for (i=0; i<countrieslist.length; i++) {
+            for (var i=0; i<countrieslist.length; i++) {
                 if (countrieslist[i].code == code) {
                     return code + ' - ' + countrieslist[i].name;
                 };
@@ -264,6 +303,9 @@ angular.module('shopShop', ['bootstrapLightbox'])
         };
         return code;
     };
+    $scope.prefixed = function(country) {
+        return country.code+' - '+country.name;
+    }
     $scope.full_address = function(address_id) {
         var addresses = [];
         if (user.get() && user.get().addresses) {
@@ -277,26 +319,27 @@ angular.module('shopShop', ['bootstrapLightbox'])
         };
         return '';
     };
-    $scope.$watch('choice.delivery_address', function(address_id) {
-        var addresses = [];
-        if (address_id) {
-            if (user.get() && user.get().addresses) {
-                addresses = user.get().addresses;
-            };
-            for (var i=0; i<addresses.length; i++) {
-                if (addresses[i].id == address_id) {
-                    var country = addresses[i].country;
-                    if (!available_carriers[country]) {
-                        $http.get('/api/carrier/'+country+'/'+totalweight.toString())
-                            .then(function(response) {
-                                available_carriers[country] = response.data;
-                            });
-                    };
-                    return;
-                };
-            };
+    find_carriers = function(country) {
+        var weight = cart.weight().toString(),
+            carriers = available_carriers[country];
+        if (carriers && carriers[weight]) {
+            return carriers[weight];
         };
-    });
+        // The function has not returned yet, it means the available
+        // carriers are unknown: get them, but only if the country is known
+        if (country) {
+            if (!available_carriers[country]) {
+                available_carriers[country] = {};
+            }
+            available_carriers[country][weight] = [];
+            $http.get('/api/carrier/'+country+'/'+weight)
+                .then(function(response) {
+                    available_carriers[country][weight] = response.data;
+                    // and then a new digest cycle is run, this content
+                    // is now present in available_carriers, it will be read
+                });
+        }
+    }
     $scope.get_available_carriers = function() {
         var addresses = [],
             address_id = $scope.choice.delivery_address;
@@ -305,15 +348,21 @@ angular.module('shopShop', ['bootstrapLightbox'])
         };
         for (var i=0; i<addresses.length; i++) {
             if (addresses[i].id == address_id) {
-                return available_carriers[addresses[i].country];
+                return find_carriers(addresses[i].country);
             };
         };
     };
+    $scope.shipping_fee_estimation = function() {
+        var carriers = find_carriers($scope.estimation_country);
+        if (carriers && carriers.length) {
+            return parseFloat(carriers[0].cost);
+        };
+    }
     $scope.get_shipping_fee = function() {
         var carriers = $scope.get_available_carriers();
         if (carriers) {
             for (var i=0; i<carriers.length; i++) {
-                if (carriers[i].carrier.id == $scope.choice.carrier) {
+                if (carriers[i].carrier && carriers[i].carrier.id == $scope.choice.carrier) {
                     return parseFloat(carriers[i].cost);
                 }
             };
@@ -322,7 +371,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
     $scope.open_terms = function() {
         $uibModal.open({
             templateUrl: 'part/page_in_modal',
-            controller: 'CheckoutTermsCtrl'
+            controller: 'CartTermsCtrl'
         })
     };
     $scope.confirm = function() {
@@ -345,7 +394,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
             });
     };
 })
-.controller('CheckoutTermsCtrl', function($http, $scope) {
+.controller('CartTermsCtrl', function($http, $scope) {
     $http.get('/api/page-info/terms_of_purchase')
         .then(function(response) {
             $scope.page = response.data;
@@ -354,7 +403,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
 .controller('SavedCartsCtrl', function($scope, savedCarts, cart) {
     $scope.saved_carts = savedCarts;
     $scope.load_cart = function(targetcart) {
-        cart.set(targetcart);
+        cart.load(targetcart);
     }
 })
 .controller('OrdersCtrl', function($scope, orders) {

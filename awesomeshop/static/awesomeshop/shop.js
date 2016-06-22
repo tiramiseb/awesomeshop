@@ -91,6 +91,68 @@ angular.module('awesomeshop', [
         }
     };
 })
+.factory('products', function($http, $q, $httpParamSerializer) {
+    var catslugs = {},
+        products = {};
+    function get_product(productid, data, resolve, reject) {
+        var prod;
+        if (products[productid]) {
+            prod = products[productid][data];
+        };
+        if (prod) {
+            resolve(angular.copy(prod));
+        } else {
+            if (data) {
+                params = {data: data};
+            } else {
+                params = {};
+            }
+            $http.get('/api/product/'+productid, {params: params})
+                .then(function(response) {
+                    var prod = response.data;
+                    if (!products[prod.id]) {
+                        products[prod.id] = {};
+                    };
+                    products[prod.id][data] = prod;
+                    resolve(angular.copy(prod));
+                }, reject);
+        };
+    };
+    return {
+        getid: function(productid, data, scope) {
+            return $q(function(resolve, reject) {
+                get_product(productid, data, resolve, reject);
+            })
+        },
+        getcatslug: function(cat, slug, data) {
+            var catslug = cat+'/'+slug;
+            return $q(function(resolve, reject) {
+                var productid = catslugs[catslug];
+                if (productid) {
+                    // This product is already known
+                    get_product(productid, data, resolve, reject);
+                } else {
+                    // Download from the catslug
+                    if (data) {
+                        params = {data: data};
+                    } else {
+                        params = {};
+                    }
+                    $http.get('/api/product/catslug/'+catslug, {params: params})
+                        .then(function(response) {
+                            var prod = response.data;
+                            if (!products[prod.id]) {
+                                products[prod.id] = {};
+                            };
+                            products[prod.id][data] = prod;
+                            catslugs[catslug] = prod.id;
+                            get_product(prod.id, data, resolve, reject);
+                        }, reject);
+                };
+            })
+        }
+    };
+})
 .factory('categories', function($rootScope, $http) {
     var categories,
         current_product_category;
@@ -218,7 +280,7 @@ angular.module('awesomeshop', [
         }
     };
 })
-.factory('cart', function($localStorage, $http, $state) {
+.factory('cart', function($rootScope, $localStorage, $http, $state, products) {
     if ($localStorage.cart) {
         // Ask the server to adjust the cart (availability and price)
         $http.post('/api/cart/verify', $localStorage.cart)
@@ -229,132 +291,140 @@ angular.module('awesomeshop', [
         $localStorage.cart = [];
     };
     return {
-        add: function(product, quantity) {
-            $http.get('/api/product/'+product.id)
-                .then(function(response) {
-                    var found = false;
+        add: function(productid, data, quantity) {
+            // Add a product to the cart
+            products.getid(productid, data)
+                .then(function(prod) {
+                    var full_data = {
+                        product: prod,
+                        data: data,
+                        quantity: quantity
+                    };
                     for (var i=0; i<$localStorage.cart.length; i++) {
-                        if ($localStorage.cart[i].product.id == product.id) {
-                            $localStorage.cart[i].product = response.data;
-                            $localStorage.cart[i].quantity += quantity;
-                            found = true;
-                            break;
+                        var cartline = $localStorage.cart[i];
+                        if (cartline.product.id == prod.id &&
+                            cartline.data == data) {
+                                cartline.quantity += quantity;
+                                $rootScope.$broadcast('cart:added', full_data);
+                                return;
                         }
                     };
-                    if (!found) {
-                        $localStorage.cart.push({
-                            'product': response.data,
-                            'quantity': quantity
-                        })
-                    };
-                });
+                    // Product was not found, adding it
+                    $localStorage.cart.push(full_data);
+                    $rootScope.$broadcast('cart:added', full_data);
+                })
         },
-        remove: function(product) {
-            var index = -1;
+        remove: function(productid, data) {
+            // Completely remove the product from the cart
             for (var i=0; i<$localStorage.cart.length; i++) {
-                if ($localStorage.cart[i].product.id == product.id) {
-                    index=i;
-                    break;
+                if ($localStorage.cart[i].product.id == productid &&
+                    $localStorage.cart[i].data == data) {
+                        $localStorage.cart.splice(i, 1);
+                        break;
                 };
             };
-            if (index >= 0) {
-                $localStorage.cart.splice(index, 1);
-            };
         },
-        set: function(targetcart, do_not_verify) {
+        load: function(cart, do_not_verify) {
+            // Load a stored cart in the live cart
+            // do_not_verify = False, ask the server to confirm the quantity in cart
             if (do_not_verify) {
-                $localStorage.cart = targetcart;
+                // Used to verify the current live cart
+                $localStorage.cart = cart;
             } else {
-                $http.post('/api/cart/verify', targetcart)
+                $http.post('/api/cart/verify', cart)
                     .then(function(response) {
                         $localStorage.cart = response.data;
+                        $rootScope.$broadcast('cart:loaded', response.data);
                     });
             };
         },
-        stock: function(product) {
-            if (product) {
-                // Check the available stock, deducing quantity in cart
-                var stock = product.stock;
+        quantity: function(product) {
+            // Return the quantity in stock for a product
+            if (product) { // product may be undefined, before it is loaded
                 for (var i=0; i<$localStorage.cart.length; i++) {
                     if ($localStorage.cart[i].product.id == product.id) {
-                        stock = stock - $localStorage.cart[i].quantity;
+                        return $localStorage.cart[i].quantity;
                     };
                 };
-                return stock;
-            } else {
-                return 0;
-            }
+            };
+            return 0;
         },
-        amount: function() {
+        total: function() {
+            // Calculate the total amount of the cart
             var amount = 0;
             for (var i=0; i<$localStorage.cart.length; i++) {
-                var qt = $localStorage.cart[i].quantity,
-                    unitprice = $localStorage.cart[i].product.net_price;
-                amount += qt * unitprice;
+                var cartline = $localStorage.cart[i];
+                amount += cartline.quantity * parseFloat(cartline.product.net_price);
             }
             return amount;
         },
+        weight: function() {
+            // Calculate the total weight of the cart
+            var weight = 0;
+            for (var i=0; i<$localStorage.cart.length; i++) {
+                var cartline = $localStorage.cart[i];
+                weight += cartline.quantity * cartline.product.weight;
+            }
+            return weight;
+        },
         count: function() {
+            // Count the number of products in the cart
             var count = 0;
             for (var i=0; i<$localStorage.cart.length; i++) {
-                if (!$localStorage.cart[i].quantity) {
-                    $localStorage.cart[i].quantity = 1;
-                } else if ($localStorage.cart[i].quantity > $localStorage.cart[i].product.stock && !$localStorage.cart[i].product.on_demand) {
-                    $localStorage.cart[i].quantity = $localStorage.cart[i].product.stock;
+                var cartline = $localStorage.cart[i];
+                // First, check and adjust the quantity
+                if (!cartline.quantity) {
+                    cartline.quantity = 1;
+                } else if (cartline.quantity > cartline.product.stock && cartline.product.overstock_delay >= 0) {
+                    // Reduce quantity to stock if overstock is not allowed
+                    cartline.quantity = cartline.product.stock;
                 };
-                count += $localStorage.cart[i].quantity;
+                count += cartline.quantity;
             }
             return count;
         },
         reset: function() {
+            // Empty the cart and go back to the index
             $localStorage.cart = [];
             $state.go('index');
         },
         empty: function() {
+            // Empty the cart;
             $localStorage.cart = [];
         },
         list: function() {
+            // Return the whole cart data
             return $localStorage.cart;
         },
-        total: function() {
-            var total = 0;
+        overstock: function() {
+            // Is any product in the cart to be ordered on demand
             for (var i=0; i<$localStorage.cart.length; i++) {
-                total += $localStorage.cart[i].product.net_price * $localStorage.cart[i].quantity;
-            };
-            return total;
-        },
-        in_stock: function() {
-            var in_stock = true;
-            for (var i=0; i<$localStorage.cart.length; i++) {
-                if ($localStorage.cart[i].product.stock < $localStorage.cart[i].quantity) {
-                    // If the stock is not sufficient for a single "not on
-                    // demand" product, the whole cart is marked as "not in
+                var cartline = $localStorage.cart[i];
+                if (cartline.product.overstock_delay >= 0 && cartline.product.stock < cartline.quantity) {
+                    // If the stock is not sufficient for a single "not
+                    // overstock" product, the whole cart is marked as "not in
                     // stock"
-                    in_stock = false;
-                    break;
+                    return true;
                 };
             };
-            return in_stock;
+            return false;
         },
-        on_demand: function() {
-            var not_on_demand_in_stock = true,
-                on_demand_not_in_stock = false;
+        delay: function() {
+            // Delay for the whole cart
+            var delay = 0;
             for (var i=0; i<$localStorage.cart.length; i++) {
-                if ($localStorage.cart[i].product.stock < $localStorage.cart[i].quantity) {
-                    if ($localStorage.cart[i].product.on_demand) {
-                        // If the stock is not sufficient for a single "on
-                        // demand" product, the whole car may be marked as "on
-                        // demand".
-                        on_demand_not_in_stock = true;
+                var product = $localStorage.cart[i].product;
+                if (product.stock < $localStorage.cart[i].quantity) {
+                    if (product.overstock_delay >= 0 && delay !== false) {
+                        delay = Math.max(product.overstock_delay, delay);
                     } else {
-                        // If the stock is not sufficient for a single "not on
-                        // demand" product, the whole cart is marked as "not on
-                        // demand" because it cannot be shipped.
-                        not_on_demand_in_stock = false;
+                        delay = false;
                     }
+                } else if (delay !== false) {
+                    delay = Math.max(product.delay, delay);
                 };
             };
-            return (on_demand_not_in_stock && not_on_demand_in_stock);
+            return delay;
         }
     }
 })

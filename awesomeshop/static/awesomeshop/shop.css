@@ -16,17 +16,35 @@
  * along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
  */
 
-.bottom-space {
-    margin-bottom: 15px !important;
-}
-.bottom-no-space {
-    margin-bottom: 0 !important;
-}
-    
 .navbar-static-bottom {
     border-radius: 0;
     margin-top: 20px;
     margin-bottom: 0;
+}
+
+/* The cart popup (when adding products to the cart */
+.cartpopup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2000;
+    padding: 2em;
+    opacity: 1;
+}
+@media (max-width: 767px) {
+    .cartpopup {
+        padding: 0.5em;
+    }
+}
+
+.cartpopup {
+  transition: all linear 0.3s;
+}
+
+.cartpopup.ng-hide {
+  top: -2em;
+  opacity: 0;
 }
 
 /***** HIDE OR SHOW THE MENU ON XS SCREENS *****/
@@ -174,24 +192,29 @@ p.price {
 }
 
 /* Checkout and order stuff */
-#checkout-form label {
+.options-list label {
     font-weight: normal;
 }
 .total-cost {
     font-size: 21px;
 }
-#checkout-form label.list-group-item {
+.options-list-clickable label {
     cursor: pointer;
     font-weight: normal;
 }
-#checkout-form label.list-group-item:hover {
+.options-list-clickable label.list-group-item:hover {
     background: #f5f5f5;
 }
-#checkout-form textarea {
-    min-height: 3em;
-    margin-bottom: 20px;
+label.list-group-item.noclick {
+    cursor: default;
 }
-#checkout-form input[type="radio"] {
+label.list-group-item.noclick:hover {
+    background: #fff;
+}
+textarea {
+    resize: vertical;
+}
+.options-list-clickable input[type="radio"] {
     margin-right: 1em;
 }
 

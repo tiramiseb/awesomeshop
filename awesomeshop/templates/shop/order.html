@@ -89,22 +89,22 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </div>
     </div>
     <div class="list-group">
-        <div class="list-group-item" ng-repeat="product in order.products">
+        <div class="list-group-item" ng-repeat="line in order.products" uib-popover-template="'/part/product_'+line.product.type+'_popup'" popover-trigger="mouseenter" popover-enable="line.product.details">
             <div class="row">
                 <div class="col-xs-4 col-md-3 col-lg-3">
-                    [[ product.reference ]]
+                    [[ line.reference ]]
                 </div>
                 <div class="col-xs-8 col-md-4 col-lg-4">
-                    [[ product.name ]]
+                    [[ line.name ]]
                 </div>
                 <div class="col-xs-3 col-xs-offset-3 col-md-1 col-md-offset-0 text-right">
-                    [[ product.quantity ]]
+                    [[ line.quantity ]]
                 </div>
                 <div class="col-xs-3 col-md-2 text-right">
-                    [[ product.net_price ]]
+                    [[ line.net_price ]]
                 </div>
                 <div class="col-xs-3 col-md-2 text-right">
-                    [[ product.line_net_price ]]
+                    [[ line.line_net_price ]]
                 </div>
              </div>
         </div>
@@ -146,8 +146,8 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <div class="panel panel-default">
     <div class="panel-body">
         <ul>
-            <li ng-if="order.on_demand">
-                {{ _('This order includes on demand products, shipping is delayed for [[ order.on_demand_delay_min ]]-[[ order.on_demand_delay_max ]] days') }}
+            <li>
+                {{ _('Shipping delay: [[ order.delay ]] days') }}
             </li>
             <li>{{ _('Payment:') }} <i class="fa fa-[[ order.payment_icon ]]" ng-if="order.payment_icon"></i> [[ order.payment_description ]]</li>
             <li ng-if="order.accept_reused_package">

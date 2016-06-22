@@ -59,7 +59,7 @@ textarea.small-textarea {
     height: 6em !important;
 }
 /* Display a "move" cursor on handles */
-[sv-handle] {
+[sv-handle], .handle {
     cursor: move;
 }
 [sv-handle]:hover {

@@ -28,7 +28,7 @@ from ...mail import send_mail
 from ...auth.models import User
 from ...payment.modes import get_mode
 from ...shipping.models import Carrier
-from .product import Product
+from .product import BaseProduct
 
 
 class OrderProduct(db.EmbeddedDocument):
@@ -39,17 +39,17 @@ class OrderProduct(db.EmbeddedDocument):
     line_net_price = db.StringField(db_field='lnprice')
     quantity = db.IntField(db_field='qty')
     quantity_from_stock = db.IntField(db_field='stk')
-    product = db.ReferenceField(Product)
+    product = db.ReferenceField(BaseProduct)
     name = db.StringField()
-    on_demand = db.BooleanField(db_field='dem')
+    delay = db.IntField()
     data = db.DictField()
 
     def set_quantity(self, quantity):
-        """Returns True if the product is bought "on_demand"."""
-        quantity, stock, on_demand = self.product.remove_quantity(quantity)
+        quantity, from_stock, delay = self.product.destock(quantity, self.data)
         self.quantity = quantity
-        self.quantity_from_stock = stock
-        self.on_demand = on_demand
+        self.quantity_from_stock = from_stock
+        self.delay = delay
+        return delay
 
     def set_gross_price(self, price):
         self.gross_price = format_currency(price, app.config['CURRENCY'])
@@ -68,8 +68,7 @@ class OrderProduct(db.EmbeddedDocument):
             quantity = self.quantity_from_stock
         else:
             quantity = self.quantity
-        self.product.add_to_stock(quantity, self.data)
-        self.product.save()
+        self.product.restock(quantity, self.data)
 
 
 order_states = {
@@ -187,9 +186,7 @@ class Order(db.Document):
     shipping_date = db.DateTimeField(db_field='s_date')
     tracking_url = db.StringField(db_field='turl')
     tracking_number = db.StringField(db_field='tnum')
-    on_demand = db.BooleanField(db_field='dem')
-    on_demand_delay_min = db.IntField(db_field='dem_min')
-    on_demand_delay_max = db.IntField(db_field='dem_max')
+    delay = db.IntField()
 
     meta = {
         'ordering': ['-number']
@@ -322,6 +319,3 @@ def email_admin(sender, document, **kwargs):
             send_mail(email, template, order=document)
 
 signals.post_save.connect(email_admin, sender=Order)
-
-
-

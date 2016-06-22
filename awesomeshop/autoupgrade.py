@@ -20,10 +20,11 @@
 import datetime
 import re
 
+from . import app
 from .helpers import Setting
 from .shipping.models import Carrier
 from .shop.models.order import Order
-from .shop.models.product import Product
+from .shop.models.product import BaseProduct
 
 ###############################################################################
 # Functions used to upgrade the database content
@@ -47,13 +48,13 @@ def add_product_cls():
 
 
 def add_ondemand():
-    products = Product._get_collection()
+    products = BaseProduct._get_collection()
     products.update_many({'dem': None}, {'$set': {'dem': False}})
 
 
 def add_creationdate():
     old_date = datetime.datetime(1970, 1, 1)
-    products = Product._get_collection()
+    products = BaseProduct._get_collection()
     products.update_many({'create': None}, {'$set': {'create': old_date}})
 
 
@@ -101,10 +102,12 @@ def merge_weights_and_costs():
 
 
 def reunite_products():
-    products = Product._get_collection()
-    products.update_many({},
-                         {'$unset': {'_cls': ''}})
-    # Url documents don't exist anymore
+    # Deprecated again, products inheritance is used again
+    # products = Product._get_collection()
+    # products.update_many({},
+    #                     {'$unset': {'_cls': ''}})
+    pass
+    # Url documents don't exist anymore, cannot get their collection
     # urls = Url._get_collection()
     # urls.update_many(
     #         {'doc._cls': 'BaseProduct.Product'},
@@ -134,6 +137,59 @@ def change_payment_description():
                 {'$set': {'p_ico': m.group(1), 'p_desc': m.group(2)}}
                 )
 
+
+def readd_product_cls():
+    # Enable subproducts again...
+    # It was not a bad idea after all, but it may have been too soon...
+    products = BaseProduct._get_collection()
+    products.update_many({'_cls': None},
+                         {'$set': {'_cls': 'BaseProduct.RegularProduct'}})
+
+
+def on_demand_to_delay():
+    orders = Order._get_collection()
+    for o in orders.find():
+        on_demand = o.get('dem', None)
+        order_delay = o.get('dem_max', app.config['ON_DEMAND_DELAY'])
+        shipping_delay = app.config['SHIPPING_DELAY']
+        for p in o['products']:
+            dem = p.get('dem', None)
+            if dem is True:
+                p['delay'] = order_delay
+            else:
+                p['delay'] = shipping_delay
+            p.pop('dem', None)
+        if on_demand is True:
+            orders.find_one_and_update(
+                    {'_id': o['_id']},
+                    {
+                        '$set': {
+                            'delay': order_delay,
+                            'products': o['products']
+                            },
+                        '$unset': {
+                            'dem': '',
+                            'dem_min': '',
+                            'dem_max': ''
+                            }
+                        }
+                    )
+        elif on_demand is False:
+            orders.find_one_and_update(
+                    {'_id': o['_id']},
+                    {
+                        '$set': {
+                            'delay': shipping_delay,
+                            'products': o['products']
+                            },
+                        '$unset': {
+                            'dem': '',
+                            'dem_min': '',
+                            'dem_max': ''
+                            }
+                        }
+                    )
+
 ###############################################################################
 # Ordered list of all upgrade functions
 upgrades = [
@@ -152,7 +208,9 @@ upgrades = [
     (
         change_payment_description,
         '16/04/2016: split the payment description and its icon'
-        )
+        ),
+    (readd_product_cls, '22/04/2016: allow subproducts again'),
+    (on_demand_to_delay, '03/05/2016: store delays instead of on_demand')
     ]
 
 

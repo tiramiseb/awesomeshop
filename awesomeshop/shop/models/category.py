@@ -59,13 +59,13 @@ class Category(db.Document):
 
     @property
     def products(self):
-        from .product import Product
-        return Product.objects(category=self)
+        from .product import BaseProduct
+        return BaseProduct.objects(category=self)
 
     @property
     def on_sale_products(self):
-        from .product import Product
-        return Product.objects(category=self, on_sale=True)
+        from .product import BaseProduct
+        return BaseProduct.objects(category=self, on_sale=True)
 
     @property
     def recursive_on_sale_products(self):

@@ -27,11 +27,12 @@ from reportlab.pdfgen import canvas
 
 from . import app
 
-subspace = 5
-space_10 = 12
-space_12 = 15
-space_14 = 17
-space_20 = 24
+# How much to go down for...
+subspace = 5   # a small space
+space_10 = 12  # a "10 pt" line
+space_12 = 15  # a "12 pt" line
+space_14 = 17  # a "14 pt" line
+space_20 = 24  # a "20 pt" line
 
 
 def invoice(order):
@@ -97,6 +98,7 @@ def invoice(order):
     c.setFont('Helvetica-Bold', 10)
     colref = 1.5*cm
     colprod = 7*cm
+    coldetails = 7.5*cm
     colqty = 15*cm
     colunit = 17*cm
     coltotal = 19.5*cm
@@ -113,13 +115,20 @@ def invoice(order):
     c.line(1*cm, y, 20*cm, y)
     # Products themselves
     c.setFont('Helvetica', 10)
-    for p in order.products:
+    for l in order.products:
         y -= space_10
-        c.drawString(colref, y, p.reference)
-        c.drawString(colprod, y, p.name)
-        c.drawRightString(colqty, y, unicode(p.quantity))
-        c.drawRightString(colunit, y, p.net_price)
-        c.drawRightString(coltotal, y, p.line_net_price)
+        c.drawString(colref, y, l.reference)
+        c.drawString(colprod, y, l.name)
+        c.drawRightString(colqty, y, unicode(l.quantity))
+        c.drawRightString(colunit, y, l.net_price)
+        c.drawRightString(coltotal, y, l.line_net_price)
+        if l.product.type == 'kit':
+            for detail in l.product.get_details(l.data):
+                y -= space_10
+                c.drawString(coldetails, y, '- {}× {}'.format(
+                                    unicode(detail['quantity']),
+                                    detail['name'].encode('utf-8')
+                                    ))
         y -= subspace
         c.line(1*cm, y, 20*cm, y)
     # Subtotal

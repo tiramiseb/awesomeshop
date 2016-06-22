@@ -97,7 +97,7 @@ angular.module('dbCarriers', [])
             }
         }
     }
-    $scope.name_from_id = function(groupid) {
+    $scope.coutriesgroup_name_from_id = function(groupid) {
         if ($scope.countriesgroups) {
             for (i=0; i<$scope.countriesgroups.length; i++) {
                 if ($scope.countriesgroups[i].id == groupid) {

@@ -23,7 +23,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <p>The failure justification is:<br>
 {{ error }}</p>
 <p>Get more details on this order on the following link:<br>
-<a href="{{ url_for('order', number=order.number, _external=True) }}">{{ url_for('order', order_number=order.number, _external=True) }}</a>
+<a href="{{ root }}/orders/{{ order.number }}">{{ root }}/orders/{{ order.number }}</a>
 </p>
 <p>Regards,<br>
 The <i>{{ config.SHOP_NAME }}</i> team</p>

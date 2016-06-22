@@ -1,5 +1,5 @@
 {#-
-Copyright 2015 Sébastien Maccagnoni-Munch
+Copyright 2016 Sébastien Maccagnoni-Munch
 
 This file is part of AwesomeShop.
 
@@ -59,8 +59,8 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <div class="panel panel-default">
                     <div class="panel-heading">{{ _('Selected') }}</div>
                     <div class="list-group">
-                        <button type="button" class="list-group-item" ng-repeat="prodid in product.related_products" ng-click="remove_prod(prodid)">
-                            [[ name_from_id(prodid) ]]
+                        <button type="button" class="list-group-item" ng-repeat="prodid in product.related_products" ng-click="remove_related_product(prodid)">
+                            [[ product_name_from_id(prodid) ]]
                             <span class="pull-right">
                                 <i class="fa fa-arrow-right"></i>
                             </span>
@@ -72,8 +72,8 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <div class="panel panel-default">
                     <div class="panel-heading">{{ _('Available') }}</div>
                     <div class="list-group">
-                        <input class="list-group-item" type="text" ng-model="query" placeholder="{{ _('Filter') }}">
-                        <button type="button" class="list-group-item" ng-repeat="prod in filtered_products() | filter:query" ng-click="add_prod(prod.id)">
+                        <input class="list-group-item" type="text" ng-model="unrelated_query" placeholder="{{ _('Filter') }}">
+                        <button type="button" class="list-group-item" ng-repeat="prod in unrelated_products() | filter:unrelated_query" ng-click="add_related_product(prod.id)">
                             <i class="fa fa-arrow-left"></i>
                             &nbsp;&nbsp;
                             [[ prod.name || prod.slug ]]
@@ -84,59 +84,13 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         </div>
     </uib-accordion-group>
 </uib-accordion>
-<div class="row">
-    <div class="col-md-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">{{ _('Pricing') }}</div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-xs-6">
-                        {{ f.input_text(_('Purchasing price'), 'purchasing_price', 'product.purchasing_price', suffix=config.CURRENCY) }}
-                    </div>
-                    <div class="col-xs-6">
-                        {{ f.input_text(_('Gross price'), 'gross_price', 'product.gross_price', 'required', _('Gross price is mandatory'), suffix=config.CURRENCY) }}
-                    </div>
-                    <div class="col-xs-6">
-                        {{ f.select(_('Tax'), 'tax', 'product.tax', 'tax.id as tax.name for tax in taxrates', 'required', _('Tax rate is mandatory')) }}
-                    </div>
-                    <div class="col-xs-6">
-                        <label for="net_price">{{ _('Net price') }}</label>
-                        <div class="input-group">
-                            <input type="text" id="net_price" name="net_price" class="form-control" ng-value="net_price()" disabled>
-                            <span class="input-group-addon">{{ config.CURRENCY }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">{{ _('Stock and shipping') }}</div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-xs-6">
-                        {{ f.input_text(_('Stock'), 'stock', 'product.stock') }}
-                    </div>
-                    <div class="col-xs-6">
-                        {{ f.input_text(_('Stock alert'), 'stock_alert', 'product.stock_alert') }}
-                    </div>
-                    <div class="col-xs-6">
-                        {{ f.checkbox_button(_('Available on demand'), _('Not on demand'), 'on_demand', 'product.on_demand') }}
-                    </div>
-                    <div class="col-xs-6">
-                        {{ f.input_text(_('Weight'), 'weight', 'product.weight', suffix='g') }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+{% block details %}
+{% endblock %}
 <div id="pictures" class="panel panel-default">
     <div class="panel-heading">{{ _('Pictures') }}</div>
     <div class="panel-body">
         <div class="row" id="photos" sv-root sv-part="photos" sv-on-sort="sort_photo($indexFrom, $indexTo)">
-            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ng-repeat="photo in photos" sv-element="sortoptions">
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ng-repeat="photo in photos" sv-element="photos_sortoptions">
                 <div class="thumbnail" sv-handle>
                     <img ng-src="[[ photo.thumbnail_url ]]" onmousedown="return false;">
                     <div class="caption text-center">

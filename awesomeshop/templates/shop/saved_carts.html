@@ -20,13 +20,13 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <div class="panel panel-default" ng-repeat="cart in saved_carts.get()">
     <div class="panel-heading">[[ cart.name ]] ([[ cart.date | date ]])</div>
     <div class="list-group">
-        <div class="list-group-item cart-list" ng-repeat="line in cart.lines">
+        <div class="list-group-item cart-list" ng-repeat="line in cart.lines" uib-popover-template="'/part/product_'+line.product.type+'_popup'" popover-trigger="mouseenter" popover-enable="line.product.details">
             <div class="row">
                 <div class="col-xs-7 col-sm-6 col-md-7 col-lg-8">
                     <a href="[[ line.product.path ]]">
                         <span class="hidden-xs hidden-sm pull-left">
-                            <img class="cart-illustration" ng-src="[[ line.product.photos[0].thumbnail_url ]]" ng-show="line.product.photos.length">
-                            <span class="cart-illustration-placeholder" ng-hide="line.product.photos.length">
+                            <img class="cart-illustration" ng-src="[[ line.product.main_photo.thumbnail_url ]]" ng-show="line.product.main_photo">
+                            <span class="cart-illustration-placeholder" ng-hide="line.product.main_photo">
                                 <i class="fa fa-ban"></i>
                             </span>
                         </span>
@@ -60,5 +60,10 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <span class="hidden-xs hidden-sm">{{ _('Remove') }}</span>
             </button>
         </div>
+    </div>
+</div>
+<div class="panel panel-default" ng-show="saved_carts.count()==0">
+    <div class="panel-body">
+        {{ _('You have no saved cart...') }}
     </div>
 </div>

@@ -76,9 +76,9 @@ SHIPPING_TAX = 0
 ORDER_PREFIX = 'ORD_'
 INVOICE_PREFIX = 'INV_'
 
-# Delay for on demand orders
-ON_DEMAND_DELAY_MIN = 5
-ON_DEMAND_DELAY_MAX = 15
+# Delay for orders (in days)
+SHIPPING_DELAY = 1
+ON_DEMAND_DELAY = 15
 
 # Delays for payment
 CONFIRM_DELAY = 5

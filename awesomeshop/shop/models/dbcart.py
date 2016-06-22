@@ -22,11 +22,11 @@ import prices
 
 from ... import db
 from ...auth.models import User
-from .product import Product
+from .product import BaseProduct
 
 
 class DbCartline(db.EmbeddedDocument):
-    product = db.ReferenceField(Product, db_field='prod')
+    product = db.ReferenceField(BaseProduct, db_field='prod')
     quantity = db.IntField(db_field='qty')
     data = db.DictField()
 

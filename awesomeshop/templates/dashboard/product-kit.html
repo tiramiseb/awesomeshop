@@ -1,0 +1,142 @@
+{#-
+Copyright 2016 Sébastien Maccagnoni-Munch
+
+This file is part of AwesomeShop.
+
+AwesomeShop is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+details.
+
+You should have received a copy of the GNU Affero General Public License
+along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+#}
+{% import "macros/form.html" as f %}
+{% extends "dashboard/product-base.html" %}
+{% block details %}
+<div class="panel panel-default">
+    <div class="panel-heading">{{ _('Products in the kit') }}</div>
+    <div class="panel-body" id="included_products" sv-root sv-part="product.products" sv-on-sort="form.$setdirty();">
+        <div class="panel panel-default" ng-repeat="subproduct in product.products" sv-element="{containment:'#included_products'}">
+            <div class="panel-heading form-inline" sv-handle>
+                <i class="fa fa-bars"></i>
+                {#{{ _('Item #[[ $index ]]') }}#}
+                <input type="text" ng-model="subproduct.title" placeholder="{{ _('Item #[[ $index ]]') }}" class="form-control">
+            </div>
+            <div class="list-group" id="options[[ $index ]]" sv-root sv-part="subproduct.options" sv-on-sort="form.$setdirty();">
+                <div class="list-group-item handle" ng-repeat="option in subproduct.options" sv-element="{containment:'#options'+$parent.$index}">
+                    <div class="row">
+                        <div class="col-xs-3 col-md-2 col-lg-1">
+                            <input type="number" id="qty-[[ $parent.$index ]]-[[ $index ]]" name="qty-[[ $parent.$index ]]-[[ $index ]]" min="1" class="form-control" ng-model="option.quantity">
+                        </div>
+                        <div class="col-xs-5 col-md-6 col-lg-7">
+                            <img ng-show="option.product.main_photo" ng-src="[[ option.product.main_photo.thumbnail_url ]]">
+                            [[ option.product.name || option.product.slug ]]
+                        </div>
+                        <div class="col-xs-4 text-right">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm" ng-class="{'btn-success': subproduct.default == option.quantity.toString() + '*' + option.product.id, 'btn-warning': subproduct.default != option.quantity.toString() + '*' + option.product.id}" ng-model="subproduct.default" uib-btn-radio="option.quantity.toString() + '*' + option.product.id">
+                                    <i class="fa" ng-class="{'fa-check': subproduct.default == option.quantity.toString() + '*' + option.product.id, 'fa-times': subproduct.default != option.quantity.toString() + '*' + option.product.id }"></i>
+                                    <span class="hidden-xs hidden-sm">
+                                        {{ _('Default') }}
+                                    </span>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger" ng-click="subproduct.options.splice($index, 1);form.$setDirty();">
+                                    <i class="fa fa-trash"></i>
+                                    <span class="hidden-xs hidden-sm">
+                                        {{ _('Remove') }}
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-danger" ng-click="product.products.splice($index, 1);form.$setDirty();">
+                                    <i class="fa fa-trash"></i>
+                                    <span class="hidden-xs hidden-sm">
+                                        {{ _('Remove') }}
+                                    </span>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-info" ng-model="subproduct.can_be_disabled" uib-btn-checkbox>
+                                    <i class="fa" ng-class="{'fa-check': subproduct.can_be_disabled, 'fa-times': !subproduct.can_be_disabled}"></i>
+                                    {{ _('Allow empty') }}
+                                </button>
+                                <button type="button" class="btn btn-sm" ng-class="{'btn-success': subproduct.default == 'none', 'btn-warning': subproduct.default != 'none'}" ng-model="subproduct.default" uib-btn-radio="'none'" ng-if="subproduct.can_be_disabled">
+                                    <i class="fa" ng-class="{'fa-check': subproduct.default == 'none', 'fa-times': subproduct.default != 'none'}"></i>
+                                    {{ _('Empty as default') }}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="{{ _('Product') }}" ng-model="subproduct.to_add" uib-typeahead="product as product.name for product in products | filter:{name:$viewValue}" typeahead-editable="false" typeahead-min-length="0">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-primary" ng-click="subproduct.options.push({quantity: 1, product: subproduct.to_add});subproduct.to_add=undefined;form.$setDirty();" ng-disabled="!subproduct.to_add">
+                                        <i class="fa fa-plus"></i>
+                                        {{ _('Add as an option') }}
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-success pull-right" ng-click="product.products.push({options:[], can_be_disabled:false})">
+            <i class="fa fa-plus"></i>
+            {{ _('Add an item') }}
+        </button>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">{{ _('Pricing') }}</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="price_variation">{{ _('Price variation') }}</label>
+                    <div class="input-group">
+                        <input type="text" id="price_variation" name="price_variation" class="form-control" ng-model="product.price_variation">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-model="product.amount_instead_of_percent" uib-btn-checkbox>
+                                <span ng-show="product.amount_instead_of_percent">{{ config.CURRENCY }}</span>
+                                <span ng-hide="product.amount_instead_of_percent">%</span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="gross_price">{{ _('Gross price') }}</label>
+                    <div class="input-group">
+                        <input type="text" id="gross_price" name="gross_price" class="form-control" ng-value="gross_price()" disabled>
+                        <span class="input-group-addon">{{ config.CURRENCY }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                {{ f.select(_('Tax'), 'tax', 'product.tax', 'tax.id as tax.name for tax in taxrates', 'required', _('Tax rate is mandatory')) }}
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="net_price">{{ _('Net price') }}</label>
+                    <div class="input-group">
+                        <input type="text" id="net_price" name="net_price" class="form-control" ng-value="net_price()" disabled>
+                        <span class="input-group-addon">{{ config.CURRENCY }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

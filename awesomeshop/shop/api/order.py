@@ -32,8 +32,8 @@ from ...marsh import Count, Loc, ObjField
 from ...auth.models import Address
 from ...shipping.models import Carrier
 from ..models.order import Order, OrderProduct, InvalidNextStatus
-from ..models.product import Product
-from .product import ProductSchemaForList
+from ..models.product import BaseProduct
+from .product import BaseProductSchemaForList
 
 
 class OrderProductCartSubSchema(Schema):
@@ -44,6 +44,7 @@ class OrderProductCartSubSchema(Schema):
 class OrderProductCartSchema(Schema):
     product = fields.Nested(OrderProductCartSubSchema, required=True)
     quantity = fields.Integer(required=True)
+    data = fields.String(missing=None)
 
 
 class OrderProductSchema(Schema):
@@ -53,25 +54,25 @@ class OrderProductSchema(Schema):
     line_gross_price = fields.String()
     line_net_price = fields.String()
     quantity = fields.Integer()
-    product = fields.Nested(ProductSchemaForList)
+    product = fields.Nested(BaseProductSchemaForList)
     name = fields.String()
-    on_demand = fields.Boolean()
+    delay = fields.Integer()
     data = fields.Raw()
 
 
 class OrderSchemaForList(Schema):
-    full_number = fields.String(dump_only=True)
-    number = fields.String(dump_only=True)
-    human_status = fields.String(dump_only=True)
-    status_color = fields.String(dump_only=True)
-    date = fields.Date(dump_only=True)
-    products = fields.Integer(dump_only=True, attribute='count_products')
-    net_total = fields.String(dump_only=True)
+    full_number = fields.String()
+    number = fields.String()
+    human_status = fields.String()
+    status_color = fields.String()
+    date = fields.Date()
+    products = fields.Integer(attribute='count_products')
+    net_total = fields.String()
 
 
 class OrderSchemaForAdminList(OrderSchemaForList):
-    customer = fields.String(attribute='customer.email', dump_only=True)
-    payment_date = fields.Date(dump_only=True)
+    customer = fields.String(attribute='customer.email')
+    payment_date = fields.Date()
 
 
 class OrderSchema(Schema):
@@ -126,9 +127,7 @@ class OrderSchema(Schema):
     shipping_date = fields.Date(dump_only=True)
     tracking = fields.Boolean(dump_only=True)
     tracking_url = fields.String(dump_only=True)
-    on_demand = fields.Boolean(dump_only=True)
-    on_demand_delay_min = fields.Integer(dump_only=True)
-    on_demand_delay_max = fields.Integer(dump_only=True)
+    delay = fields.Integer(dump_only=True)
 
     @post_load
     def make_order(self, data):
@@ -153,26 +152,34 @@ class OrderSchema(Schema):
         products = []
         subtotal = Price(0)
         total_weight = 0
-        global_on_demand = False
+        global_delay = 0
         for productdata in data.get('cart', []):
-            productobj = Product.objects.get(id=productdata['product']['id'])
+            this_data_s = productdata.get('data')
+            if this_data_s and this_data_s != '{}':
+                this_data = dict(i.split(':') for i in this_data_s.split(','))
+            else:
+                this_data = {}
+            productobj = BaseProduct.objects.get(
+                                id=productdata['product']['id']
+                                )
             product = OrderProduct(
                 reference=productdata['product']['reference'],
                 product=productobj,
                 name=productobj.name.get(get_locale(), u''),
-                data=None
+                data=this_data
                 )
             product.set_quantity(productdata['quantity'])
-            global_on_demand = global_on_demand or product.on_demand
-            quantity = product.quantity
-            product.set_gross_price(productobj.gross_price)
-            product.set_net_price(productobj.net_price)
-            line_gross_price = productobj.gross_price * quantity
-            line_net_price = productobj.net_price * quantity
-            product.set_line_gross_price(line_gross_price)
-            product.set_line_net_price(line_net_price)
-            subtotal += Price(line_net_price, line_gross_price)
-            total_weight += productobj.weight
+            global_delay = max(global_delay, product.delay)
+            price = productobj.get_price_per_item(this_data)
+            product.set_gross_price(price.gross)
+            product.set_net_price(price.net)
+            line_price = price * product.quantity
+            product.set_line_gross_price(line_price.gross)
+            product.set_line_net_price(line_price.net)
+            subtotal += line_price
+            total_weight += (
+                productobj.get_weight(this_data) * product.quantity
+                )
             products.append(product)
         order.products = products
         order.set_subtotal(subtotal)
@@ -188,9 +195,7 @@ class OrderSchema(Schema):
         order.set_payment_mode(data.get('payment'))
         order.accept_reused_package = data.get('accept_reused_package', False)
         order.paper_invoice = data.get('paper_invoice', False)
-        order.on_demand = global_on_demand
-        order.on_demand_delay_min = app.config['ON_DEMAND_DELAY_MIN']
-        order.on_demand_delay_max = app.config['ON_DEMAND_DELAY_MAX']
+        order.delay = global_delay
         order.save()
         current_user.latest_delivery_address = unicode(delivery_address.id)
         current_user.latest_billing_address = unicode(billing_address.id)
@@ -305,8 +310,6 @@ class PayOrder(Resource):
                     writer_name='html'
                     )['body']
         return PaymentInfoSchema().dump(payment_data).data
-
-
 
 rest.add_resource(ApiAllOrders, '/api/order/all')
 rest.add_resource(ApiOrders, '/api/order')

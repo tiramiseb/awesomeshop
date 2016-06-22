@@ -1,5 +1,5 @@
-{#
-Copyright 2015 Sébastien Maccagnoni-Munch
+{#-
+Copyright 2016 Sébastien Maccagnoni-Munch
 
 This file is part of AwesomeShop.
 
@@ -16,15 +16,13 @@ details.
 You should have received a copy of the GNU Affero General Public License
 along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
-{% extends 'email/skeleton.html' %}
-{% block content %}
-<p>Bonjour,</p>
-<p>Votre paiement pour la commande {{ order.full_number }} (facture {{ order.full_invoice_number }}) a échoué&nbsp;!</p>
-<p>La raison de cet échec est&nbsp;:<br>
-{{ error }}</p>
-<p>Pour obtenir plus de détails sur cette commande, cliquez sur le lien suivant&nbsp;:<br>
-<a href="{{ root }}/orders/{{ order.number }}">{{ root }}/orders/{{ order.number }}</a>
-</p>
-<p>Cordialement,<br>
-L'équipe <i>{{ config.SHOP_NAME }}</i></p>
-{% endblock %}
+<table>
+    <tr ng-repeat="l in line.product.details">
+        <td>
+            [[ l.name ]]
+        </td>
+        <td>
+            ×[[ l.quantity ]]
+        </td>
+    </tr>
+</table>

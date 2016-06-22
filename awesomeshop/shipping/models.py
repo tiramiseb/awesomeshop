@@ -52,7 +52,7 @@ class Country(db.Document):
     def get_shipping_price(self, carrier, weight):
         weights = self.carriers[unicode(carrier.id)]
         for w in weights:
-            if w['weight'] > weight:
+            if w['weight'] >= weight:
                 return result_carrier_cost(Decimal(w['cost']))
         raise UnavailableCarrier
 

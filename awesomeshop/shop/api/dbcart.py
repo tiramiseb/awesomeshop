@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
-from flask import request
+from flask import abort, request
 from flask_login import current_user
 from flask_restful import Resource
 from marshmallow import Schema, fields, pre_load, post_load, post_dump
@@ -25,36 +25,45 @@ from marshmallow import Schema, fields, pre_load, post_load, post_dump
 from ... import login_required, rest
 from ...marsh import ObjField, NetPrice
 from ..models.dbcart import DbCart, DbCartline
-from ..models.product import Product
-from .product import ProductSchema
+from ..models.product import BaseProduct
+from .product import BaseProductSchemaForList
 
 
 class LiveCartlineSchema(Schema):
     product = fields.Dict()
+    data = fields.String(missing=None)
     quantity = fields.Integer()
 
     @pre_load(pass_many=True)
     def use_existing_products(self, data, many):
-        pschema = ProductSchema()
         newdata = []
         if not many:
             data = [data]
         for entry in data:
             try:
-                prod = Product.objects.get(
+                prod = BaseProduct.objects.get(
                                 id=entry['product']['id'],
                                 on_sale=True
                                 )
-            except Product.DoesNotExist:
+            except BaseProduct.DoesNotExist:
                 # Forget non-existing products
                 continue
             # Verify and adjust the quantity
-            if prod.on_demand:
+            if prod.get_overstock_delay >= 0:
                 quantity = entry['quantity']
             else:
-                quantity = min(entry['quantity'], prod.stock)
+                quantity = min(entry['quantity'], prod.get_stock())
+            # Extract product data
+            this_data_s = entry.get('data')
+            if this_data_s:
+                this_data = dict(i.split(':') for i in this_data_s.split(','))
+            else:
+                this_data = {}
             newdata.append({
-                    'product': pschema.dump(prod).data,
+                    'product': BaseProductSchemaForList(
+                                            context={'data': this_data}
+                                            ).dump(prod).data,
+                    'data': this_data_s,
                     'quantity': quantity
                     })
         if not many:
@@ -66,7 +75,8 @@ class LiveCartlineSchema(Schema):
 
 
 class CartlineSchema(Schema):
-    product = ObjField(f='id', obj=Product)
+    product = ObjField(f='id', obj=BaseProduct)
+    data = fields.Dict(missing=None)
     quantity = fields.Integer()
 
     @pre_load(pass_many=True)
@@ -76,21 +86,24 @@ class CartlineSchema(Schema):
             data = [data]
         for entry in data:
             try:
-                prod = Product.objects.get(
+                prod = BaseProduct.objects.get(
                                 id=entry['product']['id'],
                                 on_sale=True
                                 )
-            except Product.DoesNotExist:
+            except BaseProduct.DoesNotExist:
                 # Forget non-existing products
                 continue
-            # Verify and adjust the quantity
-            if prod.on_demand:
-                quantity = entry['quantity']
+            this_data_s = entry['data']
+            if isinstance(this_data_s, unicode) and this_data_s != u'':
+                this_data = dict(i.split(':') for i in this_data_s.split(','))
+            elif isinstance(this_data_s, dict):
+                this_data = this_data_s
             else:
-                quantity = min(entry['quantity'], prod.stock)
+                this_data = {}
             newdata.append({
                     'product': prod.id,
-                    'quantity': quantity
+                    'data': this_data,
+                    'quantity': entry['quantity']
                     })
         if not many:
             if len(data) == 1:
@@ -103,26 +116,32 @@ class CartlineSchema(Schema):
     def make_cartline(self, data):
         cartline = DbCartline()
         cartline.product = data['product']
+        cartline.data = data['data']
         cartline.quantity = data['quantity']
         return cartline
 
     @post_dump(pass_many=True)
     def dump_cartline(self, data, many):
-        pschema = ProductSchema()
         newdata = []
         if not many:
             data = [data]
         for entry in data:
             try:
-                prod = Product.objects.get(
+                prod = BaseProduct.objects.get(
                                 id=entry['product'],
                                 on_sale=True
                                 )
-            except Product.DoesNotExist:
+            except BaseProduct.DoesNotExist:
                 # Forget non-existing products
                 continue
+            # Extract product data
+            this_data = entry.get('data')
+            this_data_s = ','.join(':'.join(i) for i in this_data.items())
             newdata.append({
-                    'product': pschema.dump(prod).data,
+                    'product': BaseProductSchemaForList(
+                                        context={'data': this_data}
+                                        ).dump(prod).data,
+                    'data': this_data_s,
                     'quantity': entry['quantity']
                     })
         if not many:
