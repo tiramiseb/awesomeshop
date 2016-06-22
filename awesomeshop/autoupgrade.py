@@ -151,6 +151,7 @@ def on_demand_to_delay():
     for o in orders.find():
         on_demand = o.get('dem', None)
         order_delay = o.get('dem_max', app.config['ON_DEMAND_DELAY'])
+        shipping_delay = app.config['SHIPPING_DELAY']
         for p in o['products']:
             dem = p.get('dem', None)
             if dem is True:
