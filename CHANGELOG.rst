@@ -1,7 +1,3 @@
-DOMOTEGO :
-* réécrire les conditions de vente
-* rendre claires les étapes lors de la conclusion de la commande
-
 =====================
 AwesomeShop Changelog
 =====================
