@@ -18,6 +18,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
 <h1>{{ _('My cart') }}</h1>
 <form name="form" novalidate ng-show="cart.count()" ng-submit="confirm()">
+    <h2>{{ _('My products choice') }}</h2>
     <div class="list-group">
         <div class="list-group-item cart-list" ng-repeat="line in cart.list()" uib-popover-template="'/part/product_'+line.product.type+'_popup'" popover-trigger="mouseenter" popover-enable="line.product.details">
             <div class="row">
@@ -109,6 +110,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 </div>
             </div>
         </div>
+        <h2>{{ _('My order options') }}</h2>
         <div ng-show="cart.delay() && user.get().addresses.length">
             <div class="row">
                 <div class="col-md-6">
@@ -273,7 +275,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 </div>
                 <div class="col-md-7 col-lg-5 text-right">
                     <button type="submit" id="proceed" class="btn btn-lg btn-success" ng-disabled="!(choice.delivery_address && (choice.delivery_as_billing || choice.billing_address) && choice.payment && choice.accept_terms)">
-                        {{ _('Verify and confirm the order') }}
+                        {{ _('Confirm the order') }}
                         <i class="fa fa-chevron-right"></i>
                     </button>
                 </div>
