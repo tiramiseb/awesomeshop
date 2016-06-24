@@ -409,7 +409,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
 .controller('OrdersCtrl', function($scope, orders) {
     $scope.orders = orders;
 })
-.controller('OrderCtrl', function($uibModal, $stateParams, $scope, $http, $filter, title) {
+.controller('OrderCtrl', function($uibModal, $stateParams, $scope, $http, $filter, cart, title) {
     $http.get('/api/order/'+$stateParams.number)
         .then(function(response) {
             $scope.order = response.data;
@@ -418,6 +418,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
                 .replace('[[ order.full_number ]]', $scope.order.full_number)
                 .replace('[[ order.date | date ]]', $filter('date')($scope.order.date))
             );
+                    console.log($scope.order)
         });
     $scope.pay = function() {
         $http.get('/api/order/'+$stateParams.number+'/pay')
@@ -439,8 +440,27 @@ angular.module('shopShop', ['bootstrapLightbox'])
                         window.location.replace(data.target);
                     };
                 };
-            })
+            });
     };
+    function cancel(to_cart) {
+        var back_to_cart = to_cart || false;
+        $http.get('/api/order/'+$stateParams.number+'/cancel')
+            .then(function(response) {
+                $scope.order = response.data;
+                if (back_to_cart) {
+                    for (var p=0; p<$scope.order.products.length; p++) {
+                        var prod = $scope.order.products[p];
+                        cart.add(prod.product.id, prod.data, prod.quantity);
+                    };
+                };
+            });
+    }
+    $scope.cancel = function() {
+        cancel(false);
+    }
+    $scope.to_cart = function() {
+        cancel(true);
+    }
 })
 .controller('PaymentMessageCtrl', function($scope, message) {
     $scope.message = message;

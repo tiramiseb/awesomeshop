@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-06-23 23:23+0200\n"
+"POT-Creation-Date: 2016-06-24 23:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,7 +75,7 @@ msgstr ""
 #: awesomeshop/templates/dashboard/order.html:145
 #: awesomeshop/templates/dashboard/product-kit.html:81
 #: awesomeshop/templates/dashboard/user.html:75
-#: awesomeshop/templates/shop/order.html:78
+#: awesomeshop/templates/shop/order.html:90
 msgid "Product"
 msgstr ""
 
@@ -124,12 +124,12 @@ msgstr ""
 
 #: awesomeshop/pdf.py:111 awesomeshop/templates/dashboard/order.html:148
 #: awesomeshop/templates/dashboard/user.html:78
-#: awesomeshop/templates/shop/order.html:81
+#: awesomeshop/templates/shop/order.html:93
 msgid "Qty"
 msgstr ""
 
 #: awesomeshop/pdf.py:112 awesomeshop/templates/dashboard/user.html:81
-#: awesomeshop/templates/shop/order.html:84
+#: awesomeshop/templates/shop/order.html:96
 msgid "Unit"
 msgstr ""
 
@@ -137,14 +137,14 @@ msgstr ""
 #: awesomeshop/templates/dashboard/order.html:219
 #: awesomeshop/templates/dashboard/user.html:84
 #: awesomeshop/templates/shop/cart.html:227
-#: awesomeshop/templates/shop/order.html:87
-#: awesomeshop/templates/shop/order.html:137
+#: awesomeshop/templates/shop/order.html:99
+#: awesomeshop/templates/shop/order.html:149
 msgid "Total"
 msgstr ""
 
 #: awesomeshop/pdf.py:136 awesomeshop/templates/dashboard/order.html:199
 #: awesomeshop/templates/shop/cart.html:211
-#: awesomeshop/templates/shop/order.html:114
+#: awesomeshop/templates/shop/order.html:126
 msgid "Subtotal"
 msgstr ""
 
@@ -154,7 +154,7 @@ msgid "Shipping: %(description)s"
 msgstr ""
 
 #: awesomeshop/pdf.py:161 awesomeshop/templates/shop/cart.html:274
-#: awesomeshop/templates/shop/order.html:164
+#: awesomeshop/templates/shop/order.html:176
 msgid "TVA non applicable, article 293 B du Code général des impôts"
 msgstr ""
 
@@ -754,24 +754,25 @@ msgid "Emit a refund"
 msgstr ""
 
 #: awesomeshop/templates/dashboard/order.html:137
+#: awesomeshop/templates/shop/order.html:55
 msgid "Cancel"
 msgstr ""
 
 #: awesomeshop/templates/dashboard/order.html:180
 #: awesomeshop/templates/shop/cart.html:121
-#: awesomeshop/templates/shop/order.html:58
+#: awesomeshop/templates/shop/order.html:70
 msgid "Delivery address"
 msgstr ""
 
 #: awesomeshop/templates/dashboard/order.html:189
 #: awesomeshop/templates/shop/cart.html:152
-#: awesomeshop/templates/shop/order.html:67
+#: awesomeshop/templates/shop/order.html:79
 msgid "Billing address"
 msgstr ""
 
 #: awesomeshop/templates/dashboard/order.html:209
 #: awesomeshop/templates/shop/cart.html:219
-#: awesomeshop/templates/shop/order.html:124
+#: awesomeshop/templates/shop/order.html:136
 msgid "Shipping fee"
 msgstr ""
 
@@ -1364,7 +1365,7 @@ msgid "If you have any message for us about this order, write it here!"
 msgstr ""
 
 #: awesomeshop/templates/shop/cart.html:254
-#: awesomeshop/templates/shop/order.html:155
+#: awesomeshop/templates/shop/order.html:167
 msgid "I accept that my order is shipped in a reused package"
 msgstr ""
 
@@ -1388,7 +1389,7 @@ msgid ""
 msgstr ""
 
 #: awesomeshop/templates/shop/cart.html:278
-msgid "Confirm the order"
+msgid "Verify and confirm"
 msgstr ""
 
 #: awesomeshop/templates/shop/cart.html:287
@@ -1451,28 +1452,32 @@ msgstr ""
 msgid "Tracking number:"
 msgstr ""
 
-#: awesomeshop/templates/shop/order.html:46
-#: awesomeshop/templates/shop/order.html:166
+#: awesomeshop/templates/shop/order.html:47
+#: awesomeshop/templates/shop/order.html:178
 msgid "Confirm and proceed to payment"
 msgstr ""
 
-#: awesomeshop/templates/shop/order.html:47
+#: awesomeshop/templates/shop/order.html:48
 msgid "Retry payment"
 msgstr ""
 
-#: awesomeshop/templates/shop/order.html:150
+#: awesomeshop/templates/shop/order.html:58
+msgid "Put back in cart"
+msgstr ""
+
+#: awesomeshop/templates/shop/order.html:162
 msgid "Shipping delay: [[ order.delay ]] days"
 msgstr ""
 
-#: awesomeshop/templates/shop/order.html:152
+#: awesomeshop/templates/shop/order.html:164
 msgid "Payment:"
 msgstr ""
 
-#: awesomeshop/templates/shop/order.html:159
+#: awesomeshop/templates/shop/order.html:171
 msgid "I want a paper invoice"
 msgstr ""
 
-#: awesomeshop/templates/shop/order.html:171
+#: awesomeshop/templates/shop/order.html:183
 msgid ""
 "Invoice [[ order.invoice_full_number ]], on [[ order.invoice_date | date "
 "]]"

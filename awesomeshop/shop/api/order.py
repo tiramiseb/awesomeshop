@@ -24,7 +24,7 @@ import re
 from flask import abort, request
 from flask_login import current_user
 from flask_restful import Resource, reqparse, inputs
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields, post_dump, post_load
 from prices import Price
 
 from ... import app, get_locale, admin_required, login_required, rest
@@ -206,6 +206,12 @@ class OrderSchema(Schema):
         current_user.save()
         return order
 
+    @post_dump
+    def product_data_to_string(self, data):
+        for p in data['products']:
+            p['data'] = ','.join(':'.join(i) for i in p['data'].items())
+        return data
+
 
 class OrderSchemaForAdmin(OrderSchema):
     customer = fields.Nested('UserSchemaForList')
@@ -311,7 +317,22 @@ class PayOrder(Resource):
                     )['body']
         return PaymentInfoSchema().dump(payment_data).data
 
+class CancelOrder(Resource):
+
+    @login_required
+    def get(self, number):
+        if current_user.is_admin:
+            order = Order.objects.get_or_404(number=number)
+        else:
+            order = Order.objects.get_or_404(
+                        customer=current_user.to_dbref(),
+                        number=number
+                        )
+        order.set_status('cancelled')
+        return OrderSchema().dump(order).data
+
 rest.add_resource(ApiAllOrders, '/api/order/all')
 rest.add_resource(ApiOrders, '/api/order')
 rest.add_resource(ApiOrder, '/api/order/<number>')
 rest.add_resource(PayOrder, '/api/order/<number>/pay')
+rest.add_resource(CancelOrder, '/api/order/<number>/cancel')

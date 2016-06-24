@@ -39,3 +39,16 @@
 .no-padding {
     padding: 0 !important;
 }
+.top-space {
+    margin-top: 15px !important;
+}
+
+@media (min-width: 992px) {
+    .relative {
+        position: relative;
+    }
+    .align-bottom {
+        position: absolute;
+        bottom: 0;
+    }
+}

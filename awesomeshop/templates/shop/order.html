@@ -41,12 +41,24 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 <a ng-href="[[ order.tracking_url ]]" target="_blank">[[ order.tracking_number ]]</a>
             </b>
         </div>
-        <div ng-if="['unconfirmed', 'awaiting_payment', 'payment_failed'].indexOf(order.status) != -1" class="text-right">
-            <button type="button" class="btn btn-lg btn-success" ng-click="pay()">
-                <span ng-if="order.status == 'unconfirmed'">{{ _('Confirm and proceed to payment') }}</span>
-                <span ng-if="order.status == 'awaiting_payment' || order.status == 'payment_failed'">{{ _('Retry payment') }}</span>
-                <i class="fa fa-chevron-right"></i>
-            </button>
+        <div ng-if="['unconfirmed', 'awaiting_payment', 'payment_failed'].indexOf(order.status) != -1" class="row relative">
+            <div class="col-md-6 col-md-push-6 text-right top-space">
+                <button type="button" class="btn btn-lg btn-success" ng-click="pay()">
+                    <span ng-if="order.status == 'unconfirmed'">{{ _('Confirm and proceed to payment') }}</span>
+                    <span ng-if="order.status == 'awaiting_payment' || order.status == 'payment_failed'">{{ _('Retry payment') }}</span>
+                    <i class="fa fa-chevron-right"></i>
+                </button>
+            </div>
+            <div class="col-md-6 col-md-pull-6 top-space align-bottom">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-danger" ng-click="cancel()">
+                        {{ _('Cancel') }}
+                    </button>
+                    <button type="button" class="btn btn-warning" ng-click="to_cart()">
+                        {{ _('Put back in cart') }}
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
