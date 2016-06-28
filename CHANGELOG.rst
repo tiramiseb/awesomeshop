@@ -34,8 +34,9 @@ The following are ideas of features that may be implemented in AwesomeShop.
 * Change how translations work in order to get rid of Flask for the frontend
 * "Edit" button on public pages when the user is an admin
 * Send an email when an order is created
+* Use Beaker to cache some results
 
 Bugs
 ====
 
-* Orders list is not updated when a new order is created
+* In the dashboard, user page title is the admin email because of lastpass. find a way to make it NOT change the contents
