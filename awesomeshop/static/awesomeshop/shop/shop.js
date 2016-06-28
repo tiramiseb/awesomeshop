@@ -418,7 +418,6 @@ angular.module('shopShop', ['bootstrapLightbox'])
                 .replace('[[ order.full_number ]]', $scope.order.full_number)
                 .replace('[[ order.date | date ]]', $filter('date')($scope.order.date))
             );
-                    console.log($scope.order)
         });
     $scope.pay = function() {
         $http.get('/api/order/'+$stateParams.number+'/pay')
