@@ -7,6 +7,8 @@ This file summarizes the most important modifications to AwesomeShop...
 +------------+---------+------------------------------------------------------+
 | Date       | Type    | Subject                                              |
 +============+=========+======================================================+
+| 2016-07-01 | Bugfix  | Allow creaton of categories without parents          |
++------------+---------+------------------------------------------------------+
 | 2016-06-24 | Feature | Allow the customer to cancel an order                |
 +------------+---------+------------------------------------------------------+
 | 2016-06-21 | Feature | Shipping fee estimation for anonymous users          |
@@ -39,4 +41,4 @@ The following are ideas of features that may be implemented in AwesomeShop.
 Bugs
 ====
 
-* In the dashboard, user page title is the admin email because of lastpass. find a way to make it NOT change the contents
+/
