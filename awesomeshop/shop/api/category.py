@@ -55,6 +55,7 @@ class CategorySchemaForEdition(Schema):
     parent = ObjField(f='id', obj=Category)
     name = fields.Dict(default={})
     description = fields.Dict(default={})
+    path = fields.String()
 
     @post_load
     def make_category(self, data):

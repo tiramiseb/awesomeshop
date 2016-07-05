@@ -18,7 +18,10 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
 {% import "macros/form.html" as f %}
 <form name="form" ng-submit="submit()" ovalidate>
-<h1>{{ _('Category:') }} [[ category.slug ]]</h1>
+<h1>
+    {{ _('Category:') }} [[ category.slug ]]
+    <a href="/[[ category.path ]]" class="pull-right btn btn-sm btn-info" ng-disabled="form.$dirty" target="_self">{{ _('View') }}</a>
+</h1>
 <div class="row">
     <div class="col-sm-6">
         {{ f.input_text(_('Slug'), 'slug', 'category.slug', 'required', _('Slug is mandatory')) }}

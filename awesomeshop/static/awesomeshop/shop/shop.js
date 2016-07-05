@@ -122,7 +122,8 @@ angular.module('shopShop', ['bootstrapLightbox'])
     };
     go_to_state();
 })
-.controller('CategoryCtrl', function($http, $scope, $stateParams, title) {
+.controller('CategoryCtrl', function($http, $scope, $stateParams, user, title) {
+    $scope.user = user;
     $http.get('/api/category/'+$stateParams.id)
         .then(function(response) {
             $scope.category = response.data;
