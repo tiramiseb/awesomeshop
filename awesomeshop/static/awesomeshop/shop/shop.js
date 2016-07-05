@@ -130,7 +130,8 @@ angular.module('shopShop', ['bootstrapLightbox'])
             title.set($scope.category.name);
         });
 })
-.controller('ProductCtrl', function($http, $scope, $state, $stateParams, $httpParamSerializer, Lightbox, products, cart, title, $timeout) {
+.controller('ProductCtrl', function($http, $scope, $state, $stateParams, $httpParamSerializer, Lightbox, products, cart, title, user, $timeout) {
+    $scope.user = user;
     $scope.cart = cart;
     products.getcatslug($stateParams.category, $stateParams.slug)
         .then(function(product) {

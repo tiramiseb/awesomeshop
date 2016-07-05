@@ -89,6 +89,7 @@ class BaseProductSchemaForEdition(Schema):
     id = fields.String(allow_none=True)
     type = fields.String(dump_only=True)
     slug = fields.String(required=True)
+    path = fields.String(dump_only=True)
     reference = fields.String(required=True)
     name = fields.Dict(default={})
     description = fields.Dict(default={})

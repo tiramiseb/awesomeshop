@@ -16,7 +16,10 @@ details.
 You should have received a copy of the GNU Affero General Public License
 along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
-<h1>[[ product.name || product.slug ]]</h1>
+<h1>
+    [[ product.name || product.slug ]]
+    <a href="/dashboard/#/product-[[ product.type ]]/[[ product.id ]]" ng-if="user.is_admin()" class="pull-right btn btn-sm btn-info" target="_self">{{ _('Edit') }}</a>
+</h1>
 <div class="row">
     <div class="col-xs-7 col-md-8 col-lg-9">
         <div class="row">
