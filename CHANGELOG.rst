@@ -7,6 +7,8 @@ This file summarizes the most important modifications to AwesomeShop...
 +------------+---------+------------------------------------------------------+
 | Date       | Type    | Subject                                              |
 +============+=========+======================================================+
+| 2016-07-05 | Feature | Easier navigation between shop and dashboard         |
++------------+---------+------------------------------------------------------+
 | 2016-07-01 | Bugfix  | Allow creaton of categories without parents          |
 +------------+---------+------------------------------------------------------+
 | 2016-06-24 | Feature | Allow the customer to cancel an order                |
