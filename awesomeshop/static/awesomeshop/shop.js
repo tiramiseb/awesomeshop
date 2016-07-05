@@ -223,6 +223,9 @@ angular.module('awesomeshop', [
         set: function(data) {
             user = data;
         },
+        is_admin: function() {
+            return user.is_admin;
+        },
         logout: function() {
             $http.get('/api/logout')
                 .then(function(response) {

@@ -70,7 +70,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             <a class="navbar-brand" ui-sref="index">{{ config.SHOP_DESCRIPTION[locale] }}</a>
         </div>
         <p class="navbar-text navbar-right" ng-controller="UserCtrl" ng-cloak>
-            <span ng-if="user.get().is_admin">
+            <span ng-if="user.is_admin()">
                 <a class="navbar-link" href="/dashboard" target="_blank">
                     <i class="fa fa-tachometer"></i>
                     <span class="hidden-xs">{{ _('Dashboard') }}</span>
