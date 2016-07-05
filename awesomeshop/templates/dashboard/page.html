@@ -18,7 +18,10 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 #}
 {% import "macros/form.html" as f %}
 <form name="form" ng-submit="submit()" novalidate>
-<h1>{{ _('Page:') }} [[ page.slug || "{{ _('(please set a slug)') }}" ]] <small>([[ page.pagetype ]])</small></h1>
+<h1>
+    {{ _('Page:') }} [[ page.slug || "{{ _('(please set a slug)') }}" ]] <small>([[ page.pagetype ]])</small>
+    <a href="/[[ page.pagetype ]]/[[ page.slug ]]" class="pull-right btn btn-sm btn-info" ng-disabled="form.$dirty" target="_self">{{ _('View') }}</a>
+</h1>
 <div class="row">
     <div class="col-sm-6 col-md-8">
         {{ f.input_text(_('Slug'), 'slug', 'page.slug', 'required', _('Slug is mandatory')) }}

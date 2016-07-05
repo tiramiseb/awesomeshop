@@ -33,7 +33,8 @@ angular.module('shopPage', [])
             title: 'Information'
         })
 })
-.controller('DocCtrl', function($scope, $stateParams, $http, title) {
+.controller('DocCtrl', function($scope, $stateParams, $http, title, user) {
+    $scope.user = user;
     $http.get('/api/page-'+$stateParams.type+'/'+$stateParams.slug)
         .then(function(response) {
             $scope.page = response.data;

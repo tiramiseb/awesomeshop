@@ -67,6 +67,7 @@ class PageSchema(Schema):
 
 
 class PageContentSchema(Schema):
+    id = fields.String()
     pagetype = fields.String()
     slug = fields.String()
     title = Loc()
