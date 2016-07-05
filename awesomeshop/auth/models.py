@@ -51,6 +51,10 @@ class User(db.Document, UserMixin):
         'ordering': ['email']
     }
 
+    @classmethod
+    def get_admins(cls):
+        return cls.objects(is_admin=True)
+
     @property
     def addresses(self):
         return Address.objects(user=self)

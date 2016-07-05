@@ -102,5 +102,3 @@ SEND_MAILS = True
 MAIL_FROM = "nobody@nowhere.com"
 # Mail server
 SMTP_SERVER = "localhost"
-# Admin email addresses
-ADMIN_EMAILS = []

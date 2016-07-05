@@ -227,8 +227,8 @@ class Order(db.Document):
                 self.payment_date = datetime.datetime.now()
                 send_mail(self.customer.email, 'payment_received',
                           order=self, locale=self.customer.locale)
-                for email in app.config['ADMIN_EMAILS']:
-                    send_mail(email, 'admin_payment_received', order=self)
+                for adm in User.get_admins():
+                    send_mail(adm.email, 'admin_payment_received', order=self)
             elif status == 'payment_failed':
                 self.payment_date = datetime.datetime.now()
                 send_mail(self.customer.email, 'payment_failed',
@@ -312,7 +312,7 @@ class Order(db.Document):
 
 def email_on_order_creation(sender, document, **kwargs):
     if kwargs['created']:
-        for email in app.config['ADMIN_EMAILS']:
-            send_mail(email, 'admin_new_order', order=document)
+        for adm in User.get_admins():
+            send_mail(adm.email, 'admin_new_order', order=document)
 
 signals.post_save.connect(email_on_order_creation, sender=Order)
