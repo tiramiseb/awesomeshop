@@ -36,7 +36,6 @@ The following are ideas of features that may be implemented in AwesomeShop.
 * Customize shipping delays for each product
 * Remove jinja macros
 * Change how translations work in order to get rid of Flask for the frontend
-* "Edit" button on public pages when the user is an admin
 * Use Beaker to cache some results
 
 Bugs
