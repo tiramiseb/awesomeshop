@@ -224,7 +224,11 @@ angular.module('awesomeshop', [
             user = data;
         },
         is_admin: function() {
-            return user.is_admin;
+            if (user) {
+                return user.is_admin;
+            } else {
+                return false;
+            }
         },
         logout: function() {
             $http.get('/api/logout')
