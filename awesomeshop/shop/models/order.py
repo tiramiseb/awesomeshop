@@ -227,6 +227,8 @@ class Order(db.Document):
                 self.payment_date = datetime.datetime.now()
                 send_mail(self.customer.email, 'payment_received',
                           order=self, locale=self.customer.locale)
+                for email in app.config['ADMIN_EMAILS']:
+                    send_mail(email, 'admin_payment_received', order=self)
             elif status == 'payment_failed':
                 self.payment_date = datetime.datetime.now()
                 send_mail(self.customer.email, 'payment_failed',
@@ -289,8 +291,8 @@ class Order(db.Document):
         if not mode:
             abort(403)
         if self.status == 'unconfirmed':
-            # Triggering the payment for the first time
-            # causes an invoice to be emitted
+            # Triggering the payment for the first time (thus confirming
+            # the order) causes an invoice to be emitted
             self.set_status('awaiting_payment')
         payment_response = mode.trigger(self)
         self.save()
@@ -308,14 +310,9 @@ class Order(db.Document):
             prod._put_back_in_stock()
 
 
-def email_admin(sender, document, **kwargs):
-    template = None
-    if document.status == 'awaiting_payment':
-        template = 'admin_new_order'
-    if document.status == 'payment_received':
-        template = 'admin_payment_received'
-    if template:
+def email_on_order_creation(sender, document, **kwargs):
+    if kwargs['created']:
         for email in app.config['ADMIN_EMAILS']:
-            send_mail(email, template, order=document)
+            send_mail(email, 'admin_new_order', order=document)
 
-signals.post_save.connect(email_admin, sender=Order)
+signals.post_save.connect(email_on_order_creation, sender=Order)
