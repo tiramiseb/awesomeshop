@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
-sudo apt-get install python-virtualenv libjpeg-dev libpng-dev libssl-dev
+sudo apt-get install python-virtualenv gcc python-dev libjpeg-dev libpng-dev libssl-dev
 virtualenv --system-site-packages venv
 . venv/bin/activate
 pip install -r requirements.txt
