@@ -64,6 +64,18 @@ Local templates
 Once run locally, access the shop's homepage: the list of nearly-mandatory
 templates is given there.
 
+Using reStructuredText
+======================
+
+All text is in the reStructuredText format. There is only one additional
+directive :
+
+::
+
+    .. doc-list::
+
+ This directive displays a list of all documentation pages
+
 Deploying in production
 =======================
 

@@ -26,6 +26,9 @@ from flask_login import current_user, LoginManager, login_required
 from flask_mongoengine import MongoEngine
 from flask_restful import Api
 
+from . import rest
+
+
 app = Flask(__name__)
 app.config.from_object('awesomeshop.defaultconfig')
 rest = Api(app, catch_all_404s=True)
