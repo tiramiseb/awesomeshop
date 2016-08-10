@@ -317,6 +317,7 @@ class PayOrder(Resource):
                     )['body']
         return PaymentInfoSchema().dump(payment_data).data
 
+
 class CancelOrder(Resource):
 
     @login_required

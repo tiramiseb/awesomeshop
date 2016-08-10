@@ -266,7 +266,7 @@ class KitSubProductOption(db.EmbeddedDocument):
     @property
     def selected_string(self):
         return '{}*{}'.format(self.quantity, self.product.id)
-    
+
     def get_price(self):
         var = self._instance._instance.price_variation
         if self._instance._instance.amount_instead_of_percent:
@@ -338,7 +338,8 @@ class DisabledFakeSubProductOption:
 
 
 class KitSubProduct(db.EmbeddedDocument):
-    id = db.StringField(default=lambda:
+    id = db.StringField(
+            default=lambda:
             ''.join(random.choice(string.ascii_lowercase) for _ in range(8))
             )
     title = db.StringField(db_field='tit', default='')
@@ -355,7 +356,6 @@ class KitSubProduct(db.EmbeddedDocument):
             for o in self.options:
                 if o.get_price() < ref_price:
                     self.default = o.selected_string
-
 
     def get_selected_string(self, data):
         if data:
@@ -416,7 +416,6 @@ class KitProduct(BaseProduct):
         for prod in self.products:
             price += prod.get_lower_price()
         return price
-
 
     def get_price_per_item(self, data={}):
         price = prices.Price(0)
