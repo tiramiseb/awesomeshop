@@ -71,7 +71,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 {{ _('Out of stock') }}
             </div>
             <div class="list-group">
-                <a class="list-group-item" ui-sref="product({product_id: product.id})" ng-repeat="product in out_of_stock_products">
+                <a class="list-group-item" ui-sref="product({product_type: product.type, product_id: product.id})" ng-repeat="product in out_of_stock_products">
                     [[ product.reference ]],
                     [[ product.name || product.slug ]]
                 </a>
@@ -82,7 +82,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 {{ _('Out of stock soon')}}
             </div>
             <div class="list-group">
-                <a class="list-group-item" ui-sref="product({product_id: product.id})" ng-repeat="product in stock_alert_products">
+                <a class="list-group-item" ui-sref="product({product_type: product.type, product_id: product.id})" ng-repeat="product in stock_alert_products">
                     [[ product.reference ]],
                     [[ product.name || product.slug ]]
                     ([[ product.stock ]])
