@@ -22,6 +22,10 @@
     margin-bottom: 0;
 }
 
+ui-view img {
+    max-width: 100%;
+}
+
 /* The cart popup (when adding products to the cart */
 .cartpopup {
     position: fixed;
