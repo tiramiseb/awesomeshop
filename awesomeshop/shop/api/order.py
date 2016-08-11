@@ -265,6 +265,8 @@ class ApiOrders(Resource):
 
 
 class ApiOrder(Resource):
+
+    @login_required
     def get(self, number):
         if current_user.is_admin:
             return OrderSchemaForAdmin().dump(
