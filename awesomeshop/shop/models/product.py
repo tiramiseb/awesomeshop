@@ -365,6 +365,8 @@ class KitSubProduct(db.EmbeddedDocument):
     def get_selected(self, data):
         selected = self.get_selected_string(data)
         default = DisabledFakeSubProductOption()
+        if selected == 'none':
+            return default
         for opt in self.options:
             if opt.selected_string == selected:
                 return opt
