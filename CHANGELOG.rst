@@ -41,4 +41,7 @@ The following are ideas of features that may be implemented in AwesomeShop.
 Bugs
 ====
 
+* "not on sale" products are not displayed, however they are available with
+  their direct URL
+
 /
