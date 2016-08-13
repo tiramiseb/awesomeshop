@@ -33,6 +33,8 @@ TODO
 
 The following are ideas of features that may be implemented in AwesomeShop.
 
+* When a kit product has no subproduct with any choice, make it act like a
+  regular product (make it orderable from products list, for instance)
 * Customize shipping delays for each product
 * Remove jinja macros
 * Change how translations work in order to get rid of Flask for the frontend
@@ -40,8 +42,5 @@ The following are ideas of features that may be implemented in AwesomeShop.
 
 Bugs
 ====
-
-* "not on sale" products are not displayed, however they are available with
-  their direct URL
 
 /
