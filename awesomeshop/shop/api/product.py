@@ -400,10 +400,17 @@ product_dataparser.add_argument('data')
 class ApiProductFromCatAndSlug(Resource):
 
     def get(self, category_id, product_slug):
-        product = BaseProduct.objects.get_or_404(
-                    category=category_id,
-                    slug=product_slug
-                    )
+        if current_user.is_authenticated and current_user.is_admin:
+            product = BaseProduct.objects.get_or_404(
+                        category=category_id,
+                        slug=product_slug
+                        )
+        else:
+            product = BaseProduct.objects.get_or_404(
+                        category=category_id,
+                        slug=product_slug,
+                        on_sale=True
+                        )
         schema = productschema[product.type]
         data = product_dataparser.parse_args()['data']
         if data:
@@ -417,7 +424,11 @@ class ApiProductFromCatAndSlug(Resource):
 class ApiProductFromId(Resource):
 
     def get(self, product_id):
-        product = BaseProduct.objects.get_or_404(id=product_id)
+        if current_user.is_authenticated and current_user.is_admin:
+            product = BaseProduct.objects.get_or_404(id=product_id)
+        else:
+            product = BaseProduct.objects.get_or_404(id=product_id,
+                                                     on_sale=True)
         schema = productschema[product.type]
         data = product_dataparser.parse_args()['data']
         if data:
