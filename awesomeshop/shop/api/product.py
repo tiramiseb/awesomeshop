@@ -56,6 +56,7 @@ class BaseProductSchemaForList(Schema):
                     )
     stock = fields.Function(lambda obj, ctx: obj.get_stock(ctx.get('data')))
     details = fields.Function(lambda obj, c: obj.get_details(c.get('data')))
+    static = fields.Boolean()
 
 
 class RegularProductSchemaForList(BaseProductSchemaForList):

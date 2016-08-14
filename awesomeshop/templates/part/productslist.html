@@ -22,10 +22,10 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             <img ng-src="[[ product.main_photo.preview_url ]]" ng-show="product.main_photo">
             <div class="caption">
                 <p class="text-center">[[ product.name || product.slug ]]</p>
-                <p class="text-center bottom-no-space"><span ng-if="product.type == 'kit'">{{ _('from') }} </span>[[ product.lower_price | currency:"{{ config.CURRENCY }}" ]]</p>
+                <p class="text-center bottom-no-space"><span ng-if="!product.static">{{ _('from') }} </span>[[ product.lower_price | currency:"{{ config.CURRENCY }}" ]]</p>
             </div>
         </a>
-        <div class="caption" ng-if="product.type == 'regular'">
+        <div class="caption" ng-if="product.static">
             <button type="button" class="btn btn-success btn-block" ng-if="cart.quantity(product) < product.stock || product.overstock_delay >= 0" ng-class="{ 'btn-success': cart.quantity(product) < product.stock, 'btn-info': product.overstock_delay >= 0 && cart.quantity(product) >= product.stock }" ng-click="cart.add(product.id, null, 1)">
                 {{ _('Add to cart') }}
             </button>
@@ -36,7 +36,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
             {{ _('Shipping delay: ([[ product.overstock_delay ]]&nbsp;days)') }}
             </p>
         </div>
-        <div class="caption" ng-if="product.type == 'kit'">
+        <div class="caption" ng-if="!product.static">
             <a class="btn btn-info btn-block" href="[[ product.path ]]">
                 {{ _('Customize') }}
             </a>

@@ -122,6 +122,15 @@ class BaseProduct(db.Document, StockedItem):
         if self.photos:
             return self.photos[0]
 
+    @property
+    def static(self):
+        """
+        Return True if the product is static (no variations), False otherwise
+
+        Override this method when you need to return False
+        """
+        return True
+
     def get_lower_price_per_item(self):
         """
         Return the lower price for the item, as a prices.Price object
@@ -412,6 +421,14 @@ class KitProduct(BaseProduct):
     tax = db.ReferenceField(Tax, reverse_delete_rule=db.DENY)
     price_variation = db.DecimalField(db_field='var', default=0)
     amount_instead_of_percent = db.BooleanField(db_field='euro', default=False)
+
+    @property
+    def static(self):
+        is_static = True
+        for prod in self.products:
+            if len(prod.options) > 1:
+                return False
+        return True
 
     def get_lower_price_per_item(self):
         price = prices.Price(0)
