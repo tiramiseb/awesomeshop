@@ -426,7 +426,7 @@ class KitProduct(BaseProduct):
     def static(self):
         is_static = True
         for prod in self.products:
-            if len(prod.options) > 1:
+            if len(prod.options) > 1 or prod.can_be_disabled:
                 return False
         return True
 
