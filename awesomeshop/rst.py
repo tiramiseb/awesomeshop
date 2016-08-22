@@ -60,14 +60,20 @@ def internal_page_link(match):
     """Transform "[pageslug]" to a link to the page, with the correct title."""
     from .page.models import Page
     pageslug = match.group(0)[1:-1]
+    if '|' in pageslug:
+        title, pageslug = pageslug.split('|')
+    else:
+        title = False
     try:
         page = Page.objects.get(slug=pageslug)
     except (Page.DoesNotExist, Page.MultipleObjectsReturned):
         # If a page with this slug does not exist or if there are multiple
         # pages (unlikely), return the same string
         return u'['+pageslug+u']'
+    if not title:
+        title = page.title.get(get_locale(), u'')
     return u'`{title} <{pagetype}/{slug}>`_'.format(
-                title=page.title.get(get_locale(), u''),
+                title=title,
                 pagetype=page.pagetype,
                 slug=page.slug
             )

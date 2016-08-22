@@ -67,14 +67,19 @@ templates is given there.
 Using reStructuredText
 ======================
 
-All text is in the reStructuredText format. There is only one additional
-directive :
+All text is in the reStructuredText format. There are two specific behaviors...
 
-::
+Use the following directive to include a list of all documentation pages::
 
     .. doc-list::
 
- This directive displays a list of all documentation pages
+Use the following format to include a link to a(nother) page::
+
+    [pageslug]
+
+or::
+
+    [displayed text|pageslug]
 
 Deploying in production
 =======================
