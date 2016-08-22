@@ -45,6 +45,7 @@ The following are ideas of features that may be implemented in AwesomeShop.
 * Popup on the order status, in order to identify the steps when buying a
   product
 * Display slug in dashboard products list
+* Order pages by title or by slug
 
 Bugs
 ====

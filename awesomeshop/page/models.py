@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
+import re
+
 from mongoengine import signals
 from mongoengine.connection import get_db
 
@@ -39,6 +41,11 @@ class Page(db.Document):
     meta = {
         'ordering': ['rank']
     }
+
+    def __setattr__(self, name, value):
+        if name == 'slug' and self.slug != value:
+            self._previous_slug = self.slug
+        super(Page, self).__setattr__(name, value)
 
     def move_up(self, up_to=None):
         """up_to must be the object which has been initially moved"""
@@ -90,6 +97,32 @@ class Page(db.Document):
         return BaseProduct.objects(documentation=self, on_sale=True)
 
 
+def update_other_pages(sender, document, **kwargs):
+    previous = getattr(document, '_previous_slug', None)
+    if previous:
+        for page in Page.objects:
+            anychanged = False
+            texts = page.text
+            for lang, text in texts.iteritems():
+                text, changed1 = re.subn(
+                                    r'\['+previous+'\]',
+                                    r'['+document.slug+']',
+                                    text
+                                    )
+                text, changed2 = re.subn(
+                                    r'\[([^\|\]]+)\|'+previous+'\]',
+                                    r'[\1|'+document.slug+']',
+                                    text
+                                    )
+                changed = changed1 + changed2
+                if changed:
+                    texts[lang] = text
+                    anychanged = True
+            if anychanged:
+                page.text = texts
+                page.save()
+
+
 def update_search(sender, document, **kwargs):
     from ..search import index_doc
     index_doc(document)
@@ -99,5 +132,6 @@ def delete_search(sender, document, **kwargs):
     from ..search import delete_doc
     delete_doc(document)
 
+signals.post_save.connect(update_other_pages, sender=Page)
 signals.post_save.connect(update_search, sender=Page)
 signals.pre_delete.connect(delete_search, sender=Page)
