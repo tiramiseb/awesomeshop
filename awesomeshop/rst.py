@@ -29,7 +29,6 @@ from . import get_locale
 class DocList(Directive):
 
     def run(self):
-        #from . import get_locale
         from .page.models import Page
         pageslist = bullet_list()
         for page in Page.objects.filter(pagetype='doc'):
