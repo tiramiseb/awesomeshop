@@ -18,7 +18,6 @@
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 from decimal import Decimal
-import docutils.core
 import re
 
 from flask import abort, request
@@ -27,7 +26,7 @@ from flask_restful import Resource, reqparse, inputs
 from marshmallow import Schema, fields, post_dump, post_load
 from prices import Price
 
-from ... import app, get_locale, admin_required, login_required, rest
+from ... import app, get_locale, admin_required, login_required, rest, rst
 from ...marsh import Count, Loc, ObjField
 from ...auth.models import Address
 from ...shipping.models import Carrier
@@ -313,10 +312,7 @@ class PayOrder(Resource):
                         )
         payment_data = order.trigger_payment()
         if payment_data['type'] == 'message':
-            payment_data['message'] = docutils.core.publish_parts(
-                    source=payment_data['message'],
-                    writer_name='html'
-                    )['body']
+            payment_data['message'] = rst.get_html(payment_data['message'], 2)
         return PaymentInfoSchema().dump(payment_data).data
 
 

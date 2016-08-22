@@ -18,7 +18,6 @@
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
-import docutils.core
 import random
 import string
 from decimal import Decimal
@@ -27,7 +26,7 @@ from mongoengine import signals
 from satchless.item import StockedItem
 import prices
 
-from ... import app, db, get_locale
+from ... import app, db, get_locale, rst
 from ...mongo import TranslationsField
 from ...photo import Photo
 from ...page.models import Page
@@ -94,24 +93,12 @@ class BaseProduct(db.Document, StockedItem):
     @property
     def documentation_content(self):
         """Return the formatted content of the documentation"""
-        parts = docutils.core.publish_parts(
-                    source=self.documentation.text.get(get_locale(), u''),
-                    settings_overrides={
-                        'initial_header_level': 3
-                        },
-                    writer_name='html')
-        return parts['body']
+        return rst.get_html(self.documentation.text.get(get_locale(), u''), 3)
 
     @property
     def description_content(self):
         """Return the formatted content of the description"""
-        parts = docutils.core.publish_parts(
-                    source=self.description.get(get_locale(), u''),
-                    settings_overrides={
-                        'initial_header_level': 2
-                        },
-                    writer_name='html')
-        return parts['body']
+        return rst.get_html(self.description.get(get_locale(), u''), 2)
 
     @property
     def related_products_on_sale(self):

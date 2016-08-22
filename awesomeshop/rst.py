@@ -17,14 +17,19 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
+import re
+
+from docutils.core import publish_parts
 from docutils.nodes import bullet_list, list_item, paragraph, reference
 from docutils.parsers.rst import Directive, directives
+
+from . import get_locale
 
 
 class DocList(Directive):
 
     def run(self):
-        from . import get_locale
+        #from . import get_locale
         from .page.models import Page
         pageslist = bullet_list()
         for page in Page.objects.filter(pagetype='doc'):
@@ -38,3 +43,31 @@ class DocList(Directive):
         return [pageslist]
 
 directives.register_directive('doc-list', DocList)
+
+
+def get_html(source, initial_level):
+    source = re.sub('\[[^\]]*\]', internal_page_link, source)
+    parts = publish_parts(
+                source=source,
+                settings_overrides={
+                    'initial_header_level': initial_level
+                    },
+                writer_name='html')
+    return parts['body']
+
+
+def internal_page_link(match):
+    """Transform "[pageslug]" to a link to the page, with the correct title."""
+    from .page.models import Page
+    pageslug = match.group(0)[1:-1]
+    try:
+        page = Page.objects.get(slug=pageslug)
+    except (Page.DoesNotExist, Page.MultipleObjectsReturned):
+        # If a page with this slug does not exist or if there are multiple
+        # pages (unlikely), return the same string
+        return u'['+pageslug+u']'
+    return u'`{title} <{pagetype}/{slug}>`_'.format(
+                title=page.title.get(get_locale(), u''),
+                pagetype=page.pagetype,
+                slug=page.slug
+            )
