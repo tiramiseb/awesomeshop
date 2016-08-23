@@ -511,8 +511,9 @@ angular.module('awesomeshop', [
 .controller('NewProductsCtrl', function($scope, newproducts) {
     $scope.newproducts = newproducts;
 })
-.controller('CategoriesListCtrl', function($scope, categories) {
+.controller('CategoriesListCtrl', function($scope, categories, newproducts) {
     $scope.categories = categories;
+    $scope.newproducts = newproducts;
 })
 .controller('DocsListCtrl', function($scope, docs) {
     $scope.docs = docs;
