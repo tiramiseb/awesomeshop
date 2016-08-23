@@ -152,7 +152,9 @@ class BaseProductSchemaForKitSubProductOptionForEdition(Schema):
     id = fields.String(required=True)
     name = Loc(dump_only=True)
     main_photo = fields.Nested(PhotoSchema, dump_only=True)
-    gross_price = fields.Decimal(as_string=True, required=True)
+    gross_price = fields.Function(
+                                lambda obj: str(obj.get_price_per_item().gross)
+                                )
 
 
 class KitSubProductOptionSchemaForEdition(Schema):
