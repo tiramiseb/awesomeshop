@@ -433,10 +433,16 @@ class KitProduct(BaseProduct):
         return sum(prod.get_weight(data) for prod in self.products)
 
     def get_stock(self, data={}):
-        return min(prod.get_stock(data) for prod in self.products)
+        try:
+            return min(prod.get_stock(data) for prod in self.products)
+        except ValueError:
+            return 0
 
     def get_delay(self, data={}):
-        return max(prod.get_delay(data) for prod in self.products)
+        try:
+            return max(prod.get_delay(data) for prod in self.products)
+        except ValueError:
+            return -1
 
     def get_details(self, data={}):
         details = []
@@ -456,7 +462,10 @@ class KitProduct(BaseProduct):
                 return -1
             else:
                 delays.append(this_delay)
-        return max(delays)
+        try:
+            return max(delays)
+        except ValueError:
+            return -1
 
     def destock(self, quantity, data={}):
         # TODO Be more precise on destocking so restocking would be correct
