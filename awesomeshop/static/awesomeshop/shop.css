@@ -195,6 +195,12 @@ p.price {
     padding: 2px;
 }
 
+/* Inline image thumbnail */
+.inline-thumb {
+    vertical-align: bottom;
+    height: 23px;
+}
+
 /* Checkout and order stuff */
 .options-list label {
     font-weight: normal;

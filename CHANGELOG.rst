@@ -7,6 +7,8 @@ This file summarizes the most important modifications to AwesomeShop...
 +------------+---------+------------------------------------------------------+
 | Date       | Type    | Subject                                              |
 +============+=========+======================================================+
+| 2016-08-26 | Feature | Image and popup on kit products options              |
++------------+---------+------------------------------------------------------+
 | 2016-08-23 | Feature | Easier internal links between pages                  |
 +------------+---------+------------------------------------------------------+
 | 2016-07-05 | Feature | Easier navigation between shop and dashboard         |
@@ -45,7 +47,6 @@ The following are ideas of features that may be implemented in AwesomeShop.
 * Toolbar on a "page" page, to easily include specific stuff in pages contents
   (``.. doc-list::``, links to other pages, images...)
 * Order pages by title or by slug
-* (Popup with a) picture of the product on all options for a kit product
 
 Bugs
 ====

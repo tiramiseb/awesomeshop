@@ -246,6 +246,7 @@ class BaseProductSchemaForKitSubProductOption(Schema):
     net_price = fields.Function(
                     lambda obj: str(obj.get_price_per_item().net)
                     )
+    main_photo = fields.Nested(PhotoSchema, dump_only=True)
 
 
 class KitSubProductOptionSchema(Schema):
