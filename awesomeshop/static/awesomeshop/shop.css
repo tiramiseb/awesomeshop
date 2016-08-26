@@ -95,6 +95,17 @@ ui-view img {
     background-color: #fff;
 }
 
+/* Different highlight color for new products */
+.newproducts .category_hierarchy_0 {
+    color: #a94442;
+}
+.newproducts.active .category_hierarchy_0 {
+    color: #fff;
+}
+.newproducts .badge {
+    background-color: #a94442;
+}
+
 /***** FOLLOW ICONS ON THE BOTTOM BAR *****/
 .navbar-static-bottom .fa {
     font-size: 125%;

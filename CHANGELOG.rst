@@ -47,6 +47,7 @@ The following are ideas of features that may be implemented in AwesomeShop.
 * Toolbar on a "page" page, to easily include specific stuff in pages contents
   (``.. doc-list::``, links to other pages, images...)
 * Order pages by title or by slug
+* Same height for all products in a products list
 
 Bugs
 ====
