@@ -44,8 +44,6 @@ The following are ideas of features that may be implemented in AwesomeShop.
   must wait)
 * Toolbar on a "page" page, to easily include specific stuff in pages contents
   (``.. doc-list::``, links to other pages, images...)
-* Popup on the order status, in order to identify the steps when buying a
-  product
 * Order pages by title or by slug
 * (Popup with a) picture of the product on all options for a kit product
 

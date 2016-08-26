@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  N/A\n"
 "Report-Msgid-Bugs-To: sebastien@maccagnoni.eu\n"
-"POT-Creation-Date: 2016-06-24 23:16+0200\n"
+"POT-Creation-Date: 2016-08-26 23:00+0200\n"
 "PO-Revision-Date: 2016-04-22 06:55+0200\n"
 "Last-Translator: Sebastien Maccagnoni <sebastien@maccagnoni.eu>\n"
 "Language: fr\n"
@@ -25,7 +25,7 @@ msgid "Addresses"
 msgstr "Adresses"
 
 #: awesomeshop/messages.py:26
-#: awesomeshop/templates/dashboard/product-base.html:30
+#: awesomeshop/templates/dashboard/product-base.html:33
 msgid "Category"
 msgstr "Catégorie"
 
@@ -39,8 +39,8 @@ msgstr "Créer un compte"
 
 #: awesomeshop/messages.py:29 awesomeshop/templates/dashboard.html:81
 #: awesomeshop/templates/shop.html:158
-#: awesomeshop/templates/dashboard/product-base.html:33
-#: awesomeshop/templates/shop/product.html:136
+#: awesomeshop/templates/dashboard/product-base.html:36
+#: awesomeshop/templates/shop/product.html:140
 #: awesomeshop/templates/shop/search.html:31
 msgid "Documentation"
 msgstr "Documentation"
@@ -119,7 +119,7 @@ msgstr "Expédié le %(date)s"
 msgid "Delivery address:"
 msgstr "Adresse de livraison :"
 
-#: awesomeshop/pdf.py:109 awesomeshop/templates/dashboard/product-base.html:27
+#: awesomeshop/pdf.py:109 awesomeshop/templates/dashboard/product-base.html:30
 msgid "Reference"
 msgstr "Référence"
 
@@ -159,7 +159,7 @@ msgstr "Livraison: %(description)s"
 msgid "TVA non applicable, article 293 B du Code général des impôts"
 msgstr "TVA non applicable, article 293 B du Code général des impôts"
 
-#: awesomeshop/page/api.py:131
+#: awesomeshop/page/api.py:132
 msgid "Could not delete: this documentation is used in a product."
 msgstr "Impossible de supprimer: cette documentation est utilisée par un produit."
 
@@ -236,11 +236,11 @@ msgstr ""
 msgid "Could not delete : this country is part of a countries group."
 msgstr "Impossible de supprimer : ce pays fait partie d'un groupe de pays"
 
-#: awesomeshop/shop/api/category.py:140
+#: awesomeshop/shop/api/category.py:141
 msgid "Could not delete: this category has products."
 msgstr "Impossible de supprimer: cette catégorie a des produits."
 
-#: awesomeshop/shop/api/category.py:146
+#: awesomeshop/shop/api/category.py:147
 msgid "Could not delete: this category has children."
 msgstr "Impossible de supprimer: cette catégorie a des enfants."
 
@@ -257,20 +257,20 @@ msgid "awaiting a response from the payment provider"
 msgstr "attente d'une réponse du prestataire de paiements"
 
 #: awesomeshop/shop/models/order.py:98
-msgid "payment received"
-msgstr "paiement reçu"
+msgid "1/3: payment received"
+msgstr "1/3 : paiement reçu"
 
 #: awesomeshop/shop/models/order.py:103
 msgid "payment failed"
 msgstr "échec du paiement"
 
 #: awesomeshop/shop/models/order.py:108
-msgid "in preparation"
-msgstr "en préparation"
+msgid "2/3: in preparation"
+msgstr "2/3 : en préparation"
 
 #: awesomeshop/shop/models/order.py:113
-msgid "shipped"
-msgstr "expédié"
+msgid "3/3: shipped"
+msgstr "3/3 : expédié"
 
 #: awesomeshop/shop/models/order.py:118
 msgid "awaiting return"
@@ -437,10 +437,10 @@ msgid "Carrier:"
 msgstr "Transporteur :"
 
 #: awesomeshop/templates/dashboard/carrier.html:24
-#: awesomeshop/templates/dashboard/category.html:35
+#: awesomeshop/templates/dashboard/category.html:38
 #: awesomeshop/templates/dashboard/countriesgroup.html:22
 #: awesomeshop/templates/dashboard/country.html:31
-#: awesomeshop/templates/dashboard/product-base.html:49
+#: awesomeshop/templates/dashboard/product-base.html:52
 #: awesomeshop/templates/dashboard/taxrates.html:26
 #: awesomeshop/templates/dashboard/taxrates.html:61
 msgid "Name"
@@ -462,8 +462,8 @@ msgid "Character @ will be replaced by the tracking number"
 msgstr "Le caractère @ sera remplacé par le numéro de suivi"
 
 #: awesomeshop/templates/dashboard/carrier.html:32
-#: awesomeshop/templates/dashboard/category.html:36
-#: awesomeshop/templates/dashboard/product-base.html:50
+#: awesomeshop/templates/dashboard/category.html:39
+#: awesomeshop/templates/dashboard/product-base.html:53
 msgid "Description"
 msgstr "Description"
 
@@ -477,13 +477,13 @@ msgstr "Veuillez noter qu'il y a toujours l'option « reste du monde »."
 
 #: awesomeshop/templates/dashboard/carrier.html:41
 #: awesomeshop/templates/dashboard/countriesgroup.html:26
-#: awesomeshop/templates/dashboard/product-base.html:60
+#: awesomeshop/templates/dashboard/product-base.html:63
 msgid "Selected"
 msgstr "Sélectionné"
 
 #: awesomeshop/templates/dashboard/carrier.html:60
 #: awesomeshop/templates/dashboard/countriesgroup.html:39
-#: awesomeshop/templates/dashboard/product-base.html:73
+#: awesomeshop/templates/dashboard/product-base.html:76
 msgid "Available"
 msgstr "Disponible"
 
@@ -495,7 +495,7 @@ msgstr "Disponible"
 #: awesomeshop/templates/dashboard/countriesgroups.html:25
 #: awesomeshop/templates/dashboard/orders.html:21
 #: awesomeshop/templates/dashboard/pages.html:25
-#: awesomeshop/templates/dashboard/product-base.html:75
+#: awesomeshop/templates/dashboard/product-base.html:78
 #: awesomeshop/templates/dashboard/products.html:33
 #: awesomeshop/templates/dashboard/taxrates.html:22
 #: awesomeshop/templates/dashboard/users.html:26
@@ -524,11 +524,11 @@ msgid "Rest of the world"
 msgstr "Reste du monde"
 
 #: awesomeshop/templates/dashboard/carrier.html:139
-#: awesomeshop/templates/dashboard/category.html:42
+#: awesomeshop/templates/dashboard/category.html:45
 #: awesomeshop/templates/dashboard/countriesgroup.html:52
 #: awesomeshop/templates/dashboard/country.html:34
-#: awesomeshop/templates/dashboard/page.html:67
-#: awesomeshop/templates/dashboard/product-base.html:113
+#: awesomeshop/templates/dashboard/page.html:70
+#: awesomeshop/templates/dashboard/product-base.html:116
 #: awesomeshop/templates/dashboard/taxrates.html:45
 #: awesomeshop/templates/dashboard/user.html:110
 #: awesomeshop/templates/shop/cart.html:105
@@ -536,13 +536,13 @@ msgid "Save"
 msgstr "Enregistrer"
 
 #: awesomeshop/templates/dashboard/carrier.html:142
-#: awesomeshop/templates/dashboard/category.html:45
+#: awesomeshop/templates/dashboard/category.html:48
 #: awesomeshop/templates/dashboard/countriesgroup.html:55
 #: awesomeshop/templates/dashboard/country.html:37
-#: awesomeshop/templates/dashboard/page.html:55
-#: awesomeshop/templates/dashboard/page.html:70
-#: awesomeshop/templates/dashboard/product-base.html:99
-#: awesomeshop/templates/dashboard/product-base.html:116
+#: awesomeshop/templates/dashboard/page.html:58
+#: awesomeshop/templates/dashboard/page.html:73
+#: awesomeshop/templates/dashboard/product-base.html:102
+#: awesomeshop/templates/dashboard/product-base.html:119
 #: awesomeshop/templates/dashboard/product-kit.html:52
 #: awesomeshop/templates/dashboard/product-kit.html:66
 #: awesomeshop/templates/dashboard/user.html:57
@@ -554,11 +554,11 @@ msgid "Remove"
 msgstr "Enlever"
 
 #: awesomeshop/templates/dashboard/carrier.html:145
-#: awesomeshop/templates/dashboard/category.html:48
+#: awesomeshop/templates/dashboard/category.html:51
 #: awesomeshop/templates/dashboard/countriesgroup.html:58
 #: awesomeshop/templates/dashboard/country.html:40
-#: awesomeshop/templates/dashboard/page.html:73
-#: awesomeshop/templates/dashboard/product-base.html:119
+#: awesomeshop/templates/dashboard/page.html:76
+#: awesomeshop/templates/dashboard/product-base.html:122
 #: awesomeshop/templates/dashboard/user.html:116
 msgid "Back"
 msgstr "Retour"
@@ -571,29 +571,35 @@ msgstr "Ajouter un transporteur"
 msgid "Add a category"
 msgstr "Ajouter une catégorie"
 
-#: awesomeshop/templates/dashboard/category.html:21
+#: awesomeshop/templates/dashboard/category.html:22
 msgid "Category:"
 msgstr "Catégorie :"
 
-#: awesomeshop/templates/dashboard/category.html:24
-#: awesomeshop/templates/dashboard/page.html:24
-#: awesomeshop/templates/dashboard/product-base.html:24
+#: awesomeshop/templates/dashboard/category.html:23
+#: awesomeshop/templates/dashboard/page.html:23
+#: awesomeshop/templates/dashboard/product-base.html:23
+msgid "View"
+msgstr "Voir"
+
+#: awesomeshop/templates/dashboard/category.html:27
+#: awesomeshop/templates/dashboard/page.html:27
+#: awesomeshop/templates/dashboard/product-base.html:27
 msgid "Slug"
 msgstr "Slug"
 
-#: awesomeshop/templates/dashboard/category.html:24
-#: awesomeshop/templates/dashboard/page.html:24
-#: awesomeshop/templates/dashboard/product-base.html:24
+#: awesomeshop/templates/dashboard/category.html:27
+#: awesomeshop/templates/dashboard/page.html:27
+#: awesomeshop/templates/dashboard/product-base.html:27
 msgid "Slug is mandatory"
 msgstr "Le slug est obligatoire"
 
-#: awesomeshop/templates/dashboard/category.html:27
+#: awesomeshop/templates/dashboard/category.html:30
 msgid "Parent"
 msgstr "Parent"
 
-#: awesomeshop/templates/dashboard/category.html:35
-#: awesomeshop/templates/dashboard/page.html:35
-#: awesomeshop/templates/dashboard/product-base.html:49
+#: awesomeshop/templates/dashboard/category.html:38
+#: awesomeshop/templates/dashboard/page.html:38
+#: awesomeshop/templates/dashboard/product-base.html:52
 msgid "&rarr; slug"
 msgstr "&rarr; slug"
 
@@ -655,7 +661,7 @@ msgstr "En attente de paiement"
 
 #: awesomeshop/templates/dashboard/index.html:71
 #: awesomeshop/templates/part/productslist.html:33
-#: awesomeshop/templates/shop/product.html:84
+#: awesomeshop/templates/shop/product.html:87
 msgid "Out of stock"
 msgstr "Rupture de stock"
 
@@ -785,37 +791,37 @@ msgstr "Adresse de facturation"
 msgid "Shipping fee"
 msgstr "Frais d'expédition"
 
-#: awesomeshop/templates/dashboard/page.html:21
+#: awesomeshop/templates/dashboard/page.html:22
 msgid "Page:"
 msgstr "Page :"
 
-#: awesomeshop/templates/dashboard/page.html:21
+#: awesomeshop/templates/dashboard/page.html:22
 msgid "(please set a slug)"
 msgstr "(veuiller configurer un slug)"
 
-#: awesomeshop/templates/dashboard/page.html:27
-#: awesomeshop/templates/dashboard/pages.html:33
+#: awesomeshop/templates/dashboard/page.html:30
+#: awesomeshop/templates/dashboard/pages.html:36
 msgid "Display in menu"
 msgstr "Afficher dans le menu"
 
-#: awesomeshop/templates/dashboard/page.html:27
+#: awesomeshop/templates/dashboard/page.html:30
 msgid "Do not display"
 msgstr "Ne pas afficher"
 
-#: awesomeshop/templates/dashboard/page.html:35
+#: awesomeshop/templates/dashboard/page.html:38
 msgid "Title"
 msgstr "Titre"
 
-#: awesomeshop/templates/dashboard/page.html:36
+#: awesomeshop/templates/dashboard/page.html:39
 msgid "Text"
 msgstr "Texte"
 
-#: awesomeshop/templates/dashboard/page.html:42
-#: awesomeshop/templates/dashboard/product-base.html:90
+#: awesomeshop/templates/dashboard/page.html:45
+#: awesomeshop/templates/dashboard/product-base.html:93
 msgid "Pictures"
 msgstr "Images"
 
-#: awesomeshop/templates/dashboard/page.html:62
+#: awesomeshop/templates/dashboard/page.html:65
 msgid "Please save the document before adding images"
 msgstr "Veuillez sauvegarder le document avant d'ajouter des images"
 
@@ -827,42 +833,42 @@ msgstr "Pages"
 msgid "Add a page"
 msgstr "Ajouter une page"
 
-#: awesomeshop/templates/dashboard/product-base.html:21
+#: awesomeshop/templates/dashboard/product-base.html:22
 msgid "Product:"
 msgstr "Produit :"
 
-#: awesomeshop/templates/dashboard/product-base.html:27
+#: awesomeshop/templates/dashboard/product-base.html:30
 msgid "Reference is mandatory"
 msgstr "La référence est obligatoire"
 
-#: awesomeshop/templates/dashboard/product-base.html:30
+#: awesomeshop/templates/dashboard/product-base.html:33
 msgid "Category is mandatory"
 msgstr "La catégorie est obligatoire"
 
-#: awesomeshop/templates/dashboard/product-base.html:33
+#: awesomeshop/templates/dashboard/product-base.html:36
 msgid "Documentation is mandatory"
 msgstr "La documentation est obligatoire"
 
-#: awesomeshop/templates/dashboard/product-base.html:38
+#: awesomeshop/templates/dashboard/product-base.html:41
 msgid "Keywords"
 msgstr "Mots-clé"
 
-#: awesomeshop/templates/dashboard/product-base.html:41
+#: awesomeshop/templates/dashboard/product-base.html:44
 #: awesomeshop/templates/dashboard/products.html:49
 msgid "Is on sale"
 msgstr "Est en vente"
 
-#: awesomeshop/templates/dashboard/product-base.html:41
+#: awesomeshop/templates/dashboard/product-base.html:44
 msgid "Not on sale"
 msgstr "Pas en vente"
 
-#: awesomeshop/templates/dashboard/product-base.html:56
-#: awesomeshop/templates/shop/page.html:27
-#: awesomeshop/templates/shop/product.html:125
+#: awesomeshop/templates/dashboard/product-base.html:59
+#: awesomeshop/templates/shop/page.html:30
+#: awesomeshop/templates/shop/product.html:129
 msgid "Related products"
 msgstr "Produits liés"
 
-#: awesomeshop/templates/dashboard/product-base.html:109
+#: awesomeshop/templates/dashboard/product-base.html:112
 msgid "Please save the product before adding images"
 msgstr "Veuillez enregistrer le produit avant d'ajouter des images"
 
@@ -1220,7 +1226,7 @@ msgid "from"
 msgstr "à partir de"
 
 #: awesomeshop/templates/part/productslist.html:30
-#: awesomeshop/templates/shop/product.html:72
+#: awesomeshop/templates/shop/product.html:75
 msgid "Add to cart"
 msgstr "Ajouter au panier"
 
@@ -1299,12 +1305,12 @@ msgstr "Délai d'expédition : [[ line.product.overstock_delay ]] jours"
 
 #: awesomeshop/templates/shop/cart.html:40
 #: awesomeshop/templates/shop/cart.html:65
-#: awesomeshop/templates/shop/product.html:76
+#: awesomeshop/templates/shop/product.html:79
 msgid "Insufficient stock"
 msgstr "Stock insuffisant"
 
 #: awesomeshop/templates/shop/cart.html:43
-#: awesomeshop/templates/shop/product.html:66
+#: awesomeshop/templates/shop/product.html:69
 msgid "Quantity"
 msgstr "Quantité"
 
@@ -1441,6 +1447,12 @@ msgstr ""
 "Le contenu de ce panier ne peut pas être comandé car le stock est "
 "insuffisant. Veuillez réduire les quantités."
 
+#: awesomeshop/templates/shop/category.html:21
+#: awesomeshop/templates/shop/page.html:23
+#: awesomeshop/templates/shop/product.html:21
+msgid "Edit"
+msgstr "Éditer"
+
 #: awesomeshop/templates/shop/newproducts.html:20
 #, python-format
 msgid "These products have been added to the store in the last %(days)s days"
@@ -1510,23 +1522,23 @@ msgstr ""
 msgid "products"
 msgstr "produits"
 
-#: awesomeshop/templates/shop/product.html:47
+#: awesomeshop/templates/shop/product.html:50
 msgid "Summary"
 msgstr "Résumé"
 
-#: awesomeshop/templates/shop/product.html:53
+#: awesomeshop/templates/shop/product.html:56
 msgid "Reference:"
 msgstr "Référence :"
 
-#: awesomeshop/templates/shop/product.html:74
+#: awesomeshop/templates/shop/product.html:77
 msgid "Shipping delay: [[ product.overstock_delay ]]&nbsp;days"
 msgstr "Délai d'expédition : [[ product.overstock_delay ]]&nbsp;jours"
 
-#: awesomeshop/templates/shop/product.html:79
+#: awesomeshop/templates/shop/product.html:82
 msgid "Incorrect quantity"
 msgstr "Quantité incorrecte"
 
-#: awesomeshop/templates/shop/product.html:112
+#: awesomeshop/templates/shop/product.html:116
 msgid "None"
 msgstr "Aucun"
 

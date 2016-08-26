@@ -72,63 +72,63 @@ class OrderProduct(db.EmbeddedDocument):
 
 
 order_states = {
-        # 'name': (
-        #   lazy_gettext('verbose name'),
-        #   'highlight color',
-        #   ('next', 'states')
-        #   )
-        'unconfirmed': {
-            'human': lazy_gettext('unconfirmed'),
-            'color': 'danger',
-            'next': ('awaiting_payment', 'cancelled')
-            },
-        'awaiting_payment': {
-            'human': lazy_gettext('awaiting payment'),
-            'color': 'warning',
-            'next': ('awaiting_provider', 'payment_received', 'payment_failed',
-                     'cancelled')
-            },
-        'awaiting_provider': {
-            'human':
-            lazy_gettext('awaiting a response from the payment provider'),
-            'color': 'info',
-            'next': ('payment_received', 'payment_failed', 'cancelled')
-            },
-        'payment_received': {
-            'human': lazy_gettext('payment received'),
-            'color': 'success',
-            'next': ('preparation', 'cancelled')
-            },
-        'payment_failed': {
-            'human': lazy_gettext('payment failed'),
-            'color': 'danger',
-            'next': ('awaiting_payment', 'payment_received', 'cancelled')
-            },
-        'preparation': {
-            'human': lazy_gettext('in preparation'),
-            'color': 'info',
-            'next': ('shipped', 'cancelled')
-            },
-        'shipped': {
-            'human': lazy_gettext('shipped'),
-            'color': 'success',
-            'next': ('awaiting_return',)
-            },
-        'awaiting_return': {
-            'human': lazy_gettext('awaiting return'),
-            'color': 'warning',
-            'next': ('refund',)
-            },
-        'refund': {
-            'human': lazy_gettext('refund'),
-            'color': 'success',
-            'next': ()
-            },
-        'cancelled': {
-            'human': lazy_gettext('cancelled'),
-            'color': 'warning',
-            'next': ()
-            }
+    # 'name': (
+    #   lazy_gettext('verbose name'),
+    #   'highlight color',
+    #   ('next', 'states')
+    #   )
+    'unconfirmed': {
+        'human': lazy_gettext('unconfirmed'),
+        'color': 'danger',
+        'next': ('awaiting_payment', 'cancelled')
+        },
+    'awaiting_payment': {
+        'human': lazy_gettext('awaiting payment'),
+        'color': 'warning',
+        'next': ('awaiting_provider', 'payment_received', 'payment_failed',
+                 'cancelled')
+        },
+    'awaiting_provider': {
+        'human':
+        lazy_gettext('awaiting a response from the payment provider'),
+        'color': 'info',
+        'next': ('payment_received', 'payment_failed', 'cancelled')
+        },
+    'payment_received': {
+        'human': lazy_gettext('1/3: payment received'),
+        'color': 'success',
+        'next': ('preparation', 'cancelled')
+        },
+    'payment_failed': {
+        'human': lazy_gettext('payment failed'),
+        'color': 'danger',
+        'next': ('awaiting_payment', 'payment_received', 'cancelled')
+        },
+    'preparation': {
+        'human': lazy_gettext('2/3: in preparation'),
+        'color': 'info',
+        'next': ('shipped', 'cancelled')
+        },
+    'shipped': {
+        'human': lazy_gettext('3/3: shipped'),
+        'color': 'success',
+        'next': ('awaiting_return',)
+        },
+    'awaiting_return': {
+        'human': lazy_gettext('awaiting return'),
+        'color': 'warning',
+        'next': ('refund',)
+        },
+    'refund': {
+        'human': lazy_gettext('refund'),
+        'color': 'success',
+        'next': ()
+        },
+    'cancelled': {
+        'human': lazy_gettext('cancelled'),
+        'color': 'warning',
+        'next': ()
+        }
 }
 
 
