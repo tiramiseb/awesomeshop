@@ -26,9 +26,6 @@ from .. import db, get_locale, rst
 from ..mongo import TranslationsField
 from ..photo import Photo
 
-counters = get_db()['mongoengine.counters']
-
-
 class Page(db.Document):
     pagetype = db.StringField(db_field='type')
     rank = db.SequenceField()
@@ -39,46 +36,13 @@ class Page(db.Document):
     photos = db.EmbeddedDocumentListField(Photo)
 
     meta = {
-        'ordering': ['rank']
+        'ordering': ['slug']
     }
 
     def __setattr__(self, name, value):
         if name == 'slug' and self.slug != value:
             self._previous_slug = self.slug
         super(Page, self).__setattr__(name, value)
-
-    def move_up(self, up_to=None):
-        """up_to must be the object which has been initially moved"""
-        rank = self.rank + 1
-        try:
-            nextdoc = Page.objects.get(rank=rank)
-        except Page.DoesNotExist:
-            # There is no next doc
-            # * either because the end of the list is reached
-            last_count = counters.find_one({'_id': 'page.rank'})['next']
-            if rank > last_count:
-                counters.find_one_and_update({'_id': 'page.rank'},
-                                             {'$set': {'next': rank}})
-            # * or because there is a hole in the list (perfect,
-            #                                           no change elsewere)
-        else:
-            if nextdoc != up_to:
-                nextdoc.move_up(up_to)
-        self.rank = rank
-        self.save()
-
-    def move_before(self, target):
-        rank = target.rank
-        target.move_up(up_to=self)
-        self.rank = rank
-        self.save()
-
-    def move_to_end(self):
-        rank = counters.find_one({'_id': 'page.rank'})['next'] + 1
-        counters.find_one_and_update({'_id': 'page.rank'},
-                                     {'$set': {'next': rank}})
-        self.rank = rank
-        self.save()
 
     @property
     def content(self):

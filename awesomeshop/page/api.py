@@ -168,21 +168,8 @@ class DeletePagePhoto(Resource):
         return {'status': 'OK'}
 
 
-class MovePage(Resource):
-
-    @admin_required
-    def get(self, page_id, target_id):
-        page = Page.objects.get_or_404(id=page_id)
-        if target_id == 'last':
-            page.move_to_end()
-        else:
-            target = Page.objects.get(id=target_id)
-            page.move_before(target)
-        return {'status': 'OK'}
-
 rest.add_resource(ApiPages, '/api/page', '/api/page-<page_type>')
 rest.add_resource(ApiPage, '/api/page/<page_id>')
 rest.add_resource(ApiPageContent, '/api/page-<page_type>/<page_slug>')
 rest.add_resource(PagePhoto, '/api/page/<page_id>/photo')
 rest.add_resource(DeletePagePhoto, '/api/page/<page_id>/photo/<filename>')
-rest.add_resource(MovePage, '/api/page/<page_id>/move/<target_id>')
