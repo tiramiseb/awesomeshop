@@ -20,11 +20,16 @@
 import datetime
 import re
 
+from mongoengine.connection import get_db
+
 from . import app
 from .helpers import Setting
+from .page.models import Page
 from .shipping.models import Carrier
 from .shop.models.order import Order
 from .shop.models.product import BaseProduct
+
+counters = get_db()['mongoengine.counters']
 
 ###############################################################################
 # Functions used to upgrade the database content
@@ -190,6 +195,12 @@ def on_demand_to_delay():
                         }
                     )
 
+def remove_page_rank():
+    pages = Page._get_collection()
+    pages.update_many({}, {'$unset': {'rank': ''}})
+    counters.delete_one({'_id': 'page.rank'})
+
+
 ###############################################################################
 # Ordered list of all upgrade functions
 upgrades = [
@@ -210,7 +221,11 @@ upgrades = [
         '16/04/2016: split the payment description and its icon'
         ),
     (readd_product_cls, '22/04/2016: allow subproducts again'),
-    (on_demand_to_delay, '03/05/2016: store delays instead of on_demand')
+    (on_demand_to_delay, '03/05/2016: store delays instead of on_demand'),
+    (
+        remove_page_rank,
+        '28/08/2016: remove page rank, they are now ordered alphabetically'
+        )
     ]
 
 
