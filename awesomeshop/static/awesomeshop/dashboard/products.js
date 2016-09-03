@@ -1,4 +1,4 @@
-/* Copyright 2015 Sébastien Maccagnoni-Munch
+/* Copyright 2015-2016 Sébastien Maccagnoni-Munch
  *
  * This file is part of AwesomeShop.
  *
@@ -39,11 +39,24 @@ angular.module('dbProducts', ['angularFileUpload', 'slugifier'])
             controller: 'ProductCtrl'
         })
 })
-.controller('ProductsCtrl', function($scope, $http) {
+.controller('ProductsCtrl', function($scope, $http, $uibModal, $sce) {
     $http.get('/api/product')
         .then(function(response) {
             $scope.products = response.data;
         });
+    $scope.open_note = function($event, product) {
+        var noteModal = $uibModal.open({
+            templateUrl: '/part/internal_note',
+            controller: 'InternalNoteCtrl',
+            resolve: {
+                product: function () {
+                    return product;
+                }
+            }
+        });
+        $event.preventDefault();
+        $event.stopPropagation();
+    };
 })
 .controller('ProductCtrl', function($scope, $http, $stateParams, $state, FileUploader, Slug, CONFIG) {
     // Common stuff

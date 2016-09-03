@@ -77,6 +77,7 @@ class BaseProductSchemaForAdminList(BaseProductSchemaForList):
                                 lambda obj: str(obj.get_price_per_item().gross)
                                 )
     on_sale = fields.Boolean()
+    internal_note = fields.String(attribute='internal_note_content')
 
 
 class RegularProductSchemaForAdminList(BaseProductSchemaForAdminList):
@@ -107,6 +108,7 @@ class BaseProductSchemaForEdition(Schema):
     main_photo = fields.Nested(PhotoSchema, dump_only=True)
     on_sale = fields.Boolean(default=False)
     related_products = MultiObjField(f='id', obj=BaseProduct)
+    internal_note = fields.String(allow_none=True)
 
     def preinit_product(self, product_type, data):
         if 'id' in data:
@@ -122,6 +124,7 @@ class BaseProductSchemaForEdition(Schema):
         product.name = data.get('name', {})
         product.description = data.get('description', {})
         product.related_products = data.get('related_products', [])
+        product.internal_note = data.get('internal_note', u'')
         return product
 
 

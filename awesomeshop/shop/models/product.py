@@ -75,6 +75,7 @@ class BaseProduct(db.Document, StockedItem):
                             db_field='rel',
                             )
     photos = db.EmbeddedDocumentListField(Photo)
+    internal_note = db.StringField(db_field='note')
 
     meta = {
             'collection': 'product',
@@ -99,6 +100,14 @@ class BaseProduct(db.Document, StockedItem):
     def description_content(self):
         """Return the formatted content of the description"""
         return rst.get_html(self.description.get(get_locale(), u''), 2)
+
+    @property
+    def internal_note_content(self):
+        """Return the formatted content of the internal note"""
+        if self.internal_note:
+            return rst.get_html(self.internal_note, 2)
+        else:
+            return None
 
     @property
     def related_products_on_sale(self):

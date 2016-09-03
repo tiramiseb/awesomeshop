@@ -112,6 +112,14 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
         <p ng-hide="product.id">{{ _('Please save the product before adding images') }}</p>
     </div>
 </div>
+<div id="internal-note" class="panel panel-default">
+    <div class="panel-heading">{{ _('Internal note') }}</div>
+    <div class="panel-body">
+        <div class="form-group" ng-class="{ 'has-error': form.internal_note.$invalid && !form.internal_note.$pristine }">
+            <textarea id="internal_note" name="internal_note" class="form-control" ng-model="product.internal_note"></textarea>
+        </div>
+    </div>
+</div>
 <div id="page-buttons">
     <button type="submit" class="btn btn-link" uib-tooltip="{{ _('Save') }}" ng-disabled="form.$invalid">
         <i class="fa fa-check-circle fa-4x text-success"></i>

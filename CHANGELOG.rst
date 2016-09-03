@@ -7,6 +7,8 @@ This file summarizes the most important modifications to AwesomeShop...
 +------------+---------+------------------------------------------------------+
 | Date       | Type    | Subject                                              |
 +============+=========+======================================================+
+| 2016-09-04 | Feature | Internal note (for instance, tips for preparation)   |
++------------+---------+------------------------------------------------------+
 | 2016-08-26 | Feature | Image and popup on kit products options              |
 +------------+---------+------------------------------------------------------+
 | 2016-08-23 | Feature | Easier internal links between pages                  |

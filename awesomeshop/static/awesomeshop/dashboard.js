@@ -36,6 +36,9 @@ angular.module('awesomeshop', [
             controller: 'IndexCtrl'
         })
 })
+.filter('trusthtml', function($sce) {
+    return $sce.trustAsHtml;
+})
 .filter('htmlbr', function($sce) {
     return function(input) {
         if (input) {
@@ -80,4 +83,7 @@ angular.module('awesomeshop', [
         .then(function(response) {
             $scope.stock_alert_products = response.data;
         })
+})
+.controller('InternalNoteCtrl', function($scope, product) {
+    $scope.product = product;
 })

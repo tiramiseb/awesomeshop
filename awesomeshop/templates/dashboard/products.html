@@ -1,5 +1,5 @@
 {#-
-Copyright 2015 Sébastien Maccagnoni-Munch
+Copyright 2015-2016 Sébastien Maccagnoni-Munch
 
 This file is part of AwesomeShop.
 
@@ -37,6 +37,10 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
                 [[ product.reference ]]
             </div>
             <div class="col-xs-6 col-sm-4 col-sm-push-5 text-right">
+                <span ng-show="product.internal_note" ng-click="open_note($event, product)">
+                    <i class="fa fa-sticky-note-o"></i>
+                    &ndash;
+                </span>
                 <span uib-tooltip="{{ _('Gross price') }}" tooltip-placement="left">
                     [[ product.gross_price | currency:"{{ config.CURRENCY }}" ]]
                 </span>

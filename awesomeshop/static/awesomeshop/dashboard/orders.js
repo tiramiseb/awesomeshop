@@ -36,7 +36,7 @@ angular.module('dbOrders', [])
             $scope.orders = response.data;
         });
 })
-.controller('OrderCtrl', function($http, $scope, $stateParams) {
+.controller('OrderCtrl', function($http, $scope, $stateParams, $uibModal) {
     function save_order(response) {
         $scope.order = response.data;
     }
@@ -52,5 +52,18 @@ angular.module('dbOrders', [])
             status: 'shipped',
             tracking_number: $scope.tracking_number
         }).then(save_order);
+    };
+    $scope.open_note = function(product) {
+        if (product.internal_note) {
+            var noteModal = $uibModal.open({
+                templateUrl: '/part/internal_note',
+                controller: 'InternalNoteCtrl',
+                resolve: {
+                    product: function () {
+                        return product;
+                    }
+                }
+            });
+        }
     };
 })

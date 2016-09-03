@@ -32,7 +32,7 @@ from ...auth.models import Address
 from ...shipping.models import Carrier
 from ..models.order import Order, OrderProduct, InvalidNextStatus
 from ..models.product import BaseProduct
-from .product import BaseProductSchemaForList
+from .product import BaseProductSchemaForList, BaseProductSchemaForAdminList
 
 
 class OrderProductCartSubSchema(Schema):
@@ -57,6 +57,10 @@ class OrderProductSchema(Schema):
     name = fields.String()
     delay = fields.Integer()
     data = fields.Raw()
+
+
+class OrderProductSchemaForAdmin(OrderProductSchema):
+    product = fields.Nested(BaseProductSchemaForAdminList)
 
 
 class OrderSchemaForList(Schema):
@@ -215,6 +219,8 @@ class OrderSchema(Schema):
 class OrderSchemaForAdmin(OrderSchema):
     customer = fields.Nested('UserSchemaForList')
     next_states = fields.List(fields.String())
+    products = fields.Nested(OrderProductSchemaForAdmin,
+                             dump_only=True, many=True)
 
 
 class PaymentInfoSchema(Schema):
