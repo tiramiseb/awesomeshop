@@ -84,7 +84,6 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 <div class="form-group" ng-class="{ 'has-error' : form.{{ name }}.$invalid && !form.{{ name }}.$pristine }">
     <label for="{{ name }}">{{ label }}</label>
     <textarea id="{{ name }}" name="{{ name }}" class="form-control{% if small %} small-textarea{% endif %}" ng-model="ngmodel" {{ options }}></textarea>
-    {{ field|safe }}
     {%- if errormessage %}
     <p ng-show="form.{{ name }}.$invalid" class="text-danger">
         {{ errormessage }}
