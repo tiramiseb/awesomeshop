@@ -7,6 +7,8 @@ This file summarizes the most important modifications to AwesomeShop...
 +------------+---------+------------------------------------------------------+
 | Date       | Type    | Subject                                              |
 +============+=========+======================================================+
+| 2016-09-07 | Bugfix  | Allow decimal variations for kit products            |
++------------+---------+------------------------------------------------------+
 | 2016-09-04 | Feature | Internal note (for instance, tips for preparation)   |
 +------------+---------+------------------------------------------------------+
 | 2016-08-26 | Feature | Image and popup on kit products options              |
@@ -49,6 +51,7 @@ The following are ideas of features that may be implemented in AwesomeShop.
 * Toolbar on a "page" page, to easily include specific stuff in pages contents
   (``.. doc-list::``, links to other pages, images...)
 * Same height for all products in a products list
+* Allow for a product to not be sold anymore (end of life): absent from the "out of stock" list
 
 Bugs
 ====

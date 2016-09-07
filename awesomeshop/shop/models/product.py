@@ -23,8 +23,8 @@ import string
 from decimal import Decimal
 
 from mongoengine import signals
+from prices import Price
 from satchless.item import StockedItem
-import prices
 
 from ... import app, db, get_locale, rst
 from ...mongo import TranslationsField
@@ -129,13 +129,13 @@ class BaseProduct(db.Document, StockedItem):
 
     def get_lower_price_per_item(self):
         """
-        Return the lower price for the item, as a prices.Price object
+        Return the lower price for the item, as a Price object
         """
         raise NotImplementedError
 
     def get_price_per_item(self, data=None):
         """
-        Return the price for the item, as a prices.Price object
+        Return the price for the item, as a Price object
         """
         raise NotImplementedError
 
@@ -222,7 +222,7 @@ class RegularProduct(BaseProduct):
         return self.get_price_per_item()
 
     def get_price_per_item(self, data=None):
-        return prices.Price(self._net_price, self.gross_price)
+        return Price(self._net_price, self.gross_price)
 
     def get_weight(self, data=None):
         return self.weight
@@ -275,13 +275,14 @@ class KitSubProductOption(db.EmbeddedDocument):
     def get_price(self):
         var = self._instance._instance.price_variation
         if self._instance._instance.amount_instead_of_percent:
-            result = self.product.get_price_per_item() * self.quantity + var
+            result = self.product.get_price_per_item() * self.quantity + \
+                     Price(str(var))
         else:
             result = (
                         self.product.get_price_per_item() * self.quantity
-                     ) * (
+                     ) * Decimal(str(
                         1 + var / 100
-                     )
+                     ))
         return result
 
     def get_weight(self):
@@ -317,7 +318,7 @@ class KitSubProductOption(db.EmbeddedDocument):
 class DisabledFakeSubProductOption:
 
     def get_price(self):
-        return prices.Price(0)
+        return Price(0)
 
     def get_weight(self):
         return 0
@@ -357,7 +358,7 @@ class KitSubProduct(db.EmbeddedDocument):
         # been chosen, take the cheaper one
         if not self.default and not self.can_be_disabled:
             # Randomly chosen 2^32 :)
-            ref_price = prices.Price(4294967296)
+            ref_price = Price(4294967296)
             for o in self.options:
                 if o.get_price() < ref_price:
                     self.default = o.selected_string
@@ -383,7 +384,7 @@ class KitSubProduct(db.EmbeddedDocument):
 
     def get_lower_price(self):
         if self.can_be_disabled:
-            return prices.Price(0)
+            return Price(0)
         return min(o.get_price() for o in self.options)
 
     def get_price(self, data):
@@ -427,13 +428,13 @@ class KitProduct(BaseProduct):
         return True
 
     def get_lower_price_per_item(self):
-        price = prices.Price(0)
+        price = Price(0)
         for prod in self.products:
             price += prod.get_lower_price()
         return price
 
     def get_price_per_item(self, data={}):
-        price = prices.Price(0)
+        price = Price(0)
         for prod in self.products:
             price += prod.get_price(data)
         return price
