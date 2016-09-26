@@ -42,9 +42,9 @@ Configuration
 =============
 
 Create a ``config.py`` file at the root of the project (in the same directory
-as ``run.py``). Take needed directives from ``awesomeshop/defaultconfig.py``.
+as ``standalone.py``). Take needed directives from ``back/defaultconfig.py``.
 Any directive defined in ``config.py`` will override the equivalent in
-``awesomeshop/defaultconfig.py``.
+``back/defaultconfig.py``.
  
 Locally using AwesomeShop
 =========================
@@ -55,8 +55,7 @@ Example working on Ubuntu 16.04::
     ./init_pythonapp.sh
     source venv/bin/activate
     ./init_database.py
-    ./init_searchindex.py
-    ./run.py
+    ./standalone.py
 
 Local templates
 ===============
