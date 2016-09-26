@@ -41,6 +41,7 @@ TODO
 
 The following are ideas of features that may be implemented in AwesomeShop.
 
+* Swap the shop name and page name in title tag
 * Customize shipping delays for each product
 * Remove jinja macros
 * Change how translations work in order to get rid of Flask for the frontend
@@ -52,6 +53,9 @@ The following are ideas of features that may be implemented in AwesomeShop.
   (``.. doc-list::``, links to other pages, images...)
 * Same height for all products in a products list
 * Allow for a product to not be sold anymore (end of life): absent from the "out of stock" list
+* Make the "one page" payment page simpler with buttons to unhide the rest (to make it easier to read)
+* Save invoices as files and serve them only to those who are correctly identified
+* Dashboard : toolbar for signin in, logging out, changing language...
 
 Bugs
 ====
