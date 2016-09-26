@@ -24,15 +24,15 @@ import sys
 
 from mongoengine.connection import get_db
 
-from awesomeshop import db, shipping
-from awesomeshop.auth.models import Address, User
-from awesomeshop.page.models import Page
-from awesomeshop.shipping import init as shipping_init
-from awesomeshop.shipping.models import Country, CountriesGroup, Carrier
-from awesomeshop.shop.models.category import Category
-from awesomeshop.shop.models.order import Order
-from awesomeshop.shop.models.product import Product
-from awesomeshop.shop.models.tax import Tax
+from back import db, shipping
+from back.auth.models import Address, User
+from back.page.models import Page
+from back.shipping import init as shipping_init
+from back.shipping.models import Country, CountriesGroup, Carrier
+from back.shop.models.category import Category
+from back.shop.models.order import Order
+from back.shop.models.product import Product
+from back.shop.models.tax import Tax
 
 sure = raw_input('WARNING! THE DATABASE WILL BE EMPTIED! ARE YOU SURE [yn]? ')
 
