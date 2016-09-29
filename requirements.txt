@@ -14,5 +14,6 @@ prices
 reportlab
 satchless
 scrypt
+simplejson
 whoosh
 wtforms
