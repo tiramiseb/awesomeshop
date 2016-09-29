@@ -1,0 +1,216 @@
+/ Copyright 2015-2016 Sébastien Maccagnoni
+/ 
+/ This file is part of AwesomeShop.
+/ 
+/ AwesomeShop is free software: you can redistribute it and/or modify it under
+/ the terms of the GNU Affero General Public License as published by the
+/ Free Software Foundation, either version 3 of the License, or (at your
+/ option) any later version.
+/ 
+/ AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+/ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+/ FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+/ details.
+/ 
+/ You should have received a copy of the GNU Affero General Public License
+/ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+doctype html
+html (trigger-auth enable-error-handler)
+    head
+        meta http-equiv='Content-Type' content='application/xhtml+xml; charset=UTF-8'
+        meta name='generator' content='AwesomeShop'
+        meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'
+        base href='/'
+        link rel='stylesheet' href='bower_components/bootstrap/dist/css/bootstrap.min.css'
+        link rel='stylesheet' href='bower_components/angular-bootstrap-lightbox/dist/angular-bootstrap-lightbox.min.css'
+        link rel='stylesheet' href='bower_components/font-awesome/css/font-awesome.min.css'
+        link rel='stylesheet' href='libs/common.css'
+        link rel='stylesheet' href='libs/shop.css'
+        script src='bower_components/angular/angular.min.js'
+        script src='bower_components/angular-animate/angular-animate.min.js'
+        script src='bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js'
+        script src='bower_components/angular-bootstrap-lightbox/dist/angular-bootstrap-lightbox.min.js'
+        script src='bower_components/angular-scroll/angular-scroll.min.js'
+        script src='bower_components/angular-translate/angular-translate.min.js'
+        script src='bower_components/messageformat/messageformat.js'
+        script src='bower_components/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.min.js'
+        script src='bower_components/angular-translate-loader-partial/angular-translate-loader-partial.min.js'
+        script src='bower_components/angular-dynamic-locale/tmhDynamicLocale.min.js'
+        script src='bower_components/angular-ui-router/release/angular-ui-router.min.js'
+        script src='bower_components/angular-validation-match/dist/angular-validation-match.min.js'
+        script src='bower_components/angular-http-auth/src/http-auth-interceptor.js'
+        script src='bower_components/ngstorage/ngStorage.min.js'
+        script src='libs/common.js'
+        script src='libs/shop/page.js'
+        script src='libs/shop/shop.js'
+        script src='libs/shop/user.js'
+        script src='libs/shop.js'
+        title ng-controller='TitleCtrl'
+            {{ title.get() }} - {{ shop_name }}
+    body
+        #spinner
+            i.fa.fa-spinner.fa-pulse.fa-5x.text-primary
+        .cartpopup (ng-show='added_to_cart' ng-cloak)
+            .alert.alert-info.text-center
+                {{ 'ADDED_TO_CART' | translate:{QTY:added_to_cart.quantity, NAME:added_to_cart.product.name} }}
+        .cartpopup (ng-show='loaded_to_cart' ng-cloak)
+            {{ loaded_to_cart }}
+            .alert.alert-info.text-center
+                {{ 'SAVED_CART_LOADED' | translate }}
+        .navbar.navbar-inverse.navbar-static-top
+            .container
+                .navbar-header.hidden-xs
+                    a.navbar-brand (ng-controller='TitleCtrl' ui-sref='index' ng-cloak)
+                        {{ shop_description[get_current_language()] }}
+                .navbar-text.navbar-right (ng-controller='UserCtrl' ng-cloak)
+                    span ng-if='user.is_admin()'
+                        a.navbar-link href='dashboard.html' target='_blank'
+                            i.fa.fa-tachometer
+                            ,
+                            span.hidden-xs
+                                {{ 'DASHBOARD' | translate }}
+                        ,
+                        ,|
+                    span ng-show='user.get().auth'
+                        a.navbar-link ui-sref='profile'
+                            i.fa.fa-user
+                            ,
+                            {{ user.get().email }}
+                        ,
+                        ,|
+                        a.navbar-link href='#' ng-click='user.logout()'
+                            i.fa.fa-sign-out
+                            ,
+                            span.hidden-xs
+                                {{ 'LOGOUT' | translate }}
+                    span ng-hide='user.get().auth'
+                        a.navbar-link href='#' ng-click='user.forcelogin()'
+                            i.fa.fa-sign-in
+                            ,
+                            {{ 'LOGIN' | translate }}
+                        ,
+                        ,|
+                        a.navbar-link ui-sref='register'
+                            i.fa.fa-user-plus
+                            ,
+                            {{ 'REGISTER' | translate }}
+                    ,
+                    ,|
+                    span uib-dropdown="uib-dropdown"
+                        a.navbar-link href="#" uib-dropdown-toggle="uib-dropdown-toggle"
+                            i.fa.fa-globe
+                            ,
+                            span.hidden-xs
+                                {{ 'LANGUAGE' | translate }}
+                            ,
+                            i.fa.fa-caret-down
+                        ul uib-dropdown-menu="uib-dropdown-menu"
+                            li ng-repeat="lang in CONFIG.languages"
+                                a href="#" ng-click="user.setlang(lang)"
+                                    i.fa.fa-check ng-show="lang == get_current_language()"
+                                    ,
+                                    {{ languages[lang] }}
+                    /span ng-repeat='lang in CONFIG.languages' ng-show='lang != get_current_language()'
+                        ,
+                        ,|
+                        a.navbar-link href='#' ng-click='user.setlang(lang)'
+                            {{ lang }}
+        .container (ng-cloak)
+            .row
+                .col-sm-6 ng-bind-html='CONFIG.logo | trusthtml'
+                .col-sm-6.text-right.hidden-print
+                    form.form-inline name='searchform' ng-submit='search()' ng-controller='SearchFormCtrl'
+                        .form-group.bottom-space
+                            .input-group
+                                input.form-control type='text' ng-model='terms' placeholder="{{ 'SEARCH_FOR' | translate }}"
+                                span.input-group-btn
+                                    button.btn.btn-default type='submit'
+                                        i.fa.fa-search
+                                        ,
+                                        {{ 'SEARCH' | translate }}
+                    a.btn.btn-primary.btn-lg.bottom-space ui-sref='cart' ng-controller='CartButtonCtrl' ng-class='{disabled: !cart.count()}'
+                        i.fa.fa-shopping-cart
+                        ,
+                        span ng-hide='cart.count()'
+                            {{ 'CART_EMPTY' | translate }}
+                        span ng-show='cart.count()'
+                            {{ 'X_PRODUCTS' | translate:{QTY: cart.count()} }}, {{ cart.total() | currency:CONFIG.currency }}
+            .row
+                .col-xs-12.visible-xs-block.bottom-space
+                    button.btn.btn-default.btn-block#menu-toggle (type='button' ng-model='toggleLeftMenu' uib-btn-checkbox)
+                        i.fa.fa-bars
+                        ,
+                        {{ 'SHOW_MENU' | translate }}
+                .clearfix.visible-xs-block
+                .col-lg-3.col-sm-4.hidden-print#leftmenu ng-class='{toggled: toggleLeftMenu}' ng-clic='toggleLeftMenu=false;'
+                    .panel.panel-default ng-controller='CategoriesListCtrl'
+                        .panel-heading
+                            i.fa.fa-list
+                            ,
+                            {{ 'CATEGORIES' | translate }}
+                        .list-group
+                            a.list-group-item ui-sref='new_products' ui-sref-active='active' ng-if='newproducts.count()'
+                                span.badge
+                                    {{ newproducts.count() }}
+                                span.category_hierarchy_0
+                                    {{ 'NEW_PRODUCTS' | translate }}
+                            a.list-group-item ui-sref='category_or_product({path: category.path})' ui-sref-active='active' ng-class='{activeproduct: categories.from_current_product()==category.id}' ng-repeat='category in categories.get()'
+                                span.badge ng-show='category.products'
+                                    {{ category.products }}
+                                span.category_hierarchy_{{ category.level }}
+                                    {{ category.name }}
+                    .panel.panel-default ng-controller='DocsListCtrl'
+                        .panel-heading
+                            i.fa.fa-book
+                            ,
+                            {{ 'DOCUMENTATION' | translate }}
+                        .list-group
+                            a.list-group-item ui-sref='doc({slug: page.slug})' ui-sref-active='active' ng-repeat='page in docs.get()' ng-if='page.in_menu'
+                                {{ page.title }}
+                    .panel.panel-default ng-controller='UserCtrl'
+                        .panel-heading
+                            i.fa.fa-user
+                            ,
+                            {{ 'MY_ACCOUNT' | translate }}
+                        .list-group ng-if='user.get().auth'
+                            a.list-group-item ui-sref='profile' ui-sref-active='active'
+                                {{ 'MY_PROFILE' | translate }}
+                            a.list-group-item ui-sref='orders'
+                                span.badge
+                                    {{ orders.count() }}
+                                {{ 'MY_ORDERS' | translate }}
+                            a.list-group-item ui-sref='saved_carts' ui-sref-active='active'
+                                span.badge
+                                    {{ saved_carts.count() }}
+                                {{ 'MY_SAVED_CARTS' | translate }}
+                        .list_group ng-if='!user.get().auth'
+                            a.list-group-item href='#' ng-click='user.forcelogin()'
+                                {{ 'LOGIN' | translate }}
+                            a.list-group-item ui-sref='register'
+                                {{ 'REGISTER' | translate }}
+                    .panel.panel-default ng-controller='InfosListCtrl'
+                        .panel-heading
+                            i.fa.fa-file
+                            ,
+                            {{ 'INFORMATION' | translate }}
+                        .list-group
+                            a.list-group-item ui-sref='info({slug: page.slug})' ui-sref-active='active' ng-repeat='page in infos.get()'
+                                {{ page.title }}
+                .col-lg-9.col-sm-8.col-print-12
+                    .alert.alert-danger.hidden-print ng-controller='UserCtrl' ng-show='user.get().waiting_for_confirmation'
+                        p
+                            {{ 'CONFIRM_EMAIL_ADDRESS' | translate }}
+                        p
+                            i
+                                {{ 'NOT_RECEIVED_VALIDATION' | translate }}
+                                a href='#' ng-click='user.resend_confirmation()'
+                                    {{ 'SEND_IT_AGAIN' | translate }}
+                    ui-view
+        .navbar.navbar-inverse.navbar-static-bottom
+            .container
+                p.navbar-text.navbar-right.lead (ng-cloak)
+                    b
+                        {{ 'FOLLOW_US' | translate }}
+                    a ng-repeat='soc in CONFIG.social' href='{{ soc[1] }}' target='_blank'
+                        i.fa.fa-{{ soc[0] }}-square
+                    ,

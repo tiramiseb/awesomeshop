@@ -1,0 +1,44 @@
+/ Copyright 2015-2016 Sébastien Maccagnoni
+/ 
+/ This file is part of AwesomeShop.
+/ 
+/ AwesomeShop is free software: you can redistribute it and/or modify it under
+/ the terms of the GNU Affero General Public License as published by the
+/ Free Software Foundation, either version 3 of the License, or (at your
+/ option) any later version.
+/ 
+/ AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+/ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+/ FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+/ details.
+/ 
+/ You should have received a copy of the GNU Affero General Public License
+/ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+h1
+    {{ 'USERS' | translate }}
+p
+    a.btn.btn-primary ui-sref="newuser"
+        i.fa.fa-plus
+        ,
+        {{ 'ADD_USER' | translate }}
+.panel.panel-default
+    .list-group
+        input.list-group-item type="text" ng-model="query" placeholder="{{ 'FILTER' | translate }}"
+        a.list-group-item ng-repeat="user in users | filter:query" ui-sref="user({user_id:user.id})"
+            .row
+                .col-xs-8
+                    {{ user.email }}
+                .col-xs-4.text-right
+                    span ng-show="user.is_admin"
+                        span uib-tooltip="{{ 'IS_ADMIN' | translate }}" tooltip-placement="left"
+                            i.fa.fa-user-md
+                        ,
+                        ,&ndash;
+                    span uib-tooltip="{{ 'ADDRESSES' | translate }}" tooltip-placement="left"
+                        ,{{ user.addresses }}
+                        i.fa.fa-map-marker
+                    ,
+                    ,&ndash;
+                    span uib-tooltip="{{ 'SAVED_CARTS' | translate }}" tooltip-placement="left"
+                        ,{{ user.carts }}
+                        i.fa.fa-shopping-cart

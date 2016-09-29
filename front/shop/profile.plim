@@ -1,0 +1,64 @@
+/ Copyright 2016 Sébastien Maccagnoni
+/ 
+/ This file is part of AwesomeShop.
+/ 
+/ AwesomeShop is free software: you can redistribute it and/or modify it under
+/ the terms of the GNU Affero General Public License as published by the
+/ Free Software Foundation, either version 3 of the License, or (at your
+/ option) any later version.
+/ 
+/ AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+/ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+/ FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+/ details.
+/ 
+/ You should have received a copy of the GNU Affero General Public License
+/ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+
+ui-view
+    h1
+        {{ 'WELCOME_ON_PROFILE' | translate:{EMAIL: user.get().email} }}
+    .list-group
+        a.list-group-item ui-sref="profile.addresses"
+            h4.list-group-item-heading
+                i.fa.fa-home
+                ,
+                {{ 'ADDRESSES' | translate }}
+            p.list-group-item-text
+                {{ 'CONFIGURE_ADDRESSES' | translate }}
+        a.list-group-item ui-sref="saved_carts"
+            h4.list-group-item-heading
+                i.fa.fa-shopping-cart
+                ,
+                {{ 'SAVED_CARTS' | translate }}
+            p.list-group-item-text
+                {{ 'VIEW_SAVED_CARTS' | translate }}
+        a.list-group-item ui-sref="orders"
+            h4.list-group-item-heading
+                i.fa.fa-archive
+                ,
+                {{ 'ORDERS' | translate }}
+            p.list-group-item-text
+                {{ 'VIEW_ORDERS' | translate }}
+        a.list-group-item href="#" ng-click="change_email()"
+            h4.list-group-item-heading
+                i.fa.fa-envelope-o
+                ,
+                {{ 'EMAIL_ADDRESS' | translate }}
+            p.list-group-item-text
+                {{ 'MODIFY_EMAIL_ADDRESS' | translate }}
+        a.list-group-item href="#" ng-click="change_password()"
+            h4.list-group-item-heading
+                i.fa.fa-key
+                ,
+                {{ 'PASSWORD' | translate }}
+            p.list-group-item-text
+                {{ 'MODIFY_PASSWORD' | translate }}
+        a.list-group-item href="#" ng-click="delete_account()"
+            h4.list-group-item-heading
+                span.text-danger
+                    i.fa.fa-trash
+                    ,
+                    {{ 'DELETE_ACCOUNT' | translate }}
+            p.list-group-item-text
+                {{ 'DELETE_ACCOUNT_REALLY' | translate }}

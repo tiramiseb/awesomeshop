@@ -1,0 +1,111 @@
+/ Copyright 2016 Sébastien Maccagnoni
+/ 
+/ This file is part of AwesomeShop.
+/ 
+/ AwesomeShop is free software: you can redistribute it and/or modify it under
+/ the terms of the GNU Affero General Public License as published by the
+/ Free Software Foundation, either version 3 of the License, or (at your
+/ option) any later version.
+/ 
+/ AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+/ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+/ FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+/ details.
+/ 
+/ You should have received a copy of the GNU Affero General Public License
+/ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+h1
+    {{ product.name || product.slug }}
+    a.pull-right.btn.btn-sm.btn-info href="/dashboard/#/product-{{ product.type }}/{{ product.id }}" ng-if="user.is_admin()"
+        {{ 'EDIT' | translate }}
+.row
+    .col-xs-7.col-md-8.col-lg-9
+        .row
+            .col-md-5.col-lg-6 ng-show="product.photos.length"
+                a.thumbnail href="#" ng-click="openLightboxModal(0)"
+                    img ng-src="{{ product.photos[0].preview_url }}"
+                .row.small-gutter ng-show="product.photos.length > 1"
+                    .col-xs-{{ thumb_width }} ng-repeat="photo in product.photos" ng-if="!$first"
+                        a.thumbnail href="#" ng-click="openLightboxModal($index)"
+                            img ng-src="{{ photo.thumbnail_url }}"
+            .hidden-xs.col-md-5.col-lg-6 ng-hide="product.photos.length"
+                .panel.panel-default.product-illustration-placeholder
+                    .panel-body
+                        i.fa.fa-ban
+            .col-md-7.col-lg-6
+                .panel.panel-default
+                    .panel-heading
+                        h2.panel-title
+                            i.fa.fa-ellipsis-h
+                            ,
+                            {{ 'SUMMARY' | translate }}
+                    .panel-body.page-content
+                        div ng-bind-html="product.description | trusthtml"
+                        hr
+                        p
+                            ,{{ 'REFERENCE' | translate }}
+                            i
+                                {{ product.reference }}
+   .col-xs-5.col-md-4.col-lg-3
+        .well
+            p.price
+                {{ product.net_price | currency:CONFIG.currency }}
+            hr
+            div ng-show="cart.quantity(product) < product.stock || product.overstock_delay >= 0"
+                form.form-horizontal name="form" novalidate="novalidate"
+                    .form-group ng-class="{ 'has-error' : form.quantity.$invalid }"
+                        label.col-sm-5.control-label for="quantity"
+                           {{ 'QUANTITY' | translate }}
+                        .col-sm-7
+                            input.form-control name="quantity" id="quantity" type="number" min="1" ng-model="quantity"
+                    button.btn.btn-success.btn-lg.btn-wrap.btn-block type="button" ng-show="form.quantity.$valid && (cart.quantity(product) + quantity <= product.stock || product.overstock_delay >= 0)" ng-class="{ 'btn-success': cart.quantity(product)+quantity <= product.stock, 'btn-info': cart.quantity(product) + quantity > product.stock && product.overstock_delay >= 0 }" ng-click="add_to_cart(); quantity=1;"
+                        {{ 'ADD_TO_CART' | translate }}
+                    p.text-center.bottom-no-space ng-show="cart.quantity(product) + quantity > product.stock && product.overstock_delay >= 0"
+                        {{ 'SHIPPING_DELAY_X' | translate:{QTY:product.overstock_delay} }}
+                    .alert.alert-danger.text-center.bottom-no-space ng-show="cart.quantity(product) + quantity > product.stock && product.overstock_delay < 0"
+                        {{ 'INSUFFICIENT_STOCK' | translate }}
+                    .alert.alert-danger.text-center.bottom-no-space ng-show="form.$invalid"
+                        {{ 'INCORRECT_QUANTITY' | translate }}
+            .alert.alert-danger.text-center.bottom-no-space ng-show="cart.quantity(product) >= product.stock && product.overstock_delay < 0"
+                {{ 'OUT_OF_STOCK' | translate }}
+.well ng-if="product.type=='kit'"
+    .list-group.options-list ng-repeat="prod in product.products" ng-class="{'options-list-clickable': prod.options.length > 1 || prod.can_be_disabled, 'bottom-no-space': $last }"
+        label.list-group-item.noclick ng-if="prod.title"
+            strong
+                {{ prod.title }}
+        label.list-group-item ng-repeat="option in prod.options" uib-tooltip-template="'imageTooltip'" tooltip-enable="option.product.main_photo" tooltip-placement="bottom"
+            .row
+                .col-sm-6
+                    input type="radio" ng-model="prod.selected" ng-value="option.selected_string" ng-show="prod.options.length > 1 || prod.can_be_disabled" ng-change="update_price()"
+                    img.inline-thumb ng-if="option.product.main_photo" ng-src="{{ option.product.main_photo.thumbnail_url }}"
+                    ,
+                    {{ option.product.name }}
+                .col-xs-6.col-sm-3.text-right
+                    &times;{{ option.quantity }}
+                .col-xs-6.col-sm-3.text-right ng-hide="option.selected_string == prod.selected"
+                    span ng-show="option.net_price >= prod.reference_price" +
+                    {{ option.net_price - prod.reference_price | currency:CONFIG.currency }}
+        label.list-group-item ng-if="prod.can_be_disabled"
+            .row
+                .col-xs-6.col-sm-9
+                    input type="radio" ng-model="prod.selected" ng-value="'none'" ng-change="update_price()"
+                    {{ 'NONE' | translate }}
+                .col-xs-6.col-sm-3.text-right ng-hide="prod.selected == 'none'"
+                    {{ 0 - prod.reference_price | currency:CONFIG.currency }}
+.panel.panel-default ng-show="product.related_products.length"
+    .panel-heading
+        h2.panel-title
+            i.fa.fa-cubes
+            ,
+            {{ 'RELATED_PRODUCTS' | translate }}
+    .panel-body
+        products-list products="product.related_products"
+.panel.panel-default
+    .panel-heading
+        h2.panel-title
+            i.fa.fa-book
+            ,
+            {{ 'DOCUMENTATION' | translate }}
+    .panel-body.page-content ng-bind-html="product.documentation | trusthtml"
+script type="text/ng-template" id="imageTooltip"
+    <img ng-src="{{ option.product.main_photo.preview_url }}">

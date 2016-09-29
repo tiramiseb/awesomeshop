@@ -1,0 +1,50 @@
+/ Copyright 2015-201- Sébastien Maccagnoni
+/ 
+/ This file is part of AwesomeShop.
+/ 
+/ AwesomeShop is free software: you can redistribute it and/or modify it under
+/ the terms of the GNU Affero General Public License as published by the
+/ Free Software Foundation, either version 3 of the License, or (at your
+/ option) any later version.
+/ 
+/ AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+/ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+/ FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+/ details.
+/ 
+/ You should have received a copy of the GNU Affero General Public License
+/ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+form name="form" ng-submit="submit()" novalidate="novalidate"
+    h1
+        {{ 'COUNTRY_' | translate }} {{ country.default_name }}
+    .row
+        .col-sm-4
+            .form-group ng-class="{ 'has-error': form.code.$invalid && !form.code.$pristine }"
+                label for="code"
+                    {{ 'CODE' | translate }}
+                input#code.form-control type="text" name="code" ng-model="country.code" required="required"
+                p ng-show="form.code.$invalid" class="text-danger"
+                    {{ 'COUNTRY_CODE_MANDATORY' | translate }}
+        .col-sm-8
+            .form-group ng-class="{ 'has-error': form.default_name.$invalid && !form.default_name.$pristine }"
+                label for="default_name"
+                    {{ 'DEFAULT_NAME' | translate }}
+                input#default_name.form-control type="text" name="default_name" ng-model="country.default_name" required="required"
+                p ng-show="form.default_name.$invalid" class="text-danger"
+                    {{ 'DEFAULT_NAME_MANDATORY' | translate }}
+    div ng-repeat="lang in langs"
+        .form-group ng-class="{ 'has-error': form.name_{{ lang }}.$invalid && !form.name_{{ lang }}.$pristine }"
+            label for="name_{{ lang }}"
+                {{ 'NAME' | translate }} {{ lang }}
+            .input-group
+                input.form-control type="text" id="name_{{ lang }}" name="name_{{ lang }}" ng-model="country.name[lang]"
+                span.input-group-btn
+                    button.btn.btn-primary type="button" ng-click="default_from(country.name[lang])"
+                        {{ 'TO_DEFAULT' | translate }}
+    div#page-buttons
+        button.btn.btn-link type="submit" uib-tooltip="{{ 'SAVE' | translate }}" ng-disabled="form.$invalid"
+            i.fa.fa-check-circle.fa-4x.text-success
+        button.btn.btn-link type="button" ng-click="delete()" uib-tooltip="{{ 'REMOVE' | translate }}"
+            i.fa.fa-times-circle.fa-4x.text-danger
+        a.btn.btn-link ui-sref="countries" uib-tooltip="{{ 'BACK' | translate }}"
+            i.fa.fa-arrow-circle-left.fa-4x ng-class="{'text-primary': form.$pristine, 'text-danger': form.$dirty }"

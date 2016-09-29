@@ -1,0 +1,87 @@
+/ Copyright 2015-2016 Sébastien Maccagnoni
+/ 
+/ This file is part of AwesomeShop.
+/ 
+/ AwesomeShop is free software: you can redistribute it and/or modify it under
+/ the terms of the GNU Affero General Public License as published by the
+/ Free Software Foundation, either version 3 of the License, or (at your
+/ option) any later version.
+/ 
+/ AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+/ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+/ FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+/ details.
+/ 
+/ You should have received a copy of the GNU Affero General Public License
+/ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+form name="form" ng-submit="submit()" novalidate="novalidate"
+    h1
+        ,{{ 'PAGE_' | translate }}
+        ,{{ page.slug || 'SET_SLUG' | translate }}
+        small
+            ({{ page.pagetype }})
+        a.pull-right.btn.btn-sm.btn-info href="/[[ page.pagetype ]]/[[ page.slug ]]" ng-disabled="form.$dirty"
+            {{ 'VIEW' | translate }}
+    .row
+        .col-sm-6.col-md-8
+            .form-group ng-class="{ 'has-error': form.slug.$invalid && !form.slug.$pristine }"
+                label for="slug"
+                    {{ 'SLUG' | translate }}
+                input#slug.form-control type="text" name="slug" ng-model="page.slug" required="required"
+                p.text-danger ng-show="form.slug.$invalid"
+                    {{ 'SLUG_MANDATORY' | translate }}
+        .col-sm-6.col-md-4
+            .form-group
+                label for="in_menu"
+                    {{ 'DISPLAY_IN_MENU' | translate }}
+                button.btn.form-control type="button" ng-class="{'btn-success': page.in_menu, 'btn-danger': !page.in_menu }" ng-model="page.in_menu" uib-btn-checkbox="uib-button-checkbox"
+                    span ng-show="page.in_menu"
+                        {{ 'DISPLAY_IN_MENU' | translate }}
+                    span ng-hide="page.in_menu"
+                        {{ 'DISPLAY_IN_MENU_NO' | translate }}
+    .row
+        .col-sm-6 ng-repeat="lang in langs"
+            .panel.panel-default
+                .panel-heading
+                    {{ lang }}
+                .panel-body
+                    .form-group
+                        label for="title_{{ lang }}"
+                            {{ 'TITLE' | translate }}
+                        .input-group
+                            input.form-control id="title_{{ lang }}" name="title_{{ lang }}" ng-model="page.title[lang]"
+                            span.input-group-btn
+                                button.btn.btn-primary type="button" ng-click="slug_from(page.title[lang])"
+                                    {{ 'TO_SLUG' | translate }}
+                    .form-group
+                        label for="text_{{ lang }}"
+                            {{ 'TEXT' | translate }}
+                        textarea.form-control id="text_{{ lang }}" name="text_{{ lang }}" ng-model="page.text[lang]"
+
+    #pictures.panel.panel-default
+        .panel-heading
+            {{ 'PICTURES' | translate }}
+        .list-group
+            .list-group-item ng-repeat="photo in page.photos"
+                .row
+                    .col-xs-2
+                        img ng-src="{{ photo.thumbnail_url }}"
+                    .col-xs-8
+                        tt
+                            .. image:: {{ photo.url }}
+                    .col-xs-2.text-right
+                        button.btn.btn-danger type="button" ng-click="delete_photo(photo.filename, $index)"
+                            i.fa.fa-trash
+                            ,
+                            {{ 'REMOVE' | translate }}
+            .list-group-item
+                input type="file" nv-file-select="nv-file-select" uploader="uploader" ng-if="page.id"
+                p ng-hide="page.id"
+                    {{ 'SAVE_BEFORE_IMAGES' | translate }}
+    #page-buttons
+        button.btn.btn-link type="submit" uib-tooltip="{{ 'SAVE' | translate }}" ng-disabled="form.$invalid"
+            i.fa.fa-check-circle.fa-4x.text-success
+        button.btn.btn-link type="button" ng-click="delete()" uib-tooltip="{{ 'REMOVE' | translate }}"
+            i.fa.fa-times-circle.fa-4x.text-danger
+        a.btn.btn-link href="#" ng-click="$state.go(page.pagetype+'s')" uib-tooltip="{{ 'BACK' | translate }}"
+            i.fa.fa-arrow-circle-left.fa-4x ng-class="{'text-primary': form.$pristine, 'text-danger': form.$dirty }"

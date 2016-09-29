@@ -1,0 +1,25 @@
+<!DOCTYPE html><html trigger-auth="trigger-auth" enable-error-handler="enable-error-handler"><head><meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8"/><meta name="generator" content="AwesomeShop"/><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/><base href="/"/><link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/><link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css"/><link rel="stylesheet" href="libs/simple-sidebar.css"/><link rel="stylesheet" href="libs/common.css"/><link rel="stylesheet" href="libs/dashboard.css"/><script src="bower_components/angular/angular.min.js">
+</script><script src="bower_components/angular-animate/angular-animate.min.js">
+</script><script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js">
+</script><script src="bower_components/angular-file-upload/dist/angular-file-upload.min.js">
+</script><script src="bower_components/angular-slugify/angular-slugify.js">
+</script><script src="bower_components/angular-sortable-view/src/angular-sortable-view.min.js">
+</script><script src="bower_components/angular-translate/angular-translate.min.js">
+</script><script src="bower_components/messageformat/messageformat.js">
+</script><script src="bower_components/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.min.js">
+</script><script src="bower_components/angular-translate-loader-partial/angular-translate-loader-partial.min.js">
+</script><script src="bower_components/angular-dynamic-locale/tmhDynamicLocale.min.js">
+</script><script src="bower_components/angular-ui-router/release/angular-ui-router.min.js">
+</script><script src="bower_components/angular-validation-match/dist/angular-validation-match.min.js">
+</script><script src="bower_components/angular-http-auth/src/http-auth-interceptor.js">
+</script><script src="libs/common.js">
+</script><script src="libs/dashboard/carriers.js">
+</script><script src="libs/dashboard/categories.js">
+</script><script src="libs/dashboard/countries.js">
+</script><script src="libs/dashboard/orders.js">
+</script><script src="libs/dashboard/pages.js">
+</script><script src="libs/dashboard/products.js">
+</script><script src="libs/dashboard/taxrates.js">
+</script><script src="libs/dashboard/users.js">
+</script><script src="libs/dashboard.js">
+</script><title>{{ CONFIG.shop_name }} - {{ 'DASHBOARD' | translate }}</title></head><body><div id="spinner"><i class="fa fa-spinner fa-pulse fa-5x text-primary"></i></div><div ng-class="{toggled: menuToggle}" id="wrapper"><div id="sidebar-wrapper"><ul class="sidebar-nav"><li><a href="/" target="_blank"><i class="fa fa-eye"></i> {{ 'SEE_SHOP' | translate }}</a></li><li class="sidebar-brand"><a ui-sref="index">{{ 'DASHBOARD' | translate }}</a></li><li>{{ 'DAY_TO_DAY' | translate }}</li><li><a ui-sref="orders"><i class="fa fa-shopping-cart"></i> {{ 'ORDERS' | translate }}</a></li><li><a ui-sref="products"><i class="fa fa-cubes"></i> {{ 'PRODUCTS' | translate }}</a></li><li><a ui-sref="categories"><i class="fa fa-th-list"></i> {{ 'CATEGORIES' | translate }}</a></li><li><a ui-sref="docs"><i class="fa fa-file-text"></i> {{ 'DOCUMENTATION' | translate }}</a></li><li>{{ 'CONFIGURATION' | translate }}</li><li><a ui-sref="carriers"><i class="fa fa-truck"></i> {{ 'CARRIERS' | translate }}</a></li><li><a ui-sref="countries"><i class="fa fa-flag"></i> {{ 'COUNTRIES' | translate }}</a></li><li><a ui-sref="countriesgroups"><i class="fa fa-globe"></i> {{ 'COUNTRIES_GROUPS' | translate }}</a></li><li><a ui-sref="taxrates"><i class="fa fa-calculator"></i> {{ 'TAXES' | translate }}</a></li><li><a ui-sref="infos"><i class="fa fa-file-text"></i> {{ 'INFORMATION' | translate }}</a></li><li><a ui-sref="users"><i class="fa fa-users"></i> {{ 'USERS' | translate }}</a></li></ul></div><div id="page-content-wrapper"><button type="button" ng-model="menuToggle" uib-btn-checkbox="uib-btn-checkbox" id="menu-toggle" class="btn btn-default"><i class="fa fa-bars"></i></button><div class="container-fluid"><ui-view></ui-view></div></div></div></body></html>

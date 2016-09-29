@@ -1,0 +1,32 @@
+/ Copyright 2015-2016 Sébastien Maccagnoni
+/ 
+/ This file is part of AwesomeShop.
+/ 
+/ AwesomeShop is free software: you can redistribute it and/or modify it under
+/ the terms of the GNU Affero General Public License as published by the
+/ Free Software Foundation, either version 3 of the License, or (at your
+/ option) any later version.
+/ 
+/ AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+/ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+/ FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+/ details.
+/ 
+/ You should have received a copy of the GNU Affero General Public License
+/ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+h1
+    {{ 'ORDERS' | translate }}
+#categories-list.list-group
+    input.list-group-item type="text" ng-model="query" placeholder="{{ 'FILTER' | translate }}"
+    a.list-group-item ng-repeat="order in orders | filter:query" ui-sref="order({number:order.number})"
+        .row
+            .col-xs-6.col-md-3
+                ,{{ order.full_number }}
+                ({{ order.date | date }})
+            .col-xs-6.col-md-3
+                {{ order.customer }}
+            .col-xs-6.col-md-4.text-{{ order.status_color }}
+                {{ order.human_status }}
+            .col-xs-6.col-md-2.text-right
+                {{ order.net_total }}
+

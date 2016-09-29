@@ -1,0 +1,55 @@
+/ Copyright 2015-2016 Sébastien Maccagnoni
+/ 
+/ This file is part of AwesomeShop.
+/ 
+/ AwesomeShop is free software: you can redistribute it and/or modify it under
+/ the terms of the GNU Affero General Public License as published by the
+/ Free Software Foundation, either version 3 of the License, or (at your
+/ option) any later version.
+/ 
+/ AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+/ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+/ FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+/ details.
+/ 
+/ You should have received a copy of the GNU Affero General Public License
+/ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+h1
+    {{ 'MY_SAVED_CARTS' | translate }}
+.panel.panel-default ng-repeat="cart in saved_carts.get()"
+    .panel-heading
+        {{ cart.name }} ({{ cart.date | date }})
+    .list-group
+        .list-group-item.cart-list ng-repeat="line in cart.lines" uib-popover-template="'/common/product_'+line.product.type+'_popup.html'" popover-trigger="'mouseenter'" popover-enable="line.product.details"
+            .row
+                .col-xs-7.col-sm-6.col-md-7.col-lg-8
+                    a href="{{ line.product.path }}"
+                        span.hidden-xs.hidden-sm.pull-left
+                            img.cart-illustration ng-src="{{ line.product.main_photo.thumbnail_url }}" ng-show="line.product.main_photo"
+                            span.cart-illustration-placeholder ng-hide="line.product.main_photo"
+                                i.fa.fa-ban
+                        {{ line.product.name }}
+                    br
+                    {{ 'UNIT_PRICE_' | translate }} {{ line.product.net_price | currency:CONFIG.currency }}
+                .col-xs-5.col-sm-4.col-md-3.col-lg-2
+                    {{ 'QUANTITY_' | translate }}
+                    br.hidden-xs
+                    {{ line.quantity }}
+                .col-sm-2.text-right
+                    strong
+                        {{ 'TOTAL_' | translate }}
+                        br.hidden-xs
+                        {{ line.product.net_price*line.quantity | currency:CONFIG.currency }}
+    .panel-body.text-right
+        .btn-group
+            button.btn.btn-primary type="button" ng-click="load_cart(cart.lines)"
+                i.fa.fa-folder-open
+                span.hidden-xs.hidden-sm
+                    {{ 'LOAD' | translate }}
+            button.btn.btn-danger type="button"ng-click="saved_carts.remove($index)"
+                i.fa.fa-trash
+                span.hidden-xs.hidden-sm
+                    {{ 'REMOVE' | translate }}
+.panel.panel-default ng-show="saved_carts.count()==0"
+    .panel-body
+        {{ 'NO_SAVED_CART' | translate }}

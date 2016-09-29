@@ -1,0 +1,53 @@
+/ Copyright 2015-2016 Sébastien Maccagnoni
+/ 
+/ This file is part of AwesomeShop.
+/ 
+/ AwesomeShop is free software: you can redistribute it and/or modify it under
+/ the terms of the GNU Affero General Public License as published by the
+/ Free Software Foundation, either version 3 of the License, or (at your
+/ option) any later version.
+/ 
+/ AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+/ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+/ FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+/ details.
+/ 
+/ You should have received a copy of the GNU Affero General Public License
+/ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+h1
+    {{ 'PRODUCTS' | translate }}
+.btn-group.bottom-space
+    button.btn.btn-default type="button" disabled="disabled"
+        i.fa.fa-plus
+        ,
+        {{ 'ADD' | translate }}
+    a.btn.btn-primary ui-sref="newproduct({product_type: 'regular'})"
+        {{ 'PRODUCT_REGULAR' | translate }}
+    a.btn.btn-primary ui-sref="newproduct({product_type: 'kit'})"
+        {{ 'PRODUCT_KIT' | translate }}
+#categories-list.list-group
+    input.list-group-item type="text" ng-model="query" placeholder="{{ 'FILTER' | translate }}"
+    a.list-group-item ng-repeat="product in products | filter:query" ui-sref="product({product_type: product.type, product_id:product.id})"
+        .row
+            .col-xs-6.col-sm-3.text-muted
+                {{ product.reference }}
+            .col-xs-6.col-sm-4.col-sm-push-5.text-right"
+                span ng-show="product.internal_note" ng-click="open_note($event, product)"
+                    i.fa.fa-file-text-o
+                    ,
+                    ,&ndash;
+                span uib-tooltip="{{ 'GROSS_PRICE' | translate }}" tooltip-placement="left"
+                    {{ product.gross_price | currency:CONFIG.currency }}
+                ,
+                ,&ndash;
+                span uib-tooltip="{{ 'STOCK_REMAINING' | translate }}" tooltip-placement="left" ng-class="{'text-danger': product.stock==0}"
+                    ,{{ product.stock }}
+                    i.fa.fa-cubes
+                ,
+                ,&ndash;
+                span uib-tooltip="{{ 'ON_SALE' | translate }}" tooltip-placement="left" ng-show="product.on_sale"
+                    i.text-success.fa.fa-check
+                span uib-tooltip="{{ 'ON_SALE_NO' | translate }}" tooltip-placement="left" ng-hide="product.on_sale"
+                    i.text-danger.fa.fa-times
+            .col-sm-5.col-sm-pull-4
+                {{ product.name || product.slug }}

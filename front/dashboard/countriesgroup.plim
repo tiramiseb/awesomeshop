@@ -1,0 +1,53 @@
+/ Copyright 2015-206 Sébastien Maccagnoni
+/ 
+/ This file is part of AwesomeShop.
+/ 
+/ AwesomeShop is free software: you can redistribute it and/or modify it under
+/ the terms of the GNU Affero General Public License as published by the
+/ Free Software Foundation, either version 3 of the License, or (at your
+/ option) any later version.
+/ 
+/ AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+/ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+/ FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+/ details.
+/ 
+/ You should have received a copy of the GNU Affero General Public License
+/ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+form name="form" ng-submit="submit()" novalidate="novalidate"
+    h1
+        {{ 'COUNTRIES_GROUP_' | translate }} {{ group.name || '_UNNAMED_' | translate }}
+    .form-group ng-class="{ 'has-error': form.name.$invalid && !form.name.$pristine }"
+        label for="name"
+            {{ 'NAME' | translate }}
+        input#name.form-control type="text" name="name" ng-model="group.name" required="required"
+        p.text-danger ng-show="form.name.$invalid"
+            {{ 'NAME_MANDATORY' | translate }}
+    {{ f.input_text(_('Name'), 'name', 'group.name', 'required', _('Name is mandatory')) }}
+    .row
+        .col-xs-6
+            .panel.panel-default
+                .panel-heading
+                    {{ 'SELECTED' | translate }}
+                .list-group
+                    button.list-group-item type="button" ng-repeat="code in group.countries" ng-click="remove(code)"
+                        {{ name_from_code(code) }}
+                        span.pull-right
+                            i.fa.fa-arrow-right
+        .col-xs-6
+            .panel.panel-default
+                .panel-heading
+                    {{ 'AVAILABLE' | translate }}
+                .list-group
+                    input.list-group-item type="text" ng-model="query" placeholder="{{ 'FILTER' | translate }}"
+                    button.list-group-item type="button" ng-repeat="country in filtered_countries() | filter:query" ng-click="add(country.code)"
+                        i.fa.fa-arrow-left
+                        &nbsp;&nbsp;
+                        {{ country.name }}
+    #page-buttons
+        button.btn.btn-link type="submit" uib-tooltip="{{ 'SAVE' | translate }}" ng-disabled="form.$invalid"
+            i.fa.fa-check-circle.fa-4x.text-success
+        button.btn.btn-link type="button" ng-click="delete()" uib-tooltip="{{ 'REMOVE' | translate }}"
+            i.fa.fa-times-circle.fa-4x.text-danger
+        a.btn.btn-link ui-sref="countriesgroups" uib-tooltip="{{ 'BACK' | translate }}"
+            i.fa.fa-arrow-circle-left.fa-4x ng-class="{'text-primary': form.$pristine, 'text-danger': form.$dirty }"

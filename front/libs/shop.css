@@ -1,0 +1,244 @@
+/* Copyright 2016 Sébastien Maccagnoni-Munch
+ *
+ * This file is part of AwesomeShop.
+ *
+ * AwesomeShop is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU Affero General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+.navbar-static-bottom {
+    border-radius: 0;
+    margin-top: 20px;
+    margin-bottom: 0;
+}
+
+ui-view img {
+    max-width: 100%;
+}
+
+/* The cart popup (when adding products to the cart */
+.cartpopup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2000;
+    padding: 2em;
+    opacity: 1;
+}
+@media (max-width: 767px) {
+    .cartpopup {
+        padding: 0.5em;
+    }
+}
+
+.cartpopup {
+  transition: all linear 0.3s;
+}
+
+.cartpopup.ng-hide {
+  top: -2em;
+  opacity: 0;
+}
+
+/***** HIDE OR SHOW THE MENU ON XS SCREENS *****/
+@media (max-width: 767px) {
+    #leftmenu {
+        display: none;
+    }
+    #leftmenu.toggled {
+        display: block;
+    }
+}
+
+/***** CATEGORIES HIERARCHY *****/
+.category_hierarchy_0 {
+    padding-left: 0;
+    font-weight: bold;
+}
+.category_hierarchy_1 {
+    padding-left: 0px;
+}
+.category_hierarchy_2 {
+    padding-left: 1em;
+}
+.category_hierarchy_1::before, .category_hierarchy_2::before {
+    content: '» ';
+}
+
+.product-in-grid a:hover, .product-in-grid a:active, .cart-list a:hover, .cart-list a:active {
+    text-decoration: none;
+}
+
+/* highlight the category containing the current product
+ *
+ * copied from bootstrap.css, .list-group-item.active and .list-group-item.active>.badge
+ */
+.list-group-item.activeproduct, .list-group-item.activeproduct:hover {
+    z-index: 2;
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #337ab7;
+}
+.list-group-item.activeproduct>.badge {
+    color: #337ab7;
+    background-color: #fff;
+}
+
+/* Different highlight color for new products */
+.newproducts .category_hierarchy_0 {
+    color: #a94442;
+}
+.newproducts.active .category_hierarchy_0 {
+    color: #fff;
+}
+.newproducts .badge {
+    background-color: #a94442;
+}
+
+/***** FOLLOW ICONS ON THE BOTTOM BAR *****/
+.navbar-static-bottom .fa {
+    font-size: 125%;
+    margin: 0 0 0 10px;
+}
+
+/***** TRANSITION ON PAGES ANIMATION *****/
+ui-view.ng-enter, ui-view.ng-leave {
+    position: absolute;
+    left: 15px;
+    right: 15px;
+    transition: all .3s ease-in-out;
+}
+
+ui-view.ng-enter {
+    opacity: 0;
+  -webkit-transform:scale3d(0.5, 0.5, 0.5);
+  -moz-transform:scale3d(0.5, 0.5, 0.5);
+  transform:scale3d(0.5, 0.5, 0.5);
+}
+
+ui-view.ng-enter-active {
+    opacity: 1;
+  -webkit-transform:scale3d(1, 1, 1);
+  -moz-transform:scale3d(1, 1, 1);
+  transform:scale3d(1, 1, 1);
+}
+
+ui-view.ng-leave {
+    opacity: 1;
+  -webkit-transform:translate3d(0, 0, 0);
+  -moz-transform:translate3d(0, 0, 0);
+  transform:translate3d(0, 0, 0);
+}
+
+ui-view.ng-leave-active {
+    opacity: 0;
+  -webkit-transform:translate3d(100px, 0, 0);
+  -moz-transform:translate3d(100px, 0, 0);
+  transform:translate3d(100px, 0, 0);
+}
+
+/***** PRODUCT PAGE *****/
+p.price {
+    font-size: 1.5em;
+    text-align: center;
+}
+.btn-wrap {
+    white-space: normal;
+}
+/***** Placeholders for photos *****/
+.product-illustration-placeholder {
+    height: 1.5em;
+    line-height: 1.5em;
+    text-align: center;
+    color: #eee;
+}
+/* Sizes from bootstrap */
+@media (min-width: 768px) {
+    .product-illustration-placeholder {
+        width: 100%;
+        font-size: 8em;
+    }
+}
+@media (min-width: 992px) {
+    .product-illustration-placeholder {
+        font-size: 6em;
+    }
+}
+@media (min-width: 1200px) {
+    .product-illustration-placeholder {
+        font-size: 10em;
+    }
+}
+.product-illustration-placeholder .panel-body {
+    padding: 0;
+}
+.cart-illustration-placeholder {
+    display: inline-block;
+    width: 100px;
+    height: 70px;
+    line-height: 1.1em;
+    font-size: 4em;
+    text-align: center;
+    color: #eee;
+    vertical-align: middle;
+}
+.cart-illustration, .cart-illustration-placeholder {
+    margin-right: 16px;
+}
+
+/* Small gutter for images thumbnails */
+.small-gutter > [class*='col-'] {
+    padding-right:1px;
+    padding-left:1px;
+}
+.small-gutter a.thumbnail {
+    padding: 2px;
+}
+
+/* Inline image thumbnail */
+.inline-thumb {
+    vertical-align: bottom;
+    height: 23px;
+}
+
+/* Checkout and order stuff */
+.options-list label {
+    font-weight: normal;
+}
+.total-cost {
+    font-size: 21px;
+}
+.options-list-clickable label {
+    cursor: pointer;
+    font-weight: normal;
+}
+.options-list-clickable label.list-group-item:hover {
+    background: #f5f5f5;
+}
+label.list-group-item.noclick {
+    cursor: default;
+}
+label.list-group-item.noclick:hover {
+    background: #fff;
+}
+textarea {
+    resize: vertical;
+}
+.options-list-clickable input[type="radio"] {
+    margin-right: 1em;
+}
+
+td {
+    padding: 3px 6px;
+}

@@ -1,0 +1,32 @@
+/ Copyright 2016 Sébastien Maccagnoni-Munch
+/ 
+/ This file is part of AwesomeShop.
+/ 
+/ AwesomeShop is free software: you can redistribute it and/or modify it under
+/ the terms of the GNU Affero General Public License as published by the
+/ Free Software Foundation, either version 3 of the License, or (at your
+/ option) any later version.
+/ 
+/ AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+/ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+/ FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+/ details.
+/ 
+/ You should have received a copy of the GNU Affero General Public License
+/ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+
+.modal-body ng-swipe-left="Lightbox.nextImage()" ng-swipe-right="Lightbox.prevImage()"
+    .Lightbox-nav
+        button.close type="button" aria-hidden="true" ng-click="$dismiss()"
+            i.fa.fa-times
+        .btn-group ng-if="Lightbox.images.length > 1"
+            a.btn.btn-xs.btn-default ng-click="Lightbox.prevImage()"
+                i.fa.fa-long-arrow-left
+                ,
+                {{ 'PREVIOUS' | translate }}
+            a.btn.btn-xs.btn-default ng-click="Lightbox.nextImage()"
+                i.fa.fa-long-arrow-right
+                ,
+                {{ 'NEXT' | translate }}
+    .Lightbox-image-container
+        img Lightbox-src="{{ Lightbox.imageUrl }}"

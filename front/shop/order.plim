@@ -1,0 +1,147 @@
+/ Copyright 2015-2016 Sébastien Maccagnoni-Munch
+/ 
+/ This file is part of AwesomeShop.
+/ 
+/ AwesomeShop is free software: you can redistribute it and/or modify it under
+/ the terms of the GNU Affero General Public License as published by the
+/ Free Software Foundation, either version 3 of the License, or (at your
+/ option) any later version.
+/ 
+/ AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+/ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+/ FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+/ details.
+/ 
+/ You should have received a copy of the GNU Affero General Public License
+/ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+h1
+    {{ 'ORDER_NUM_AND_DATE' | translate:{NUM: order.full_number, DATE:(order.date|date)} }}
+.panel.panel-default
+    .panel-body
+        ,{{ 'ORDER_STATUS_' | translate }}
+        span.text-{{ order.status_color }}
+            {{ order.human_status }}
+        div ng-if="order.status == 'unconfirmed'"
+            b
+                {{ 'CANCELLED_NOT_CONFIRMED_X' | translate:{QTY: CONFIG.confirm_delay} }}
+        div ng-if="order.status == 'awaiting_payment'"
+            b
+                {{ 'CANCELLED_NOT_PAID_X' | translate:{QTY: CONFIG.payment_delay} }}
+        div ng-if="order.payment_date"
+            {{ 'PAYMENT_RECEIVED_ON_X' | translate:{DATE:(order.payment_date|date)} }}
+        div ng-if="order.payment_message"
+            {{ 'MESSAGE_ABOUT_PAYMENT_' | translate }} {{ order.payment_message }}
+        div ng-if="order.shipping_date"
+            {{ ''SHIPPED_ON_X' | translate:{DATE:(order.shipping_date|date} }}
+        div ng-if="order.tracking_number"
+            b
+                ,{{ 'TRACKING_NUMBER_' | translate }}
+                a ng-href="{{ order.tracking_url }}" target="_blank"
+                    {{ order.tracking_number }}
+        .row.relative ng-if="['unconfirmed', 'awaiting_payment', 'payment_failed'].indexOf(order.status) != -1"
+            .col-md-6.col-md-push-6.text-right.top-space
+                button.btn.btn-lg.btn-success type="button" ng-click="pay()"
+                    span ng-if="order.status == 'unconfirmed'"
+                        {{ 'CONFIRM_PAY' | translate }}
+                    span ng-if="order.status == 'awaiting_payment' || order.status == 'payment_failed'"
+                        {{ 'RETRY_PAY' | translate }}
+                    ,
+                    i.fa.fa-chevron-right
+            .col-md-6.col-md-pull-6.top-space.align-bottom
+                .btn-group
+                    button.btn.btn-danger type="button" ng-click="cancel()"
+                        {{ 'CANCEL_FORGET' | translate }}
+                    button.btn.btn-warning type="button" ng-click="to_cart()"
+                        {{ 'BACK_TO_CART' | translate }}
+.row
+    .col-sm-6
+        .panel.panel-default
+            .panel-heading
+                i.fa.fa-map-marker
+                ,
+                {{ 'DELIVERY_ADDRESS' | translate }}
+            .panel-body ng-bind-html="order.delivery | htmlbr"
+    .col-sm-6
+        .panel.panel-default
+            .panel-heading
+                i.fa.fa-file-text-o
+                ,
+                {{ 'BILLING_ADDRESS' | translate }}
+            .panel-body ng-bind-html="order.billing | htmlbr"
+.panel.panel-default
+    .panel-heading
+        .row
+            .col-md-7
+                i.fa.fa-cube
+                ,
+                {{ 'PRODUCT' | translate }}
+            .col-xs-3.col-xs-offset-3.col-md-1.col-md-offset-0.text-right
+                {{ 'QTY' | translate }}
+            .col-xs-3.col-md-2.text-right
+                {{ 'UNIT' | translate }}
+            .col-xs-3.col-md-2.text-right
+                {{ 'TOTAL' | translate }}
+    .list-group
+        .list-group-item ng-repeat="line in order.products" uib-popover-template="'/common/product_'+line.product.type+'_popup.html'" popover-trigger="'mouseenter'" popover-enable="line.product.details"
+            .row
+                .col-xs-4.col-md-3.col-lg-3
+                    {{ line.reference }}
+                .col-xs-8.col-md-4.col-lg-4
+                    {{ line.name }}
+                .col-xs-3.col-xs-offset-3.col-md-1.col-md-offset-0.text-right
+                    {{ line.quantity }}
+                .col-xs-3.col-md-2.text-right
+                    {{ line.net_price }}
+                .col-xs-3.col-md-2.text-right
+                    {{ line.line_net_price }}
+        .list-group-item
+            .row
+                .col-xs-8
+                    b
+                        {{ 'SUBTOTAL' | translate }}
+                .col-xs-4.text-right
+                    b
+                        {{ order.net_subtotal }}
+        .list-group-item
+            .row
+                .col-xs-4.col-sm-4
+                    {{ 'SHIPPING_FEE' | translate }}
+                .col-xs-5.col-sm-6.text-right
+                    {{ order.carrier_description }}
+                .col-xs-3.col-sm-2.text-right
+                    {{ order.net_shipping }}
+        .list-group-item
+            .row.text-info.total-cost
+                .col-xs-7
+                    b
+                        {{ 'TOTAL' | translate }}
+                .col-xs-5.text-right
+                    b
+                        {{ order.net_total }}
+.panel.panel-default
+    .panel-body
+        ul
+            li
+                {{ 'SHIPPING_DELAY_X' | translate:{QTY: order.delay} }}
+            li
+                ,{{ 'PAYMENT_' | translate }}
+                i.fa.fa-{{ order.payment_icon }} ng-if="order.payment_icon"
+                ,
+                {{ order.payment_description }}
+            li ng-if="order.accept_reused_package"
+                i.fa.fa-recycle
+                ,
+                {{ 'ACCEPT_REUSED_PACKAGE' | translate }}
+            li ng-if="order.paper_invoice"
+                i.fa.fa-file-text-o
+                ,
+                {{ 'PAPER_INVOICE' | translate }}
+small
+    {{ 'LEGAL_NOTICE' | translate }}
+button.btn.btn-lg.btn-success.pull-right type="button" ng-show="order.status == 'unconfirmed'" ng-click="pay()"
+    ,{{ 'CONFIRM_PAY' | translate }}
+    i.fa.fa-chevron-right
+a.btn.btn-lg.btn-primary.pull-right ng-href="/pdf/invoice/{{ order.invoice_number }}" ng-if="order.invoice_number" target="_blank"
+    i.fa.fa-file-text-o
+    ,
+    {{ 'INVOICE_NUM_AND_DATE' | translate:{NUM: order.invoice_full_number, DATE: (order.invoice_date | date)} }}

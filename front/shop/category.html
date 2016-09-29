@@ -1,0 +1,1 @@
+<h1>{{ category.name || category.slug }}<a href="/dashboard/#/category/{{ category.id }}" ng-if="user.is_admin()" class="pull-right btn btn-sm btn-info">{{ 'EDIT' | translate }}</a></h1><div ng-show="category.description" ng-bind="category.description" class="well"></div><products-list products="category.products"></products-list>
