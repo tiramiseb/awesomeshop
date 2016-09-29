@@ -131,8 +131,8 @@ class BaseProductSchemaForEdition(Schema):
 class RegularProductSchemaForEdition(BaseProductSchemaForEdition):
     tax = ObjField(f='id', obj=Tax)
     on_demand = fields.Boolean(allow_none=True, default=False)
-    purchasing_price = fields.Decimal(as_string=True)
-    gross_price = fields.Decimal(as_string=True, required=True)
+    purchasing_price = fields.Decimal()
+    gross_price = fields.Decimal(required=True)
     weight = fields.Integer()
     stock = fields.Integer()
     stock_alert = fields.Integer()
@@ -149,7 +149,6 @@ class RegularProductSchemaForEdition(BaseProductSchemaForEdition):
         product.stock_alert = data.get('stock_alert', 0)
         product.save()
         return product
-
 
 class BaseProductSchemaForKitSubProductOptionForEdition(Schema):
     id = fields.String(required=True)
@@ -175,7 +174,7 @@ class KitSubProductSchemaForEdition(Schema):
 class KitProductSchemaForEdition(BaseProductSchemaForEdition):
     products = fields.Nested(KitSubProductSchemaForEdition, many=True)
     tax = ObjField(f='id', obj=Tax)
-    price_variation = fields.Decimal(as_string=True, required=True)
+    price_variation = fields.Decimal(required=True)
     amount_instead_of_percent = fields.Boolean(default=False)
 
     @post_load

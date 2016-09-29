@@ -29,7 +29,7 @@ from ..models.tax import Tax
 class TaxSchema(Schema):
     id = fields.String()
     name = fields.String(required=True)
-    rate = fields.Decimal(as_string=True, required=True)
+    rate = fields.Decimal(required=True)
 
     @post_load
     def make_tax(self, data):

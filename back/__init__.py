@@ -20,11 +20,12 @@
 
 from functools import wraps
 
-from flask import abort, current_app, Flask, request, session
+from flask import abort, current_app, Flask, make_response, request, session
 from flask_babel import Babel
 from flask_login import current_user, LoginManager, login_required
 from flask_mongoengine import MongoEngine
 from flask_restful import Api
+import simplejson
 
 
 def create_app(prefix=''):
@@ -35,6 +36,11 @@ def create_app(prefix=''):
     app = Flask('awesomeshop')
     app.config.from_object('back.defaultconfig')
     rest = Api(app, prefix=prefix, catch_all_404s=True)
+    @rest.representation('application/json')
+    def output_json(data, code, headers=None):
+        resp = make_response(simplejson.dumps(data) + "\n", code)
+        resp.headers.extend(headers or {})
+        return resp
     try:
         app.config.from_object('config')
     except ImportError:
