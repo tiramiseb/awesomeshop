@@ -61,8 +61,8 @@ Example working on Ubuntu 16.04::
 
     apt-get install mongodb-server
     ./init_awesomeshop.sh
+    ./init_webroot.sh
     source venv/bin/activate
-    ./init_webroot.py
     ./init_database.py
     ./standalone.py
    
@@ -82,7 +82,8 @@ described in ``requirements.txt``. For a standard installation, you may
 simply use the ``init_awesomeshop.sh`` script.
 
 Afterwards, initialize the web root and the database if needed
-(``init_webroot.py`` and ``init_database.py``).
+(``init_webroot.sh`` and ``init_database.py``) - don't forget the virtualenv
+if needed.
 
 Then, serve ``webroot/`` as static files and ``back.create_app`` on ``/api``
 with a WSGI server...

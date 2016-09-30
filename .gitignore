@@ -4,5 +4,6 @@ config.py
 whoosh_index/
 webroot/photos
 webroot/libs
+webroot/l10n
 webroot/*.html
 webroot/*/*.html

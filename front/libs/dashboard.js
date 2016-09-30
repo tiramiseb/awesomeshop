@@ -28,7 +28,7 @@ angular.module('awesomeshop', [
         'dbProducts', 'dbTaxrates', 'dbUsers'
 ])
 .config(function($locationProvider, $interpolateProvider, $stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider, $translateProvider, $translatePartialLoaderProvider, tmhDynamicLocaleProvider) {
-    $urlRouterProvider.otherwise('/test');
+    $urlRouterProvider.otherwise('');
     $urlMatcherFactoryProvider.strictMode(false);
     tmhDynamicLocaleProvider.localeLocationPattern('bower_components/angular-i18n/angular-locale_{{locale}}.js');
     $translatePartialLoaderProvider.addPart('common');
@@ -36,7 +36,7 @@ angular.module('awesomeshop', [
     $translateProvider
         .useMessageFormatInterpolation()
         .useSanitizeValueStrategy('escape')
-        .useLoader('$translatePartialLoader', {urlTemplate: 'libs/locale-{part}-{lang}.json'})
+        .useLoader('$translatePartialLoader', {urlTemplate: 'l10n/{lang}/{part}.json'})
         .registerAvailableLanguageKeys(langs, langs_negociation)
         .fallbackLanguage(fallback_language)
         .determinePreferredLanguage();
