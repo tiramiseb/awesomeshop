@@ -75,7 +75,6 @@ angular.module('awesomeshop', [
     $rootScope.CONFIG = CONFIG;
 })
 .controller('IndexCtrl', function($http, $scope) {
-    console.log('paf')
     $http.get('/api/order', {params: {'status': 'preparation'}})
         .then(function(response) {
             $scope.prep_orders = response.data;
