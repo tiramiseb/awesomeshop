@@ -2,4 +2,7 @@ venv/
 config.py
 *.pyc
 whoosh_index/
-front/photos
+webroot/photos
+webroot/libs
+webroot/*.html
+webroot/*/*.html

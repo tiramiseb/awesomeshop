@@ -49,8 +49,13 @@ as ``standalone.py``). Take needed directives from ``back/defaultconfig.py``.
 Any directive defined in ``config.py`` will override the equivalent in
 ``back/defaultconfig.py``.
  
-Locally using AwesomeShop
-=========================
+Using AwesomeShop
+=================
+
+First, create a configuration file.
+
+Locally for development
+-----------------------
 
 Example working on Ubuntu 16.04::
 
@@ -60,6 +65,27 @@ Example working on Ubuntu 16.04::
     ./init_webroot.py
     ./init_database.py
     ./standalone.py
+   
+For frontend development, you may also want to start the PLIM watcher, to
+automatically regenerate the HTML files::
+
+    ./plim_watcher.py
+
+In production
+-------------
+
+First, install (and configure) a MongoDB server. Make sure your configuration
+file is okay.
+
+You may preferably run Python in a virtualenv. Install the Python modules
+described in ``requirements.txt``. For a standard installation, you may
+simply use the ``init_awesomeshop.sh`` script.
+
+Afterwards, initialize the web root and the database if needed
+(``init_webroot.py`` and ``init_database.py``).
+
+Then, serve ``webroot/`` as static files and ``back.create_app`` on ``/api``
+with a WSGI server...
 
 Local templates
 ===============
