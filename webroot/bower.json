@@ -34,5 +34,8 @@
     "font-awesome": "~4.6.3",
     "angular-i18n": "^1.5.8",
     "ngstorage": "~0.3.11"
+  },
+  "resolutions": {
+    "angular-bootstrap": "~2.1.3"
   }
 }
