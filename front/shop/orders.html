@@ -1,1 +1,0 @@
-<h1>{{ 'MY_ORDERS' | translate }}</h1><div class="list-group""><a ui-sref="order({number:order.number})" ng-repeat="order in orders.get()" class="list-group-item">{{ order.full_number }}, {{ order.date | date }} &mdash; {{ 'X_PRODUCTS' | translate:{QTY: order.products} }}, {{ order.net_total }}, <span class="text-{{ order.status_color }}">{{ order.human_status }}</span></a></div>
