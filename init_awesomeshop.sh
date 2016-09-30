@@ -1,6 +1,5 @@
 #!/bin/sh
-
-# Copyright 2015 Sébastien Maccagnoni-Munch
+# Copyright 2015-2016 Sébastien Maccagnoni
 #
 # This file is part of AwesomeShop.
 #
@@ -16,6 +15,19 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+
+read -p "This file will install requirements and initialize AwesomeShop.
+It is tailored for Ubuntu and Debian.
+
+Are you sure you want to continue? [y/N] " confirm
+
+confirm=`echo "$confirm" | tr '[A-Z]' '[a-z]'`
+
+if [ "$confirm" != "y" -a "$confirm" != "yes" ]
+then
+    echo "Cancelling the initialization"
+    exit 1
+fi
 
 sudo apt-get install python-virtualenv gcc python-dev libjpeg-dev libpng-dev libssl-dev
 virtualenv --system-site-packages venv

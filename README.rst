@@ -2,7 +2,10 @@
 AwesomeShop
 ===========
 
-AwesomeShop is an e-boutique webapp written in Python.
+AwesomeShop is a light and fast e-boutique webapp, using modern techniques
+to achieve these goals.
+
+AwesomeShop is written in Javascript/AngularJS and Python.
 
 AweshomeShop uses the following awesome tools:
 
@@ -52,8 +55,9 @@ Locally using AwesomeShop
 Example working on Ubuntu 16.04::
 
     apt-get install mongodb-server
-    ./init_pythonapp.sh
+    ./init_awesomeshop.sh
     source venv/bin/activate
+    ./init_webroot.py
     ./init_database.py
     ./standalone.py
 

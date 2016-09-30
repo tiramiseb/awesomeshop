@@ -40,7 +40,7 @@ def static_file(path=None):
     if not path:
         path = 'index.html'
     try:
-        return send_from_directory('front', path)
+        return send_from_directory('webroot', path)
     except NotFound:
         return static_file()
 
