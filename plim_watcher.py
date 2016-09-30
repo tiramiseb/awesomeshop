@@ -17,25 +17,26 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
-"""Run AwesomeShop locally for development"""
+"""Automatic generation of HTML files from PLIM sources"""
 
-from flask.helpers import send_from_directory
-from werkzeug.exceptions import NotFound
+import os
+import re
 
-from back import create_app
+from inotify.adapters import InotifyTree
+from plim import preprocessor
 
-app = create_app(prefix='/api')
-app.debug = True
+FROM='front'
+TO='webroot'
 
-@app.route('/')
-@app.route('/<path:path>')
-def static_file(path=None):
-    if not path:
-        path = 'index.html'
-    try:
-        return send_from_directory('webroot', path)
-    except NotFound:
-        return static_file()
-
-app.run()
-
+i = InotifyTree(FROM)
+for event in i.event_gen():
+    if event is not None and 'IN_CLOSE_WRITE' in event[1]:
+        if event[3].endswith('.plim'):
+            filename = os.path.join(event[2], event[3])
+            target = re.sub(FROM+'/(.*).plim', TO+r'/\1.html', filename)
+            dirname = os.path.dirname(target)
+            result = preprocessor(file(filename, 'r').read())
+            if not os.path.exists(dirname):
+                os.makedirs(dirname)
+            file(target, 'w').write(result)
+            print "Regenerated", target
