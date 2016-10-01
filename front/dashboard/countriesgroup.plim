@@ -23,7 +23,6 @@ form name="form" ng-submit="submit()" novalidate="novalidate"
         input#name.form-control type="text" name="name" ng-model="group.name" required="required"
         p.text-danger ng-show="form.name.$invalid"
             {{ 'NAME_MANDATORY' | translate }}
-    {{ f.input_text(_('Name'), 'name', 'group.name', 'required', _('Name is mandatory')) }}
     .row
         .col-xs-6
             .panel.panel-default
