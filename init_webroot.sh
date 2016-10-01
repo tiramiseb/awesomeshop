@@ -32,7 +32,7 @@ do
 done
 
 echo "Linking libs dir..."
-ln -s $FROM/libs $TO
+ln -s ../$FROM/libs $TO
 
 echo "Linking translation files..."
 for source in `find $TRANSLATIONS/* -type d`
@@ -41,7 +41,7 @@ do
     mkdir -p $destination
     for fname in common dashboard shop
     do
-        ln -s $source/$fname.json $destination/
+        ln -s ../../../$source/$fname.json $destination/
     done
 done
 
