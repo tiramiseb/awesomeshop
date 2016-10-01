@@ -31,17 +31,17 @@ do
     echo "  * $destination"
 done
 
-echo "Copying libs files..."
-cp -a $FROM/libs $TO
+echo "Linking libs dir..."
+ln -s $FROM/libs $TO
 
-echo "Copying translation files..."
+echo "Linking translation files..."
 for source in `find $TRANSLATIONS/* -type d`
 do
     destination=`echo $source | sed -s "s/^$TRANSLATIONS/$TO\/l10n/"`
     mkdir -p $destination
     for fname in common dashboard shop
     do
-        cp $source/$fname.json $destination/
+        ln -s $source/$fname.json $destination/
     done
 done
 
