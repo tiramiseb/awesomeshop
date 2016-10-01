@@ -37,7 +37,7 @@ angular.module('awesomeshop', [
     $translateProvider
         .useMessageFormatInterpolation()
         .useSanitizeValueStrategy('escape')
-        .useLoader('$translatePartialLoader', {urlTemplate: 'libs/l10n/[lang}/{part}.json'})
+        .useLoader('$translatePartialLoader', {urlTemplate: 'l10n/{lang}/{part}.json'})
         .registerAvailableLanguageKeys(langs, langs_negociation)
         .fallbackLanguage(fallback_language)
         .determinePreferredLanguage();
