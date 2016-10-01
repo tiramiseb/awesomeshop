@@ -57,6 +57,9 @@ NEW_PRODUCTS_MAX_AGE = 60
 # Where to store indexes for the search engine
 SEARCH_INDEX_PATH = '/tmp/awesomeshop_search'
 
+# Where to store pictures
+PHOTOS_PATH = 'webroot/photos'
+
 # Average (or minimum, as you wish) weight of the package itself (will be added
 # to the weight of a cart before calculating the shipping cost) (in grams)
 PACKAGE_WEIGHT = 0

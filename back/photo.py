@@ -30,7 +30,7 @@ from . import app, db, rest
 
 thumb_size = app.config['THUMBNAIL_SIZE']
 preview_size = app.config['PREVIEW_SIZE']
-photos_folder = os.path.join(app.config['WWW_ROOT'], 'photos')
+photos_folder = app.config['PHOTOS_PATH']
 
 
 class Photo(db.EmbeddedDocument):
