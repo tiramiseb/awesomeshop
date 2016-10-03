@@ -66,7 +66,7 @@ class OrderProductSchemaForAdmin(OrderProductSchema):
 class OrderSchemaForList(Schema):
     full_number = fields.String()
     number = fields.String()
-    human_status = fields.String()
+    status = fields.String()
     status_color = fields.String()
     date = fields.Date()
     products = fields.Integer(attribute='count_products')
@@ -103,7 +103,6 @@ class OrderSchema(Schema):
     tracking_number = fields.String(dump_only=True)
 
     # Fields that are only dumped
-    human_status = fields.String(dump_only=True)
     status_color = fields.String(dump_only=True)
     full_number = fields.String(dump_only=True)
     number = fields.String(dump_only=True)

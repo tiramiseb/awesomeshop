@@ -391,7 +391,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
                 orders.add({
                     full_number: order.full_number,
                     number: order.number,
-                    human_status: order.human_status,
+                    status: order.status,
                     status_color: order.status_color,
                     date: order.date,
                     products: order.products.length,

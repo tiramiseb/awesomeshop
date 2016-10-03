@@ -40,7 +40,7 @@ h1
                     .col-xs-5.text-right
                         {{ 'STATUS' | translate }}
                     .col-xs-7.text-{{ order.status_color }}
-                        {{ order.human_status }}
+                        {{ 'STATUS:'+order.status | translate }}
                 .row
                     .col-xs-5.text-right
                         {{ 'PAYMENT_MODE' | translate }}

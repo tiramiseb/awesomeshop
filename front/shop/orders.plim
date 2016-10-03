@@ -23,4 +23,4 @@ h1
         ,{{ 'X_PRODUCTS' | translate:{QTY: order.products} }},
         ,{{ order.net_total }},
         span.text-{{ order.status_color }}
-            {{ order.human_status }}
+            {{ 'STATUS:'+order.status | translate }}

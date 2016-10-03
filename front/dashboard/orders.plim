@@ -26,7 +26,7 @@ h1
             .col-xs-6.col-md-3
                 {{ order.customer }}
             .col-xs-6.col-md-4.text-{{ order.status_color }}
-                {{ order.human_status }}
+                {{ 'STATUS:'+order.status | translate }}
             .col-xs-6.col-md-2.text-right
                 {{ order.net_total }}
 

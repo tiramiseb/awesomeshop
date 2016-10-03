@@ -20,7 +20,7 @@ h1
     .panel-body
         ,{{ 'ORDER_STATUS_' | translate }}
         span.text-{{ order.status_color }}
-            {{ order.human_status }}
+            {{ 'STATUS:'+order.status | translate }}
         div ng-if="order.status == 'unconfirmed'"
             b
                 {{ 'CANCELLED_NOT_CONFIRMED_X' | translate:{QTY: CONFIG.confirm_delay} }}
