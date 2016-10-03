@@ -163,7 +163,6 @@ class Order(db.Document):
     paper_invoice = db.BooleanField(db_field='paper')
     payment_id = db.StringField(db_field='p_id')
     payment_icon = db.StringField(db_field='p_ico')
-    payment_description = db.StringField(db_field='p_desc')
     # Data for the payment, specific to the payment method (optional)
     payment_data = db.DynamicField(db_field='p_data')
     # Date when the payment is really confirmed
@@ -264,7 +263,6 @@ class Order(db.Document):
         self.payment_id = mode_id
         mode = get_mode(mode_id)
         self.payment_icon = mode.icon
-        self.payment_description = unicode(mode.description)
 
     def trigger_payment(self):
         if self.status not in ('unconfirmed', 'awaiting_payment'):

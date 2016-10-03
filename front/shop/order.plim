@@ -127,7 +127,7 @@ h1
                 ,{{ 'PAYMENT_' | translate }}
                 i.fa.fa-{{ order.payment_icon }} ng-if="order.payment_icon"
                 ,
-                {{ order.payment_description }}
+                {{ 'PAYMENT:'+order.payment_id | translate }}
             li ng-if="order.accept_reused_package"
                 i.fa.fa-recycle
                 ,

@@ -26,7 +26,6 @@ from .base import PaymentMode
 class SepaTransfer(PaymentMode):
     id = 'sepa_transfer'
     icon = 'exchange'
-    description = lazy_gettext('SEPA bank transfer')
 
     def trigger(self, order):
         return {

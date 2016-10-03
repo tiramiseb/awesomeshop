@@ -47,7 +47,7 @@ h1
                     .col-xs-7
                         i.fa.fa-{{ order.payment_icon }} ng-if="order.payment_icon"
                         ,
-                        {{ order.payment_description }}
+                        {{ 'PAYMENT:'+order.payment_id | translate }}
                 .row ng-show="order.payment_date"
                     .col-xs-5.text-right
                         {{ 'PAYMENT_DATE' | translate }}

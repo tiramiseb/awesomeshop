@@ -39,6 +39,8 @@
 "PASSWORD_AGAIN": "Password (again)", 
 "PASSWORD_MANDATORY": "Password is mandatory", 
 "PASSWORDS_MUST_MATCH": "Passwords must match", 
+"PAYMENT:payplug": "Credit Card (secured by PayPlug)",
+"PAYMENT:sepa_transfer": "SEPA bank transfer",
 "PHONE": "Phone", 
 "PRODUCT": "Product", 
 "PRODUCTS": "Products",

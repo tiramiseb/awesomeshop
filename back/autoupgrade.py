@@ -203,6 +203,9 @@ def remove_page_rank():
     counters = Counters._get_collection()
     counters.delete_one({'_id': 'page.rank'})
 
+def remove_payment_description():
+    orders = Order._get_collection()
+    orders.update_many({}, {'$unset': {'p_desc': ''}})
 
 ###############################################################################
 # Ordered list of all upgrade functions
@@ -228,6 +231,10 @@ upgrades = [
     (
         remove_page_rank,
         '28/08/2016: remove page rank, they are now ordered alphabetically'
+        ),
+    (
+        remove_payment_description,
+        '03/09/2016: remove static payment description in orders'
         )
     ]
 

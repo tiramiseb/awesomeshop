@@ -21,12 +21,10 @@ from flask import abort
 
 
 class PaymentMode:
-    # Payment mode unique identifier (dev-understandable text)
+    # Payment mode unique identifier
     id = u''
     # Icon identifier from Font Awesome for this payment mode
     icon = u''
-    # Human-understandable payment mode name/description
-    description = u''
 
     def trigger(self, order):
         """

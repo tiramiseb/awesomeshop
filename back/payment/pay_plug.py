@@ -31,7 +31,6 @@ from .base import PaymentMode
 class PayPlug(PaymentMode):
     id = 'payplug'
     icon = 'credit-card'
-    description = lazy_gettext('Credit Card (secured by PayPlug)')
 
     def __init__(self):
         payplug.set_secret_key(app.config['PAYPLUG_API_KEY'])
