@@ -18,7 +18,6 @@
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 from flask import abort, request
-from flask_babel import _
 from flask_restful import Resource
 from marshmallow import Schema, fields, post_load
 

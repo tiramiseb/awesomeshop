@@ -21,7 +21,7 @@ import datetime
 
 from mongoengine import signals
 from flask import abort
-from flask_babel import format_currency, lazy_gettext
+from flask_babel import format_currency
 
 from ... import app, db
 from ...mail import send_mail

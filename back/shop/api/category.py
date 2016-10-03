@@ -20,7 +20,6 @@
 import re
 
 from flask import abort, request
-from flask_babel import _
 from flask_login import current_user
 from flask_restful import inputs, reqparse, Resource
 from marshmallow import Schema, fields, post_load

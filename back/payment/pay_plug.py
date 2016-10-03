@@ -20,7 +20,6 @@
 import os.path
 
 from flask import abort, redirect, request, url_for
-from flask_babel import _, lazy_gettext
 from flask_login import current_user
 import payplug
 
