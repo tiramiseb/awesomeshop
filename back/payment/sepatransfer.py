@@ -29,37 +29,15 @@ class SepaTransfer(PaymentMode):
     description = lazy_gettext('SEPA bank transfer')
 
     def trigger(self, order):
-        titles = [
-            _('Recipient account owner'),
-            _('Recipient account BIC'),
-            _('Recipient account IBAN'),
-            _('Transfer amount'),
-            _('Transfer information')
-            ]
-        values = [
-            app.config['SEPA_TRANSFER_RECIPIENT'],
-            app.config['SEPA_TRANSFER_BIC'],
-            app.config['SEPA_TRANSFER_IBAN'] + '          ',
-            order.net_total,
-            order.invoice_full_number
-            ]
-        lent = max([len(i) for i in titles])
-        lenv = max([len(i) for i in values])
-        line = '+-' + '-'*lent + '-+-' + '-'*lenv + '-+'
-        message = [
-            _('Please execute a SEPA bank transfer within %(num)d days '
-              'with the following criteria:', num=app.config['PAYMENT_DELAY']),
-            '',
-            line,
-            ]
-        for i in range(0, 5):
-            message.append(
-                '| ' + titles[i] + (lent-len(titles[i]))*' ' + ' | ' +
-                values[i] + (lenv-len(values[i]))*' ' + ' |'
-                )
-            message.append(line)
-
         return {
-            'type': 'message',
-            'message': '\n'.join(message)
+            'type': 'modal',
+            'template': 'sepatransfer',
+            'data': {
+                'recipient': app.config['SEPA_TRANSFER_RECIPIENT'],
+                'bic': app.config['SEPA_TRANSFER_BIC'],
+                'iban': app.config['SEPA_TRANSFER_IBAN'],
+                'delay': app.config['PAYMENT_DELAY'],
+                'amount': order.net_total,
+                'information': order.invoice_full_number
+                }
             }

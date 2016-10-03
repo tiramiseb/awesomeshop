@@ -129,8 +129,8 @@ class ApiPage(Resource):
                         '(.*Product.documentation refers to it)', e.message):
                 abort(400, {
                     'type': 'message',
-                    'message': _('Could not delete: '
-                                 'this documentation is used in a product.')
+                    'message': ('Could not delete: '
+                                'this documentation is used in a product.')
                     })
             raise
         return {'status': 'OK'}

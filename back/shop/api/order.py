@@ -225,8 +225,11 @@ class OrderSchemaForAdmin(OrderSchema):
 
 class PaymentInfoSchema(Schema):
     type = fields.String()
-    message = fields.String()
+    # For links
     target = fields.String()
+    # For modals
+    template = fields.String()
+    data = fields.Dict()
     order = fields.Nested(OrderSchema)
 
 
@@ -317,8 +320,6 @@ class PayOrder(Resource):
                         number=number
                         )
         payment_data = order.trigger_payment()
-        if payment_data['type'] == 'message':
-            payment_data['message'] = rst.get_html(payment_data['message'], 2)
         return PaymentInfoSchema().dump(payment_data).data
 
 

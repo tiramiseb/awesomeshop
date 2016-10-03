@@ -111,21 +111,21 @@ def payplug_ipn(order_number):
         elif resource.failure:
             code = resource.failure.code
             if code == 'processing_error':
-                message = _('Error while processing the card')
+                message = 'Error while processing the card'
             elif code == 'card_declined':
-                message = _('Your bank declined the payment')
+                message = 'Your bank declined the payment'
             elif code == 'insufficient_funds':
-                message = _('Insufficient funds on your bank account')
+                message = 'Insufficient funds on your bank account'
             elif code == '3ds_declined':
-                message = _('3-D secure protection has failed')
+                message = '3-D secure protection has failed'
             elif code == 'incorrect_number':
-                message = _('The card number is incorrect')
+                message = 'The card number is incorrect'
             elif code == 'fraud_suspected':
-                message = _('A potential fraud has been detected')
+                message = 'A potential fraud has been detected'
             elif code == 'aborted':
-                message = _('Payment has been aborted')
+                message = 'Payment has been aborted'
             else:
-                message = _('Unknown problem')
+                message = 'Unknown problem'
             order.payment_message = message
             order.payment_data = None
             order.set_status('payment_failed')

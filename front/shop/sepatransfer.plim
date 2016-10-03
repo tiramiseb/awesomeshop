@@ -16,9 +16,36 @@
 / along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 .modal-header
     h3.modal-title.text-danger
-        {{ 'MESSAGE_ABOUT_PAYMENT' | translate }}
+        {{ 'SEPA_TRANSFER' | translate }}
 .modal-body
-    p ng-bind-html="message | trusthtml"
+    p
+        {{ 'EXECUTE_SEPA_TRANSFER_' | translate:{QTY: data.delay} }}
+    table
+        tr
+            th
+                {{ 'RECIPIENT_ACCOUNT_OWNER' | translate }}
+            td
+                {{ data.recipient }}
+        tr
+            th
+                {{ 'RECIPIENT_ACCOUNT_BIC' | translate }}
+            td
+                {{ data.bic }}
+        tr
+            th
+                {{ 'RECIPIENT_ACCOUNT_IBAN' | translate }}
+            td
+                {{ data.iban }}
+        tr
+            th
+                {{ 'AMOUNT' | translate }}
+            td
+                {{ data.amount }}
+        tr
+            th
+                {{ 'INFORMATION' | translate }}
+            td
+                {{ data.information }}
 .modal-footer
     button.btn.btn-primary type="button" ng-click="$close()"
         {{ 'OK' | translate }}

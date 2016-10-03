@@ -167,8 +167,8 @@ class ApiCountry(Resource):
                              '(CountriesGroup.countries refers to it)'):
                 abort(400, {
                     'type': 'message',
-                    'message': _('Could not delete : this country '
-                                 'is part of a countries group.')
+                    'message': ('Could not delete: this country '
+                                'is part of a countries group.')
                     })
             raise
         return {'status': 'OK'}

@@ -138,13 +138,13 @@ class ApiCategoryEdit(Resource):
                  ):
                 abort(400, {
                   'type': 'message',
-                  'message': _('Could not delete: this category has products.')
+                  'message': 'Could not delete: this category has products.'
                   })
             elif e.message == \
                     'Could not delete document (Category.parent refers to it)':
                 abort(400, {
                   'type': 'message',
-                  'message': _('Could not delete: this category has children.')
+                  'message': 'Could not delete: this category has children.'
                   })
             raise
         return {'status': 'OK'}

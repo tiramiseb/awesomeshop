@@ -432,13 +432,13 @@ angular.module('shopShop', ['bootstrapLightbox'])
                 var data = response.data;
                 if (data) {
                     $scope.order = data.order;
-                    if (data.type == 'message') {
+                    if (data.type == 'modal') {
                         $uibModal.open({
-                            templateUrl: 'shop/paymentmessage.html',
-                            controller: 'PaymentMessageCtrl',
+                            templateUrl: 'shop/'+data.template+'.html',
+                            controller: 'PaymentModalCtrl',
                             resolve: {
-                                message: function() {
-                                    return data.message;
+                                data: function() {
+                                    return data.data;
                                 }
                             }
                         })
@@ -468,8 +468,8 @@ angular.module('shopShop', ['bootstrapLightbox'])
         cancel(true);
     }
 })
-.controller('PaymentMessageCtrl', function($scope, message) {
-    $scope.message = message;
+.controller('PaymentModalCtrl', function($scope, data) {
+    $scope.data = data;
 })
 .controller('SearchCtrl', function($stateParams, $scope, $http) {
     $scope.terms = $stateParams.q || '';

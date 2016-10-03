@@ -20,7 +20,7 @@
 .modal-body
     p
         b
-            {{ message }}
+            {{ 'ERRMSG:'+message | translate }}
 .modal-footer
     button.btn.btn-primary type='button' ng-click='$close()'
         {{ 'OK' | translate }}
