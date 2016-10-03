@@ -41,6 +41,22 @@ for (lang in langs) {
   );
 })();
 
+angular.module('l10n_param', ['pascalprecht.translate'])
+.config(function($httpProvider) {
+    $httpProvider.interceptors.push(function($injector) {
+        return {
+            'request': function(config) {
+                $translate = $injector.get('$translate');
+                if (!config.params) {
+                    config.params = {};
+                }
+                config.params.lang = $translate.use();
+                return config;
+            }
+        };
+    });
+});
+
 angular.module('spinner', ['ui.bootstrap'])
 .config(function($httpProvider) {
     loading_count = 0;
@@ -55,6 +71,10 @@ angular.module('spinner', ['ui.bootstrap'])
     show_or_hide_spinner(0);
     $httpProvider.interceptors.push(function($rootScope, $q) {
         return {
+            'request': function(config) {
+                show_or_hide_spinner(+1);
+                return config;
+            },
             'response': function(response) {
                 show_or_hide_spinner(-1);
                 return response;
@@ -71,10 +91,6 @@ angular.module('spinner', ['ui.bootstrap'])
                 return $q.reject(rejection);
             }
         };
-    });
-    $httpProvider.defaults.transformRequest.push(function(data){
-        show_or_hide_spinner(+1);
-        return data;
     });
 })
 .directive('enableErrorHandler', function($uibModal){

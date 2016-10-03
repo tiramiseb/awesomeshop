@@ -21,7 +21,7 @@ angular.module('awesomeshop', [
         'duScroll', 'ngAnimate', 'ngStorage', 'pascalprecht.translate',
         'tmh.dynamicLocale', 'ui.bootstrap', 'ui.router',
         // Common awesomeshop modules
-        'authentication', 'config', 'spinner',
+        'authentication', 'config', 'l10n_param', 'spinner',
         // Shop modules
         'shopPage',
         'shopUser',

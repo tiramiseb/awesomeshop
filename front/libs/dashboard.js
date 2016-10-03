@@ -22,7 +22,7 @@ angular.module('awesomeshop', [
         'ngAnimate', 'pascalprecht.translate', 'tmh.dynamicLocale',
         'ui.bootstrap', 'ui.router', 'validation.match',
         // Common awesomeshop modules
-        'authentication', 'config', 'spinner', 
+        'authentication', 'config', 'l10n_param', 'spinner',
         // Dashboard modules
         'dbCarriers', 'dbCategories', 'dbCountries', 'dbOrders', 'dbPages',
         'dbProducts', 'dbTaxrates', 'dbUsers'

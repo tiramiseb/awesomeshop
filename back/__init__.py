@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-# Copyright 2015 Sébastien Maccagnoni-Munch
+# Copyright 2015-2016 Sébastien Maccagnoni
 #
 # This file is part of AwesomeShop.
 #
@@ -21,7 +21,6 @@
 from functools import wraps
 
 from flask import abort, current_app, Flask, make_response, request, session
-from flask_babel import Babel
 from flask_login import current_user, LoginManager, login_required
 from flask_mongoengine import MongoEngine
 from flask_restful import Api
@@ -31,7 +30,6 @@ import simplejson
 def create_app(prefix=''):
     global app
     global db
-    global get_locale
     global rest
     app = Flask('awesomeshop')
     app.config.from_object('back.defaultconfig')
@@ -49,9 +47,6 @@ def create_app(prefix=''):
         import sys
         sys.exit(1)
     db = MongoEngine(app)
-    babel = Babel(app)
-    get_locale = babel.localeselector(get_locale)
-    app.jinja_env.globals.update(get_locale=get_locale)
     login_manager = LoginManager(app)
     @login_manager.user_loader
     def load_user(uid):
@@ -66,34 +61,8 @@ def create_app(prefix=''):
     return app
 
 
-def get_locale(from_user=True):
-    locale = None
-    if from_user and current_user and current_user.is_authenticated \
-            and current_user.locale:
-        # Use the user-defined locale if it exists
-        locale = current_user.locale
-    else:
-        try:
-            # Use the locale defined in the session or get the "best match"
-            locale = session.get('locale') or \
-                request.accept_languages.best_match(app.config['LANGS'])
-        except:
-            pass
-    if not locale:
-        try:
-            # If there is no "best match", try pseudo-manually
-            for i in request.accept_languages.itervalues():
-                if '-' in i:
-                    i = i.split('-')[0]
-                if i in app.config['LANGS']:
-                    locale = i
-                    break
-        except:
-            pass
-    if not locale:
-        # Fallback locale, defined app-wide
-        locale = app.config['LANGS'][0]
-    return locale
+def get_locale():
+    return request.args.get('lang', app.config['LANGS'][0])
 
 
 def admin_required(func):
