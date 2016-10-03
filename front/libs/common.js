@@ -101,16 +101,13 @@ angular.module('spinner', ['ui.bootstrap'])
 
 angular.module('authentication', ['http-auth-interceptor', 'ui.bootstrap'])
 .controller('AuthenticationCtrl', function($scope, $http, authService) {
-    console.log('HAH');
     $scope.login = function() {
-        console.log('paf');
         $http.post('/api/login', {
                 email: $scope.auth.email,
                 password: $scope.auth.password
         })
             .then(function(response) {
                 var success = response.data.auth;
-                console.log('SUCCESS');
                 $scope.auth.success = success;
                 if (success) {
                     $scope.$close();
@@ -118,7 +115,6 @@ angular.module('authentication', ['http-auth-interceptor', 'ui.bootstrap'])
                 }
             });
     }
-    console.log('AHA')
 })
 .directive('triggerAuth', ['$uibModal', function($uibModal) {
     return {
