@@ -91,8 +91,9 @@ with a WSGI server...
 Local templates
 ===============
 
-Once run locally, access the shop's homepage: the list of nearly-mandatory
-templates is given there.
+The parts you may modify locally, to customize the shop, are - at the moment -
+limited to the ``LOGO_CONTENT`` and ``HOME_CONTENT`` variables, configured in
+``config.py``.
 
 Using reStructuredText
 ======================
