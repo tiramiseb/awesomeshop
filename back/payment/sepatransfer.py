@@ -35,6 +35,7 @@ class SepaTransfer(PaymentMode):
                 'iban': app.config['SEPA_TRANSFER_IBAN'],
                 'delay': app.config['PAYMENT_DELAY'],
                 'amount': order.net_total,
+                'currency': order.currency,
                 'information': order.invoice_full_number
                 }
             }

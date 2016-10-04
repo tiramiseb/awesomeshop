@@ -21,6 +21,6 @@ h1
         ,{{ order.full_number }},
         ,{{ order.date | date }} &mdash;
         ,{{ 'X_PRODUCTS' | translate:{QTY: order.products} }},
-        ,{{ order.net_total }},
+        ,{{ order.net_total | currency:order.currency }},
         span.text-{{ order.status_color }}
             {{ 'STATUS:'+order.status | translate }}

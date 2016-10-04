@@ -40,7 +40,7 @@
             th
                 {{ 'AMOUNT' | translate }}
             td
-                {{ data.amount }}
+                {{ data.amount | currency:data.currency }}
         tr
             th
                 {{ 'INFORMATION' | translate }}

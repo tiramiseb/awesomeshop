@@ -19,6 +19,7 @@
 
 import datetime
 import re
+from decimal import Decimal
 
 from . import app, db
 from .helpers import Setting
@@ -56,7 +57,7 @@ def add_product_cls():
 
 def add_ondemand():
     products = BaseProduct._get_collection()
-    products.update_many({'dem': None}, {'$set': {'dem': False}})
+    products.update_many({'_cls': None, 'dem': None}, {'$set': {'dem': False}})
 
 
 def add_creationdate():
@@ -207,6 +208,92 @@ def remove_payment_description():
     orders = Order._get_collection()
     orders.update_many({}, {'$unset': {'p_desc': ''}})
 
+def order_totals_as_decimal():
+    """Warning : the "order_totals_as_decimal" function only works with
+    "X.XX C" or "X,XX C" formats. This should not be a problem because, when
+    writing this function, AwesomeShop is still used by only one shop : I have
+    no knowledge of any other user."""
+    orders = Order._get_collection()
+    for o in orders.find():
+        currency = o.get('cur')
+        new_set = {}
+        unset = ['tot']
+        ntot = o.get('ntot')
+        if ntot:
+            net_total, net_cur = ntot.split()
+            if not currency:
+                currency = net_cur
+                new_set['cur'] = net_cur
+            newset['n_tot'] = float(Decimal(net_total.replace(',', '.')))
+            unset.append('ntot')
+        if not currency:
+            currency = app.config['CURRENCY']
+            new_set['cur'] = currency
+        gtot = o.get('gtot')
+        if gtot:
+            grosstot, gross_cur = gtot.split()
+            if gross_cur == currency:
+                new_set['g_tot'] = float(Decimal(grosstot.replace(',', '.')))
+                unset.append('gtot')
+        nship = o.get('nship')
+        if nship:
+            netship, nship_cur = nship.split()
+            if nship_cur == currency:
+                new_set['n_ship'] = float(Decimal(netship.replace(',', '.')))
+                unset.append('nship')
+        gship = o.get('gship')
+        if gship:
+            grossship, gship_cur = gship.split()
+            if gship_cur == currency:
+                new_set['g_ship'] = float(Decimal(grossship.replace(',', '.')))
+                unset.append('gship')
+        nsub = o.get('nsub')
+        if nsub:
+            netsub, nsub_cur = nsub.split()
+            if nsub_cur == currency:
+                new_set['n_sub'] = float(Decimal(netsub.replace(',', '.')))
+                unset.append('nsub')
+        gsub = o.get('gsub')
+        if gsub:
+            grosssub, gsub_cur = gsub.split()
+            if gsub_cur == currency:
+                new_set['g_sub'] = float(Decimal(grosssub.replace(',', '.')))
+                unset.append('gsub')
+        products = o.get('products')
+        for prod in products:
+            gprice = prod.get('gprice')
+            if gprice:
+                gprice, gp_cur = gprice.split()
+                if gp_cur == currency:
+                    prod['g_price'] = float(Decimal(gprice.replace(',', '.')))
+                    prod.pop('gprice')
+            nprice = prod.get('nprice')
+            if nprice:
+                nprice, np_cur = nprice.split()
+                if np_cur == currency:
+                    prod['n_price'] = float(Decimal(nprice.replace(',', '.')))
+                    prod.pop('nprice')
+            lgprice = prod.get('lgprice')
+            if lgprice:
+                lgp, lgp_cur = lgprice.split()
+                if lgp_cur == currency:
+                    prod['lg_price'] = float(Decimal(lgp.replace(',', '.')))
+                    prod.pop('lgprice')
+            lnprice = prod.get('lnprice')
+            if lnprice:
+                lnp, lnp_cur = lnprice.split()
+                if lnp_cur == currency:
+                    prod['ln_price'] = float(Decimal(lnp.replace(',', '.')))
+                    prod.pop('lnprice')
+        new_set['products'] = products
+        unset_dict = {}
+        for entry in unset:
+            unset_dict[entry] = ''
+        orders.find_one_and_update(
+            {'_id': o['_id']},
+            {'$set': new_set, '$unset': unset_dict}
+            )
+
 ###############################################################################
 # Ordered list of all upgrade functions
 upgrades = [
@@ -235,6 +322,10 @@ upgrades = [
     (
         remove_payment_description,
         '03/09/2016: remove static payment description in orders'
+        ),
+    (
+        order_totals_as_decimal,
+        '04/09/2016: store the totals in orders as decimal instead of strings'
         )
     ]
 

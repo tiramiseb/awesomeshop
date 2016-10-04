@@ -39,7 +39,7 @@ class PayPlug(PaymentMode):
             payment = payplug.Payment.retrieve(order.payment_data)
         else:
             payment_data = {
-                'amount': int(order.numeric_total * 100),
+                'amount': int(order.net_total * 100),
                 'currency': 'EUR',
                 'customer': {
                     'email': current_user.email,

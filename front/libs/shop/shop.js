@@ -395,7 +395,8 @@ angular.module('shopShop', ['bootstrapLightbox'])
                     status_color: order.status_color,
                     date: order.date,
                     products: order.products.length,
-                    net_total: order.net_total
+                    net_total: order.net_total,
+                    currency: order.currency
                 });
                 $state.go('order', {number: order.number});
             });

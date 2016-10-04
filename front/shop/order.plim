@@ -91,9 +91,9 @@ h1
                 .col-xs-3.col-xs-offset-3.col-md-1.col-md-offset-0.text-right
                     {{ line.quantity }}
                 .col-xs-3.col-md-2.text-right
-                    {{ line.net_price }}
+                    {{ line.net_price | currency:order.currency }}
                 .col-xs-3.col-md-2.text-right
-                    {{ line.line_net_price }}
+                    {{ line.line_net_price | currency:order.currency }}
         .list-group-item
             .row
                 .col-xs-8
@@ -101,7 +101,7 @@ h1
                         {{ 'SUBTOTAL' | translate }}
                 .col-xs-4.text-right
                     b
-                        {{ order.net_subtotal }}
+                        {{ order.net_subtotal | currency:order.currency }}
         .list-group-item
             .row
                 .col-xs-4.col-sm-4
@@ -109,7 +109,7 @@ h1
                 .col-xs-5.col-sm-6.text-right
                     {{ order.carrier_description }}
                 .col-xs-3.col-sm-2.text-right
-                    {{ order.net_shipping }}
+                    {{ order.net_shipping | currency:order.currency }}
         .list-group-item
             .row.text-info.total-cost
                 .col-xs-7
@@ -117,7 +117,7 @@ h1
                         {{ 'TOTAL' | translate }}
                 .col-xs-5.text-right
                     b
-                        {{ order.net_total }}
+                        {{ order.net_total | currency:order.currency }}
 .panel.panel-default
     .panel-body
         ul

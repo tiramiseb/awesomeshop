@@ -162,13 +162,13 @@ h1
                                 {{ 'SUBTOTAL' | translate }}
                         .col-xs-4.text-right
                             b
-                                {{ order.net_subtotal }}
+                                {{ order.net_subtotal | currency:order.currency }}
                 .list-group-item
                     .row
                         .col-xs-8
                             {{ 'SHIPPING_FEE' | translate }}
                         .col-xs-4.text-right
-                            {{ order.net_shipping }}
+                            {{ order.net_shipping | currency:order.currency }}
                 .list-group-item
                     .row.text-info.total-cost
                         .col-xs-8
@@ -176,4 +176,4 @@ h1
                                 {{ 'TOTAL' | translate }}
                         .col-xs-4.text-right
                             b
-                                {{ order.net_total }}
+                                {{ order.net_total | currency:order.currency }}

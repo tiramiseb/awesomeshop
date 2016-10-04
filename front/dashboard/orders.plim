@@ -28,5 +28,5 @@ h1
             .col-xs-6.col-md-4.text-{{ order.status_color }}
                 {{ 'STATUS:'+order.status | translate }}
             .col-xs-6.col-md-2.text-right
-                {{ order.net_total }}
+                {{ order.net_total | currency:order.currency }}
 

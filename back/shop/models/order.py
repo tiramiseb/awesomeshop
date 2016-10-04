@@ -33,10 +33,10 @@ from .product import BaseProduct
 
 class OrderProduct(db.EmbeddedDocument):
     reference = db.StringField(db_field='ref')
-    gross_price = db.StringField(db_field='gprice')
-    net_price = db.StringField(db_field='nprice')
-    line_gross_price = db.StringField(db_field='lgprice')
-    line_net_price = db.StringField(db_field='lnprice')
+    gross_price = db.DecimalField(db_field='g_price')
+    net_price = db.DecimalField(db_field='n_price')
+    line_gross_price = db.DecimalField(db_field='lg_price')
+    line_net_price = db.DecimalField(db_field='ln_price')
     quantity = db.IntField(db_field='qty')
     quantity_from_stock = db.IntField(db_field='stk')
     product = db.ReferenceField(BaseProduct)
@@ -52,16 +52,16 @@ class OrderProduct(db.EmbeddedDocument):
         return delay
 
     def set_gross_price(self, price):
-        self.gross_price = format_currency(price, app.config['CURRENCY'])
+        self.gross_price = price
 
     def set_net_price(self, price):
-        self.net_price = format_currency(price, app.config['CURRENCY'])
+        self.net_price = price
 
     def set_line_gross_price(self, price):
-        self.line_gross_price = format_currency(price, app.config['CURRENCY'])
+        self.line_gross_price = price
 
     def set_line_net_price(self, price):
-        self.line_net_price = format_currency(price, app.config['CURRENCY'])
+        self.line_net_price = price
 
     def _put_back_in_stock(self):
         if self.quantity_from_stock:
@@ -151,15 +151,15 @@ class Order(db.Document):
     billing_firstname = db.StringField(db_field='bill_fn')
     billing_lastname = db.StringField(db_field='bill_ln')
     products = db.EmbeddedDocumentListField(OrderProduct)
-    gross_subtotal = db.StringField(db_field='gsub')
-    net_subtotal = db.StringField(db_field='nsub')
+    gross_subtotal = db.DecimalField(db_field='g_sub')
+    net_subtotal = db.DecimalField(db_field='n_sub')
     carrier = db.ReferenceField(Carrier)
     carrier_description = db.StringField(db_field='car_desc')
-    gross_shipping = db.StringField(db_field='gship')
-    net_shipping = db.StringField(db_field='nship')
-    gross_total = db.StringField(db_field='gtot')
-    net_total = db.StringField(db_field='ntot')
-    numeric_total = db.DecimalField(db_field='tot')
+    currency = db.StringField(db_field='cur')
+    gross_shipping = db.DecimalField(db_field='g_ship')
+    net_shipping = db.DecimalField(db_field='n_ship')
+    gross_total = db.DecimalField(db_field='g_tot')
+    net_total = db.DecimalField(db_field='n_tot')
     paper_invoice = db.BooleanField(db_field='paper')
     payment_id = db.StringField(db_field='p_id')
     payment_icon = db.StringField(db_field='p_ico')
@@ -244,20 +244,16 @@ class Order(db.Document):
         self.billing_lastname = address.lastname
 
     def set_subtotal(self, price):
-        currency = app.config['CURRENCY']
-        self.gross_subtotal = format_currency(price.gross, currency)
-        self.net_subtotal = format_currency(price.net, currency)
+        self.gross_subtotal = price.gross
+        self.net_subtotal = price.net
 
     def set_shipping(self, price):
-        currency = app.config['CURRENCY']
-        self.gross_shipping = format_currency(price.gross, currency)
-        self.net_shipping = format_currency(price.net, currency)
+        self.gross_shipping = price.gross
+        self.net_shipping = price.net
 
     def set_total(self, price):
-        currency = app.config['CURRENCY']
-        self.gross_total = format_currency(price.gross, currency)
-        self.net_total = format_currency(price.net, currency)
-        self.numeric_total = price.net
+        self.gross_total = price.gross
+        self.net_total = price.net
 
     def set_payment_mode(self, mode_id):
         self.payment_id = mode_id
