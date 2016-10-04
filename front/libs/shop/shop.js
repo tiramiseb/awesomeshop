@@ -123,13 +123,18 @@ angular.module('shopShop', ['bootstrapLightbox'])
     };
     go_to_state();
 })
-.controller('CategoryCtrl', function($http, $scope, $stateParams, user, title) {
+.controller('CategoryCtrl', function($http, $rootScope, $scope, $stateParams, user, title) {
     $scope.user = user;
-    $http.get('/api/category/'+$stateParams.id)
-        .then(function(response) {
-            $scope.category = response.data;
-            title.set($scope.category.name);
-        });
+    function get_category() {
+        $http.get('/api/category/'+$stateParams.id)
+            .then(function(response) {
+                $scope.category = response.data;
+                title.set($scope.category.name);
+            });
+    };
+    get_category();
+    stoptranslate = $rootScope.$on('$translateChangeSuccess', get_category);
+    $scope.$on('$destroy', stoptranslate);
 })
 .controller('ProductCtrl', function($http, $rootScope, $scope, $state, $stateParams, $httpParamSerializer, Lightbox, products, cart, title, user, $timeout) {
     $scope.user = user;
@@ -183,7 +188,8 @@ angular.module('shopShop', ['bootstrapLightbox'])
             });
     };
     get_product();
-    $rootScope.$on('$translateChangeSuccess', get_product);
+    stoptranslate = $rootScope.$on('$translateChangeSuccess', get_product);
+    $scope.$on('$destroy', stoptranslate);
 })
 .controller('ProductInListCtrl', function($scope, cart) {
     $scope.cart = cart;

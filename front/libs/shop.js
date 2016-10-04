@@ -64,12 +64,16 @@ angular.module('awesomeshop', [
         }
     };
 })
-.factory('newproducts', function($http) {
+.factory('newproducts', function($rootScope, $http) {
     var newproducts;
-    $http.get('/api/newproducts')
-        .then(function(response) {
-            newproducts = response.data;
-        });
+    function get_new_products () {
+        $http.get('/api/newproducts')
+            .then(function(response) {
+                newproducts = response.data;
+            });
+    }
+    get_new_products();
+    $rootScope.$on('$translateChangeSuccess', get_new_products);
     return {
         get: function() {
             return newproducts;
@@ -156,10 +160,14 @@ angular.module('awesomeshop', [
 .factory('categories', function($rootScope, $http) {
     var categories,
         current_product_category;
-    $http.get('/api/category', {params: {'flat':'true'}})
-        .then(function(response) {
-            categories = response.data;
-        });
+    function get_categories() {
+        $http.get('/api/category', {params: {'flat':'true'}})
+            .then(function(response) {
+                categories = response.data;
+            });
+    }
+    get_categories();
+    $rootScope.$on('$translateChangeSuccess', get_categories);
     $rootScope.$on('$stateChangeStart', function() {
         current_product_category = undefined;
     });
