@@ -98,12 +98,16 @@ angular.module('spinner', ['ui.bootstrap'])
         link: function(scope, elem, attrs) {
                 scope.$on('apierror', function(evt, data) {
                     var template_url;
-                    if (data.type == 'message') {
-                        scope.message = data.message;
-                        template_url = 'common/stringerror.html'
-                    } else if (data.type == 'fields') {
-                        scope.errors = data.errors;
-                        template_url = 'common/fieldserror.html'
+                    if (data) {
+                        if (data.type == 'message') {
+                            scope.message = data.message;
+                            template_url = 'common/stringerror.html'
+                        } else if (data.type == 'fields') {
+                            scope.errors = data.errors;
+                            template_url = 'common/fieldserror.html'
+                        } else {
+                            template_url = 'common/unknownerror.html'
+                        };
                     } else {
                         template_url = 'common/unknownerror.html'
                     };
