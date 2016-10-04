@@ -46,11 +46,13 @@ angular.module('l10n_param', ['pascalprecht.translate'])
     $httpProvider.interceptors.push(function($injector) {
         return {
             'request': function(config) {
-                $translate = $injector.get('$translate');
-                if (!config.params) {
-                    config.params = {};
-                }
-                config.params.lang = $translate.use();
+                if (config.url.indexOf('/api/') == 0) {
+                    $translate = $injector.get('$translate');
+                    if (!config.params) {
+                        config.params = {};
+                    }
+                    config.params.lang = $translate.use();
+                };
                 return config;
             }
         };
