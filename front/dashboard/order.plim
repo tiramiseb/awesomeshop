@@ -34,7 +34,7 @@ h1
                     .col-xs-5.text-right
                         {{ 'INVOICE_DATE' | translate }}
                     .col-xs-7
-                        a ng-href="/pdf/invoice/{{ order.invoice_number }}" target="_blank"
+                        a ng-href="/api/order/{{ order.number }}/invoice?lang={{ get_current_language() }}" target="_blank"
                             {{ order.invoice_date | date }}
                 .row
                     .col-xs-5.text-right
