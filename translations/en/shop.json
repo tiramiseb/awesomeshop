@@ -83,7 +83,7 @@
 "RECIPIENT_ACCOUNT_BIC": "Recipient account BIC",
 "RECIPIENT_ACCOUNT_IBAN": "Recipient account IBAN",
 "RECIPIENT_ACCOUNT_OWNER": "Recipient account owner",
-"REFERENCE": "Reference:", 
+"REFERENCE_": "Reference:", 
 "REGISTER": "Register", 
 "RETRY_PAY": "Retry payment", 
 "SAVED_CART_LOADED": "Saved cart bas been loaded into the current cart", 
