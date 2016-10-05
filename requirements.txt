@@ -1,7 +1,6 @@
 blinker
 docutils
 flask
-flask-babel
 flask-login
 flask-mongoengine
 flask-restful

@@ -18,6 +18,7 @@
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 """AwesomeShop: an e-commerce webapp using Flask"""
 
+import os
 from functools import wraps
 
 from flask import abort, current_app, Flask, make_response, request, session
@@ -27,12 +28,13 @@ from flask_restful import Api
 import simplejson
 
 
-def create_app(prefix=''):
+def create_app(prefix='/'):
     global app
     global db
     global rest
     app = Flask('awesomeshop')
     app.config.from_object('back.defaultconfig')
+    app.config['URL_PREFIX'] = prefix
     rest = Api(app, prefix=prefix, catch_all_404s=True)
     @rest.representation('application/json')
     def output_json(data, code, headers=None):
@@ -60,9 +62,52 @@ def create_app(prefix=''):
     from . import apiroutes
     return app
 
+translations = {}
+def load_translations():
+    """Load all translations, even frontend ones that will not be used,
+    so that there is no need to maintain too many json files..."""
+    for lang in os.listdir('translations'):
+        translations[lang] = {}
+        for jsonfile in os.listdir(os.path.join('translations', lang)):
+            translations[lang].update(
+                simplejson.load(
+                    file(os.path.join('translations', lang, jsonfile), 'r')
+                    )
+                )
+load_translations()
+
 
 def get_locale():
     return request.args.get('lang', app.config['LANGS'][0])
+
+def _(message, **kwargs):
+    return translations.get(get_locale(), {}).get(message,
+                                                  message).format(**kwargs)
+
+
+def _cur(amount, currency=None):
+    print amount
+    if not amount:
+        amount = 0
+    if not currency:
+        currency = app.config['CURRENCY']
+    curformat = translations.get(get_locale(), {}).get(
+                'currency_format',
+                u'{AMOUNT} {CURRENCY}'
+                )
+    return curformat.format(
+                        CURRENCY=unicode(currency),
+                        AMOUNT=unicode(amount),
+                        AMOUNT2=unicode(amount).replace('.', ',')
+                        )
+
+def _date(date):
+    if date:
+        return date.strftime(
+            translations.get(get_locale(), {}).get('date_format', u'%Y-%m-%d')
+            )
+    else:
+        return ''
 
 
 def admin_required(func):

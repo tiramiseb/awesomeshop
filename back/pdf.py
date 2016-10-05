@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-# Copyright 2016 Sébastien Maccagnoni-Munch
+# Copyright 2016 Sébastien Maccagnoni
 #
 # This file is part of AwesomeShop.
 #
@@ -20,12 +20,11 @@
 import cStringIO
 
 from flask import url_for
-from flask_babel import _, format_date
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import cm
 from reportlab.pdfgen import canvas
 
-from . import app
+from . import app, _, _cur, _date
 
 # How much to go down for...
 subspace = 5   # a small space
@@ -54,34 +53,36 @@ def invoice(order):
     # Order and invoice details
     y -= space_20
     c.setFont('Helvetica', 12)
-    c.drawString(x, y, _('Order %(number)s, on %(date)s',
-                         number=order.full_number,
-                         date=format_date(order.date)))
+    c.drawString(x, y, _('ORDER_NUM_AND_DATE',
+                         NUM=order.full_number,
+                         DATE=_date(order.date)))
     y -= space_12
     c.setFont('Helvetica-Bold', 12)
-    c.drawString(x, y, _('Invoice %(number)s, on %(date)s',
-                         number=order.invoice_full_number,
-                         date=format_date(order.invoice_date)))
+    c.drawString(x, y, _('INVOICE_NUM_AND_DATE',
+                         NUM=order.invoice_full_number,
+                         DATE=_date(order.invoice_date)))
     c.setFont('Helvetica', 12)
     y -= space_12
 
     if order.payment_date:
-        c.drawString(x, y, _('Payment received on %(date)s',
-                             date=format_date(order.payment_date)))
+        c.drawString(x, y, _('PAYMENT_RECEIVED_ON_X',
+                             DATE=_date(order.payment_date)))
         y -= space_12
-        c.drawString(x, y, _('Paid by %(description)s',
-                             description=order.payment_description))
+        c.drawString(x, y, '{} {}'.format(
+                                    _('PAYMENT_'),
+                                    _('PAYMENT:'+order.payment_id)
+                                    ))
         y -= space_12
 
     if order.shipping_date:
-        c.drawString(x, y, _('Shipped on %(date)s',
-                             date=format_date(order.shipping_date)))
+        c.drawString(x, y, _('SHIPPED_ON_X',
+                             DATE=_date(order.shipping_date)))
         y -= space_12
 
     # Delivery address
     y -= space_12
-    c.drawString(x, y, _('Delivery address:'))
-    y -= space_12
+    c.drawString(x, y, _('DELIVERY_ADDRESS'))
+    y -= space_20
     for l in order.delivery.split('\n'):
         c.drawString(x, y, l)
         y -= space_12
@@ -106,11 +107,11 @@ def invoice(order):
     y = tablestart
     c.line(1*cm, y, 20*cm, y)
     y -= space_10
-    c.drawString(colref, y, _('Reference'))
-    c.drawString(colprod, y, _('Product'))
-    c.drawRightString(colqty, y, _('Qty'))
-    c.drawRightString(colunit, y, _('Unit'))
-    c.drawRightString(coltotal, y, _('Total'))
+    c.drawString(colref, y, _('REFERENCE'))
+    c.drawString(colprod, y, _('PRODUCT'))
+    c.drawRightString(colqty, y, _('QTY'))
+    c.drawRightString(colunit, y, _('UNIT'))
+    c.drawRightString(coltotal, y, _('TOTAL'))
     y -= subspace
     c.line(1*cm, y, 20*cm, y)
     # Products themselves
@@ -120,8 +121,7 @@ def invoice(order):
         c.drawString(colref, y, l.reference)
         c.drawString(colprod, y, l.name)
         c.drawRightString(colqty, y, unicode(l.quantity))
-        c.drawRightString(colunit, y, l.net_price)
-        c.drawRightString(coltotal, y, l.line_net_price)
+        c.drawRightString(colunit, y, _cur(l.net_price, order.currency))
         if l.product.type == 'kit':
             for detail in l.product.get_details(l.data):
                 y -= space_10
@@ -133,33 +133,29 @@ def invoice(order):
         c.line(1*cm, y, 20*cm, y)
     # Subtotal
     y -= space_10
-    c.drawString(colprod, y, _('Subtotal'))
-    c.drawRightString(coltotal, y, order.net_subtotal)
+    c.drawString(colprod, y, _('SUBTOTAL'))
+    c.drawRightString(coltotal, y, _cur(order.net_subtotal, order.currency))
     y -= subspace
     c.line(1*cm, y, 20*cm, y)
     # Shipping
     y -= space_10
-    c.drawString(colprod, y, _('Shipping: %(description)s',
-                               description=order.carrier_description))
-    c.drawRightString(coltotal, y, order.net_shipping)
+    c.drawString(colprod, y, _('SHIPPING'))
+    c.drawRightString(colunit, y, order.carrier_description)
+    c.drawRightString(coltotal, y, _cur(order.net_shipping, order.currency))
     y -= subspace
     c.line(1*cm, y, 20*cm, y)
     # Total
     y -= space_12
     c.setFont('Helvetica-Bold', 12)
-    c.drawString(colprod, y, _('Total'))
-    c.drawRightString(coltotal, y, order.net_total)
+    c.drawString(colprod, y, _('TOTAL'))
+    c.drawRightString(coltotal, y, _cur(order.net_total, order.currency))
     y -= subspace*1.2
     c.line(1*cm, y, 20*cm, y)
     c.line(1*cm, tablestart, 1*cm, y)
     c.line(20*cm, tablestart, 20*cm, y)
     y -= space_10
     c.setFont('Helvetica', 10)
-    c.drawString(
-            colref,
-            y,
-            _(u'TVA non applicable, article 293 B du Code général des impôts')
-            )
+    c.drawString(colref, y, _('LEGAL_NOTICE'))
 
     # Footer
     c.setFont('Helvetica', 10)
