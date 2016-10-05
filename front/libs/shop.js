@@ -501,9 +501,7 @@ angular.module('awesomeshop', [
         $document.scrollTop(0,300);
     });
     $rootScope.CONFIG = CONFIG;
-    $rootScope.get_current_language = function() {
-        return $translate.use();
-    }
+    $rootScope.get_current_language = $translate.use;
     $rootScope.languages = languages;
 })
 .directive('productsList', function() {
