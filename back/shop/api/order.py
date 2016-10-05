@@ -343,3 +343,18 @@ rest.add_resource(ApiOrders, '/order')
 rest.add_resource(ApiOrder, '/order/<number>')
 rest.add_resource(PayOrder, '/order/<number>/pay')
 rest.add_resource(CancelOrder, '/order/<number>/cancel')
+
+@app.route(app.config['URL_PREFIX']+'/order/<number>/invoice')
+@login_required
+def pdf_invoice(number):
+    if current_user.is_admin:
+        order = Order.objects.get_or_404(number=number)
+    else:
+        order = Order.objects.get_or_404(
+                    customer=current_user.to_dbref(),
+                    number=number
+                    )
+    response = make_response(pdf.invoice(order))
+    response.mimetype = 'application/pdf'
+    return response
+

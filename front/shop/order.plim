@@ -141,7 +141,7 @@ small
 button.btn.btn-lg.btn-success.pull-right type="button" ng-show="order.status == 'unconfirmed'" ng-click="pay()"
     ,{{ 'CONFIRM_PAY' | translate }}
     i.fa.fa-chevron-right
-a.btn.btn-lg.btn-primary.pull-right ng-href="/pdf/invoice/{{ order.invoice_number }}" ng-if="order.invoice_number" target="_blank"
+a.btn.btn-lg.btn-primary.pull-right ng-href="/api/order/{{ order.number }}/invoice?lang={{ get_current_language() }}" ng-if="order.invoice_number" target="_blank"
     i.fa.fa-file-text-o
     ,
     {{ 'INVOICE_NUM_AND_DATE' | translate:{NUM: order.invoice_full_number, DATE: (order.invoice_date | date)} }}

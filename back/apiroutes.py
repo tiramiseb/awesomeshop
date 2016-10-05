@@ -50,20 +50,6 @@ class ApiConfig(Resource):
                 social=app.config['SOCIAL'],
                 )
 
-@app.route('/pdf/invoice/<number>')
-@login_required
-def pdf_invoice(number):
-    if current_user.is_admin:
-        order = Order.objects.get_or_404(invoice_number=number)
-    else:
-        order = Order.objects.get_or_404(
-                    customer=current_user.to_dbref(),
-                    invoice_number=number
-                    )
-    response = make_response(pdf.invoice(order))
-    response.mimetype = 'application/pdf'
-    return response
-
 class ApiSearch(Resource):
     def get(self):
         from .search import do_search
