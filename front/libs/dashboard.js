@@ -42,7 +42,7 @@ angular.module('awesomeshop', [
         .determinePreferredLanguage();
     $stateProvider
         .state('index', {
-            url: '/test',
+            url: '',
             templateUrl: 'dashboard/index.html',
             controller: 'IndexCtrl'
         })
