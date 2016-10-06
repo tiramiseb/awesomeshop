@@ -19,7 +19,7 @@
 
 import cStringIO
 
-from flask import url_for
+from flask import request
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import cm
 from reportlab.pdfgen import canvas
@@ -55,7 +55,7 @@ def invoice(order):
     # URL
     y -= space_14
     c.setFont('Helvetica', 12)
-    c.drawString(x+0.5*cm, y, url_for('static_file', _external=True))
+    c.drawString(x+0.5*cm, y, request.url_root)
 
     # Order and invoice details
     y -= space_20
