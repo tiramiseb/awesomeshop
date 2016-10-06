@@ -129,6 +129,7 @@ def invoice(order):
         c.drawString(colprod, y, l.name)
         c.drawRightString(colqty, y, unicode(l.quantity))
         c.drawRightString(colunit, y, _cur(l.net_price, order.currency))
+        c.drawRightString(coltotal, y, _cur(l.line_net_price, order.currency))
         if l.product.type == 'kit':
             for detail in l.product.get_details(l.data):
                 y -= space_10
