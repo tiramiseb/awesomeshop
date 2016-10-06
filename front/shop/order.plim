@@ -32,7 +32,7 @@ h1
         div ng-if="order.payment_message"
             {{ 'MESSAGE_ABOUT_PAYMENT_' | translate }} {{ 'ERRMSG:'+order.payment_message | translate }}
         div ng-if="order.shipping_date"
-            {{ ''SHIPPED_ON_X' | translate:{DATE:(order.shipping_date|date} }}
+            {{ 'SHIPPED_ON_X' | translate:{DATE:(order.shipping_date|date} }}
         div ng-if="order.tracking_number"
             b
                 ,{{ 'TRACKING_NUMBER_' | translate }}
