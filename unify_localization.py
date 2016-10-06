@@ -1,30 +1,41 @@
 #!/usr/bin/env python2
 
-LANGUAGES = ['en', 'fr']
-
+import codecs
 import json
+import os
 
-# First, read all locales
-locales = {}
-for l in LANGUAGES:
-    try:
-        with file('locale-{}.json'.format(l), 'r') as translations:
-            locales[l] = json.load(translations)
-    except IOError, e:
-        # No such file
-        if e.errno == 2:
-            locales[l] = {}
-        else:
-            raise
 
-# Then, make sure all translations are in all languages
-for strings in locales.values():
-    for refstring in strings:
-        for otherstrings in locales.values():
-            if refstring not in otherstrings:
-                otherstrings[refstring] = u''
+print "Read all existing translations..."
+languages = os.listdir('translations')
+translations = {}
+for l in languages:
+    for jsonfile in os.listdir(os.path.join('translations', l)):
+        if jsonfile not in translations:
+            translations[jsonfile] = {}
+        translations[jsonfile][l] = json.load(
+                                file(os.path.join('translations', l, jsonfile))
+                                )
 
-# Finally, save files
-for l, strings in locales.iteritems():
-    with file('locale-{}.json'.format(l), 'w') as translations:
-        json.dump(strings, translations, indent=0, sort_keys=True)
+print "Make sure all translations exist in all languages..."
+for jsonfile, langs in translations.iteritems():
+    print "     ... checking {}".format(jsonfile)
+    for l in languages:
+        if l not in langs:
+            langs[l] = {}
+    for strings in langs.values():
+        for refstring in strings:
+            for otherlang, otherstrings in langs.iteritems():
+                if refstring not in otherstrings:
+                    print ' ... adding "{}" to {}'.format(refstring, otherlang)
+                    otherstrings[refstring] = u''
+
+print "Save updated files..."
+for jsonfile, langs in translations.iteritems():
+    for lang, strings in langs.iteritems():
+        with codecs.open(
+                os.path.join('translations', lang, jsonfile),
+                'w',
+                encoding='utf-8'
+                ) as targetfile:
+            json.dump(strings, targetfile, indent=0, ensure_ascii=False,
+                      separators=(',', ': '), sort_keys=True)
