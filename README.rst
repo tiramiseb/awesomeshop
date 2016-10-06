@@ -59,7 +59,8 @@ Locally for development
 
 Example working on Ubuntu 16.04::
 
-    apt-get install mongodb-server
+    apt-get install mongodb-server npm nodejs-legacy
+    npm install bower -g
     ./init_awesomeshop.sh
     ./init_webroot.sh
     source venv/bin/activate
@@ -85,8 +86,19 @@ Afterwards, initialize the web root and the database if needed
 (``init_webroot.sh`` and ``init_database.py``) - don't forget the virtualenv
 if needed.
 
-Then, serve ``webroot/`` as static files and ``back.create_app`` on ``/api``
-with a WSGI server...
+Then, serve ``webroot/`` as static files and ``wsgi.app`` on ``/api`` with a
+WSGI server...
+
+Example conf for uWSGI::
+
+    [uwsgi]
+    chdir = /srv/awesomeshop
+    pythonpath = /srv/awesomeshop
+    virtualenv = /srv/awesomeshop/venv
+    mount = /api=wsgi:app
+    manage-script-name = true
+
+
 
 Local templates
 ===============
