@@ -1,4 +1,4 @@
-/* Copyright 2016 Sébastien Maccagnoni-Munch
+/* Copyright 2016 Sébastien Maccagnoni
  *
  * This file is part of AwesomeShop.
  *

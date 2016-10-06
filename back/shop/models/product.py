@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-# Copyright 2015-2016 Sébastien Maccagnoni-Munch
+# Copyright 2015-2016 Sébastien Maccagnoni
 #
 # This file is part of AwesomeShop.
 #
