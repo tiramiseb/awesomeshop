@@ -1,0 +1,51 @@
+/ Copyright 2016 Sébastien Maccagnoni
+/ 
+/ This file is part of AwesomeShop.
+/ 
+/ AwesomeShop is free software: you can redistribute it and/or modify it under
+/ the terms of the GNU Affero General Public License as published by the
+/ Free Software Foundation, either version 3 of the License, or (at your
+/ option) any later version.
+/ 
+/ AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+/ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+/ FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+/ details.
+/ 
+/ You should have received a copy of the GNU Affero General Public License
+/ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+.modal-header
+    h3.modal-title.text-danger
+        {{ 'SEPA_TRANSFER' | translate }}
+.modal-body
+    p
+        {{ 'EXECUTE_SEPA_TRANSFER_' | translate:{QTY: data.delay} }}
+    table
+        tr
+            th
+                {{ 'RECIPIENT_ACCOUNT_OWNER' | translate }}
+            td
+                {{ data.recipient }}
+        tr
+            th
+                {{ 'RECIPIENT_ACCOUNT_BIC' | translate }}
+            td
+                {{ data.bic }}
+        tr
+            th
+                {{ 'RECIPIENT_ACCOUNT_IBAN' | translate }}
+            td
+                {{ data.iban }}
+        tr
+            th
+                {{ 'AMOUNT' | translate }}
+            td
+                {{ data.amount | currency:data.currency }}
+        tr
+            th
+                {{ 'INFORMATION' | translate }}
+            td
+                {{ data.information }}
+.modal-footer
+    button.btn.btn-primary type="button" ng-click="$close()"
+        {{ 'OK' | translate }}

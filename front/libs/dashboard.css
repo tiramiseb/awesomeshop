@@ -1,0 +1,94 @@
+/* Copyright 2015-2016 Sébastien Maccagnoni
+ *
+ * This file is part of AwesomeShop.
+ *
+ * AwesomeShop is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU Affero General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/* Smaller text for the menu */
+.sidebar-nav li {
+    font-size: 90%;
+    line-height: 3em !important;
+}
+
+/* Button to toggle the menu */
+#menu-toggle {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 100;
+}
+/* Buttons related to the page */
+#page-buttons {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+}
+#page-buttons i {
+    text-shadow: 1px 1px 5px #999;
+}
+#page-buttons *:hover i {
+    text-shadow: 1px 1px 15px #000;
+}
+#page-buttons *:disabled i {
+    text-shadow: none;
+}
+#page-content-wrapper {
+    /* Buttons should never overlap the last lines of the page */
+    margin-bottom: 4em;
+}
+
+/* Text area with monospace, better for writing ReST */
+textarea {
+    font-family: monospace;
+    height: 20em !important;
+}
+textarea.small-textarea {
+    height: 6em !important;
+}
+/* Display a "move" cursor on handles */
+[sv-handle], .handle {
+    cursor: move;
+}
+[sv-handle]:hover {
+    text-shadow: 0 0 4px #58f;
+}
+
+/* Filter inputs */
+input.list-group-item {
+    width: 100%;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+/* Categories list prefixes */
+.cat-0 {
+    margin-left: 0;
+}
+.cat-1 {
+    margin-left: 1.5em;
+}
+.cat-2 {
+    margin-left: 3em;
+}
+.cat-1:before, .cat-2:before {
+    content: '↳';
+}
+/* Cursor pointer */
+.pointer {
+       cursor: pointer;
+}

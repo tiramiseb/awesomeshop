@@ -7,6 +7,8 @@ This file summarizes the most important modifications to AwesomeShop...
 +------------+---------+------------------------------------------------------+
 | Date       | Type    | Subject                                              |
 +============+=========+======================================================+
+| 2016-10-06 | Feature | Frontend as static files                             |
++------------+---------+------------------------------------------------------+
 | 2016-09-07 | Bugfix  | Allow decimal variations for kit products            |
 +------------+---------+------------------------------------------------------+
 | 2016-09-04 | Feature | Internal note (for instance, tips for preparation)   |
@@ -41,9 +43,8 @@ TODO
 
 The following are ideas of features that may be implemented in AwesomeShop.
 
+* Swap the shop name and page name in title tag
 * Customize shipping delays for each product
-* Remove jinja macros
-* Change how translations work in order to get rid of Flask for the frontend
 * Use Beaker to cache some results
 * When creating an order, do not empty the cart before the browser is
   redirected to the order page (or display a message to tell the user (s)he
@@ -52,6 +53,10 @@ The following are ideas of features that may be implemented in AwesomeShop.
   (``.. doc-list::``, links to other pages, images...)
 * Same height for all products in a products list
 * Allow for a product to not be sold anymore (end of life): absent from the "out of stock" list
+* Make the "one page" payment page simpler with buttons to unhide the rest (to make it easier to read)
+* Save invoices as files and serve them only to those who are correctly identified
+* ... Or store the invoice (PDF version) in the database (to generate it only once)
+* Dashboard : toolbar for signin in, logging out, changing language...
 
 Bugs
 ====

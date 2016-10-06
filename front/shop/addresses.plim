@@ -1,0 +1,73 @@
+/ Copyright 2015-2016 Sébastien Maccagnoni
+/ 
+/ This file is part of AwesomeShop.
+/ 
+/ AwesomeShop is free software: you can redistribute it and/or modify it under
+/ the terms of the GNU Affero General Public License as published by the
+/ Free Software Foundation, either version 3 of the License, or (at your
+/ option) any later version.
+/ 
+/ AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+/ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+/ FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+/ details.
+/ 
+/ You should have received a copy of the GNU Affero General Public License
+/ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+
+h1
+    {{ 'CONFIGURE_ADDRESSES' | translate }}
+form name="form" ng-submit="send()" novalidate="novalidate"
+    .row
+        .col-sm-6 ng-class="{'col-sm-offset-3':is_last_odd($index)}" ng-repeat="address in addresses"
+            .panel.panel-default
+                .panel-body
+                    .form-group ng-class="{ 'has-error': form.address_t_{{ $index }}.$invalid && !form.address_t_{{ $index }}.$pristine }"
+                        label for="address_t_{{ $index }}"
+                            {{ 'ADDRESS_TITLE' | translate }}
+                        input.form-control type="text" id="address_t_{{ $index }}" name="address_t_{{ $index }}" ng-model="address.title" required="required"
+                        p.text-danger ng-show="form.address_t_{{ $index }}.$invalid"
+                            {{ 'TITLE_MANDATORY' | translate }}
+                    .row
+                        .col-xs-6
+                            .form-group
+                                label for="address_f_{{ $index }}"
+                                    {{ 'FIRST_NAME' | translate }}
+                                input.form-control type="text" id="address_f_{{ $index }}" name="address_f_{{ $index }}" ng-model="address.firstname"
+                        .col-xs-6
+                            .form-group ng-class="{ 'has-error': form.address_l_{{ $index }}.$invalid && !form.address_l_{{ $index }}.$pristine }"
+                                label for="address_l_{{ $index }}"
+                                    {{ 'LAST_NAME' | translate }}
+                                input.form-control type="text" id="address_l_{{ $index }}" name="address_l_{{ $index }}" ng-model="address.lastname" required="required"
+                                p.text-danger ng-show="form.address_l_{{ $index }}.$invalid"
+                                    {{ 'LAST_NAME_MANDATORY' | translate }}
+                    .form-group ng-class="{ 'has-error' : form.address_a_{{ $index }}.$invalid && !form.address_a_{{ $index }}.$pristine }"
+                        label for="address_a_{{ $index }}"
+                            {{ 'ADDRESS' | translate }}
+                        textarea.form-control.small-textarea id="address_a_{{ $index }}" name="address_a_{{ $index }}" ng-model="address.address" required="required"
+                        p.text-danger ng-show="form.address_a_{{ $index }}.$invalid"
+                            {{ 'ADDRESS_MANDATORY' | translate }}
+                    .form-group ng-class="{ 'has-error' : form.address_c_{{ $index }}.$invalid && !form.address_c_{{ $index }}.$pristine }"
+                        label for="address_c_{{ $index }}"
+                            {{ 'COUNTRY' | translate }}
+                        select.form-control id="address_c_{{ $index }}" name="address_c_{{ $index }}" ng-model="address.country" ng-options="country.code as prefixed(country) for country in countries.get()" required="required"
+                        p.text-danger ng-show="form.address_c_{{ $index }}.$invalid"
+                            {{ 'COUNTRY_MANDATORY' | translate }}
+                    .form-group
+                        label for="address_p_{{ $index }}"
+                            {{ 'PHONE' | translate }}
+                        input.form-control type="text" id="address_p_{{ $index }}" name="address_p_{{ $index }}" ng-model="address.phone" required="required"
+                    button.btn.btn-danger.pull-right type="button" ng-click="addresses.splice($index, 1)"
+                        i.fa.fa-trash
+                        ,
+                        {{ 'REMOVE' | translate }}
+        .col-xs-12.text-center
+            button.btn.btn-primary type="button" ng-click="addresses.push({new: true, title: MY_ADDRESS})"
+                i.fa.fa-plus
+                ,
+                {{ 'ADD_ADDRESS' | translate }}
+            ,
+            button.btn.btn-success type="submit" ng-disabled="form.$invalid"
+                i.fa.fa-check
+                ,
+                {{ 'SAVE_MODIFICATIONS' | translate }}

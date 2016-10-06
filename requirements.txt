@@ -1,7 +1,6 @@
 blinker
 docutils
 flask
-flask-babel
 flask-login
 flask-mongoengine
 flask-restful
@@ -10,9 +9,11 @@ marshmallow
 mongoengine
 payplug
 pillow
+plim
 prices
 reportlab
 satchless
 scrypt
+simplejson
 whoosh
 wtforms

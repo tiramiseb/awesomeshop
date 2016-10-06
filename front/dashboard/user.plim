@@ -1,0 +1,135 @@
+/ Copyright 2015 Sébastien Maccagnoni
+/ 
+/ This file is part of AwesomeShop.
+/ 
+/ AwesomeShop is free software: you can redistribute it and/or modify it under
+/ the terms of the GNU Affero General Public License as published by the
+/ Free Software Foundation, either version 3 of the License, or (at your
+/ option) any later version.
+/ 
+/ AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+/ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+/ FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+/ details.
+/ 
+/ You should have received a copy of the GNU Affero General Public License
+/ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+form name="form" ng-submit="submit()" novalidate="novalidate"
+    h1
+        ,{{ 'USER_' | translate }}
+        {{ form.email.$valid || form.email.$pristine ? user.email : 'INCORRECT_EMAIL' | translate }}
+    .row
+        .col-xs-8.col-md-4
+            .form-group ng-class="{ 'has-error': form.email.$invalid && !form.email.$pristine }"
+                label for="email"
+                    {{ 'EMAIL_ADDRESS' | translate }}
+                input#email.form-control type="email" name="email" ng-model="user.email" required="required"
+                p.text-danger ng-show="form.email.$invalid"
+                    {{ 'INCORRECT_EMAIL' | translate }}
+        .col-xs-4.col-md-2
+            .form-group
+                label for="is_admin"
+                    {{ 'IS_ADMIN' | translate }}
+                button.btn.form-control type="button" ng-class="{'btn-success': user.is_admin, 'btn-danger': !user.is_admin }" ng-model="user.is_admin" uib-btn-checkbox="uib-btn-checkbox"
+                    span ng-show="user.is_admin"
+                        {{ 'IS_ADMIN' | translate }}
+                    span ng-hide="user.is_admin"
+                        {{ 'IS_ADMIN_NO' | translate }}
+        .col-xs-6.col-md-3
+            .form-group ng-class="{ 'has-error': form.password.$invalid && !form.password.$pristine }"
+                label for="password"
+                    {{ 'PASSWORD' | translate }}
+                input#password.form-control type="password" name="password" ng-model="user.password" ng-required="!user.id"
+                p.text-danger ng-show="form.password.$invalid"
+                    {{ 'PASSWORD_MANDATORY' | translate }}
+        .col-xs-6.col-md-3
+            .form-group ng-class="{ 'has-error': form.password2.$invalid && !form.password2.$pristine }"
+                label for="password2"
+                    {{ 'PASSWORD_AGAIN' | translate }}
+                input#password2.form-control type="password" name="password2" ng-model="user.password_confirm" match="user.password"
+                p.text-danger ng-show="form.password2.$invalid"
+                    {{ 'PASSWORDS_MUST_MATCH' | translate }}
+    h2
+        {{ 'ADDRESSES' | translate }}
+    uib-accordion
+        .panel-default uib-accordion-group="uib-accordion-group" ng-repeat="address in user.addresses" heading="{{ address.title || 'UNTITLED_ADDRESS' | translate }}" is-open="address.new"
+                .row
+                    .col-sm-6
+                        .form-group ng-class="{ 'has-error': form.address_t_{{ $index }}.$invalid && !form.address_t_{{ $index }}.$pristine }"
+                            label for="address_t_{{ $index }}"
+                                {{ 'ADDRESS_TITLE' | translate }}
+                            input.form-control id="address_t_{{ $index }}" name="address_t_{{ $index }}" ng-model="address.title" required="required"
+                            p.text-danger ng-show="form.address_t_{{ $index }}.$invalid"
+                                {{ 'TITLE_MANDATORY' | translate }}
+                        .row
+                            .col-xs-6
+                                .form-group
+                                    label for="address_f_{{ $index }}"
+                                        {{ 'FIRST_NAME' | translate }}
+                                    input.form-control id="address_f_{{ $index }}" name="address_f_{{ $index }}" ng-model="address.firstname"
+                            .col-xs-6
+                                .form-group ng-class="{ 'has-error': form.address_l_{{ $index }}.$invalid && !form.address_l_{{ $index }}.$pristine }"
+                                    label for="address_l_{{ $index }}"
+                                        {{ 'LAST_NAME' | translate }}
+                                    input.form-control id="address_l_{{ $index }}" name="address_l_{{ $index }}" ng-model="address.lastname" required="required"
+                                    p.text-danger ng-show="form.address_l_{{ $index }}.$invalid"
+                                        {{ 'LAST_NAME_MANDATORY' | translate }}
+                        .form-group
+                            label for="address_p_{{ $index }}"
+                                {{ 'PHONE' | translate }}
+                            input.form-control id="address_p_{{ $index }}" name="address_p_{{ $index }}" ng-model="address.phone"
+                    .col-sm-6
+                        .form-group ng-class="{ 'has-error': form.address_a_{{ $index }}.$invalid && !form.address_a_{{ $index }}.$pristine }"
+                            label for="address_a_{{ $index }}"
+                                {{ 'ADDRESS' | translate }}
+                            textarea.form-control.small-textarea id="address_a_{{ $index }}" name="address_a_{{ $index }}" ng-model="address.address" required="required"
+                            p.text-danger ng-show="form.address_a_{{ $index }}.$invalid"
+                                {{ 'ADDRESS_MANDATORY' | translate }}
+                        .form-group ng-class="{ 'has-error': form.address_c_{{ $index }}.$invalid && !form.address_c_{{ $index }}.$pristine }"
+                            label for="address_c_{{ $index }}"
+                                {{ 'COUNTRY' | translate }}
+                            select.form-control id="address_c_{{ $index }}" name="address_c_{{ $index }}" ng-model="address.country" ng-options="country.code as prefixed(country) for country in countries" required="required"
+                            p.text-danger ng-show="form.address_l_{{ $index }}.$invalid"
+                                {{ 'COUNTRY_MANDATORY' | translate }}
+                        button.btn.btn-danger.pull-right type="button" ng-click="user.addresses.splice($index, 1)"
+                            i.fa.fa-trash
+                            ,
+                            {{ 'REMOVE' | translate }}
+    button.btn.btn-success type="button" ng-click='user.addresses.push({new:true})'
+        i.fa.fa-plus
+        {{ 'ADD_ADDRESS' | translate }}
+    h2
+        {{ 'SAVED_CARTS' | translate }}
+    uib-accordion
+        .panel-default uib-accordion-group="uib-accordion-group" ng-repeat="cart in user.carts" heading="{{ cart.name }} ({{ cart.date | date }})"
+            .panel.panel-default
+                .panel-heading
+                    .row
+                        .col-sm-6
+                            i.fa.fa-cube
+                            ,
+                            {{ 'PRODUCT' | translate }}
+                        .col-xs-4.col-sm-2.text-right
+                            {{ 'QTY' | translate }}
+                        .col-xs-4.col-sm-2.text-right
+                            {{ 'UNIT' | translate }}
+                        .col-xs-4.col-sm-2.text-right
+                            {{ 'TOTAL' | translate }}
+                .list-group
+                    .list-group-item ng-repeat="line in cart.lines" uib-popover-template="'/common/product_'+line.product.type+'_popup.html'" popover-trigger="mouseenter" popover-enable="line.product.details"
+                        .row
+                            .col-sm-6
+                                {{ line.product.name }}
+                            .col-xs-4.col-sm-2.text-right
+                               {{ line.quantity }}
+                            .col-xs-4.col-sm-2.text-right
+                                {{ line.product.net_price | currency:CONFIG.currency }}
+                            .col-xs-4.col-sm-2.text-right
+                                {{ line.product.net_price * line.quantity | currency:CONFIG.currency }}
+    #page-buttons
+        button.btn.btn-link type="submit" uib-tooltip="{{ 'SAVE' | translate }}" ng-disabled="form.$invalid"
+            i.fa.fa-check-circle.fa-4x.text-success
+        button.btn.btn-link type="button" ng-click="delete()" uib-tooltip="{{ 'REMOVE' | translate }}"
+            i.fa.fa-times-circle.fa-4x.text-danger
+        a.btn.btn-link ui-sref="users" uib-tooltip="{{ 'BACK' | translate }}"
+            i.fa.fa-arrow-circle-left.fa-4x ng-class="{'text-primary': form.$pristine, 'text-danger': form.$dirty }"

@@ -1,0 +1,127 @@
+/ Copyright 2015-2016 Sébastien Maccagnoni
+/ 
+/ This file is part of AwesomeShop.
+/ 
+/ AwesomeShop is free software: you can redistribute it and/or modify it under
+/ the terms of the GNU Affero General Public License as published by the
+/ Free Software Foundation, either version 3 of the License, or (at your
+/ option) any later version.
+/ 
+/ AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+/ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+/ FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+/ details.
+/ 
+/ You should have received a copy of the GNU Affero General Public License
+/ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+doctype html
+html (trigger-auth enable-error-handler)
+    head
+        meta http-equiv='Content-Type' content='application/xhtml+xml; charset=UTF-8'
+        meta name='generator' content='AwesomeShop'
+        meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'
+        base href='/'
+        link rel='stylesheet' href='bower_components/bootstrap/dist/css/bootstrap.min.css'
+        link rel='stylesheet' href='bower_components/font-awesome/css/font-awesome.min.css'
+        link rel='stylesheet' href='libs/simple-sidebar.css'
+        link rel='stylesheet' href='libs/common.css'
+        link rel='stylesheet' href='libs/dashboard.css'
+        script src='bower_components/angular/angular.min.js'
+        script src='bower_components/angular-animate/angular-animate.min.js'
+        script src='bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js'
+        script src='bower_components/angular-file-upload/dist/angular-file-upload.min.js'
+        script src='bower_components/angular-slugify/angular-slugify.js'
+        script src='bower_components/angular-sortable-view/src/angular-sortable-view.min.js'
+        script src='bower_components/angular-translate/angular-translate.min.js'
+        script src='bower_components/messageformat/messageformat.js'
+        script src='bower_components/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.min.js'
+        script src='bower_components/angular-translate-loader-partial/angular-translate-loader-partial.min.js'
+        script src='bower_components/angular-dynamic-locale/tmhDynamicLocale.min.js'
+        script src='bower_components/angular-ui-router/release/angular-ui-router.min.js'
+        script src='bower_components/angular-validation-match/dist/angular-validation-match.min.js'
+        script src='bower_components/angular-http-auth/src/http-auth-interceptor.js'
+        script src='libs/common.js'
+        script src='libs/dashboard/carriers.js'
+        script src='libs/dashboard/categories.js'
+        script src='libs/dashboard/countries.js'
+        script src='libs/dashboard/orders.js'
+        script src='libs/dashboard/pages.js'
+        script src='libs/dashboard/products.js'
+        script src='libs/dashboard/taxrates.js'
+        script src='libs/dashboard/users.js'
+        script src='libs/dashboard.js'
+        title
+            {{ CONFIG.shop_name }} - {{ 'DASHBOARD' | translate }}
+    body
+        #spinner
+            i.fa.fa-spinner.fa-pulse.fa-5x.text-primary
+        #wrapper ng-class="{toggled: menuToggle}"
+            #sidebar-wrapper
+                ul.sidebar-nav
+                    li
+                        a href="/" target="_blank"
+                            i.fa.fa-eye
+                            ,
+                            {{ 'SEE_SHOP' | translate }}
+                    li.sidebar-brand
+                        a ui-sref="index"
+                            {{ 'DASHBOARD' | translate }}
+                    li
+                        {{ 'DAY_TO_DAY' | translate }}
+                    li
+                        a ui-sref="orders"
+                            i.fa.fa-shopping-cart
+                            ,
+                            {{ 'ORDERS' | translate }}
+                    li
+                        a ui-sref="products"
+                            i.fa.fa-cubes
+                            ,
+                            {{ 'PRODUCTS' | translate }}
+                    li
+                        a ui-sref="categories"
+                            i.fa.fa-th-list
+                            ,
+                            {{ 'CATEGORIES' | translate }}
+                    li
+                        a ui-sref="docs"
+                            i.fa.fa-file-text
+                            ,
+                            {{ 'DOCUMENTATION' | translate }}
+                    li
+                        {{ 'CONFIGURATION' | translate }}
+                    li
+                        a ui-sref="carriers"
+                            i.fa.fa-truck
+                            ,
+                            {{ 'CARRIERS' | translate }}
+                    li
+                        a ui-sref="countries"
+                            i.fa.fa-flag
+                            ,
+                            {{ 'COUNTRIES' | translate }}
+                    li
+                        a ui-sref="countriesgroups"
+                            i.fa.fa-globe
+                            ,
+                            {{ 'COUNTRIES_GROUPS' | translate }}
+                    li
+                        a ui-sref="taxrates"
+                            i.fa.fa-calculator
+                            ,
+                            {{ 'TAXES' | translate }}
+                    li
+                        a ui-sref="infos"
+                            i.fa.fa-file-text
+                            ,
+                            {{ 'INFORMATION' | translate }}
+                    li
+                        a ui-sref="users"
+                            i.fa.fa-users
+                            ,
+                            {{ 'USERS' | translate }}
+            #page-content-wrapper
+                button#menu-toggle.btn.btn-default type="button" ng-model="menuToggle" uib-btn-checkbox="uib-btn-checkbox"
+                    i.fa.fa-bars
+                .container-fluid
+                    ui-view

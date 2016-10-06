@@ -1,0 +1,206 @@
+/ Copyright 2016 Sébastien Maccagnoni
+/ 
+/ This file is part of AwesomeShop.
+/ 
+/ AwesomeShop is free software: you can redistribute it and/or modify it under
+/ the terms of the GNU Affero General Public License as published by the
+/ Free Software Foundation, either version 3 of the License, or (at your
+/ option) any later version.
+/ 
+/ AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+/ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+/ FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+/ details.
+/ 
+/ You should have received a copy of the GNU Affero General Public License
+/ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+form name="form" ng-submit="submit()" novalidate="novalidate"
+    h1
+        {{ 'PRODUCT_' | translate }} {{ product.slug }}
+        a.pull-right.btn.btn-sm.btn-info href="/[[ product.path ]]" ng-disabled="form.$dirty"
+            {{ 'VIEW' | translate }}
+    .row
+        .col-md-3.col-xs-6
+            .form-group ng-class="{ 'has-error': form.slug.$invalid && !form.slug.$pristine }"
+                label for="slug"
+                    {{ 'SLUG' | translate }}
+                input#slug.form-control name="slug" ng-model="product.slug" required="required"
+                p.text-danger ng-show="form.slug.$invalid"
+                    {{ 'SLUG_MANDATORY' | translate }}
+        .col-md-3.col-xs-6
+            .form-group ng-class="{ 'has-error': form.reference.$invalid && !form.reference.$pristine }"
+                label for="reference"
+                    {{ 'REFERENCE' | translate }}
+                input#reference.form-control name="reference" ng-model="product.reference" required="required"
+                p.text-danger ng-show="form.reference.$invalid"
+                    {{ 'REFERENCE_MANDATORY' | translate }}
+        .col-md-3.col-xs-6
+            .form-group ng-class="{ 'has-error': form.category.$invalid && !form.category.$pristine }"
+                label for="category"
+                    {{ 'CATEGORY' | translate }}
+                input#category.form-control name="category" type="text" ng-model="displayablecategories" uib-typeahead="category as category.full_name for category in categories | filter:{ full_name: $viewValue }" typeahead-editable="false" typeahead-min-length="0" typeahead-on-select="product.category=$item.id" required="required"
+                p.text-danger ng-show="form.category.$invalid"
+                    {{ 'CATEGORY_MANDATORY' | translate }}
+        .col-md-3.col-xs-6
+            .form-group ng-class="{ 'has-error': form.documentation.$invalid && !form.documentation.$pristine }"
+                label for="documentation"
+                    {{ 'DOCUMENTATION' | translate }}
+                input#documentation.form-control name="documentation" type="text" ng-model="displayabledocumentations" uib-typeahead="documentation as documentation.title for documentation in documentations | filter:{ title: $viewValue }" typeahead-editable="false" typeahead-min-length="0" typeahead-on-select="product.documentation=$item.id" required="required"
+                p.text-danger ng-show="form.documentation.$invalid"
+                    {{ 'DOCUMENTATION_MANDATORY' | translate }}
+    .row
+        .col-md-9
+            .form-group
+                label for="keywords"
+                    {{ 'KEYWORDS' | translate }}
+                input#keywords.form-control name="keywords" ng-model="product.keywords"
+        .col-md-3
+            .form-group
+                label for="on_sale"
+                    {{ 'ON_SALE' | translate }}
+                button.btn.form-control type="button" ng-class="{'btn-success': product.on_sale, 'btn-danger': !product.on_sale }" ng-model="product.on_sale" uib-btn-checkbox="uib-button-checkbox"
+                    span ng-show="product.on_sale"
+                        {{ 'ON_SALE' | translate }}
+                    span ng-hide="product.on_sale"
+                        {{ 'ON_SALE_NO' | translate }}
+    .row
+        .col-sm-6 ng-repeat="lang in langs"
+            .panel.panel-default
+                .panel-heading
+                    {{ lang }}
+                .panel-body
+                    .form-group
+                        label for="name{{ lang }}"
+                            {{ 'NAME' | translate }}
+                        .input-group
+                            input.form-control id="name{{ lang }}" name="name{{ lang }}" ng-model="product.name[lang]"
+                            span.input-group-btn
+                                button.btn.btn-primary type="button" ng-click="slug_from(product.name[lang])"
+                                    {{ 'TO_SLUG' | translate }}
+                    .form-group
+                        label for="description{{ lang }}"
+                            {{ 'DESCRIPTION' | translate }}
+                        textarea.form-control id="description{{ lang }}" name="description{{ lang }}" ng-model="product.description[lang]"
+    uib-accordion
+        .panel-default uib-accordion-group="uib-accordion-group" heading="{{ 'RELATED_PRODUCTS' | translate }} ({{ product.related_products.length }})"
+            .row
+                .col-xs-6
+                    .panel.panel-default
+                        .panel-heading
+                            {{ 'SELECTED' | translate }}
+                        .list-group
+                            button.list-group-item type="button" ng-repeat="prodid in product.related_products" ng-click="remove_related_product(prodid)"
+                                {{ product_name_from_id(prodid) }}
+                                span.pull-right
+                                    i.fa.fa-arrow-right
+                .col-xs-6
+                    .panel.panel-default
+                        .panel-heading
+                            {{ 'AVAILABLE' | translate }}
+                        .list-group
+                            input.list-group-item type="text" ng-model="unrelated_query" placeholder="{{ 'FILTER' | translate }}"
+                            button.list-group-item type="button" ng-repeat="prod in unrelated_products() | filter:unrelated_query" ng-click="add_related_product(prod.id)"
+                                i.fa.fa-arrow-left
+                                &nbsp;&nbsp;
+                                {{ prod.name || prod.slug }}
+    .row
+        .col-md-6
+            .panel.panel-default
+                .panel-heading
+                    {{ 'PRICING' | translate }}
+                .panel-body
+                    .row
+                        .col-xs-6
+                            .form-group
+                                label for="purchase_price"
+                                    {{ 'PURCHASE_PRICE' | translate }}
+                                .input-group
+                                    input#purchase_price.form-control type="number" step="0.01" name="purchase_price" ng-model="product.purchasing_price"
+                                    span.input-group-addon
+                                        {{ CONFIG.currency }}
+                        .col-xs-6
+                            .form-group ng-class="{ 'has-error': form.gross_price.$invalid && !form.gross_price.$pristine }"
+                                label for="gross_price"
+                                    {{ 'GROSS_PRICE' | translate }}
+                                .input-group
+                                    input#gross_price.form-control type="number" step="0.01" name="gross_price" ng-model="product.gross_price" required="required"
+                                    span.input-group-addon
+                                        {{ CONFIG.currency }}
+                                p.text-danger ng-show="form.gross_price.$invalid"
+                                    {{ 'GROSS_PRICE_MANDATORY' | translate }}
+                        .col-xs-6
+                            .form-group ng-class="{ 'has-error': form.tax.$invalid && !form.tax.$pristine }"
+                                label for="tax"
+                                    {{ 'TAX' | translate }}
+                                select#tax.form-control name="tax" ng-model="product.tax" ng-options="tax.id as tax.name for tax in taxrates" required="required"
+                                p.text-danger ng-show="form.tax.$invalid"
+                                    {{ 'TAX_MANDATORY' | translate }}
+                        .col-xs-6
+                            .form-group
+                                label for="net_price"
+                                    {{ 'NET_PRICE' | translate }}
+                                .input-group
+                                    input#net_price.form-control type="text" name="net_price" ng-value="net_price()" disabled="disabled"
+                                    span.input-group-addon
+                                        {{ CONFIG.currency }}
+        .col-md-6
+            .panel.panel-default
+                .panel-heading
+                    {{ 'STOCK_SHIPPING' | translate }}
+                .panel-body
+                    .row
+                        .col-xs-6
+                            .form-group
+                                label for="stock"
+                                    {{ 'STOCK' | translate }}
+                                input#stock.form-control type="number" name="stock" ng-model="product.stock"
+                        .col-xs-6
+                            .form-group
+                                label for="stock_alert"
+                                    {{ 'STOCK_ALERT' | translate }}
+                                input#stock_alert.form-control type="number" name="stock_alert" ng-model="product.stock_alert"
+                        .col-xs-6
+                            .form-group
+                                label for="on_demand"
+                                    {{ 'ON_DEMAND' | translate }}
+                                button.btn.form-control type="button" ng-class="{'btn-success': product.on_demand, 'btn-danger': !product.on_demand }" ng-model="product.on_demand" uib-btn-checkbox="uib-button-checkbox"
+                                    span ng-show="product.on_demand"
+                                        {{ 'ON_DEMAND' | translate }}
+                                    span ng-hide="product.on_demand"
+                                        {{ 'ON_DEMAND_NO' | translate }}
+                        .col-xs-6
+                            .form-group
+                                label for="weight"
+                                    {{ 'WEIGHT' | translate }}
+                                input#weight.form-control name="weight" type="number" ng-model="product.weight"
+    #pictures.panel.panel-default
+        .panel-heading
+            {{ 'PICTURES' | translate }}
+        .panel-body
+            #photos.row sv-root="sv-root" sv-part="photos" sv-on-sort="sort_photo($indexFrom, $indexTo)"
+                .col-xs-6.col-sm-4.col-md-3.col-lg-2 ng-repeat="photo in photos" sv-element="photos_sortoptions"
+                    .thumbnail sv-handle="sv_handle"
+                        img ng-src="{{ photo.thumbnail_url }}" onmousedown="return false;"
+                        .caption.text-center
+                            button.btn.btn-danger type="button" ng-click="delete_photo(photo.filename, $index)"
+                                i.fa.fa-trash
+                                ,
+                                {{ 'REMOVE' | translate }}
+            div ng-if="product.id"
+                hr
+                input type="file" nv-file-select="nv-file-select" uploader="uploader"
+            p ng-hide="product.id"
+                {{ 'SAVE_BEFORE_IMAGES' | translate }}
+    #internal-note.panel.panel-default
+        .panel-heading
+            {{ 'INTERNAL_NOTE' | translate }}
+        .panel-body
+            .form-group ng-class="{ 'has-error': form.internal_note.$invalid && !form.internal_note.$pristine }"
+                textarea#internal_note.form-control name="internal_note" ng-model="product.internal_note"
+    #page-buttons
+        button.btn.btn-link type="submit" uib-tooltip="{{ 'SAVE' | translate }}" ng-disabled="form.$invalid"
+            i.fa.fa-check-circle.fa-4x.text-success
+        button.btn.btn-link type="button" ng-click="delete()" uib-tooltip="{{ 'REMOVE' | translate }}"
+            i.fa.fa-times-circle.fa-4x.text-danger
+        a.btn.btn-link ui-sref="products" uib-tooltip="{{ 'BACK' | translate }}"
+            i.fa.fa-arrow-circle-left.fa-4x ng-class="{'text-primary': form.$pristine, 'text-danger': form.$dirty }"

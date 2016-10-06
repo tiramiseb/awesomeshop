@@ -1,0 +1,64 @@
+/ Copyright 2015-2016 Sébastien Maccagnoni
+/ 
+/ This file is part of AwesomeShop.
+/ 
+/ AwesomeShop is free software: you can redistribute it and/or modify it under
+/ the terms of the GNU Affero General Public License as published by the
+/ Free Software Foundation, either version 3 of the License, or (at your
+/ option) any later version.
+/ 
+/ AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+/ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+/ FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+/ details.
+/ 
+/ You should have received a copy of the GNU Affero General Public License
+/ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+h1
+    {{ 'TAX_RATES' | translate }}
+.list-group
+    input.list-group-item type="text" ng-model="query" placeholder="{{ 'FILTER' | translate }}"
+    .list-group-item ng-repeat="rate in taxrates | filter:query"
+        form.row name="form" ng-submit="save(rate)" novalidate="novalidate"
+            .col-xs-4
+                input.form-control name="name" type="text" ng-model="rate.name" placeholder="{{ 'NAME' | translate }}" required="required"
+                p.text-danger ng-show="form.name.$dirty && form.name.$invalid"
+                    {{ 'NAME_MANDATORY' | translate }}
+            .col-xs-4
+                .input-group
+                    input.form-control name="rate" type="text" ng-model="rate.rate" placeholder="{{ 'RATE' | translate }}" required="required"
+                    span.input-group-addon
+                        |%
+                p.text-danger ng-show="form.rate.$dirty && form.rate.$invalid"
+                    {{ 'RATE_MANDATORY' | translate }}
+            .col-xs-4.text-right
+                .btn-group
+                    button.btn.btn-success type="submit" ng-disabled="form.$invalid"
+                        i.fa.fa-check
+                        ,
+                        span.hidden-xs.hidden-sm
+                            {{ 'SAVE' | translate }}
+                    button.btn.btn-danger type="button" ng-click="delete(rate)"
+                        i.fa.fa-times
+                        ,
+                        span.hidden-xs.hidden-sm
+                            {{ 'DELETE' | translate }}
+    .list-group-item
+        form.row name="newrateform" ng-submit="add()" novalidate="novalidate"
+            .col-xs-4
+                input.form-control name="name" type="text" ng-model="newrate.name" placeholder="{{ 'NAME' | translate }}" required="required"
+                p.text-danger ng-show="newrateform.name.$dirty && newrateform.name.$invalid"
+                    {{ 'NAME_MANDATORY' | translate }}
+            .col-xs-4
+                .input-group
+                    input.form-control name="rate" type="text" ng-model="newrate.rate" placeholder="{{ 'RATE' | translate }}" required="required"
+                    span.input-group-addon
+                        |%
+                p.text-danger ng-show="form.rate.$dirty && form.rate.$invalid"
+                    {{ 'RATE_MANDATORY' | translate }}
+            .col-xs-4.text-right
+                button.btn.btn-primary type="submit" ng-disabled="newrateform.$invalid"
+                    i.fa.fa-plus
+                    ,
+                    span.hidden-xs.hidden-sm
+                        {{ 'ADD' | translate }}

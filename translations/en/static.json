@@ -1,0 +1,4 @@
+{
+"currency_format": "{CURRENCY}{AMOUNT}",
+"date_format": "%m/%d/%Y"
+}

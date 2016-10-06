@@ -1,0 +1,29 @@
+{#
+Copyright 2015-2016 Sébastien Maccagnoni
+
+This file is part of AwesomeShop.
+
+AwesomeShop is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+details.
+
+You should have received a copy of the GNU Affero General Public License
+along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+#}
+{% extends 'email/skeleton.html' %}
+{% block content %}
+<p>Hello,</p>
+<p>Your payment for order {{ order.full_number }} (invoice {{ order.invoice_full_number }}) has been received!</p>
+<p>This order will be prepared and shipped soon.</p>
+<p>Get more details on this order on the following link:<br>
+<a href="{{ root }}/orders/{{ order.number }}">{{ root }}/orders/{{ order.number }}</a>
+</p>
+<p>Regards,<br>
+The <i>{{ config.SHOP_NAME }}</i> team</p>
+{% endblock %}

@@ -1,0 +1,73 @@
+/ Copyright 2015-2016 Sébastien Maccagnoni
+/ 
+/ This file is part of AwesomeShop.
+/ 
+/ AwesomeShop is free software: you can redistribute it and/or modify it under
+/ the terms of the GNU Affero General Public License as published by the
+/ Free Software Foundation, either version 3 of the License, or (at your
+/ option) any later version.
+/ 
+/ AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+/ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+/ FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+/ details.
+/ 
+/ You should have received a copy of the GNU Affero General Public License
+/ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+h1
+    {{ CONFIG.shop_name }} - {{ 'DASHBOARD' | translate }}
+.row
+    .col-sm-6
+        .panel.panel-primary ng-show="prep_orders.length"
+            .panel-heading
+                {{ 'ORDERS_PREPARATION' | translate }}
+            .list-group
+                a.list-group-item ui-sref="order({number:order.number})" ng-repeat="order in prep_orders"
+                    ,{{ order.full_number }},
+                    ,{{ order.customer }},
+                    i.fa.fa-credit-card
+                    ,
+                    ,{{ order.payment_date | date }},
+                    i.fa.fa-cubes
+                    ,
+                    {{ order.products }}
+        .panel.panel-primary ng-show="paid_orders.length"
+            .panel-heading
+                {{ 'ORDER_TO_PREPARE' | translate }}
+            .list-group
+                a.list-group-item ui-sref="order({number:order.number})" ng-repeat="order in paid_orders"
+                    ,{{ order.full_number }},
+                    ,{{ order.customer }},
+                    i.fa.fa-credit-card
+                    ,
+                    ,{{ order.payment_date | date }},
+                    i.fa.fa-cubes
+                    ,
+                    {{ order.products }}
+        .panel.panel-warning ng-show="awaiting_payment_orders.length"
+            .panel-heading
+                {{ 'AWAITING_PAYMENT' | translate }}
+            .list-group
+                a.list-group-item ui-sref="order({number: order.number})" ng-repeat="order in awaiting_payment_orders"
+                    ,{{ order.full_number }},
+                    ,{{ order.customer }},
+                    ,{{ order.date | date }},
+                    i.fa.fa-cubes
+                    ,
+                    {{ order.products }}
+    .col-sm-6
+        .panel.panel-danger ng-show="out_of_stock_products.length"
+            .panel-heading
+                {{ 'OUT_OF_STOCK' | translate }}
+            .list-group
+                a.list-group-item ui-sref="product({product_type: product.type, product_id: product.id})" ng-repeat="product in out_of_stock_products"
+                    ,{{ product.reference }},
+                    {{ product.name || product.slug }}
+        .panel.panel-warning ng-show="stock_alert_products.length"
+            .panel-heading
+                {{ 'OUT_OF_STOCK_SOON' | translate }}
+            .list-group
+                a.list-group-item ui-sref="product({product_type: product.type, product_id: product.id})" ng-repeat="product in stock_alert_products"
+                    ,{{ product.reference }},
+                    ,{{ product.name || product.slug }}
+                    ({{ product.stock }})

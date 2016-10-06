@@ -1,0 +1,36 @@
+/ Copyright 2016 Sébastien Maccagnoni
+/ 
+/ This file is part of AwesomeShop.
+/ 
+/ AwesomeShop is free software: you can redistribute it and/or modify it under
+/ the terms of the GNU Affero General Public License as published by the
+/ Free Software Foundation, either version 3 of the License, or (at your
+/ option) any later version.
+/ 
+/ AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+/ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+/ FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+/ details.
+/ 
+/ You should have received a copy of the GNU Affero General Public License
+/ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+form name="form" ng-submit="change_email()" novalidate="novalidate"
+    .modal-header
+        h3.modal-title
+            {{ 'CHANGE_EMAIL' | translate }}
+    .modal-body
+        .form-group ng-class="{ 'has-error': form.old_email.$invalid && !form.old_email.$pristine }"
+            label for="old_email"
+                {{ 'CURRENT_EMAIL' | translate }}
+            input.form-control type="text" id="old_email" name="old_email" ng-model="user.get().email" disabled="disabled"
+        .form-group ng-class="{ 'has-error': form.new_email.$invalid && !form.new_email.$pristine }"
+            label for="new_email"
+                {{ 'NEW_EMAIL' | translate }}
+            input.form-control type="email" id="new_email" name="new_email" ng-model="email" required="required"
+            p.text-danger ng-show="form.new_email.$invalid"
+                {{'INCORRECT_EMAIL' | translate }}
+    .modal-footer
+        button.btn.btn-success type="submit" ng-disabled="form.$invalid"
+            i.fa.fa-check
+            ,
+            {{ 'CHANGE_EMAIL' | translate }}

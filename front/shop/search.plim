@@ -1,0 +1,40 @@
+/ Copyright 2015-2016 Sébastien Maccagnoni
+/ 
+/ This file is part of AwesomeShop.
+/ 
+/ AwesomeShop is free software: you can redistribute it and/or modify it under
+/ the terms of the GNU Affero General Public License as published by the
+/ Free Software Foundation, either version 3 of the License, or (at your
+/ option) any later version.
+/ 
+/ AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+/ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+/ FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+/ details.
+/ 
+/ You should have received a copy of the GNU Affero General Public License
+/ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+h1
+    {{ 'SEARCH_RESULTS_FOR_X' | translate:{TERMS: terms} }}
+div ng-show="result.categories.length"
+    h2
+        {{ 'CATEGORIES' | translate }}
+    ul
+        li ng-repeat="category in result.categories"
+            a ui-sref="category_or_product({path:category.path})"
+                {{ category.full_name }}
+div ng-show="result.docs.length"
+    h2
+        {{ 'DOCUMENTATION' | translate }}
+    ul
+        li ng-repeat="doc in result.docs"
+            a ui-sref="doc({slug:doc.slug})"
+                {{ doc.title }}
+div ng-show="result.products.length"
+    h2
+        {{ 'PRODUCTS' | translate }}
+    products-list products="result.products"
+p ng-hide="waiting || result.products.length || result.categories.length || result.docs.length"
+    {{ 'NO_RESULT' | translate }}
+p ng-show="waiting"
+    {{ 'WAIT_SEARCH' | translate }}

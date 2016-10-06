@@ -2,7 +2,10 @@
 AwesomeShop
 ===========
 
-AwesomeShop is an e-boutique webapp written in Python.
+AwesomeShop is a light and fast e-boutique webapp, using modern techniques
+to achieve these goals.
+
+AwesomeShop is written in Javascript/AngularJS and Python.
 
 AweshomeShop uses the following awesome tools:
 
@@ -42,27 +45,55 @@ Configuration
 =============
 
 Create a ``config.py`` file at the root of the project (in the same directory
-as ``run.py``). Take needed directives from ``awesomeshop/defaultconfig.py``.
+as ``standalone.py``). Take needed directives from ``back/defaultconfig.py``.
 Any directive defined in ``config.py`` will override the equivalent in
-``awesomeshop/defaultconfig.py``.
+``back/defaultconfig.py``.
  
-Locally using AwesomeShop
-=========================
+Using AwesomeShop
+=================
+
+First, create a configuration file.
+
+Locally for development
+-----------------------
 
 Example working on Ubuntu 16.04::
 
     apt-get install mongodb-server
-    ./init_pythonapp.sh
+    ./init_awesomeshop.sh
+    ./init_webroot.sh
     source venv/bin/activate
     ./init_database.py
-    ./init_searchindex.py
-    ./run.py
+    ./standalone.py
+   
+For frontend development, you may also want to start the PLIM watcher, to
+automatically regenerate the HTML files::
+
+    ./plim_watcher.py
+
+In production
+-------------
+
+First, install (and configure) a MongoDB server. Make sure your configuration
+file is okay.
+
+You may preferably run Python in a virtualenv. Install the Python modules
+described in ``requirements.txt``. For a standard installation, you may
+simply use the ``init_awesomeshop.sh`` script.
+
+Afterwards, initialize the web root and the database if needed
+(``init_webroot.sh`` and ``init_database.py``) - don't forget the virtualenv
+if needed.
+
+Then, serve ``webroot/`` as static files and ``back.create_app`` on ``/api``
+with a WSGI server...
 
 Local templates
 ===============
 
-Once run locally, access the shop's homepage: the list of nearly-mandatory
-templates is given there.
+The parts you may modify locally, to customize the shop, are - at the moment -
+limited to the ``LOGO_CONTENT`` and ``HOME_CONTENT`` variables, configured in
+``config.py``.
 
 Using reStructuredText
 ======================

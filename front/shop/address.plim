@@ -1,0 +1,65 @@
+/ Copyright 2016 Sébastien Maccagnoni
+/ 
+/ This file is part of AwesomeShop.
+/ 
+/ AwesomeShop is free software: you can redistribute it and/or modify it under
+/ the terms of the GNU Affero General Public License as published by the
+/ Free Software Foundation, either version 3 of the License, or (at your
+/ option) any later version.
+/ 
+/ AwesomeShop is distributed in the hope that it will be useful, but WITHOUT
+/ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+/ FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+/ details.
+/ 
+/ You should have received a copy of the GNU Affero General Public License
+/ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
+form name="form" novalidate="novalidate" ng-submit="save()"
+    .modal-header
+        h3.modal-title
+            {{ 'ADDRESS' | translate }}
+    .modal-body
+        .form-group ng-class="{ 'has-error': form.address_title.$invalid && !form.address_title.$pristine }"
+            label for="address_title"
+                {{ 'ADDRESS_TITLE' | translate }}
+            input.form-control type="text" id="address_title" name="address_title" ng-model="address.title" required="required"
+            p.text-danger ng-show="form.address_title.$invalid"
+                {{ 'TITLE_MANDATORY' | translate }}
+        .row
+            .col-xs-6
+                .form-group
+                    label for="address_firstname"
+                        {{ 'FIRST_NAME' | translate }}
+                    input.form-control type="text" id="address_firstname" name="address_firstname" ng-model="address.firstname"
+            .col-xs-6
+                .form-group ng-class="{ 'has-error': form.address_lastname.$invalid && !form.address_lastname.$pristine }"
+                    label for="address_lastname"
+                        {{ 'LAST_NAME' | translate }}
+                    input.form-control type="text" id="address_lastname" name="address_lastname" ng-model="address.lastname" required="required"
+                    p.text-danger ng-show="form.address_lastname.$invalid"
+                        {{ 'LAST_NAME_MANDATORY' | translate }}
+        .form-group ng-class="{ 'has-error': form.address_address.$invalid && !form.address_address.$pristine }"
+            label for="address_address"
+                {{ 'ADDRESS' | translate }}
+            textarea.form-control.small-textarea id="address_address" name="address_address" ng-model="address.address" required="required"
+            p.text-danger ng-show="form.address_address.$invalid"
+                {{ 'ADDRESS_MANDATORY' | translate }}
+        .form-group ng-class="{ 'has-error': form.address_country.$invalid && !form.address_country.$pristine }"
+            label for="address_country"
+                {{ 'COUNTRY' | translate }}
+            select.form-control id="address_country" name="address_country" ng-model="address.country" ng-options="country.code as prefixed(country) for country in countries.get()" required="required"
+            p.text-danger ng-show="form.address_country.$invalid"
+                {{ 'COUNTRY_MANDATORY' | translate }}
+            
+        .form-group
+            label for="address_phone"
+                {{ 'PHONE' | translate }}
+            input.form-control type="text" id="address_phone" name="address_phone" ng-model="address.phone"
+    .modal-footer
+        button.btn.btn-success type="submit" ng-disabled="form.$invalid"
+            i.fa.fa-check
+            ,
+            span ng-show="modify"
+                {{ 'MODIFY_ADDRESS' | translate }}
+            span ng-hide="modify"
+                {{ 'ADD_ADDRESS_1' | translate }}
