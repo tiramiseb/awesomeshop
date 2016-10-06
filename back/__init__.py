@@ -29,7 +29,7 @@ from flask_restful import Api
 import simplejson
 
 
-def create_app(prefix='/'):
+def create_app(prefix=''):
     global app
     global db
     global rest
