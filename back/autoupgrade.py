@@ -224,7 +224,7 @@ def order_totals_as_decimal():
             if not currency:
                 currency = net_cur
                 new_set['cur'] = net_cur
-            newset['n_tot'] = float(Decimal(net_total.replace(',', '.')))
+            new_set['n_tot'] = float(Decimal(net_total.replace(',', '.')))
             unset.append('ntot')
         if not currency:
             currency = app.config['CURRENCY']
