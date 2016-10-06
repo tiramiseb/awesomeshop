@@ -37,6 +37,13 @@ space_20 = 24  # a "20 pt" line
 def invoice(order):
     content = cStringIO.StringIO()
     c = canvas.Canvas(content, pagesize=A4)
+    c.setTitle('{} - {}'.format(
+        app.config['SHOP_NAME'],
+        _('INVOICE_NUM_AND_DATE',
+          NUM=order.invoice_full_number,
+          DATE=_date(order.invoice_date)
+          )
+        ))
     c.setLineWidth(.3)
 
     x = 1*cm
