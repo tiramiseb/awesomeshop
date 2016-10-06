@@ -18,6 +18,7 @@
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 """AwesomeShop: an e-commerce webapp using Flask"""
 
+import codecs
 import os
 from functools import wraps
 
@@ -71,7 +72,9 @@ def load_translations():
         for jsonfile in os.listdir(os.path.join('translations', lang)):
             translations[lang].update(
                 simplejson.load(
-                    file(os.path.join('translations', lang, jsonfile), 'r')
+                    codecs.getreader('utf-8')(
+                        file(os.path.join('translations', lang, jsonfile), 'r')
+                        )
                     )
                 )
 load_translations()
@@ -86,7 +89,6 @@ def _(message, **kwargs):
 
 
 def _cur(amount, currency=None):
-    print amount
     if not amount:
         amount = 0
     if not currency:
