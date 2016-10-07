@@ -20,8 +20,10 @@
 import base64
 import datetime
 import uuid
-from flask_login import UserMixin
 from os import urandom
+
+from flask import request
+from flask_login import UserMixin
 from scrypt import hash as scrypt_hash
 
 from .. import db
@@ -81,7 +83,8 @@ class User(db.Document, UserMixin):
 
     def send_confirmation_email(self):
         self.confirm_code = unicode(uuid.uuid4())
-        send_mail(self.email, 'email_confirmation', code=self.confirm_code)
+        send_mail(self.email, 'email_confirmation', code=self.confirm_code,
+                  root=request.url_root)
 
 
 class Address(db.Document):

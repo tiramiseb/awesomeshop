@@ -1,5 +1,5 @@
 {#
-Copyright 2015 Sébastien Maccagnoni
+Copyright 2015-2016 Sébastien Maccagnoni
 
 This file is part of AwesomeShop.
 
@@ -20,7 +20,7 @@ along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 {% block content %}
 <p>Bonjour,</p>
 <p>Veuillez confirmer votre adresse e-mail en chargeant la page suivante&nbsp;:<br>
-<a href="{{ url_for('confirm_email', code=code, _external=True) }}">{{ url_for('confirm_email', code=code, _external=True) }}</a></p>
+<a href="{{ root }}/api/confirm/{{ code }}">{{ root }}/api/confirm/{{ code }}</a></p>
 <p>Merci&nbsp;!</p>
 <p>Cordialement,<br>
 L'équipe <i>{{ config.SHOP_NAME }}</i></p>

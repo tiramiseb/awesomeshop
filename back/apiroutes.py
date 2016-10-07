@@ -24,18 +24,6 @@ from flask_restful import Resource
 from .shop.models.order import Order
 from . import app, login_required, pdf, rest
 
-# TODO Move everything somewhere in "/api"
-
-@app.route('/confirm/<code>')
-@login_required
-def confirm_email(code):
-    if code == current_user.confirm_code:
-        current_user.confirm_code = None
-        current_user.save()
-    # TODO Redirect the user to a specific message
-    return redirect('/')
-
-
 class ApiConfig(Resource):
     def get(self):
         return jsonify(
