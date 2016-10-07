@@ -22,7 +22,7 @@ from flask_login import current_user, login_user, logout_user
 from flask_restful import Resource
 from marshmallow import Schema, fields, post_dump, post_load
 
-from .. import admin_required, login_required, rest
+from .. import app, admin_required, login_required, rest
 from ..marsh import Count, ObjField
 from ..shipping.models import Country
 from ..shop.api.dbcart import CartSchema
@@ -265,3 +265,13 @@ rest.add_resource(ResendConfirmationEmail, '/register/resend')
 rest.add_resource(ForceLogin, '/forcelogin')
 rest.add_resource(ApiUsers, '/user')
 rest.add_resource(ApiUser, '/user/<user_id>')
+
+@app.route(app.config['URL_PREFIX']+'/confirm/<code>')
+@login_required
+def confirm_email(code):
+    if code == current_user.confirm_code:
+        current_user.confirm_code = None
+        current_user.save()
+    # TODO Redirect the user to a specific message
+    return redirect('/')
+
