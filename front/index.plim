@@ -110,11 +110,6 @@ html (trigger-auth enable-error-handler)
                                     i.fa.fa-check ng-show="lang == get_current_language()"
                                     ,
                                     {{ languages[lang] }}
-                    /span ng-repeat='lang in CONFIG.languages' ng-show='lang != get_current_language()'
-                        ,
-                        ,|
-                        a.navbar-link href='#' ng-click='user.setlang(lang)'
-                            {{ lang }}
         .container (ng-cloak)
             .row
                 .col-sm-6 ng-bind-html='CONFIG.logo | trusthtml'
