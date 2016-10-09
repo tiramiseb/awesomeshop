@@ -7,6 +7,8 @@ This file summarizes the most important modifications to AwesomeShop...
 +------------+---------+------------------------------------------------------+
 | Date       | Type    | Subject                                              |
 +============+=========+======================================================+
+| 2016-10-09 | Misc    | Swap shop name and page name in page title
++------------+---------+------------------------------------------------------+
 | 2016-10-06 | Feature | Frontend as static files                             |
 +------------+---------+------------------------------------------------------+
 | 2016-09-07 | Bugfix  | Allow decimal variations for kit products            |
@@ -43,7 +45,6 @@ TODO
 
 The following are ideas of features that may be implemented in AwesomeShop.
 
-* Swap the shop name and page name in title tag
 * Customize shipping delays for each product
 * Use Beaker to cache some results
 * When creating an order, do not empty the cart before the browser is

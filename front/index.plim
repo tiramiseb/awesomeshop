@@ -47,7 +47,7 @@ html (trigger-auth enable-error-handler)
         script src='libs/shop.js'
         script src='local/local.css'
         title ng-controller='TitleCtrl'
-            {{ title.get() }} - {{ shop_name }}
+            {{ shop_name }} - {{ title.get() }}
     body
         #spinner
             i.fa.fa-spinner.fa-pulse.fa-5x.text-primary
