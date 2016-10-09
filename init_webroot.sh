@@ -45,6 +45,10 @@ do
         plimc $source > $dest
     fi
 done
+if [ ! -e $TO/local/local.css ]
+then
+    touch $TO/local/local.css
+fi
 
 echo "Linking libs dir..."
 ln -s ../$FROM/libs $TO
