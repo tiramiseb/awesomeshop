@@ -5,6 +5,7 @@ whoosh_index/
 webroot/bower_components
 webroot/l10n
 webroot/libs
+webroot/local
 webroot/photos
 webroot/*.html
 webroot/*/*.html
