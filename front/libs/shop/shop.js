@@ -21,6 +21,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
         .state('index', {
             url: '/',
             templateUrl: 'shop/index.html',
+            controller: 'IndexCtrl',
             title: 'HOME'
         })
         .state('search', {
@@ -81,6 +82,18 @@ angular.module('shopShop', ['bootstrapLightbox'])
             controller: 'CategoryOrProductCtrl',
         })
     LightboxProvider.templateUrl = 'shop/lightbox.html';
+})
+.controller('IndexCtrl', function($rootScope, $scope, $http, $translate) {
+    function get_home() {
+        $http.get('local/home/'+$translate.use()+'.html')
+            .then(function(response) {
+                console.log(response);
+                $scope.home = response.data;
+            });
+    }
+    get_home();
+    stoptranslate = $rootScope.$on('$translateChangeSuccess', get_home);
+    $scope.$on('$destroy', stoptranslate);
 })
 .controller('CategoryOrProductCtrl', function($stateParams, $state, $timeout, categories) {
     var path = $stateParams.path;

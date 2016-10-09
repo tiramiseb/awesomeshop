@@ -31,6 +31,21 @@ do
     echo "  * $destination"
 done
 
+echo "Generating local files..."
+for dir in `find $FROM/local -type d`
+do
+    mkdir -p `echo $dir | sed "s/^$FROM/$TO/"`
+done
+for source in `find $FROM/local -type f`
+do
+    dest=`echo $source | sed "s/^$FROM/$TO/"`
+    if [ ! -e $dest ]
+    then
+        echo "... $dest"
+        plimc $source > $dest
+    fi
+done
+
 echo "Linking libs dir..."
 ln -s ../$FROM/libs $TO
 

@@ -488,17 +488,25 @@ angular.module('awesomeshop', [
         }
     }
 })
-.run(function($timeout, $rootScope, $document, $translate, title, CONFIG) {
+.run(function($timeout, $rootScope, $document, $translate, $state, title, CONFIG) {
     $rootScope.$on('$stateChangeSuccess', function(event, toState) {
         if (toState.title) {
             // Without this timeout, the history is scrambled
             $timeout(function() {
                 $translate(toState.title).then(function(newtitle) {
                     title.set(newtitle);
-                })
+                });
             }, 0);
         };
         $document.scrollTop(0,300);
+    });
+    $rootScope.$on('$translateChangeSuccess', function() {
+        console.log($state.current);
+        if ($state.current.title) {
+            $translate($state.current.title).then(function(newtitle) {
+                title.set(newtitle);
+            });
+        };
     });
     $rootScope.CONFIG = CONFIG;
     $rootScope.get_current_language = $translate.use;
@@ -522,6 +530,16 @@ angular.module('awesomeshop', [
     $scope.user = user;
     $scope.saved_carts = savedCarts;
     $scope.orders = orders;
+})
+.controller('LogoCtrl', function($rootScope, $scope, $http, $translate) {
+    function get_logo() {
+        $http.get('local/logo/'+$translate.use()+'.html')
+            .then(function(response) {
+                $scope.logo = response.data;
+            });
+    }
+    get_logo();
+    $rootScope.$on('$translateChangeSuccess', get_logo);
 })
 .controller('NewProductsCtrl', function($scope, newproducts) {
     $scope.newproducts = newproducts;

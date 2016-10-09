@@ -14,4 +14,4 @@
 / 
 / You should have received a copy of the GNU Affero General Public License
 / along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
-div ng-bind-html='CONFIG.home | trusthtml'
+div ng-bind-html='home | trusthtml'

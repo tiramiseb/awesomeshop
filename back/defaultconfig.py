@@ -110,20 +110,3 @@ MAIL_FROM = "nobody@nowhere.com"
 SMTP_SERVER = "localhost"
 
 WWW_ROOT = "."
-
-# Content for the logo and the home page
-# TODO : replace by something configured in the dashboard
-LOGO_CONTENT = """<h1>Online boutique</h1>"""
-HOME_CONTENT = """
-<h1>Welcome on this shop!</h1>
-<div class="well">
-    <p>This is a default homepage from AwesomeShop.</p>
-    <p>Shop owner, you must create your own content in the configuration:</p>
-    <dl>
-        <dt><tt>LOGO_CONTENT</tt></dt>
-        <dd>The logo displayed in the top left of the page</dd>
-        <dt><tt>HOME_CONTENT</tt></dt>
-        <dd>The home page (which will replace the current page)</dd>
-    </dl>
-</div>
-"""

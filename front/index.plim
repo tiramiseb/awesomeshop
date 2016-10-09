@@ -112,7 +112,7 @@ html (trigger-auth enable-error-handler)
                                     {{ languages[lang] }}
         .container (ng-cloak)
             .row
-                .col-sm-6 ng-bind-html='CONFIG.logo | trusthtml'
+                .col-sm-6 ng-controller="LogoCtrl" ng-bind-html='logo | trusthtml'
                 .col-sm-6.text-right.hidden-print
                     form.form-inline name='searchform' ng-submit='search()' ng-controller='SearchFormCtrl'
                         .form-group.bottom-space

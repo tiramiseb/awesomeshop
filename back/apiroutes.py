@@ -29,9 +29,7 @@ class ApiConfig(Resource):
         return jsonify(
                 confirm_delay=app.config['CONFIRM_DELAY'],
                 currency=app.config['CURRENCY'],
-                home=app.config['HOME_CONTENT'],
                 languages=app.config['LANGS'],
-                logo=app.config['LOGO_CONTENT'],
                 payment_delay=app.config['PAYMENT_DELAY'],
                 shop_description=app.config['SHOP_DESCRIPTION'],
                 shop_name=app.config['SHOP_NAME'],
