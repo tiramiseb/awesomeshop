@@ -7,7 +7,9 @@ This file summarizes the most important modifications to AwesomeShop...
 +------------+---------+------------------------------------------------------+
 | Date       | Type    | Subject                                              |
 +============+=========+======================================================+
-| 2016-10-09 | Misc    | Swap shop name and page name in page title
+| 2016-10-10 | Misc    | Store the PDF invoice in the database                |
++------------+---------+------------------------------------------------------+
+| 2016-10-09 | Misc    | Swap shop name and page name in page title           |
 +------------+---------+------------------------------------------------------+
 | 2016-10-06 | Feature | Frontend as static files                             |
 +------------+---------+------------------------------------------------------+
@@ -55,8 +57,6 @@ The following are ideas of features that may be implemented in AwesomeShop.
 * Same height for all products in a products list
 * Allow for a product to not be sold anymore (end of life): absent from the "out of stock" list
 * Make the "one page" payment page simpler with buttons to unhide the rest (to make it easier to read)
-* Save invoices as files and serve them only to those who are correctly identified
-* ... Or store the invoice (PDF version) in the database (to generate it only once)
 * Dashboard : toolbar for signin in, logging out, changing language...
 
 Bugs

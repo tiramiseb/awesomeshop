@@ -22,7 +22,7 @@ import datetime
 from mongoengine import signals
 from flask import abort
 
-from ... import app, db
+from ... import app, db, get_locale, pdf
 from ...mail import send_mail
 from ...auth.models import User
 from ...payment.modes import get_mode
@@ -173,6 +173,7 @@ class Order(db.Document):
     tracking_url = db.StringField(db_field='turl')
     tracking_number = db.StringField(db_field='tnum')
     delay = db.IntField()
+    pdf_invoice = db.MapField(db.BinaryField(), db_field='pdf')
 
     meta = {
         'ordering': ['-number']
@@ -285,6 +286,16 @@ class Order(db.Document):
     def _put_products_back_in_stock(self):
         for prod in self.products:
             prod._put_back_in_stock()
+
+    def get_pdf_invoice(self):
+        lang = get_locale()
+        if lang in self.pdf_invoice:
+            content = self.pdf_invoice[lang]
+        else:
+            content = pdf.invoice(self)
+            self.pdf_invoice[lang] = content
+            self.save()
+        return content
 
 
 def email_on_order_creation(sender, document, **kwargs):

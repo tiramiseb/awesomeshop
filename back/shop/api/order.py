@@ -18,15 +18,16 @@
 # along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 
 from decimal import Decimal
+import cStringIO
 import re
 
-from flask import abort, make_response, request
+from flask import abort, request, send_file
 from flask_login import current_user
 from flask_restful import Resource, reqparse, inputs
 from marshmallow import Schema, fields, post_dump, post_load
 from prices import Price
 
-from ... import app, get_locale, admin_required, login_required, pdf, rest, rst
+from ... import app, get_locale, admin_required, login_required, rest
 from ...marsh import Count, Loc, ObjField
 from ...auth.models import Address
 from ...shipping.models import Carrier
@@ -354,7 +355,9 @@ def pdf_invoice(number):
                     customer=current_user.to_dbref(),
                     number=number
                     )
-    response = make_response(pdf.invoice(order))
-    response.mimetype = 'application/pdf'
-    return response
-
+    strio = cStringIO.StringIO()
+    strio.write(order.get_pdf_invoice())
+    strio.seek(0)
+    return send_file(strio,
+                     attachment_filename='{}.pdf'.format(order.invoice_number),
+                     mimetype='application/pdf')
