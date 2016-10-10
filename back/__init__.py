@@ -81,7 +81,7 @@ load_translations()
 
 
 def get_locale():
-    return request.args.get('lang', app.config['LANGS'][0])
+    return request.args.get('lang') or app.config['LANGS'][0]
 
 def _(message, **kwargs):
     return translations.get(get_locale(), {}).get(message,
