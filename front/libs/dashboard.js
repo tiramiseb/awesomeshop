@@ -57,7 +57,7 @@ angular.module('awesomeshop', [
         };
     };
 })
-.run(function($timeout, $rootScope, CONFIG) {
+.run(function($timeout, $rootScope, $translate, CONFIG) {
     $rootScope.displayable_from_id = function(scope, listname, value) {
         if (!scope[listname]) {
             $timeout($rootScope.displayable_from_id, 100, true, scope, listname, value);
@@ -70,8 +70,8 @@ angular.module('awesomeshop', [
                 }
             }
         }
-
     };
+    $rootScope.get_current_language = $translate.use;
     $rootScope.CONFIG = CONFIG;
 })
 .controller('IndexCtrl', function($http, $scope) {
