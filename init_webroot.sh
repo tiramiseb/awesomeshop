@@ -25,7 +25,7 @@ TO="webroot"
 echo "Generating HTML files..."
 for source in `find $FROM -name "*.plim"`
 do
-    destination=`echo $source | sed -s "s/^$FROM/$TO/;s/.plim$/.html/"`
+    destination=`echo $source | sed "s/^$FROM/$TO/;s/.plim$/.html/"`
     mkdir -p `dirname $destination`
     plimc $source > $destination
     echo "  * $destination"
@@ -38,11 +38,11 @@ do
 done
 for source in `find $FROM/local -type f`
 do
-    dest=`echo $source | sed "s/^$FROM/$TO/"`
-    if [ ! -e $dest ]
+    destination=`echo $source | sed "s/^$FROM/$TO/;s/.plim$/.html/"`
+    if [ ! -e $destination ]
     then
-        echo "... $dest"
-        plimc $source > $dest
+        plimc $source > $destination
+        echo "  * $destination"
     fi
 done
 if [ ! -e $TO/local/local.css ]
