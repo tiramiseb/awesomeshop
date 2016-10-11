@@ -501,7 +501,6 @@ angular.module('awesomeshop', [
         $document.scrollTop(0,300);
     });
     $rootScope.$on('$translateChangeSuccess', function() {
-        console.log($state.current);
         if ($state.current.title) {
             $translate($state.current.title).then(function(newtitle) {
                 title.set(newtitle);

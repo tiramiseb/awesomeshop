@@ -87,7 +87,6 @@ angular.module('shopShop', ['bootstrapLightbox'])
     function get_home() {
         $http.get('local/home/'+$translate.use()+'.html')
             .then(function(response) {
-                console.log(response);
                 $scope.home = response.data;
             });
     }
