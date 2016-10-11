@@ -197,7 +197,7 @@ form name="form" ng-show="cart.count()" ng-submit="confirm()" novalidate="novali
                         input type="radio" ng-model="choice.payment" ng-value="mode.id"
                         i.fa.fa-{{ mode.icon }}
                         ,
-                        {{ mode.description }}
+                        {{ 'PAYMENT:'+mode.id | translate }}
             textarea.form-control.bottom-large-space placeholder="{{ 'YOUR_MESSAGE' | translate }}" ng-model="choice.message"
             .panel.panel-default
                 .panel-body.text-right.options-list-clickable
