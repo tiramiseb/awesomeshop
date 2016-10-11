@@ -26,6 +26,7 @@ html (trigger-auth enable-error-handler)
         link rel='stylesheet' href='bower_components/font-awesome/css/font-awesome.min.css'
         link rel='stylesheet' href='libs/common.css'
         link rel='stylesheet' href='libs/shop.css'
+        link rel='stylesheet' href='local/local.css'
         script src='bower_components/angular/angular.min.js'
         script src='bower_components/angular-animate/angular-animate.min.js'
         script src='bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js'
@@ -45,7 +46,6 @@ html (trigger-auth enable-error-handler)
         script src='libs/shop/shop.js'
         script src='libs/shop/user.js'
         script src='libs/shop.js'
-        script src='local/local.css'
         title ng-controller='TitleCtrl'
             {{ shop_name }} - {{ title.get() }}
     body
