@@ -39,7 +39,7 @@
 "PASSWORDS_MUST_MATCH": "Les mots de passe doivent être identiques",
 "PASSWORD_AGAIN": "Mot de passe (à nouveau)",
 "PASSWORD_MANDATORY": "Le mot de passe est obligatoire",
-"PAYMENT:payplug": "PayPlug",
+"PAYMENT:payplug": "Carte de crédit (sécurisé par PayPlug)",
 "PAYMENT:sepa_transfer": "Virement bancaire SEPA",
 "PHONE": "Téléphone",
 "PRODUCT": "Produit",
