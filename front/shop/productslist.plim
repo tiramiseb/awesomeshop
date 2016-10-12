@@ -24,7 +24,7 @@
                 p.text-center.bottom-no-space
                     span ng-if='!product.static'
                         ,{{ 'FROM_PRICE' | translate }}
-                    {{ product.lower_price | currency:CONFIG.currency }}
+                    {{ product.lower_price | currency:$root.CONFIG.currency }}
         .caption ng-if='product.static'
             button.btn.btn-success.btn-block type='button' ng-if='cart.quantity(product) < product.stock || product.overstock_delay >=0' ng-class="{ 'btn-success': cart.quantity(product) < product.stock, 'btn-info': product.overstock_delay >= 0 && cart.quantity(product) >= product.stock }" ng-click='cart.add(product.id, null, 1)'
                 {{ 'ADD_TO_CART' | translate }}
