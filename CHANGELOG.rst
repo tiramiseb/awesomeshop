@@ -7,6 +7,8 @@ This file summarizes the most important modifications to AwesomeShop...
 +------------+---------+------------------------------------------------------+
 | Date       | Type    | Subject                                              |
 +============+=========+======================================================+
+| 2016-10-12 | Feature | Simplify by hiding checkout part of the cart page    |
++------------+---------+------------------------------------------------------+
 | 2016-10-10 | Misc    | Store the PDF invoice in the database                |
 +------------+---------+------------------------------------------------------+
 | 2016-10-09 | Misc    | Swap shop name and page name in page title           |
@@ -63,7 +65,6 @@ Minor improvements
 * When creating an order, do not empty the cart before the browser is
   redirected to the order page (or display a message to tell the user (s)he
   must wait)
-* Make the "one page" payment page simpler with buttons to unhide the rest (to make it easier to read)
 * Dashboard : toolbar for signin in, logging out, changing language...
 * Allow to connect or create an account from the cart page without a popup
 * Allow to create an address without a popup
