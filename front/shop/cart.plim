@@ -17,8 +17,6 @@
 h1
     {{ 'MY_CART' | translate }}
 form name="form" ng-show="cart.count()" ng-submit="confirm()" novalidate="novalidate"
-    h2 ng-show="user.get().auth"
-        {{ 'MY_PRODUCTS_CHOICE' | translate }}
     .list-group
         .list-group-item.cart-list ng-repeat="line in cart.list()" uib-popover-template="'/common/product_'+line.product.type+'_popup.html'" popover-trigger="'mouseenter'" popover-enable="line.product.details"
             .row
