@@ -39,7 +39,6 @@ angular.module('awesomeshop', [
         .useSanitizeValueStrategy('escape')
         .useLoader('$translatePartialLoader', {urlTemplate: 'l10n/{lang}/{part}.json'})
         .registerAvailableLanguageKeys(langs, langs_negociation)
-        .fallbackLanguage(fallback_language)
         .determinePreferredLanguage();
 })
 .filter('trusthtml', function($sce) {
@@ -488,7 +487,7 @@ angular.module('awesomeshop', [
         }
     }
 })
-.run(function($timeout, $rootScope, $document, $translate, $state, title, CONFIG) {
+.run(function($timeout, $rootScope, $document, $translate, $state, tmhDynamicLocale, title, CONFIG) {
     $rootScope.$on('$stateChangeSuccess', function(event, toState) {
         if (toState.title) {
             // Without this timeout, the history is scrambled
@@ -510,6 +509,7 @@ angular.module('awesomeshop', [
     $rootScope.CONFIG = CONFIG;
     $rootScope.get_current_language = $translate.use;
     $rootScope.languages = languages;
+    tmhDynamicLocale.set($translate.use());
 })
 .directive('productsList', function() {
     return {
