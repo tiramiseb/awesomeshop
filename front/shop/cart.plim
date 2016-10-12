@@ -245,7 +245,7 @@ form name="form" ng-show="cart.count()" ng-submit="confirm()" novalidate="novali
             .col-sm-6
                 select.form-control id="address_country" name="address_country" ng-model="estimation_country" ng-options="country.code as prefixed(country) for country in countries.get()"
             .col-sm-6
-                input.form-control type="text" disabled="disabled" ng-show="shipping_fee_estimation()" value="{{ 'FROM_PRICE' | translate }}{{ shipping_fee_estimation() | currency:CONFIG.currency }}"
+                input.form-control type="text" disabled="disabled" ng-show="shipping_fee_estimation()" value="{{ 'FROM_PRICE' | translate }} {{ shipping_fee_estimation() | currency:CONFIG.currency }}"
 .panel.panel-default ng-show="user.get().auth && cart.count() && !user.get().addresses.length"
     .panel-body
         p.lead.text-center
