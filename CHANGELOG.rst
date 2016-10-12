@@ -45,19 +45,29 @@ This file summarizes the most important modifications to AwesomeShop...
 TODO
 ====
 
-The following are ideas of features that may be implemented in AwesomeShop.
+The following are ideas of features that may be implemented in AwesomeShop...
+
+Major modifications
+-------------------
 
 * Customize shipping delays for each product
 * Use Beaker to cache some results
-* When creating an order, do not empty the cart before the browser is
-  redirected to the order page (or display a message to tell the user (s)he
-  must wait)
 * Toolbar on a "page" page, to easily include specific stuff in pages contents
   (``.. doc-list::``, links to other pages, images...)
 * Same height for all products in a products list
 * Allow for a product to not be sold anymore (end of life): absent from the "out of stock" list
+
+Minor improvements
+------------------
+
+* When creating an order, do not empty the cart before the browser is
+  redirected to the order page (or display a message to tell the user (s)he
+  must wait)
 * Make the "one page" payment page simpler with buttons to unhide the rest (to make it easier to read)
 * Dashboard : toolbar for signin in, logging out, changing language...
+* Allow to connect or create an account from the cart page without a popup
+* Allow to create an address without a popup
+* Remove ":"s from the cart page
 
 Bugs
 ====

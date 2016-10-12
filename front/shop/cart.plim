@@ -70,81 +70,53 @@ form name="form" ng-show="cart.count()" ng-submit="confirm()" novalidate="novali
                         br.hidden-xs
                         {{ cart.total() | currency:CONFIG.currency }}
     div ng-show="user.get().auth"
-        .panel.panel-default
-            .panel-heading
-                {{ 'SAVE_FOR_LATER' | translate }}
-            .panel-body
-                div ng-show="user.get().auth && saved_cart"
-                    .btn-group
-                        a.btn.btn-primary ui-sref="saved_carts"
-                            i.fa.fa-bookmark"
-                            ,
-                            {{ 'CART_SAVED' | translate }}
-                        button.btn.btn-danger type="button" ng-click="cart.reset()"
-                            i.fa.fa-trash
-                            ,
-                            {{ 'EMPTY_CART' | translate }}
-                div ng-hide="!user.get().auth || saved_cart"
-                    .input-group
-                        input.form-control type="text" ng-model="cartname" placeholder="{{ 'CART_NAME' | translate }}" required="required"
-                        span.input-group-btn
-                            button.btn.btn-primary type="button" uib-tooltip="{{ 'SAVE_CART' | translate }}" ng-click="save_cart()" ng-disabled="form.$invalid"
-                                i.fa.fa-bookmark
-                                ,
-                                {{ 'SAVE' | translate }}
-        h2
-            {{ 'MY_ORDER_OPTIONS' | translate }}
-        div ng-show="cart.delay() && user.get().addresses.length"
-            .row
-                .col-md-6
-                    .panel.panel-default
-                        .panel-heading
-                            h3.panel-title
-                                i.fa.fa-map-marker
-                                ,
-                                {{ 'DELIVERY_ADDRESS' | translate }}
-                        .panel-body
-                            .form-group
-                                select.form-control name="delivery" ng-model="choice.delivery_address" ng-options="address.id as address.title for address in user.get().addresses" required="required"
-                            p
-                                {{ 'WILL_SHIP_TO_' | translate }}
-                            pre.well ng-bind="full_address(choice.delivery_address)"
-                            .btn-group.btn-group-justified
-                                .btn-group
-                                    button.btn.btn-info type="button" ng-disabled="!choice.delivery_address" ng-click="modify_address(choice.delivery_address)"
-                                        i.fa.fa-pencil
+        .row ng-hide="show_order"
+            .col-sm-6
+                .panel.panel-default
+                    .panel-heading
+                        {{ 'SAVE_FOR_LATER' | translate }}
+                    .panel-body
+                        div ng-show="user.get().auth && saved_cart"
+                            .btn-group
+                                a.btn.btn-primary ui-sref="saved_carts"
+                                    i.fa.fa-bookmark"
+                                    ,
+                                    {{ 'CART_SAVED' | translate }}
+                                button.btn.btn-danger type="button" ng-click="cart.reset()"
+                                    i.fa.fa-trash
+                                    ,
+                                    {{ 'EMPTY_CART' | translate }}
+                        div ng-hide="!user.get().auth || saved_cart"
+                            .input-group
+                                input.form-control type="text" ng-model="cartname" placeholder="{{ 'CART_NAME' | translate }}" required="required"
+                                span.input-group-btn
+                                    button.btn.btn-primary type="button" uib-tooltip="{{ 'SAVE_CART' | translate }}" ng-click="save_cart()" ng-disabled="form.$invalid"
+                                        i.fa.fa-bookmark
                                         ,
-                                        {{ 'MODIFY' | translate }}
-                                .btn-group
-                                    button.btn.btn-warning type="button" ng-click="add_address()"
-                                        i.fa.fa-plus
-                                        ,
-                                        {{ 'NEW_ADDRESS' | translate }}
-                .col-md-6
-                    .panel.panel-default
-                        .panel-heading
-                            h3.panel-title
-                                i.fa.fa-map-marker
-                                ,
-                                {{ 'BILLING_ADDRESS' | translate }}
-                        .panel-body
-                            .form-group ng-class="{'bottom-no-space': choice.delivery_as_billing}"
-                                button.btn.btn-primary.btn-block type="button" ng-model="choice.delivery_as_billing" uib-btn-checkbox="uib-btn-checkbox"
-                                    span ng-show="choice.delivery_as_billing"
-                                        i.fa.fa-check
-                                        ,
-                                        {{ 'USE_DELIVERY_ADDRESS' | translate }}
-                                    span ng-hide="choice.delivery_as_billing"
-                                        i.fa.fa-times
-                                        ,
-                                        {{ 'USE_DELIVERY_ADDRESS_NO' | translate }}
-                            div ng-hide="choice.delivery_as_billing"
+                                        {{ 'SAVE' | translate }}
+            .col-sm-6.text-right
+                button.btn.btn-lg.btn-success.bottom-space type="button" ng-click="show_order=true"
+                    ,{{ 'CHECKOUT' | translate }}
+                    i.fa.fa-chevron-right
+        div ng-show="show_order"
+            div ng-show="cart.delay() && user.get().addresses.length"
+                .row
+                    .col-md-6
+                        .panel.panel-default
+                            .panel-heading
+                                h3.panel-title
+                                    i.fa.fa-map-marker
+                                    ,
+                                    {{ 'DELIVERY_ADDRESS' | translate }}
+                            .panel-body
                                 .form-group
-                                    select.form-control name="billing" ng-model="choice.billing_address" ng-options="address.id as address.title for address in user.get().addresses"
-                                pre.well ng-bind="full_address(choice.billing_address)"
+                                    select.form-control name="delivery" ng-model="choice.delivery_address" ng-options="address.id as address.title for address in user.get().addresses" required="required"
+                                p
+                                    {{ 'WILL_SHIP_TO_' | translate }}
+                                pre.well ng-bind="full_address(choice.delivery_address)"
                                 .btn-group.btn-group-justified
                                     .btn-group
-                                        button.btn.btn-info type="button" ng-disabled="!choice.billing_address" ng-click="modify_address(choice.billing_address)"
+                                        button.btn.btn-info type="button" ng-disabled="!choice.delivery_address" ng-click="modify_address(choice.delivery_address)"
                                             i.fa.fa-pencil
                                             ,
                                             {{ 'MODIFY' | translate }}
@@ -153,87 +125,120 @@ form name="form" ng-show="cart.count()" ng-submit="confirm()" novalidate="novali
                                             i.fa.fa-plus
                                             ,
                                             {{ 'NEW_ADDRESS' | translate }}
-            .panel.panel-default
-                .panel-heading
-                    h2.panel-title
-                        i.fa.fa-truck
-                        ,
-                        {{ 'SHIPPING' | translate }}
-                .list-group.options-list-clickable
-                    label.list-group-item ng-repeat="available_carrier in get_available_carriers()"
-                        .row
-                            .col-xs-8
-                                input type="radio" ng-model="choice.carrier" ng-value="available_carrier.carrier.id"
-                                ,{{ available_carrier.carrier.description }}
-                                ({{ available_carrier.carrier.name }})
-                            .col-xs-4.text-right
-                                b
-                                    {{ available_carrier.cost | currency:CONFIG.currency }}
-            .well
+                    .col-md-6
+                        .panel.panel-default
+                            .panel-heading
+                                h3.panel-title
+                                    i.fa.fa-map-marker
+                                    ,
+                                    {{ 'BILLING_ADDRESS' | translate }}
+                            .panel-body
+                                .form-group ng-class="{'bottom-no-space': choice.delivery_as_billing}"
+                                    button.btn.btn-primary.btn-block type="button" ng-model="choice.delivery_as_billing" uib-btn-checkbox="uib-btn-checkbox"
+                                        span ng-show="choice.delivery_as_billing"
+                                            i.fa.fa-check
+                                            ,
+                                            {{ 'USE_DELIVERY_ADDRESS' | translate }}
+                                        span ng-hide="choice.delivery_as_billing"
+                                            i.fa.fa-times
+                                            ,
+                                            {{ 'USE_DELIVERY_ADDRESS_NO' | translate }}
+                                div ng-hide="choice.delivery_as_billing"
+                                    .form-group
+                                        select.form-control name="billing" ng-model="choice.billing_address" ng-options="address.id as address.title for address in user.get().addresses"
+                                    pre.well ng-bind="full_address(choice.billing_address)"
+                                    .btn-group.btn-group-justified
+                                        .btn-group
+                                            button.btn.btn-info type="button" ng-disabled="!choice.billing_address" ng-click="modify_address(choice.billing_address)"
+                                                i.fa.fa-pencil
+                                                ,
+                                                {{ 'MODIFY' | translate }}
+                                        .btn-group
+                                            button.btn.btn-warning type="button" ng-click="add_address()"
+                                                i.fa.fa-plus
+                                                ,
+                                                {{ 'NEW_ADDRESS' | translate }}
+                .panel.panel-default
+                    .panel-heading
+                        h2.panel-title
+                            i.fa.fa-truck
+                            ,
+                            {{ 'SHIPPING' | translate }}
+                    .list-group.options-list-clickable
+                        label.list-group-item ng-repeat="available_carrier in get_available_carriers()"
+                            .row
+                                .col-xs-8
+                                    input type="radio" ng-model="choice.carrier" ng-value="available_carrier.carrier.id"
+                                    ,{{ available_carrier.carrier.description }}
+                                    ({{ available_carrier.carrier.name }})
+                                .col-xs-4.text-right
+                                    b
+                                        {{ available_carrier.cost | currency:CONFIG.currency }}
+                .well
+                    .row
+                        .col-xs-8.col-md-9.text-right
+                            {{ 'SUBTOTAL' | translate }}
+                        .col-xs-4.col-md-3.text-right
+                            {{ cart.total() | currency:CONFIG.currency }}
+                    .row
+                        .col-xs-8.col-md-9.text-right
+                            {{ 'SHIPPING_FEE' | translate }}
+                        .col-xs-4.col-md-3.text-right
+                            {{ get_shipping_fee() | currency:CONFIG.currency }}
+                    .row.total-cost.text-info
+                        .col-xs-8.col-md-9.text-right
+                            {{ 'TOTAL' | translate }}
+                        .col-xs-4.col-md-3.text-right
+                            b
+                                {{ cart.total() + get_shipping_fee() | currency:CONFIG.currency }}
+                .panel.panel-default
+                    .panel-heading
+                        h2.panel-title
+                            i.fa.fa-money
+                            ,
+                            {{ 'PAYMENT' | translate }}
+                    .list-group.options-list-clickable
+                        label.list-group-item ng-repeat="mode in payments"
+                            input type="radio" ng-model="choice.payment" ng-value="mode.id"
+                            i.fa.fa-{{ mode.icon }}
+                            ,
+                            {{ 'PAYMENT:'+mode.id | translate }}
+                textarea.form-control.bottom-large-space placeholder="{{ 'YOUR_MESSAGE' | translate }}" ng-model="choice.message"
+                .panel.panel-default
+                    .panel-body.text-right.options-list-clickable
+                        label
+                            i.fa.fa-recycle
+                            ,
+                            ,{{ 'ACCEPT_REUSED_PACKAGE' | translate }}
+                            input type="checkbox" ng-model="choice.accept_reused_package"
+                        br
+                        label
+                            i.fa.fa-file-text-o
+                            ,
+                            ,{{ 'PAPER_INVOICE' | translate }}
+                            input type="checkbox" ng-model="choice.paper_invoice"
+                        br
+                        label
+                            i.fa.fa-check
+                            ,
+                            b
+                                ,{{ 'AGREE_TO_TERMS' | translate }}
+                                a href="#" ng-click="open_terms()"
+                                    (?)
+                            ,
+                            input type="checkbox" ng-model="choice.accept_terms"
+                        div ng-show="cart.overstock()"
+                            b.text-danger
+                                {{ 'UNDERSTAND_DELAY' | translate:{QTY: cart.delay()} }}
                 .row
-                    .col-xs-8.col-md-9.text-right
-                        {{ 'SUBTOTAL' | translate }}
-                    .col-xs-4.col-md-3.text-right
-                        {{ cart.total() | currency:CONFIG.currency }}
-                .row
-                    .col-xs-8.col-md-9.text-right
-                        {{ 'SHIPPING_FEE' | translate }}
-                    .col-xs-4.col-md-3.text-right
-                        {{ get_shipping_fee() | currency:CONFIG.currency }}
-                .row.total-cost.text-info
-                    .col-xs-8.col-md-9.text-right
-                        {{ 'TOTAL' | translate }}
-                    .col-xs-4.col-md-3.text-right
-                        b
-                            {{ cart.total() + get_shipping_fee() | currency:CONFIG.currency }}
-            .panel.panel-default
-                .panel-heading
-                    h2.panel-title
-                        i.fa.fa-money
-                        ,
-                        {{ 'PAYMENT' | translate }}
-                .list-group.options-list-clickable
-                    label.list-group-item ng-repeat="mode in payments"
-                        input type="radio" ng-model="choice.payment" ng-value="mode.id"
-                        i.fa.fa-{{ mode.icon }}
-                        ,
-                        {{ 'PAYMENT:'+mode.id | translate }}
-            textarea.form-control.bottom-large-space placeholder="{{ 'YOUR_MESSAGE' | translate }}" ng-model="choice.message"
-            .panel.panel-default
-                .panel-body.text-right.options-list-clickable
-                    label
-                        i.fa.fa-recycle
-                        ,
-                        ,{{ 'ACCEPT_REUSED_PACKAGE' | translate }}
-                        input type="checkbox" ng-model="choice.accept_reused_package"
-                    br
-                    label
-                        i.fa.fa-file-text-o
-                        ,
-                        ,{{ 'PAPER_INVOICE' | translate }}
-                        input type="checkbox" ng-model="choice.paper_invoice"
-                    br
-                    label
-                        i.fa.fa-check
-                        ,
-                        b
-                            ,{{ 'AGREE_TO_TERMS' | translate }}
-                            a href="#" ng-click="open_terms()"
-                                (?)
-                        ,
-                        input type="checkbox" ng-model="choice.accept_terms"
-                    div ng-show="cart.overstock()"
-                        b.text-danger
-                            {{ 'UNDERSTAND_DELAY' | translate:{QTY: cart.delay()} }}
-            .row
-                .col-md-5.col-lg-7.bottom-large-space
-                    small
-                        {{ 'LEGAL_NOTICE' | translate }}
-                .col-md-7.col-lg-5.text-right
-                    button.btn.btn-lg.btn-success type="submit" id="proceed" ng-disabled="!(choice.delivery_address && (choice.delivery_as_billing || choice.billing_address) && choice.payment && choice.accept_terms)"
-                        ,
-                        ,{{ 'VERIFY_AND_CONFIRM' | translate }}
-                        i.fa.fa-chevron-right
+                    .col-md-5.col-lg-7.bottom-large-space
+                        small
+                            {{ 'LEGAL_NOTICE' | translate }}
+                    .col-md-7.col-lg-5.text-right
+                        button.btn.btn-lg.btn-success type="submit" id="proceed" ng-disabled="!(choice.delivery_address && (choice.delivery_as_billing || choice.billing_address) && choice.payment && choice.accept_terms)"
+                            ,
+                            ,{{ 'VERIFY_AND_CONFIRM' | translate }}
+                            i.fa.fa-chevron-right
 .panel.panel-default ng-show="cart.count() && (!user.get().auth || !user.get().addresses.length)"
     .panel-heading
         {{ 'ESTIMATE_SHIPPING_FEE' | translate }}
