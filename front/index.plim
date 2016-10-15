@@ -198,7 +198,7 @@ html (trigger-auth enable-error-handler)
                             {{ 'CONFIRM_EMAIL_ADDRESS' | translate }}
                         p
                             i
-                                {{ 'NOT_RECEIVED_VALIDATION' | translate }}
+                                ,{{ 'NOT_RECEIVED_VALIDATION' | translate }}
                                 a href='#' ng-click='user.resend_confirmation()'
                                     {{ 'SEND_IT_AGAIN' | translate }}
                     ui-view
