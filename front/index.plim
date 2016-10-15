@@ -91,7 +91,7 @@ html (trigger-auth enable-error-handler)
                             {{ 'LOGIN' | translate }}
                         ,
                         ,|
-                        a.navbar-link ui-sref='register'
+                        a.navbar-link href="#" ng-click='user.register()'
                             i.fa.fa-user-plus
                             ,
                             {{ 'REGISTER' | translate }}

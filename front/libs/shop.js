@@ -242,6 +242,12 @@ angular.module('awesomeshop', [
                     $state.go('index');
                 });
         },
+        register: function() {
+            $uibModal.open({
+                templateUrl: 'shop/register.html',
+                controller: 'RegisterCtrl'
+            })
+        },
         resend_confirmation: function() {
             $http.get('/api/register/resend');
         },

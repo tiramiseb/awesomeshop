@@ -262,7 +262,7 @@ form name="form" ng-show="cart.count()" ng-submit="confirm()" novalidate="novali
             i.fa.fa-sign-in"
             ,
             {{ 'LOGIN' | translate }}
-        a.btn.btn-default ui-sref="register"
+        a.btn.btn-default href="#" ng-click="user.register()"
             i.fa.fa-user-plus
             ,
             {{ 'REGISTER' | translate }}

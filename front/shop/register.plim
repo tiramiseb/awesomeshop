@@ -15,32 +15,33 @@
 / You should have received a copy of the GNU Affero General Public License
 / along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 form name="form" ng-submit="register()"
-    h1
-        {{ 'CREATE_ACCOUNT' | translate }}
-    .panel.panel-default
-        .panel-body
-            .form-group ng-class="{ 'has-error': form.email.$invalid && !form.email.$pristine }"
-                label for="email"
-                    {{ 'EMAIL_ADDRESS' | translate }}
-                input.form-control type="email" id="email" name="email" ng-model="email" required="required"
-                p.text-danger ng-show="form.email.$invalid"
-                    {{'INCORRECT_EMAIL' | translate }}
-            .row
-                .col-sm-6
-                    .form-group ng-class="{ 'has-error': form.password.$invalid && !form.password.$pristine }"
-                        label for="password"
-                            {{ 'PASSWORD' | translate }}
-                        input.form-control type="password" id="password" name="password" ng-model="password"
-                        p.text-danger ng-show="form.password.$invalid"
-                            {{ 'PASSWORD_MANDATORY' | translate }}
-                .col-sm-6
-                    .form-group ng-class="{ 'has-error': form.password_again.$invalid && !form.password_again.$pristine }"
-                        label for="password_again"
-                            {{ 'PASSWORD_AGAIN' | translate }}
-                        input.form-control type="password" id="password_again" name="password_again" ng-model="password_again"
-                        p.text-danger ng-show="form.password_again.$invalid"
-                            {{ 'PASSWORDS_MUST_MATCH' | translate }}
-            button.btn.btn-success type="submit" ng-disabled="form.$invalid"
-                i.fa.fa-plus
-                ,
-                {{ 'SIGN_UP' | translate }}
+    .modal-header
+        h3.modal-title
+            {{ 'CREATE_ACCOUNT' | translate }}
+    .modal-body
+        .form-group ng-class="{ 'has-error': form.email.$invalid && !form.email.$pristine }"
+            label for="email"
+                {{ 'EMAIL_ADDRESS' | translate }}
+            input.form-control type="email" id="email" name="email" ng-model="email" required="required"
+            p.text-danger ng-show="form.email.$invalid"
+                {{'INCORRECT_EMAIL' | translate }}
+        .row
+            .col-sm-6
+                .form-group ng-class="{ 'has-error': form.password.$invalid && !form.password.$pristine }"
+                    label for="password"
+                        {{ 'PASSWORD' | translate }}
+                    input.form-control type="password" id="password" name="password" ng-model="password"
+                    p.text-danger ng-show="form.password.$invalid"
+                        {{ 'PASSWORD_MANDATORY' | translate }}
+            .col-sm-6
+                .form-group ng-class="{ 'has-error': form.password_again.$invalid && !form.password_again.$pristine }"
+                    label for="password_again"
+                        {{ 'PASSWORD_AGAIN' | translate }}
+                    input.form-control type="password" id="password_again" name="password_again" ng-model="password_again" match="password"
+                    p.text-danger ng-show="form.password_again.$invalid"
+                        {{ 'PASSWORDS_MUST_MATCH' | translate }}
+    .modal-footer
+        button.btn.btn-success type="submit" ng-disabled="form.$invalid"
+            i.fa.fa-plus
+            ,
+            {{ 'SIGN_UP' | translate }}

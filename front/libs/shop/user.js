@@ -37,15 +37,15 @@ angular.module('shopUser', ['validation.match'])
             title: 'CREATE_ACCOUNT'
         })
 })
-.controller('RegisterCtrl', function($state, $scope, $http, user) {
+.controller('RegisterCtrl', function($state, $scope, $http, user, authService) {
     $scope.register = function() {
         $http.post('/api/register', {
                 email: $scope.email,
                 password: $scope.password
                 })
             .then(function(response) {
-                user.set(response.data);
-                $state.go('profile');
+                authService.loginConfirmed(response.data);
+                $scope.$close();
             })
     }
 })

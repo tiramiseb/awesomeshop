@@ -132,8 +132,8 @@ angular.module('authentication', ['http-auth-interceptor', 'ui.bootstrap'])
                 var success = response.data.auth;
                 $scope.auth.success = success;
                 if (success) {
-                    $scope.$close();
                     authService.loginConfirmed(response.data);
+                    $scope.$close();
                 }
             });
     }
