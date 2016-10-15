@@ -138,7 +138,7 @@ angular.module('authentication', ['http-auth-interceptor', 'ui.bootstrap'])
             });
     }
 })
-.directive('triggerAuth', ['$uibModal', function($uibModal) {
+.directive('triggerAuth', function($uibModal, authService) {
     return {
         link: function(scope, elem, attrs) {
                 scope.$on('event:auth-loginRequired', function() {
@@ -146,10 +146,14 @@ angular.module('authentication', ['http-auth-interceptor', 'ui.bootstrap'])
                         templateUrl: 'common/login.html',
                         controller: 'AuthenticationCtrl'
                     });
+                    modalInstance.result.then(function() {
+                    }, function() {
+                        authService.loginCancelled();
+                    });
                 });
         }
     };
-}])
+})
 .run(function($rootScope, $http, $translate, tmhDynamicLocale) {
     // Change locale when user is authenticated
     $rootScope.$on('event:auth-loginConfirmed', function(e, data) {
