@@ -382,7 +382,18 @@ angular.module('shopShop', ['bootstrapLightbox'])
         if (carriers && carriers.length) {
             return parseFloat(carriers[0].cost);
         };
-    }
+    };
+    $scope.shipping_fee_one_address_estimation = function() {
+        var country = user.get().addresses[0].country,
+            carriers = find_carriers(country);
+        console.log('paf');
+        console.log(country);
+        console.log(carriers);
+        if (carriers && carriers.length) {
+            console.log('pif');
+            return parseFloat(carriers[0].cost);
+        };
+    };
     $scope.get_shipping_fee = function() {
         var carriers = $scope.get_available_carriers();
         if (carriers) {

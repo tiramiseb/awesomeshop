@@ -67,6 +67,13 @@ form name="form" ng-show="cart.count()" ng-submit="confirm()" novalidate="novali
                         {{ 'SUBTOTAL_' | translate }}
                         br.hidden-xs
                         {{ cart.total() | currency:CONFIG.currency }}
+        .list-group-item ng-show="user.get().addresses.length == 1 && !show_order"
+            .row
+                .col-xs-6
+                    {{ 'SHIPPING_FEE' | translate }}
+                .col-xs-6.text-right
+                    ,{{ 'FROM_PRICE' | translate }}
+                    {{ shipping_fee_one_address_estimation() | currency:CONFIG.currency }}
     .panel.panel-default ng-show="cart.count() && (!user.get().auth || !user.get().addresses.length) && !show_order"
         .panel-heading
             {{ 'ESTIMATE_SHIPPING_FEE' | translate }}
