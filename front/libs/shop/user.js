@@ -127,7 +127,7 @@ angular.module('shopUser', ['validation.match'])
             });
     };
 })
-.controller('AddressCtrl', function($scope, $http, user, address_id, countries) {
+.controller('AddressCtrl', function($scope, $http, $translate, user, address_id, countries) {
     $scope.countries = countries;
     if (address_id) {
         if (user.get().addresses) {
@@ -142,6 +142,9 @@ angular.module('shopUser', ['validation.match'])
         $scope.modify = true;
     } else {
         $scope.address = {};
+        $translate('MY_ADDRESS').then(function(title) {
+            $scope.address.title = title;
+        })
         $scope.modify = false;
     }
     $scope.prefixed = function(country) {
