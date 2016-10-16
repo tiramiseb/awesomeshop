@@ -67,6 +67,15 @@ form name="form" ng-show="cart.count()" ng-submit="confirm()" novalidate="novali
                         {{ 'SUBTOTAL_' | translate }}
                         br.hidden-xs
                         {{ cart.total() | currency:CONFIG.currency }}
+    .panel.panel-default ng-show="cart.count() && (!user.get().auth || !user.get().addresses.length) && !show_order"
+        .panel-heading
+            {{ 'ESTIMATE_SHIPPING_FEE' | translate }}
+        .panel-body
+            .row
+                .col-sm-6
+                    select.form-control id="address_country" name="address_country" ng-model="estimation_country" ng-options="country.code as prefixed(country) for country in countries.get()"
+                .col-sm-6
+                    input.form-control type="text" disabled="disabled" ng-show="shipping_fee_estimation()" value="{{ 'FROM_PRICE' | translate }} {{ shipping_fee_estimation() | currency:CONFIG.currency }}"
     div ng-show="user.get().auth"
         .row ng-hide="show_order"
             .col-sm-6
@@ -237,16 +246,7 @@ form name="form" ng-show="cart.count()" ng-submit="confirm()" novalidate="novali
                             ,
                             ,{{ 'VERIFY_AND_CONFIRM' | translate }}
                             i.fa.fa-chevron-right
-.panel.panel-default ng-show="cart.count() && (!user.get().auth || !user.get().addresses.length)"
-    .panel-heading
-        {{ 'ESTIMATE_SHIPPING_FEE' | translate }}
-    .panel-body
-        .row
-            .col-sm-6
-                select.form-control id="address_country" name="address_country" ng-model="estimation_country" ng-options="country.code as prefixed(country) for country in countries.get()"
-            .col-sm-6
-                input.form-control type="text" disabled="disabled" ng-show="shipping_fee_estimation()" value="{{ 'FROM_PRICE' | translate }} {{ shipping_fee_estimation() | currency:CONFIG.currency }}"
-.panel.panel-default ng-show="user.get().auth && cart.count() && !user.get().addresses.length"
+.panel.panel-default ng-show="show_order && user.get().auth && cart.count() && !user.get().addresses.length"
     .panel-body
         p.lead.text-center
             {{ 'DEFINE_ADDRESS' | translate }}
