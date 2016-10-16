@@ -47,7 +47,8 @@ This file summarizes the most important modifications to AwesomeShop...
 TODO
 ====
 
-The following are ideas of features that may be implemented in AwesomeShop...
+The following are ideas of features that may (or may not) be implemented
+in AwesomeShop...
 
 Major modifications
 -------------------
@@ -62,12 +63,11 @@ Major modifications
 Minor improvements
 ------------------
 
+* If there is only one address, show the shipping price estimation in the cart
 * When creating an order, do not empty the cart before the browser is
   redirected to the order page (or display a message to tell the user (s)he
   must wait)
 * Dashboard : toolbar for signin in, logging out, changing language...
-* Allow to connect or create an account from the cart page without a popup
-* Allow to create an address without a popup
 * Remove ":"s from the cart page
 
 Bugs
