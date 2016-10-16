@@ -7,6 +7,8 @@ This file summarizes the most important modifications to AwesomeShop...
 +------------+---------+------------------------------------------------------+
 | Date       | Type    | Subject                                              |
 +============+=========+======================================================+
+| 2016-10-16 | Feature | If only one address,show shipping estimation in cart |
++------------+---------+------------------------------------------------------+
 | 2016-10-12 | Feature | Simplify by hiding checkout part of the cart page    |
 +------------+---------+------------------------------------------------------+
 | 2016-10-10 | Misc    | Store the PDF invoice in the database                |
@@ -63,7 +65,6 @@ Major modifications
 Minor improvements
 ------------------
 
-* If there is only one address, show the shipping price estimation in the cart
 * When creating an order, do not empty the cart before the browser is
   redirected to the order page (or display a message to tell the user (s)he
   must wait)
