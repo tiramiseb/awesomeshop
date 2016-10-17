@@ -386,11 +386,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
     $scope.shipping_fee_one_address_estimation = function() {
         var country = user.get().addresses[0].country,
             carriers = find_carriers(country);
-        console.log('paf');
-        console.log(country);
-        console.log(carriers);
         if (carriers && carriers.length) {
-            console.log('pif');
             return parseFloat(carriers[0].cost);
         };
     };
