@@ -7,7 +7,7 @@ This file summarizes the most important modifications to AwesomeShop...
 +------------+---------+------------------------------------------------------+
 | Date       | Type    | Subject                                              |
 +============+=========+======================================================+
-| 2016-10-16 | Feature | If only one address,show shipping estimation in cart |
+| 2016-10-21 | Feature | Miscelaneous improvements on the cart page           |
 +------------+---------+------------------------------------------------------+
 | 2016-10-12 | Feature | Simplify by hiding checkout part of the cart page    |
 +------------+---------+------------------------------------------------------+
@@ -73,7 +73,7 @@ These may be easy to implement:
   redirected to the order page (or display a message to tell the user (s)he
   must wait)
 * Dashboard : toolbar for signin in, logging out, changing language...
-* Remove ":"s from the cart page
+* Faster plim compilation from front to webroot
 
 Bugs
 ====

@@ -39,7 +39,7 @@ form name="form" ng-show="cart.count()" ng-submit="confirm()" novalidate="novali
                         {{ 'INSUFFICIENT_STOCK' | translate }}
                 .col-xs-5.col-sm-3.col-lg-2
                     label.hidden-xs for="qty-{{ line.product.reference }}"
-                        {{ 'QUANTITY_' | translate }}
+                        {{ 'QUANTITY' | translate }}
                     .input-group
                         input.form-control id="qty-{{ line.product.reference }}" type="number" min="1" ng-model="line.quantity" ng-model-options="{debounce:{default:100}}"
                         span.input-group-btn
@@ -47,8 +47,11 @@ form name="form" ng-show="cart.count()" ng-submit="confirm()" novalidate="novali
                                 i.fa.fa-trash
                 .col-sm-3.col-md-2.text-right
                     strong
-                        ,{{ 'TOTAL_' | translate }}
+                        {{ 'TOTAL' | translate }}
+                        span.visible-xs-inline
+                            {{ '_' | translate }}
                         br.hidden-xs
+                        ,
                         {{ line.product.net_price*line.quantity | currency:CONFIG.currency }}
         .list-group-item
             .row
@@ -64,8 +67,11 @@ form name="form" ng-show="cart.count()" ng-submit="confirm()" novalidate="novali
                         {{ 'EMPTY' | translate }}
                 .col-sm-3.col-md-2.text-right
                     strong.text-primary
-                        {{ 'SUBTOTAL_' | translate }}
+                        {{ 'SUBTOTAL' | translate }}
+                        span.visible-xs-inline
+                            {{ '_' | translate }}
                         br.hidden-xs
+                        ,
                         {{ cart.total() | currency:CONFIG.currency }}
         .list-group-item ng-show="user.get().addresses.length == 1 && !show_order"
             .row

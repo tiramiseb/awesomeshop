@@ -1,4 +1,5 @@
 {
+"_": ":",
 "ACCEPT_REUSED_PACKAGE": "I accept that my order is shipped in a reused package",
 "ADDED_TO_CART": "{QTY} of \"{NAME}\" {QTY, plural, one{has} other{have}} been added to the cart",
 "ADD_ADDRESS_1": "Add this address",
@@ -100,7 +101,6 @@
 "SHIPPING_DELAY_X": "Shipping delay: {QTY} {QTY, plural, one{day} other{days}}",
 "SHOW_MENU": "Show the menu",
 "SIGN_UP": "Sign up",
-"SUBTOTAL_": "Subtotal:",
 "SUMMARY": "Summary",
 "SURE_DELETE_ACCOUNT": "Are you sure you want to delete your account? You will not be able to access your orders or your invoices anymore.",
 "TOTAL_": "Total:",
