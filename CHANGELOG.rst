@@ -55,6 +55,8 @@ in AwesomeShop...
 Major modifications
 -------------------
 
+I think these changes are not easy to do:
+
 * Customize shipping delays for each product
 * Use Beaker to cache some results
 * Toolbar on a "page" page, to easily include specific stuff in pages contents
@@ -64,6 +66,8 @@ Major modifications
 
 Minor improvements
 ------------------
+
+These may be easy to implement:
 
 * When creating an order, do not empty the cart before the browser is
   redirected to the order page (or display a message to tell the user (s)he
