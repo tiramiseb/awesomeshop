@@ -35,12 +35,15 @@ do
         if [ "$sourcedate" -gt "$destinationdate" ]
         then
             plimc $source > $destination
+            echo "  * $destination"
+        else
+            echo "  * $destination already done"
         fi
     else
         # If destination does not exist, compile
         plimc $source > $destination
+        echo "  * $destination"
     fi
-    echo "  * $destination"
 done
 
 echo "Generating local files..."
@@ -51,8 +54,20 @@ done
 for source in `find $FROM/local -type f`
 do
     destination=`echo $source | sed "s/^$FROM/$TO/;s/.plim$/.html/"`
-    if [ ! -e $destination ]
+    if [ -e $destination ]
     then
+        # If destination exists, check if it is older than source
+        sourcedate=`date -r $source +%s`
+        destinationdate=`date -r $destination +%s`
+        if [ "$sourcedate" -gt "$destinationdate" ]
+        then
+            plimc $source > $destination
+            echo "  * $destination"
+        else
+            echo "  * $destination already done"
+        fi
+    else
+        # If destination does not exist, compile
         plimc $source > $destination
         echo "  * $destination"
     fi
@@ -62,8 +77,11 @@ then
     touch $TO/local/local.css
 fi
 
-echo "Linking libs dir..."
-ln -s ../$FROM/libs $TO
+if [ ! -h $TO/libs ]
+then
+    echo "Linking libs dir..."
+    ln -s ../$FROM/libs $TO
+fi
 
 echo "Linking translation files..."
 for source in `find $TRANSLATIONS/* -type d`
@@ -72,7 +90,10 @@ do
     mkdir -p $destination
     for fname in common dashboard shop
     do
-        ln -s ../../../$source/$fname.json $destination/
+        if [ ! -h $destination/$fname.json ]
+        then
+            ln -s ../../../$source/$fname.json $destination/
+        fi
     done
 done
 
