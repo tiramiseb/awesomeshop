@@ -27,7 +27,19 @@ for source in `find $FROM -name "*.plim"`
 do
     destination=`echo $source | sed "s/^$FROM/$TO/;s/.plim$/.html/"`
     mkdir -p `dirname $destination`
-    plimc $source > $destination
+    if [ -e $destination ]
+    then
+        # If destination exists, check if it is older than source
+        sourcedate=`date -r $source +%s`
+        destinationdate=`date -r $destination +%s`
+        if [ "$sourcedate" -gt "$destinationdate" ]
+        then
+            plimc $source > $destination
+        fi
+    else
+        # If destination does not exist, compile
+        plimc $source > $destination
+    fi
     echo "  * $destination"
 done
 

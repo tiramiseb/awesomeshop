@@ -73,7 +73,6 @@ These may be easy to implement:
   redirected to the order page (or display a message to tell the user (s)he
   must wait)
 * Dashboard : toolbar for signin in, logging out, changing language...
-* Faster plim compilation from front to webroot
 
 Bugs
 ====
