@@ -7,6 +7,8 @@ This file summarizes the most important modifications to AwesomeShop...
 +------------+---------+------------------------------------------------------+
 | Date       | Type    | Subject                                              |
 +============+=========+======================================================+
+| 2016-10-24 | Feature | Do not show "not on sale" products in "out of stock" |
++------------+---------+------------------------------------------------------+
 | 2016-10-21 | Feature | Miscelaneous improvements on the cart page           |
 +------------+---------+------------------------------------------------------+
 | 2016-10-12 | Feature | Simplify by hiding checkout part of the cart page    |
@@ -62,7 +64,6 @@ I think these changes are not easy to do:
 * Toolbar on a "page" page, to easily include specific stuff in pages contents
   (``.. doc-list::``, links to other pages, images...)
 * Same height for all products in a products list
-* Allow for a product to not be sold anymore (end of life): absent from the "out of stock" list
 
 Minor improvements
 ------------------

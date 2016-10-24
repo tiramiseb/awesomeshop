@@ -327,7 +327,7 @@ class ApiProducts(Resource):
             query = {}
             if product_type == 'regular' and 'out_of_stock' in options:
                 if options.pop('out_of_stock'):
-                    obj = product.objects(stock=0)
+                    obj = product.objects(stock=0, on_sale=True)
                 else:
                     obj = product.objects(stock__gt=0)
             elif (product_type == 'regular' and
