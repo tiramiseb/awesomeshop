@@ -37,11 +37,13 @@ def create_app(prefix=''):
     app.config.from_object('back.defaultconfig')
     app.config['URL_PREFIX'] = prefix
     rest = Api(app, prefix=prefix, catch_all_404s=True)
+
     @rest.representation('application/json')
     def output_json(data, code, headers=None):
         resp = make_response(simplejson.dumps(data) + "\n", code)
         resp.headers.extend(headers or {})
         return resp
+
     try:
         app.config.from_object('config')
     except ImportError:
@@ -51,6 +53,7 @@ def create_app(prefix=''):
         sys.exit(1)
     db = MongoEngine(app)
     login_manager = LoginManager(app)
+
     @login_manager.user_loader
     def load_user(uid):
         from .auth.models import User
@@ -58,12 +61,15 @@ def create_app(prefix=''):
             return User.objects.get(id=uid)
         except User.DoesNotExist:
             return None
+
     from . import autoupgrade
     autoupgrade.upgrade()
     from . import apiroutes
     return app
 
 translations = {}
+
+
 def load_translations():
     """Load all translations, even frontend ones that will not be used,
     so that there is no need to maintain too many json files..."""
@@ -82,6 +88,7 @@ load_translations()
 
 def get_locale():
     return request.args.get('lang') or app.config['LANGS'][0]
+
 
 def _(message, **kwargs):
     return translations.get(get_locale(), {}).get(message,
@@ -102,6 +109,7 @@ def _cur(amount, currency=None):
                         AMOUNT=unicode(amount),
                         AMOUNT2=unicode(amount).replace('.', ',')
                         )
+
 
 def _date(date):
     if date:

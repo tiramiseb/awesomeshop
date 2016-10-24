@@ -266,6 +266,7 @@ rest.add_resource(ForceLogin, '/forcelogin')
 rest.add_resource(ApiUsers, '/user')
 rest.add_resource(ApiUser, '/user/<user_id>')
 
+
 @app.route(app.config['URL_PREFIX']+'/confirm/<code>')
 @login_required
 def confirm_email(code):
@@ -274,4 +275,3 @@ def confirm_email(code):
         current_user.save()
     # TODO Redirect the user to a specific message
     return redirect('/')
-

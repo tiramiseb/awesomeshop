@@ -26,6 +26,7 @@ from .. import db, get_locale, rst
 from ..mongo import TranslationsField
 from ..photo import Photo
 
+
 class Page(db.Document):
     pagetype = db.StringField(db_field='type')
     rank = db.SequenceField()

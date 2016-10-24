@@ -28,6 +28,7 @@ from .shipping.models import Carrier
 from .shop.models.order import Order
 from .shop.models.product import BaseProduct
 
+
 class Counters(db.Document):
     """Simulate counters as a MongoEngine class so that we can access it..."""
     meta = {
@@ -198,15 +199,18 @@ def on_demand_to_delay():
                         }
                     )
 
+
 def remove_page_rank():
     pages = Page._get_collection()
     pages.update_many({}, {'$unset': {'rank': ''}})
     counters = Counters._get_collection()
     counters.delete_one({'_id': 'page.rank'})
 
+
 def remove_payment_description():
     orders = Order._get_collection()
     orders.update_many({}, {'$unset': {'p_desc': ''}})
+
 
 def order_totals_as_decimal():
     """Warning : the "order_totals_as_decimal" function only works with

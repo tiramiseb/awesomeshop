@@ -345,6 +345,7 @@ rest.add_resource(ApiOrder, '/order/<number>')
 rest.add_resource(PayOrder, '/order/<number>/pay')
 rest.add_resource(CancelOrder, '/order/<number>/cancel')
 
+
 @app.route(app.config['URL_PREFIX']+'/order/<number>/invoice')
 @login_required
 def pdf_invoice(number):

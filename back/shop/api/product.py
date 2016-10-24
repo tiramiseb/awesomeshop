@@ -150,6 +150,7 @@ class RegularProductSchemaForEdition(BaseProductSchemaForEdition):
         product.save()
         return product
 
+
 class BaseProductSchemaForKitSubProductOptionForEdition(Schema):
     id = fields.String(required=True)
     name = Loc(dump_only=True)

@@ -45,10 +45,10 @@ PREVIEW_SIZE = [350, 350]
 
 # URLs to social networks acconts and URLs
 SOCIAL = (
-#      fa icon name    url
-#        ('facebook', 'https://www.facebook.com/<username>'),
-#        ('twitter', 'https://www.twitter.com/<username>'),
-#        ('rss', '<blog url>')
+    #  fa icon name    url
+    #    ('facebook', 'https://www.facebook.com/<username>'),
+    #    ('twitter', 'https://www.twitter.com/<username>'),
+    #    ('rss', '<blog url>')
         )
 
 # The max age for new products (in days)
