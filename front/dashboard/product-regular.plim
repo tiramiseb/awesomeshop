@@ -49,12 +49,12 @@ form name="form" ng-submit="submit()" novalidate="novalidate"
                 p.text-danger ng-show="form.documentation.$invalid"
                     {{ 'DOCUMENTATION_MANDATORY' | translate }}
     .row
-        .col-md-9
+        .col-xs-6.col-md-9
             .form-group
                 label for="keywords"
                     {{ 'KEYWORDS' | translate }}
                 input#keywords.form-control name="keywords" ng-model="product.keywords"
-        .col-md-3
+        .col-xs-6.col-md-3
             .form-group
                 label for="on_sale"
                     {{ 'ON_SALE' | translate }}
