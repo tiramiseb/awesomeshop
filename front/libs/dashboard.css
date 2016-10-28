@@ -16,19 +16,26 @@
  * along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
  */
 
+.navbar-dashboard {
+    background: #000 !important;
+    border: 1px solid #000 !important;
+    margin-bottom: 0 !important;
+    padding-right: 15px !important;
+}
+.navbar-dashboard button {
+    /* Menu toggle button */
+    margin-right: 15px;
+}
+.dashboard-brand {
+    font-size: 18px;
+    color: #9d9d9d;
+}
 /* Smaller text for the menu */
 .sidebar-nav li {
     font-size: 90%;
     line-height: 3em !important;
 }
 
-/* Button to toggle the menu */
-#menu-toggle {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    z-index: 100;
-}
 /* Buttons related to the page */
 #page-buttons {
     position: fixed;

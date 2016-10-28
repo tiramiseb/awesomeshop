@@ -57,7 +57,7 @@ angular.module('awesomeshop', [
         };
     };
 })
-.run(function($timeout, $rootScope, $translate, CONFIG) {
+.run(function($timeout, $rootScope, $translate, tmhDynamicLocale, CONFIG) {
     $rootScope.displayable_from_id = function(scope, listname, value) {
         if (!scope[listname]) {
             $timeout($rootScope.displayable_from_id, 100, true, scope, listname, value);
@@ -71,8 +71,32 @@ angular.module('awesomeshop', [
             }
         }
     };
-    $rootScope.get_current_language = $translate.use;
     $rootScope.CONFIG = CONFIG;
+    $rootScope.get_current_language = $translate.use;
+    $rootScope.languages = languages;
+    tmhDynamicLocale.set($translate.use());
+})
+.factory('user', function($rootScope, $http, $translate, tmhDynamicLocale) {
+    var user = undefined;
+    $rootScope.$on('event:auth-loginConfirmed', function(e, data) {
+        user = data;
+    });
+    return {
+        get: function() {
+            return user;
+        },
+        logout: function() {
+            $http.get('/api/logout')
+                .then(function(response) {
+                    $window.location.href='/';
+                });
+        },
+        setlang: function(lang) {
+            $http.put('/api/setlang', {'lang': lang});
+            $translate.use(lang);
+            tmhDynamicLocale.set(lang);
+        }
+    }
 })
 .controller('IndexCtrl', function($http, $scope) {
     $http.get('/api/order', {params: {'status': 'preparation'}})
@@ -95,6 +119,9 @@ angular.module('awesomeshop', [
         .then(function(response) {
             $scope.stock_alert_products = response.data;
         })
+})
+.controller('TopbarCtrl', function($scope, user) {
+    $scope.user = user;
 })
 .controller('InternalNoteCtrl', function($scope, product) {
     $scope.product = product;

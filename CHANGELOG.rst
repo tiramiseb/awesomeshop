@@ -7,6 +7,8 @@ This file summarizes the most important modifications to AwesomeShop...
 +------------+---------+------------------------------------------------------+
 | Date       | Type    | Subject                                              |
 +============+=========+======================================================+
+| 2016-10-28 | Feature | Topbar in the dashboard                              |
++------------+---------+------------------------------------------------------+
 | 2016-10-24 | Feature | Do not show "not on sale" products in "out of stock" |
 +------------+---------+------------------------------------------------------+
 | 2016-10-21 | Feature | Miscelaneous improvements on the cart page           |
@@ -73,7 +75,6 @@ These may be easy to implement:
 * When creating an order, do not empty the cart before the browser is
   redirected to the order page (or display a message to tell the user (s)he
   must wait)
-* Dashboard : toolbar for signin in, logging out, changing language...
 
 Bugs
 ====

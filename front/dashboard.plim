@@ -55,17 +55,50 @@ html (trigger-auth enable-error-handler)
     body
         #spinner
             i.fa.fa-spinner.fa-pulse.fa-5x.text-primary
+            .container
+                .navbar-header.hidd
+        .navbar.navbar-inverse.navbar-dashboard.navbar-static-top
+            .container-fluid
+                .pull-left
+                    button.btn.btn-default.navbar-btn type="button" ng-model="menuToggle" uib-btn-checkbox="uib-btn-checkbox"
+                        i.fa.fa-bars
+                    span.dashboard-brand.hidden-xs
+                        a.navbar-link ui-sref="index"
+                            {{ 'DASHBOARD' | translate }}
+                .navbar-text.navbar-right ng-controller="TopbarCtrl"
+                    ,{{ user.get().email }} |
+                    a.navbar-link href="#" ng-click="user.logout()"
+                        i.fa.fa-sign-out
+                        ,
+                        span.hidden-xs
+                            {{ 'LOGOUT' | translate }}
+                    ,
+                    ,|
+                    span uib-dropdown="uib-dropdown"
+                        a.navbar-link href="#" uib-dropdown-toggle="uib-dropdown-toggle"
+                            i.fa.fa-globe
+                            ,
+                            span.hidden-xs
+                                {{ 'LANGUAGE' | translate }}
+                            ,
+                            i.fa.fa-caret-down
+                        ul uib-dropdown-menu="uib-dropdown-menu"
+                            li ng-repeat="lang in CONFIG.languages"
+                                a href="" ng-click="user.setlang(lang)"
+                                    i.fa.fa-check ng-show="lang == get_current_language()"
+                                    ,
+                                    {{ languages[lang] }}
         #wrapper ng-class="{toggled: menuToggle}"
             #sidebar-wrapper
                 ul.sidebar-nav
+                    li.sidebar-brand.visible-xs
+                        a ui-sref="index"
+                            {{ 'DASHBOARD' | translate }}
                     li
                         a href="/" target="_blank"
                             i.fa.fa-eye
                             ,
                             {{ 'SEE_SHOP' | translate }}
-                    li.sidebar-brand
-                        a ui-sref="index"
-                            {{ 'DASHBOARD' | translate }}
                     li
                         {{ 'DAY_TO_DAY' | translate }}
                     li
@@ -121,7 +154,5 @@ html (trigger-auth enable-error-handler)
                             ,
                             {{ 'USERS' | translate }}
             #page-content-wrapper
-                button#menu-toggle.btn.btn-default type="button" ng-model="menuToggle" uib-btn-checkbox="uib-btn-checkbox"
-                    i.fa.fa-bars
                 .container-fluid
                     ui-view
