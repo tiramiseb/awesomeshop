@@ -46,8 +46,8 @@ html (trigger-auth enable-error-handler)
         script src='libs/shop/shop.js'
         script src='libs/shop/user.js'
         script src='libs/shop.js'
-        title ng-controller='TitleCtrl'
-            {{ shop_name }} - {{ title.get() }}
+        title ng-controller='TitleCtrl' ng-bind-template="{{ shop_name }} - {{ title.get() }}"
+            A shop made with AwesomeShop
     body
         #spinner
             i.fa.fa-spinner.fa-pulse.fa-5x.text-primary

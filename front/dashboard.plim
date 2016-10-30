@@ -50,8 +50,8 @@ html (trigger-auth enable-error-handler)
         script src='libs/dashboard/taxrates.js'
         script src='libs/dashboard/users.js'
         script src='libs/dashboard.js'
-        title
-            {{ CONFIG.shop_name }} - {{ 'DASHBOARD' | translate }}
+        title ng-bind-template="{{ CONFIG.shop_name }} - {{ 'DASHBOARD' | translate }}"
+            A shop made with AwesomeShop - Dashboard
     body
         #spinner
             i.fa.fa-spinner.fa-pulse.fa-5x.text-primary
