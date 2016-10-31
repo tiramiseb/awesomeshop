@@ -7,6 +7,8 @@ This file summarizes the most important modifications to AwesomeShop...
 +------------+---------+------------------------------------------------------+
 | Date       | Type    | Subject                                              |
 +============+=========+======================================================+
+| 2016-10-31 | Feature | Misc cart improvements                               |
++------------+---------+------------------------------------------------------+
 | 2016-10-28 | Feature | Topbar in the dashboard                              |
 +------------+---------+------------------------------------------------------+
 | 2016-10-24 | Feature | Do not show "not on sale" products in "out of stock" |
@@ -73,8 +75,7 @@ Minor improvements
 
 These may be easy to implement:
 
-* When ordering (first button in cart), move position to addresses box (so
-  that the user sees he must push other buttons)
+/
 
 Bugs
 ====

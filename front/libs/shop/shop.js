@@ -227,7 +227,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
         }, 5000);
     });
 })
-.controller('CartCtrl', function($timeout, $scope, $state, $http, $uibModal, cart, savedCarts, user, orders, countries) {
+.controller('CartCtrl', function($timeout, $document, $scope, $state, $http, $uibModal, cart, savedCarts, user, orders, countries) {
     var available_carriers = {};
     $scope.cart = cart;
     $scope.user = user;
@@ -294,7 +294,13 @@ angular.module('shopShop', ['bootstrapLightbox'])
                 $scope.saved_cart = response.data.name;
                 savedCarts.add(response.data);
             });
-    }
+    };
+    $scope.do_order = function() {
+        $scope.show_order = true;
+        $timeout(function() {
+            $document.scrollTo(angular.element(document.getElementById('order_start')), 0, 500);
+        }, 100);
+    };
     $scope.add_address = function() {
         $uibModal.open({
             templateUrl: 'shop/address.html',
