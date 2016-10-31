@@ -57,7 +57,7 @@ html (trigger-auth enable-error-handler)
             i.fa.fa-spinner.fa-pulse.fa-5x.text-primary
             .container
                 .navbar-header.hidd
-        .navbar.navbar-inverse.navbar-dashboard.navbar-static-top
+        .navbar.navbar-inverse.navbar-dashboard.navbar-fixed-top
             .container-fluid
                 .pull-left
                     button.btn.btn-default.navbar-btn type="button" ng-model="menuToggle" uib-btn-checkbox="uib-btn-checkbox"

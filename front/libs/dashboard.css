@@ -53,6 +53,7 @@
     text-shadow: none;
 }
 #page-content-wrapper {
+    margin-top: 2em;
     /* Buttons should never overlap the last lines of the page */
     margin-bottom: 4em;
 }
