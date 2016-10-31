@@ -145,6 +145,7 @@ class OrderSchema(Schema):
         # (missing objects especially)
         order = Order()
         order.customer = current_user.to_dbref()
+        order.currency = app.config['CURRENCY']
         delivery_address = Address.objects.get(id=data['delivery_address'])
         order.set_delivery(delivery_address)
         billing_address_id = data.get('billing_address', None)
