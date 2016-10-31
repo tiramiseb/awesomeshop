@@ -253,7 +253,7 @@ form name="form" ng-show="cart.count()" ng-submit="confirm()" novalidate="novali
                                 {{ 'UNDERSTAND_DELAY' | translate:{QTY: cart.delay()} }}
                         button.btn.btn-lg.btn-success.top-space type="submit" id="proceed" ng-disabled="!(choice.delivery_address && (choice.delivery_as_billing || choice.billing_address) && choice.payment && choice.accept_terms)"
                             ,
-                            ,{{ 'VERIFY_AND_CONFIRM' | translate }}
+                            {{ 'CONFIRM_PAY' | translate }}
                             i.fa.fa-chevron-right
                 small
                     {{ 'LEGAL_NOTICE' | translate }}
