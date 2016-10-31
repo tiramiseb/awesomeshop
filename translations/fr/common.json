@@ -5,6 +5,7 @@
 "ADDRESS_TITLE": "Titre de l'adresse",
 "ADD_ADDRESS": "Ajouter une adresse",
 "BILLING_ADDRESS": "Adresse de facturation",
+"CANCEL": "Annuler",
 "CANCELLED_NOT_CONFIRMED_X": "Annulée si aucun paiement n'a lieu sous {QTY} {QTY, plural, one{jour} other{jours}}.",
 "CANCELLED_NOT_PAID_X": "Annulée si aucun paiement n'a lieu sous {QTY} {QTY, plural, one{jour} other{jours}}.",
 "CATEGORIES": "Catégories",

@@ -5,6 +5,7 @@
 "ADDRESS_TITLE": "Address title",
 "ADD_ADDRESS": "Add an address",
 "BILLING_ADDRESS": "Billing address",
+"CANCEL": "Cancel",
 "CANCELLED_NOT_CONFIRMED_X": "Cancelled if not confirmed within {QTY} {QTY, plural, one{day} other{days}}.",
 "CANCELLED_NOT_PAID_X": "Cancelled if payment not received within {QTY} {QTY, plural, one{day} other{days}}.",
 "CATEGORIES": "Categories",

@@ -50,7 +50,7 @@ h1
             .col-md-6.col-md-pull-6.top-space.align-bottom
                 .btn-group
                     button.btn.btn-danger type="button" ng-click="cancel()"
-                        {{ 'CANCEL_FORGET' | translate }}
+                        {{ 'CANCEL' | translate }}
                     button.btn.btn-warning type="button" ng-click="to_cart()"
                         {{ 'BACK_TO_CART' | translate }}
 .row
