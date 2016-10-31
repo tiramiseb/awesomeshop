@@ -66,15 +66,15 @@ I think these changes are not easy to do:
 * Toolbar on a "page" page, to easily include specific stuff in pages contents
   (``.. doc-list::``, links to other pages, images...)
 * Same height for all products in a products list
+* Some way to have a better default content for social network links/indexation
 
 Minor improvements
 ------------------
 
 These may be easy to implement:
 
-* When creating an order, do not empty the cart before the browser is
-  redirected to the order page (or display a message to tell the user (s)he
-  must wait)
+* When ordering (first button in cart), move position to addresses box (so
+  that the user sees he must push other buttons)
 
 Bugs
 ====

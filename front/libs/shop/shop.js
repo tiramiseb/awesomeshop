@@ -412,7 +412,6 @@ angular.module('shopShop', ['bootstrapLightbox'])
         $http.post('/api/order', data)
             .then(function(response) {
                 order = response.data;
-                cart.empty();
                 orders.add({
                     full_number: order.full_number,
                     number: order.number,
@@ -424,6 +423,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
                     currency: order.currency
                 });
                 $state.go('order', {number: order.number});
+                cart.empty();
             });
     };
 })
