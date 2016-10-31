@@ -74,7 +74,10 @@ angular.module('shopShop', ['bootstrapLightbox'])
         .state('order', {
             url: '/orders/:number',
             templateUrl: 'shop/order.html',
-            controller: 'OrderCtrl'
+            controller: 'OrderCtrl',
+            params: {
+                do_pay: false
+            }
         })
         .state('category_or_product', {
             url: '/{path:any}',
@@ -428,7 +431,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
                     net_total: order.net_total,
                     currency: order.currency
                 });
-                $state.go('order', {number: order.number});
+                $state.go('order', {number: order.number, do_pay: true});
                 cart.empty();
             });
     };
@@ -448,7 +451,7 @@ angular.module('shopShop', ['bootstrapLightbox'])
 .controller('OrdersCtrl', function($scope, orders) {
     $scope.orders = orders;
 })
-.controller('OrderCtrl', function($uibModal, $stateParams, $scope, $http, $filter, cart, title) {
+.controller('OrderCtrl', function($uibModal, $stateParams, $scope, $http, $filter, cart, title, orders) {
     $http.get('/api/order/'+$stateParams.number)
         .then(function(response) {
             $scope.order = response.data;
@@ -480,11 +483,25 @@ angular.module('shopShop', ['bootstrapLightbox'])
                 };
             });
     };
+    if ($stateParams.do_pay) {
+        $scope.pay();
+    }
     function cancel(to_cart) {
         var back_to_cart = to_cart || false;
         $http.get('/api/order/'+$stateParams.number+'/cancel')
             .then(function(response) {
-                $scope.order = response.data;
+                var order = response.data;
+                $scope.order = order;
+                orders.add({
+                    full_number: order.full_number,
+                    number: order.number,
+                    status: order.status,
+                    status_color: order.status_color,
+                    date: order.date,
+                    products: order.products.length,
+                    net_total: order.net_total,
+                    currency: order.currency
+                });
                 if (back_to_cart) {
                     for (var p=0; p<$scope.order.products.length; p++) {
                         var prod = $scope.order.products[p];

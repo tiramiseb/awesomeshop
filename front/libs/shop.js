@@ -474,6 +474,13 @@ angular.module('awesomeshop', [
             return orders;
         },
         add: function(order) {
+            for (i=0; i<orders.length; i++) {
+                if (orders[i].number == order.number) {
+                    orders[i] = order;
+                    return;
+                };
+            }
+            // If the function didn't return before, add an entry
             orders.push(order);
         }
     }
