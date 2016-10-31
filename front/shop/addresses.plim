@@ -57,11 +57,11 @@ form name="form" ng-submit="send()" novalidate="novalidate"
                         label for="address_p_{{ $index }}"
                             {{ 'PHONE' | translate }}
                         input.form-control type="text" id="address_p_{{ $index }}" name="address_p_{{ $index }}" ng-model="address.phone"
-                    button.btn.btn-danger.pull-right type="button" ng-click="addresses.splice($index, 1)"
+                    button.btn.btn-danger.pull-right.hidden-print type="button" ng-click="addresses.splice($index, 1)"
                         i.fa.fa-trash
                         ,
                         {{ 'REMOVE' | translate }}
-        .col-xs-12.text-center
+        .col-xs-12.text-center.hidden-print
             button.btn.btn-primary type="button" ng-click="addresses.push({new: true, title: MY_ADDRESS})"
                 i.fa.fa-plus
                 ,

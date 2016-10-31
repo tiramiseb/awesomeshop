@@ -132,13 +132,13 @@ html (trigger-auth enable-error-handler)
                         span ng-show='cart.count()'
                             {{ 'X_PRODUCTS' | translate:{QTY: cart.count()} }}, {{ cart.total() | currency:CONFIG.currency }}
             .row
-                .col-xs-12.visible-xs-block.bottom-space
-                    button.btn.btn-default.btn-block#menu-toggle (type='button' ng-model='toggleLeftMenu' uib-btn-checkbox)
+                .col-xs-12.visible-xs-block.bottom-space.hidden-print
+                    button#menu-toggle.btn.btn-default.btn-block (type='button' ng-model='toggleLeftMenu' uib-btn-checkbox)
                         i.fa.fa-bars
                         ,
                         {{ 'SHOW_MENU' | translate }}
                 .clearfix.visible-xs-block
-                .col-lg-3.col-sm-4.hidden-print#leftmenu ng-class='{toggled: toggleLeftMenu}' ng-clic='toggleLeftMenu=false;'
+                #leftmenu.col-lg-3.col-sm-4.hidden-print ng-class='{toggled: toggleLeftMenu}' ng-click='toggleLeftMenu=false;'
                     .panel.panel-default ng-controller='CategoriesListCtrl'
                         .panel-heading
                             i.fa.fa-list

@@ -242,3 +242,9 @@ textarea {
 td {
     padding: 3px 6px;
 }
+
+@media print {
+  a[href]:after {
+    content: none !important;
+  }
+}

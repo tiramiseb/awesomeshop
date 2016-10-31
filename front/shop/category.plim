@@ -16,7 +16,7 @@
 / along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 h1
     {{ category.name || category.slug }}
-    a.pull-right.btn.btn-sm.btn-info href="/dashboard/#/category/{{ category.id }}" ng-if="user.is_admin()"
+    a.pull-right.btn.btn-sm.btn-info.hidden-print href="/dashboard/#/category/{{ category.id }}" ng-if="user.is_admin()"
         {{ 'EDIT' | translate }}
 .well ng-show="category.description" ng-bind="category.description"
 products-list products="category.products"

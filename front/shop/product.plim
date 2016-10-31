@@ -16,7 +16,7 @@
 / along with AwesomeShop. If not, see <http://www.gnu.org/licenses/>.
 h1
     {{ product.name || product.slug }}
-    a.pull-right.btn.btn-sm.btn-info href="/dashboard/#/product-{{ product.type }}/{{ product.id }}" ng-if="user.is_admin()"
+    a.pull-right.btn.btn-sm.btn-info.hidden-print href="/dashboard/#/product-{{ product.type }}/{{ product.id }}" ng-if="user.is_admin()"
         {{ 'EDIT' | translate }}
 .row
     .col-xs-7.col-md-8.col-lg-9
@@ -50,24 +50,25 @@ h1
         .well
             p.price
                 {{ product.net_price | currency:CONFIG.currency }}
-            hr
-            div ng-show="cart.quantity(product) < product.stock || product.overstock_delay >= 0"
-                form.form-horizontal name="form" novalidate="novalidate"
-                    .form-group ng-class="{ 'has-error' : form.quantity.$invalid }"
-                        label.col-sm-5.control-label for="quantity"
-                           {{ 'QUANTITY' | translate }}
-                        .col-sm-7
-                            input.form-control name="quantity" id="quantity" type="number" min="1" ng-model="quantity"
-                    button.btn.btn-success.btn-lg.btn-wrap.btn-block type="button" ng-show="form.quantity.$valid && (cart.quantity(product) + quantity <= product.stock || product.overstock_delay >= 0)" ng-class="{ 'btn-success': cart.quantity(product)+quantity <= product.stock, 'btn-info': cart.quantity(product) + quantity > product.stock && product.overstock_delay >= 0 }" ng-click="add_to_cart(); quantity=1;"
-                        {{ 'ADD_TO_CART' | translate }}
-                    p.text-center.bottom-no-space ng-show="cart.quantity(product) + quantity > product.stock && product.overstock_delay >= 0"
-                        {{ 'SHIPPING_DELAY_X' | translate:{QTY:product.overstock_delay} }}
-                    .alert.alert-danger.text-center.bottom-no-space ng-show="cart.quantity(product) + quantity > product.stock && product.overstock_delay < 0"
-                        {{ 'INSUFFICIENT_STOCK' | translate }}
-                    .alert.alert-danger.text-center.bottom-no-space ng-show="form.$invalid"
-                        {{ 'INCORRECT_QUANTITY' | translate }}
-            .alert.alert-danger.text-center.bottom-no-space ng-show="cart.quantity(product) >= product.stock && product.overstock_delay < 0"
-                {{ 'OUT_OF_STOCK' | translate }}
+            div.hidden-print
+                hr
+                div ng-show="cart.quantity(product) < product.stock || product.overstock_delay >= 0"
+                    form.form-horizontal name="form" novalidate="novalidate"
+                        .form-group ng-class="{ 'has-error' : form.quantity.$invalid }"
+                            label.col-sm-5.control-label for="quantity"
+                               {{ 'QUANTITY' | translate }}
+                            .col-sm-7
+                                input.form-control name="quantity" id="quantity" type="number" min="1" ng-model="quantity"
+                        button.btn.btn-success.btn-lg.btn-wrap.btn-block type="button" ng-show="form.quantity.$valid && (cart.quantity(product) + quantity <= product.stock || product.overstock_delay >= 0)" ng-class="{ 'btn-success': cart.quantity(product)+quantity <= product.stock, 'btn-info': cart.quantity(product) + quantity > product.stock && product.overstock_delay >= 0 }" ng-click="add_to_cart(); quantity=1;"
+                            {{ 'ADD_TO_CART' | translate }}
+                        p.text-center.bottom-no-space ng-show="cart.quantity(product) + quantity > product.stock && product.overstock_delay >= 0"
+                            {{ 'SHIPPING_DELAY_X' | translate:{QTY:product.overstock_delay} }}
+                        .alert.alert-danger.text-center.bottom-no-space ng-show="cart.quantity(product) + quantity > product.stock && product.overstock_delay < 0"
+                            {{ 'INSUFFICIENT_STOCK' | translate }}
+                        .alert.alert-danger.text-center.bottom-no-space ng-show="form.$invalid"
+                            {{ 'INCORRECT_QUANTITY' | translate }}
+                .alert.alert-danger.text-center.bottom-no-space ng-show="cart.quantity(product) >= product.stock && product.overstock_delay < 0"
+                    {{ 'OUT_OF_STOCK' | translate }}
 .well ng-if="product.type=='kit'"
     .list-group.options-list ng-repeat="prod in product.products" ng-class="{'options-list-clickable': prod.options.length > 1 || prod.can_be_disabled, 'bottom-no-space': $last }"
         label.list-group-item.noclick ng-if="prod.title"

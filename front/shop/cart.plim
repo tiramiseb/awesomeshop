@@ -24,7 +24,7 @@ form name="form" ng-show="cart.count()" ng-submit="confirm()" novalidate="novali
                     a href="{{ line.product.path }}"
                         span.hidden-xs.hidden-sm.pull-left
                             img.cart-illustration ng-src="{{ line.product.main_photo.thumbnail_url }}" ng-show="line.product.main_photo"
-                            span.cart-illustration-placeholder ng-hide="line.product.main_photo"
+                            span.cart-illustration-placeholder.hidden-print ng-hide="line.product.main_photo"
                                 i.fa.fa-ban
                                 ,
                         {{ line.product.name }}
@@ -43,7 +43,7 @@ form name="form" ng-show="cart.count()" ng-submit="confirm()" novalidate="novali
                     .input-group
                         input.form-control id="qty-{{ line.product.reference }}" type="number" min="1" ng-model="line.quantity" ng-model-options="{debounce:{default:100}}"
                         span.input-group-btn
-                            button.btn.btn-danger type="button" ng-click="cart.remove(line.product.id, line.data)" uib-tooltip="{{ 'REMOVE' | translate }}"
+                            button.btn.btn-danger.hidden-print type="button" ng-click="cart.remove(line.product.id, line.data)" uib-tooltip="{{ 'REMOVE' | translate }}"
                                 i.fa.fa-trash
                 .col-sm-3.col-md-2.text-right
                     strong
@@ -61,7 +61,7 @@ form name="form" ng-show="cart.count()" ng-submit="confirm()" novalidate="novali
                     span.text-danger ng-hide="cart.delay()"
                         {{ 'INSUFFICIENT_STOCK' | translate }}
                 .col-xs-5.col-sm-3.col-lg-2
-                    button.btn.btn-danger.btn-block type="button" ng-click="cart.reset()"
+                    button.btn.btn-danger.btn-block.hidden-print type="button" ng-click="cart.reset()"
                         i.fa.fa-trash
                         ,
                         {{ 'EMPTY' | translate }}
@@ -89,7 +89,7 @@ form name="form" ng-show="cart.count()" ng-submit="confirm()" novalidate="novali
                     select.form-control id="address_country" name="address_country" ng-model="estimation_country" ng-options="country.code as prefixed(country) for country in countries.get()"
                 .col-sm-6
                     input.form-control type="text" disabled="disabled" ng-show="shipping_fee_estimation()" value="{{ 'FROM_PRICE' | translate }} {{ shipping_fee_estimation() | currency:CONFIG.currency }}"
-    div ng-show="user.get().auth"
+    div.hidden-print ng-show="user.get().auth"
         .row ng-hide="show_order"
             .col-sm-6
                 .panel.panel-default
