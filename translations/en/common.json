@@ -19,6 +19,7 @@
 "EMAIL_OR_PASSWORD_INVALID": "Email address or Password is invalid",
 "ERRMSG:3-D secure protection has failed": "3-D secure protection has failed",
 "ERRMSG:A potential fraud has been detected": "A potential fraud has been detected",
+"ERRMSG:A user with this email address already exists": "A user with this email address already exists",
 "ERRMSG:Could not delete: this category has children": "Could not delete: this category has children",
 "ERRMSG:Could not delete: this category has products": "Could not delete: this category has products",
 "ERRMSG:Could not delete: this country is part of a countries group": "Could not delete: this country is part of a countries group",

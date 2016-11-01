@@ -21,6 +21,7 @@ from flask import abort, request, session
 from flask_login import current_user, login_user, logout_user
 from flask_restful import Resource
 from marshmallow import Schema, fields, post_dump, post_load
+from mongoengine import NotUniqueError
 
 from .. import app, admin_required, login_required, rest
 from ..marsh import Count, ObjField
@@ -196,7 +197,10 @@ class Register(Resource):
         schema = UserSchema()
         if current_user.is_authenticated:
             return schema.dump(current_user).data
-        result, errors = schema.load(request.get_json())
+        try:
+            result, errors = schema.load(request.get_json())
+        except NotUniqueError:
+            abort(400, {'type': 'message', 'message': 'A user with this email address already exists'})
         if errors:
             abort(400, {'type': 'fields', 'errors': errors})
         login_user(result)
