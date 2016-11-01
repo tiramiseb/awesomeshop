@@ -76,9 +76,9 @@ def invoice(order):
                              DATE=_date(order.payment_date)))
         y -= space_12
         c.drawString(x, y, '{} {}'.format(
-                                    _('PAYMENT_'),
-                                    _('PAYMENT:'+order.payment_id)
-                                    ))
+                                _('PAYMENT_'),
+                                _('PAYMENT:'+order.payment_id).encode('utf-8')
+                                ))
         y -= space_12
 
     if order.shipping_date:
@@ -105,8 +105,8 @@ def invoice(order):
     # Products table
     c.setFont('Helvetica-Bold', 10)
     colref = 1.5*cm
-    colprod = 7*cm
-    coldetails = 7.5*cm
+    colprod = 5*cm
+    coldetails = 5.5*cm
     colqty = 15*cm
     colunit = 17*cm
     coltotal = 19.5*cm
