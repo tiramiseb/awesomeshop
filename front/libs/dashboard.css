@@ -52,8 +52,10 @@
 #page-buttons *:disabled i {
     text-shadow: none;
 }
+#wrapper {
+    margin-top: 50px;
+}
 #page-content-wrapper {
-    margin-top: 2em;
     /* Buttons should never overlap the last lines of the page */
     margin-bottom: 4em;
 }
