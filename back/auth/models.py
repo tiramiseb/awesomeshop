@@ -83,8 +83,7 @@ class User(db.Document, UserMixin):
 
     def send_confirmation_email(self):
         self.confirm_code = unicode(uuid.uuid4())
-        send_mail(self.email, 'email_confirmation', code=self.confirm_code,
-                  root=request.url_root)
+        send_mail(self.email, 'email_confirmation', code=self.confirm_code)
 
 
 class Address(db.Document):
