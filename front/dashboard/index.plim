@@ -33,7 +33,7 @@ h1
                     {{ order.products }}
         .panel.panel-primary ng-show="paid_orders.length"
             .panel-heading
-                {{ 'ORDER_TO_PREPARE' | translate }}
+                {{ 'ORDERS_TO_PREPARE' | translate }}
             .list-group
                 a.list-group-item ui-sref="order({number:order.number})" ng-repeat="order in paid_orders"
                     ,{{ order.full_number }},
