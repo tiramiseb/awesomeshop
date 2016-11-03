@@ -24,7 +24,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import cm
 from reportlab.pdfgen import canvas
 
-from . import app, _, _cur, _date
+from . import app, get_locale, _, _cur, _date
 
 # How much to go down for...
 subspace = 5   # a small space
@@ -52,10 +52,10 @@ def invoice(order):
     c.setFont('Helvetica', 20)
     c.drawString(x+0.5*cm, y, app.config['SHOP_NAME'])
 
-    # URL
+    # Subtitle
     y -= space_14
     c.setFont('Helvetica', 12)
-    c.drawString(x+0.5*cm, y, request.url_root)
+    c.drawString(x+0.5*cm, y, app.config['SHOP_DESCRIPTION'][get_locale()])
 
     # Order and invoice details
     y -= space_20
