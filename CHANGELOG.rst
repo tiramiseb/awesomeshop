@@ -69,6 +69,9 @@ I think these changes are not easy to do:
   (``.. doc-list::``, links to other pages, images...)
 * Same height for all products in a products list
 * Some way to have a better default content for social network links/indexation
+* Internal note on orders
+* Do not diplay "customize" in products list for kit products which will be
+  out of stock no matter what
 
 Minor improvements
 ------------------
@@ -80,4 +83,7 @@ These may be easy to implement:
 Bugs
 ====
 
-/
+* URL for the links in the dashboard (when opening in another tab)
+* Store the current kit product details in the order (not only the refs to
+  other products)
+* Correctly display kit details in orders, for user interface and dashboard
