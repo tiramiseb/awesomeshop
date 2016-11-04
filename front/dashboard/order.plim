@@ -81,7 +81,7 @@ h1
                     .col-xs-5.text-right
                         {{ 'TRACKING_NUMBER' | translate }}
                     .col-xs-7
-                        a ng-href="[[ order.tracking_url ]]" target="_blank"
+                        a ng-href="{{ order.tracking_url }}" target="_blank"
                             {{ order.tracking_number }}
                 .text-right ng-show="order.status == 'unconfirmed'"
                     {{ 'CANCELLED_NOT_CONFIRMED_X' | translate:{QTY: CONFIG.confirm_delay } }}
