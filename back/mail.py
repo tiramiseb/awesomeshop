@@ -28,20 +28,19 @@ from . import app, get_locale
 
 def send_mail(recipient, template, **kwargs):
     if app.config['SEND_MAILS']:
+        root = re.sub('/api/?$', '', request.url_root)
         locale = kwargs.get('locale') or get_locale()
         # Get the message content
         sender = app.config['MAIL_FROM']
-        subject = render_template('email/{}/{}.subject'.format(template,
-                                                               locale),
-                                  root=request.url_root, **kwargs)
+        subj = render_template('email/{}/{}.subject'.format(template, locale),
+                                  root=root, **kwargs)
         text = render_template('email/{}/{}.txt'.format(template, locale),
-                               root=request.url_root, **kwargs)
+                               root=root, **kwargs)
         html = render_template('email/{}/{}.html'.format(template, locale),
-                               subject=subject, root=request.url_root,
-                               **kwargs)
+                               subject=subj, root=root, **kwargs)
         # Create the message
         msg = MIMEMultipart('alternative')
-        msg['Subject'] = subject
+        msg['Subject'] = subj
         msg['From'] = sender
         msg['To'] = recipient
         part_text = MIMEText(text.encode('utf8'), 'plain', 'utf-8')
