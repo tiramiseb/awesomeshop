@@ -19,6 +19,7 @@
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import re
 import smtplib
 
 from flask import render_template, request
