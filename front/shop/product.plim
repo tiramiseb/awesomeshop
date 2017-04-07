@@ -63,10 +63,11 @@ h1
                                 .col-sm-7.visible-xs.visible-sm
                                     .input-group
                                         span.input-group-btn
-                                            button.btn.btn-default ng-disabled="quantity==1" ng-click="quantity-=1"
+                                            button.btn.btn-default ng-disabled="quantity==1" ng-click="quantity=quantity-1"
                                                 |-
                                         input.form-control name="quantity" id="quantity" type="number" min="1" ng-model="quantity"
-                                            button.btn.btn-default ng-click="quantity+=1"
+                                        span.input-group-btn
+                                            button.btn.btn-default ng-click="quantity=quantity+1"
                                                 |+
                         button.btn.btn-success.btn-lg.btn-wrap.btn-block type="button" ng-show="form.quantity.$valid && (cart.quantity(product) + quantity <= product.stock || product.overstock_delay >= 0)" ng-class="{ 'btn-success': cart.quantity(product)+quantity <= product.stock, 'btn-info': cart.quantity(product) + quantity > product.stock && product.overstock_delay >= 0 }" ng-click="add_to_cart(); quantity=1;"
                             {{ 'ADD_TO_CART' | translate }}
