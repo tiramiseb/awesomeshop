@@ -1,7 +1,3 @@
-venv/
-config.py
-*.pyc
-whoosh_index/
 webroot/bower_components
 webroot/l10n
 webroot/libs
