@@ -5,3 +5,5 @@ webroot/local
 webroot/photos
 webroot/*.html
 webroot/*/*.html
+back/vendor
+back/glide.lock
