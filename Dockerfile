@@ -35,7 +35,7 @@ RUN apk update && \
             openssl-dev \
             python-dev \
             zlib-dev && \
-    rm /var/cache/apt/* && \
+    rm /var/cache/apk/* && \
     rm /awesomeshop/webroot/libs && \
     cp -a /awesomeshop/front/libs /awesomeshop/webroot/ && \
     rm -fr /awesomeshop/webroot/l10n && \
