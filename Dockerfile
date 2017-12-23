@@ -1,5 +1,7 @@
 FROM python:2.7-alpine
 
+ADD . /awesomeshop
+
 RUN apk update && \
     apk add --update \
         gcc \
