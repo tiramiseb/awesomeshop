@@ -128,3 +128,29 @@ Deploying in production
 =======================
 
 For production deployment, refer to any good Flask WSGI deployment manual.
+
+Docker image
+============
+
+A docker image, generated with the `Dockerfile` in the current directory, is
+available on the docker hub under the name `smaccagnoni/awesomeshop`.
+
+For this image to work, you need to provide the container a `config.py` file,
+mounted on `/awesomeshop/config.py`. To serve it, you need a reverse proxy,
+which will connect to the awesomeshop container on port 3031 using WSGI and
+serve it on `/api`.
+
+The awesomeshop image also shares the web root in a volume, on
+`/awesomeshop/webroot`.
+
+A NginX configuration can contain the following parameters:
+```
+    location / {
+        root   /awesomeshop/webroot;
+    }
+    location /api {
+        include uwsgi_params;
+        uwsgi_pass api:3031;
+    }
+```
+
