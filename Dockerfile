@@ -34,8 +34,10 @@ RUN apk update && \
             nodejs \
             openssl-dev \
             python-dev \
-            zlib-dev
+            zlib-dev && \
+    rm /awesomeshop/webroot/libs && \
+    cp -a /awesomeshop/front/libs /awesomeshop/webroot/
 
 VOLUME /awesomeshop/webroot
 
-CMD ["uwsgi", "--socket", ":3031", "--wsgi-file", "/awesomeshop/wsgi.py", "--callable", "app", "--master"]
+CMD ["uwsgi", "--socket", ":3031", "--chdir", "/awesomeshop", "--wsgi-file", "/awesomeshop/wsgi.py", "--callable", "app", "--master"]
