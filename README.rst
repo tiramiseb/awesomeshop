@@ -138,12 +138,15 @@ available on the docker hub under the name `smaccagnoni/awesomeshop`.
 For this image to work, you need to provide the container a `config.py` file,
 mounted on `/awesomeshop/config.py`. To serve it, you need a reverse proxy,
 which will connect to the awesomeshop container on port 3031 using WSGI and
-serve it on `/api`.
+serve it on `/api`. You also need an MongoDB instance.
 
 The awesomeshop image also shares the web root in a volume, on
-`/awesomeshop/webroot`.
+`/awesomeshop/webroot`. You will probably want to mount external volumes on
+`/awesomeshop/webroot/local` for local files and `/awesomeshop/webroot/photos`
+for uploaded pictures.
 
-A NginX configuration can contain the following parameters:
+An NginX configuration can contain the following parameters:
+
 ```
     location / {
         root   /awesomeshop/webroot;
