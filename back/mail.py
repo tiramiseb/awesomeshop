@@ -50,5 +50,9 @@ def send_mail(recipient, template, **kwargs):
         msg.attach(part_html)
         # TODO Delay the message when the SMTP server is not available
         s = smtplib.SMTP(app.config['SMTP_SERVER'])
+        if app.config['SMTP_TLS']:
+            s.starttls()
+        if app.config['SMTP_USER'] != "" and app.config['SMTP_PASS'] != "":
+            s.login(app.config['SMTP_USER'], app.config['SMTP_PASS'])
         s.sendmail(sender, recipient, msg.as_string())
         s.quit()

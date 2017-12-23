@@ -108,5 +108,10 @@ SEND_MAILS = True
 MAIL_FROM = "nobody@nowhere.com"
 # Mail server
 SMTP_SERVER = "localhost"
+# Use TLS
+SMTP_TLS = False
+# Authentication
+SMTP_USER = ""
+SMTP_PASS = ""
 
 WWW_ROOT = "."
