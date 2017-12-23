@@ -19,7 +19,7 @@ RUN apk update && \
     pip install -r /awesomeshop/requirements.txt && \
     pip install uwsgi && \
     npm install -g bower && \
-    cd /awesomeshop &&
+    cd /awesomeshop && \
     sed -i 's/bower install/bower --allow-root install/' init_webroot.sh && \
     ./init_webroot.sh && \
     apk del gcc \
