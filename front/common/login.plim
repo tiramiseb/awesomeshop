@@ -26,7 +26,7 @@ form name='form' ng-submit='login()'
         .form-group ng-class="{'has-error': form.authpassword.$invalid && !form.authpassword.$pristine}"
             label for='authpassword'
                 {{ 'PASSWORD' | translate }}
-            input#authpassword.form-control type='text' name='authpassword' ng-model='auth.password' ng-focus='auth.success=undefined' required="required"
+            input#authpassword.form-control type='password' name='authpassword' ng-model='auth.password' ng-focus='auth.success=undefined' required="required"
         .alert-danger uib-alert="uib-alert" ng-show="auth.success==false" close="auth.success=undefined"
             {{ 'EMAIL_OR_PASSWORD_INVALID' | translate }}
     .modal-footer
