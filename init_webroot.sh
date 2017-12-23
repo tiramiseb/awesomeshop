@@ -86,7 +86,7 @@ fi
 echo "Linking translation files..."
 for source in `find $TRANSLATIONS/* -type d`
 do
-    destination=`echo $source | sed -s "s/^$TRANSLATIONS/$TO\/l10n/"`
+    destination=`echo $source | sed "s/^$TRANSLATIONS/$TO\/l10n/"`
     mkdir -p $destination
     for fname in common dashboard shop
     do
