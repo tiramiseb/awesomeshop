@@ -2,6 +2,16 @@
 AwesomeShop
 ===========
 
+Deprecation notice
+==================
+
+I'm not working on this tool anymore. As a side-project, I'm willing to develop an equivalent webapp in Go, but It is far from usable.
+
+I keep this code here for history, feel free to fork it and continue working on it if you want, but don't hope I will work on it again: that will not happen.
+
+Introduction
+============
+
 AwesomeShop is a light and fast e-boutique webapp, using modern techniques
 to achieve these goals.
 
